@@ -1,0 +1,12 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "drop_ceiling_light.png"
+normal_map_texture = "drop_ceiling_light_normal.png"
+metallic_roughness_texture = "drop_ceiling_light_mr.png"
+emissive_texture = "drop_ceiling_light_emissive.png"
+metallic = 1.0
+perceptual_roughness = 1.0
+emissive = [2.0, 2.0, 2.0, 1.0]
+
+
+

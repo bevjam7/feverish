@@ -1,0 +1,10 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "wood_paneling.png"
+normal_map_texture = "wood_paneling_normal.png"
+metallic_roughness_texture = "wood_paneling_mr.png"
+metallic = 1.0
+perceptual_roughness = 1.0
+
+
+

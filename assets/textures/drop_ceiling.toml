@@ -1,0 +1,10 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "drop_ceiling.png"
+normal_map_texture = "drop_ceiling_normal.png"
+metallic_roughness_texture = "drop_ceiling_mr.png"
+metallic = 1.0
+perceptual_roughness = 1.0
+
+
+

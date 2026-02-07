@@ -1,0 +1,3 @@
+({
+    "levels": Files(paths: ["maps/default.map#Scene"]),
+})

@@ -1,0 +1,7 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "carpet.png"
+normal_map_texture = "carpet_normal.png"
+metallic = 0.0
+perceptual_roughness = 1.0
+reflectance = 0.12

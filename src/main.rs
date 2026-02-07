@@ -3,6 +3,10 @@
 // Disable console on Windows for non-dev builds.
 #![cfg_attr(not(feature = "dev"), windows_subsystem = "windows")]
 
+mod assets;
+mod camera;
+mod map;
+
 use bevy::{asset::AssetMetaCheck, prelude::*};
 
 fn main() -> AppExit {
@@ -51,8 +55,8 @@ impl Plugin for AppPlugin {
             .add_sub_state::<GameState>();
         app.configure_sets(Update, PausableSystems.run_if(in_state(Paused(false))));
 
-        // Spawn the main camera.
-        app.add_systems(Startup, spawn_camera);
+        // Set up game plugins
+        app.add_plugins((assets::AssetsPlugin, camera::CameraPlugin, map::MapPlugin));
     }
 }
 
@@ -82,6 +86,7 @@ enum AppState {
 #[source(AppState = AppState::Game)]
 enum GameState {
     #[default]
+    Prepare,
     Main,
 }
 
@@ -92,7 +97,3 @@ struct PausableSystems;
 /// Whether or not the game is paused.
 #[derive(States, Copy, Clone, Eq, PartialEq, Hash, Debug, Default)]
 struct Paused(pub bool);
-
-fn spawn_camera(mut commands: Commands) {
-    commands.spawn((Name::new("Camera"), Camera2d));
-}
