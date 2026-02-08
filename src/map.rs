@@ -14,8 +14,7 @@ impl Plugin for MapPlugin {
                 TrenchBroomConfig::new("feverish")
                     // .linear_filtering()
                     .default_face_attributes(DefaultFaceAttributes {
-                        scale: Some(Vec2::splat(0.25)), /* Suitable for 512x512 textures; may
-                                                         * wish to change to a lower res */
+                        scale: Some(Vec2::splat(0.5)), // Suitable for 256x256 textures
                         ..default()
                     })
                     .default_solid_scene_hooks(|| {

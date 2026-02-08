@@ -109,7 +109,7 @@
 				"metallic": 0.0,
 				"normal": 1.0,
 				"roughness": 1.0,
-				"size": 9,
+				"size": 8,
 				"sss": 1.0
 			},
 			"seed_int": 0,

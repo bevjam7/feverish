@@ -4,3 +4,4 @@
 .cargo/config.toml
 .DS_Store
 *.mmcr
+assets/maps/autosave/

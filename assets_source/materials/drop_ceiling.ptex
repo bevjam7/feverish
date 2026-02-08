@@ -153,7 +153,7 @@
 			},
 			"export_last_target": "Bevy Trenchbroom",
 			"export_paths": {
-				"Bevy Trenchbroom": "/Users/doomy/Code/feverish/assets/materials/drop_ceiling"
+				"Bevy Trenchbroom": "/Users/doomy/Code/feverish/assets/textures/drop_ceiling"
 			},
 			"name": "Material",
 			"node_position": {
@@ -175,7 +175,7 @@
 				"metallic": 1.0,
 				"normal": 1.0,
 				"roughness": 1.0,
-				"size": 9,
+				"size": 8.0,
 				"sss": 1.0
 			},
 			"seed_int": 0,
