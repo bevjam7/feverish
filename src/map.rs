@@ -1,38 +1,57 @@
 //! Map lifecycle plugin and Trenchbroom integration
 
 use bevy::{prelude::*, scene::SceneInstanceReady};
-use bevy_trenchbroom::{config::DefaultFaceAttributes, prelude::*};
 
-use crate::{GameState, assets::GameAssets};
+use crate::{
+    GameState,
+    assets::GameAssets,
+    gameplay::{Player, PlayerRoot},
+};
 
 pub(crate) struct MapPlugin;
 
 impl Plugin for MapPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins(
-            TrenchBroomPlugins(
-                TrenchBroomConfig::new("feverish")
-                    // .linear_filtering()
-                    .default_face_attributes(DefaultFaceAttributes {
-                        scale: Some(Vec2::splat(0.5)), // Suitable for 256x256 textures
-                        ..default()
-                    })
-                    .default_solid_scene_hooks(|| {
-                        SceneHooks::new().smooth_by_default_angle()
-                        // .convex_collider()
-                    }),
-            )
-            .build(),
-        )
-        .add_systems(OnEnter(GameState::Prepare), spawn_map);
+        app.init_resource::<LevelToPrepare>()
+            .add_systems(OnEnter(GameState::Prepare), (reset, spawn_map).chain());
     }
 }
 
-fn spawn_map(mut cmd: Commands, assets: Res<GameAssets>) {
-    cmd.spawn(SceneRoot(assets.levels[0].clone()))
-        .observe(transition_after_spawned);
+fn reset(mut cmd: Commands, players: Query<Entity, Or<(With<Player>, With<PlayerRoot>)>>) {
+    for player in players {
+        cmd.entity(player).despawn();
+    }
 }
 
-fn transition_after_spawned(_: On<SceneInstanceReady>, mut cmd: Commands) {
+fn spawn_map(
+    mut cmd: Commands,
+    assets: Res<GameAssets>,
+    level_to_prepare: Res<LevelToPrepare>,
+    existing_level: Option<Single<Entity, With<Level>>>,
+) {
+    if let Some(existing_level) = existing_level {
+        cmd.entity(existing_level.entity()).despawn();
+    }
+    let level = level_to_prepare
+        .level
+        .clone()
+        .unwrap_or(assets.level_exterior.clone());
+    cmd.spawn((SceneRoot(level), Level))
+        .observe(move_and_transition_after_spawned);
+}
+
+fn move_and_transition_after_spawned(_on: On<SceneInstanceReady>, mut cmd: Commands) {
+    // Transition to the main game state
     cmd.set_state(GameState::Main);
 }
+
+#[derive(Resource, Default)]
+pub(crate) struct LevelToPrepare {
+    pub(crate) level: Option<Handle<Scene>>,
+    /// If set, move the spawned player to the portal target immediately after
+    /// loading
+    pub(crate) portal_target: Option<String>,
+}
+
+#[derive(Component)]
+pub(crate) struct Level;

@@ -1,3 +1,4 @@
 ({
-    "levels": Files(paths: ["maps/default.map#Scene"]),
+    "levels.exterior": File(path: "maps/exterior.map#Scene"),
+    "levels.hallway": File(path: "maps/hallway.map#Scene"),
 })

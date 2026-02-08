@@ -1,0 +1,164 @@
+use avian3d::prelude::*;
+use bevy::{
+    asset::AssetPath,
+    ecs::{lifecycle::HookContext, world::DeferredWorld},
+    prelude::*,
+};
+use bevy_ahoy::prelude::*;
+use bevy_trenchbroom::prelude::*;
+
+use crate::{
+    AppSystems, GameState, Usable,
+    input::{Use, UseRaycaster},
+    map::LevelToPrepare,
+};
+
+pub(crate) struct GameplayPlugin;
+
+impl Plugin for GameplayPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(
+            Update,
+            (handle_added_spawn_point_camera).in_set(AppSystems::Update),
+        );
+    }
+}
+
+/// Marks an entity as owned by the player. Note that this does *not* refer to a
+/// specific entity, but should instead be combined with other queries.
+#[derive(Component, Default)]
+pub(crate) struct Player;
+
+#[derive(Component)]
+#[require(Player)]
+pub(crate) struct PlayerRoot;
+
+#[point_class(group("player"), classname("spawn"), size(-16 -16 -32, 16 16 32), base(Transform))]
+#[derive(Clone, Copy)]
+pub struct SpawnPoint;
+
+/// Transition between two doors across different levels
+#[solid_class(group("func"), classname("door_portal"), size(-16 -16 -32, 16 16 32), base(Transform, Target))]
+#[derive(Clone, Default)]
+#[component(on_add=Self::on_add_hook)]
+#[require(Usable)]
+pub struct DoorPortal {
+    /// If none, attempt to find a door portal target within the same level and
+    /// move there
+    level: Option<String>,
+}
+
+impl DoorPortal {
+    fn on_add_hook(mut world: DeferredWorld, hook: HookContext) {
+        if world.is_scene_world() {
+            return;
+        }
+        world.commands().entity(hook.entity).observe(Self::on_use);
+    }
+
+    fn on_use(
+        trigger: On<Use>,
+        mut cmd: Commands,
+        targets: Query<&Target>,
+        doors: Query<&Self>,
+        mut next_level: ResMut<LevelToPrepare>,
+        assets: Res<AssetServer>,
+    ) {
+        let door_portal = doors.get(trigger.0).unwrap();
+        let target_level = door_portal.level.clone().expect(
+            "Transitioning between two doors in the same map is not yet supported. A target level \
+             must be set.",
+        );
+        let target_name = targets
+            .get(trigger.0)
+            .expect("Door portal must have a set target.")
+            .target
+            .0
+            .clone();
+
+        let handle = assets
+            .get_handle(AssetPath::parse(&format!("maps/{target_level}.map#Scene")))
+            .expect(&format!("maps/{target_level}.map#Scene not found."));
+
+        // Set desired level
+        next_level.level = Some(handle);
+        next_level.portal_target = Some(target_name);
+        // Transition states
+        cmd.set_state(GameState::Prepare);
+    }
+}
+
+#[point_class(group("door"), classname("portal_target"), size(-16 -16 -32, 16 16 32), base(Transform, Targetable))]
+#[derive(Clone, Copy, Default)]
+pub struct DoorPortalTarget;
+
+fn handle_added_spawn_point_camera(
+    mut cmd: Commands,
+    added: Query<(Entity, &GlobalTransform), Added<SpawnPoint>>,
+    level_to_prepare: Res<LevelToPrepare>,
+    door_targets: Query<(&Targetable, &GlobalTransform), With<DoorPortalTarget>>,
+) {
+    const MAX_INTERACTION_DISTANCE: f32 = 3.0;
+
+    if added.count() > 1 {
+        error!("Multiple spawn points detected.");
+    }
+    if let Some((entity, added)) = added.iter().next() {
+        let target_transform = {
+            match (
+                level_to_prepare.level.as_ref(),
+                level_to_prepare.portal_target.as_ref(),
+            ) {
+                (Some(_level), Some(portal_target)) => {
+                    // Move the player to the desired portal door exit
+                    let (_, target_transform) = door_targets
+                        .iter()
+                        .find(|(name, _)| &name.targetname.0 == portal_target)
+                        .expect(&format!("Door target `{portal_target}` not found"));
+                    target_transform.compute_transform()
+                }
+                _ => added.compute_transform(),
+            }
+        };
+
+        // Character collider and player root
+        let player_root = cmd
+            .entity(entity)
+            .insert((
+                crate::input::controller_bundle(),
+                target_transform,
+                Player,
+                PlayerRoot,
+            ))
+            .id();
+
+        // Camera for our character collider
+        let camera_entity = cmd
+            .spawn((
+                crate::camera::player_camera_bundle(),
+                CharacterControllerCameraOf::new(player_root),
+                Player,
+            ))
+            .id();
+
+        // Raycaster for our use functionality
+        cmd.entity(camera_entity).with_child((
+            Player,
+            UseRaycaster,
+            RayCaster::new(Vec3::ZERO, Dir3::NEG_Z)
+                .with_max_distance(MAX_INTERACTION_DISTANCE)
+                .with_query_filter(SpatialQueryFilter {
+                    mask: [PhysLayer::Default, PhysLayer::Usable].into(),
+                    ..Default::default()
+                })
+                .with_max_hits(1),
+        ));
+    }
+}
+
+#[derive(PhysicsLayer, Default)]
+pub enum PhysLayer {
+    #[default]
+    Default,
+    Usable,
+}

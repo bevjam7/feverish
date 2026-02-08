@@ -1,0 +1,10 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "brick_wall.png"
+normal_map_texture = "brick_wall_normal.png"
+metallic_roughness_texture = "brick_wall_mr.png"
+metallic = 1.0
+perceptual_roughness = 1.0
+
+
+

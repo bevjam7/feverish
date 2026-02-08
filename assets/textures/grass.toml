@@ -1,0 +1,9 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "grass.png"
+normal_map_texture = "grass_normal.png"
+metallic = 1.0
+perceptual_roughness = 1.0
+
+
+

@@ -11,7 +11,6 @@ pub(crate) struct CameraPlugin;
 impl Plugin for CameraPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, spawn_ui_camera)
-            .add_systems(OnEnter(super::GameState::Main), spawn_player_camera)
             .add_observer(make_hdr_compatible);
     }
 }
@@ -41,13 +40,9 @@ fn spawn_ui_camera(mut commands: Commands) {
     ));
 }
 
-fn spawn_player_camera(mut cmd: Commands, existing_camera: Query<(), With<Camera3d>>) {
-    if !existing_camera.is_empty() {
-        return;
-    }
-    cmd.spawn((
+pub(crate) fn player_camera_bundle() -> impl Bundle {
+    (
         Name::new("3D Camera"),
-        DespawnOnExit(super::GameState::Main),
         Camera {
             order: CameraOrder::World.into(),
             ..default()
@@ -62,7 +57,7 @@ fn spawn_player_camera(mut cmd: Commands, existing_camera: Query<(), With<Camera
         AutoExposure::default(),
         Tonemapping::TonyMcMapface,
         Hdr,
-    ));
+    )
 }
 
 fn make_hdr_compatible(

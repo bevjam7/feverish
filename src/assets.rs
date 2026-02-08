@@ -18,6 +18,8 @@ impl Plugin for AssetsPlugin {
 
 #[derive(AssetCollection, Resource)]
 pub struct GameAssets {
-    #[asset(key = "levels", collection(typed))]
-    pub levels: Vec<Handle<Scene>>,
+    #[asset(key = "levels.hallway")]
+    pub level_hallway: Handle<Scene>,
+    #[asset(key = "levels.exterior")]
+    pub level_exterior: Handle<Scene>,
 }

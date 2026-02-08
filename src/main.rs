@@ -5,9 +5,20 @@
 
 mod assets;
 mod camera;
+mod gameplay;
+mod input;
 mod map;
 
-use bevy::{asset::AssetMetaCheck, prelude::*};
+use avian3d::prelude::{CollisionLayers, LayerMask};
+use bevy::{
+    asset::AssetMetaCheck,
+    ecs::{lifecycle::HookContext, world::DeferredWorld},
+    gltf::{GltfPlugin, convert_coordinates::GltfConvertCoordinates},
+    prelude::*,
+};
+use bevy_trenchbroom::{config::DefaultFaceAttributes, prelude::*};
+
+use crate::gameplay::PhysLayer;
 
 fn main() -> AppExit {
     App::new().add_plugins(AppPlugin).run()
@@ -35,8 +46,40 @@ impl Plugin for AppPlugin {
                     }
                     .into(),
                     ..default()
+                })
+                .set(GltfPlugin {
+                    convert_coordinates: GltfConvertCoordinates {
+                        rotate_scene_entity: true,
+                        rotate_meshes: true,
+                    },
+                    ..default()
                 }),
         );
+
+        // Add 3rd party plugins
+        app.add_plugins((
+            avian3d::PhysicsPlugins::default(),
+            (
+                TrenchBroomPlugins(
+                    TrenchBroomConfig::new("feverish")
+                        // .linear_filtering()
+                        .default_face_attributes(DefaultFaceAttributes {
+                            scale: Some(Vec2::splat(0.5)), // Suitable for 256x256 textures
+                            ..default()
+                        })
+                        .default_solid_scene_hooks(|| {
+                            SceneHooks::new()
+                                .smooth_by_default_angle()
+                                .convex_collider()
+                        }),
+                )
+                .build(),
+                TrenchBroomPhysicsPlugin::new(bevy_trenchbroom_avian::AvianPhysicsBackend),
+            ),
+            avian3d::debug_render::PhysicsDebugPlugin,
+            bevy_enhanced_input::EnhancedInputPlugin,
+            bevy_ahoy::AhoyPlugins::default(),
+        ));
 
         // Order new `AppSystems` variants by adding them here:
         app.configure_sets(
@@ -56,7 +99,13 @@ impl Plugin for AppPlugin {
         app.configure_sets(Update, PausableSystems.run_if(in_state(Paused(false))));
 
         // Set up game plugins
-        app.add_plugins((assets::AssetsPlugin, camera::CameraPlugin, map::MapPlugin));
+        app.add_plugins((
+            assets::AssetsPlugin,
+            camera::CameraPlugin,
+            map::MapPlugin,
+            gameplay::GameplayPlugin,
+            input::InputPlugin,
+        ));
     }
 }
 
@@ -97,3 +146,21 @@ struct PausableSystems;
 /// Whether or not the game is paused.
 #[derive(States, Copy, Clone, Eq, PartialEq, Hash, Debug, Default)]
 struct Paused(pub bool);
+
+#[derive(Component, Reflect, Default)]
+#[component(on_add=Self::on_add_hook)]
+#[require(Pickable)]
+#[reflect(Component)]
+pub struct Usable;
+
+impl Usable {
+    fn on_add_hook(mut world: DeferredWorld, hook: HookContext) {
+        world
+            .commands()
+            .entity(hook.entity)
+            .insert(CollisionLayers::new(
+                [PhysLayer::Default, PhysLayer::Usable],
+                LayerMask::NONE,
+            ));
+    }
+}
