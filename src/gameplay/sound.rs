@@ -46,13 +46,20 @@ impl SoundPoint {
             return;
         }
         let point = world.get::<Self>(hook.entity).unwrap();
-        let samples = world.resource::<Assets<AudioSample>>();
         let assets = world.resource::<AssetServer>();
-        let (sample_id, _) = samples
-            .iter()
-            .find(|(x, _)| assets.get_path(*x).unwrap() == AssetPath::from(point.sample.clone()))
-            .expect(&format!("Could not load sample {}", point.sample));
-        let sample = assets.get_id_handle(sample_id).unwrap();
+
+        // let samples = world.resource::<Assets<AudioSample>>();
+
+        // let (sample_id, _) = samples
+        // .iter()
+        // .find(|(x, _)| assets.get_path(*x).unwrap() ==
+        // AssetPath::from(point.sample.clone())) .expect(&format!("Could not
+        // load sample {}", point.sample)); let sample =
+        // assets.get_id_handle(sample_id).unwrap();
+
+        // so i kind of had to edit this becaaaause the last version would crash after
+        // not finsing AudioSample in assets
+        let sample: Handle<AudioSample> = assets.load(AssetPath::from(point.sample.clone()));
 
         let mut sampler = SamplePlayer::new(sample);
         // TODO: make this work lol
