@@ -1,14 +1,14 @@
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
-use bevy_seedling::sample::AudioSample;
+use bevy_seedling::prelude::AudioSample;
 
-use crate::AppState;
+use crate::{AppState, ratspinner::RatScriptAsset};
 
 pub struct AssetsPlugin;
 
 impl Plugin for AssetsPlugin {
     fn build(&self, app: &mut App) {
-        app.init_state::<AppState>().add_loading_state(
+        app.add_loading_state(
             LoadingState::new(AppState::Load)
                 .continue_to_state(AppState::Game)
                 .with_dynamic_assets_file::<StandardDynamicAssetCollection>("default.assets.ron")
@@ -27,4 +27,6 @@ pub struct GameAssets {
     pub models: Vec<Handle<Gltf>>,
     #[asset(key = "audio", collection(typed))]
     pub audio: Vec<Handle<AudioSample>>,
+    #[asset(key = "ratspinner.scripts", collection(typed))]
+    pub rat_scripts: Vec<Handle<RatScriptAsset>>,
 }
