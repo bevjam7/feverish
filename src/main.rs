@@ -10,7 +10,10 @@ mod camera;
 mod gameplay;
 mod input;
 mod map;
+mod ratspinner;
+mod settings;
 mod ui;
+mod voice;
 
 use avian3d::prelude::{CollisionLayers, LayerMask};
 use bevy::{
@@ -106,6 +109,7 @@ impl Plugin for AppPlugin {
 
         // Set up game plugins
         app.add_plugins((
+            settings::SettingsPlugin,
             assets::AssetsPlugin,
             camera::CameraPlugin,
             map::MapPlugin,
@@ -114,13 +118,26 @@ impl Plugin for AppPlugin {
             audio::AudioPlugin,
             // our ui :3
             ui::UiPlugin,
+            // voice plugin duh
+            voice::VoicePlugin,
+            // we might kill ratspinner
+            ratspinner::RatSpinnerPlugin,
         ))
-        .add_systems(Startup, spawn_default_main_menu);
+        .add_systems(OnEnter(AppState::Game), spawn_default_main_menu);
     }
 }
 
-// debug thing for the menu
-fn spawn_default_main_menu(mut commands: Commands) {
+fn spawn_default_main_menu(mut commands: Commands, drivers: Query<(Entity, &Name, Has<ui::MainMenuUi>)>) {
+    for (entity, name, has_main_menu) in &drivers {
+        if name.as_str() != "Main Menu Driver" {
+            continue;
+        }
+        if has_main_menu {
+            return;
+        }
+        commands.entity(entity).insert(ui::MainMenuUi);
+        return;
+    }
     commands.spawn((Name::new("Main Menu Driver"), ui::MainMenuUi));
 }
 
@@ -150,8 +167,8 @@ enum AppState {
 #[source(AppState = AppState::Game)]
 enum GameState {
     #[default]
-    Prepare,
     Main,
+    Prepare,
 }
 
 /// A system set for systems that shouldn't run while the game is paused.

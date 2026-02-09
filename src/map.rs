@@ -25,7 +25,8 @@ fn reset(mut cmd: Commands, players: Query<Entity, Or<(With<Player>, With<Player
 
 fn spawn_map(
     mut cmd: Commands,
-    assets: Res<GameAssets>,
+    assets: Option<Res<GameAssets>>,
+    asset_server: Res<AssetServer>,
     level_to_prepare: Res<LevelToPrepare>,
     existing_level: Option<Single<Entity, With<Level>>>,
 ) {
@@ -35,7 +36,11 @@ fn spawn_map(
     let level = level_to_prepare
         .level
         .clone()
-        .unwrap_or(assets.level_exterior.clone());
+        .or_else(|| assets.as_ref().map(|loaded| loaded.level_exterior.clone()))
+        .unwrap_or_else(|| {
+            warn!("GameAssets missing during map spawn; loading fallback scene path directly.");
+            asset_server.load("maps/exterior.map#Scene")
+        });
     cmd.spawn((SceneRoot(level), Level))
         .observe(move_and_transition_after_spawned);
 }
