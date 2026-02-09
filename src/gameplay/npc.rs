@@ -8,7 +8,11 @@ use bevy::{
 };
 use bevy_trenchbroom::prelude::*;
 
-use crate::gameplay::PhysLayer;
+use crate::{
+    gameplay::PhysLayer,
+    input::Use,
+    ratspinner::{RatCommand, RatStart},
+};
 
 #[point_class(base(Transform, Visibility), model("models/npc_a/npc_a.gltf"))]
 #[component(on_add=Self::on_add_hook)]
@@ -88,8 +92,10 @@ impl Npc {
                     animations,
                     graph_handle,
                 },
+                NpcDialogueProfile::default(),
             ))
-            .observe(idle_on_spawn);
+            .observe(idle_on_spawn)
+            .observe(npc_on_use);
     }
 }
 
@@ -121,4 +127,26 @@ fn idle_on_spawn(
 pub(crate) struct NpcAnimationControls {
     pub(crate) animations: HashMap<&'static str, AnimationNodeIndex>,
     pub(crate) graph_handle: Handle<AnimationGraph>,
+}
+
+#[derive(Component, Clone)]
+struct NpcDialogueProfile {
+    script_id: String,
+}
+
+impl Default for NpcDialogueProfile {
+    fn default() -> Self {
+        Self {
+            script_id: "npc.default".to_string(),
+        }
+    }
+}
+
+fn npc_on_use(trigger: On<Use>, mut commands: Commands, npcs: Query<&NpcDialogueProfile>) {
+    let Ok(dialogue) = npcs.get(trigger.0) else {
+        return;
+    };
+    commands.write_message(RatCommand::Start(
+        RatStart::new(dialogue.script_id.clone()).target(trigger.0),
+    ));
 }
