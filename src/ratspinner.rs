@@ -30,13 +30,14 @@ mod runtime;
 mod types;
 
 use bevy::prelude::*;
-use crate::AppState;
 pub use runtime::RatDialogueState;
 #[allow(unused_imports)]
 pub use types::{
     RatCommand, RatCommandsExt, RatHookTriggered, RatNodeBuilder, RatOptionBuilder, RatScript,
     RatScriptAsset, RatScriptBuilder, RatStart,
 };
+
+use crate::AppState;
 
 pub struct RatSpinnerPlugin;
 
