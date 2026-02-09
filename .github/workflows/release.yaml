@@ -87,7 +87,7 @@ env:
 
   # Before enabling LFS, please take a look at GitHub's documentation for costs and quota limits:
   # <https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-storage-and-bandwidth-usage>
-  git_lfs: false
+  git_lfs: true
 
   # Enable these to deploy on every push to `main`.
   # Make sure to set up any enabled targets. Builds will ignore warnings.

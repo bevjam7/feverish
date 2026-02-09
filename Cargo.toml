@@ -31,6 +31,7 @@ bevy_asset_loader = { version = "0.25.0", features = [
 ] }
 bevy_framepace = { git = "https://github.com/aevyrie/bevy_framepace" }
 bevy_seedling = { version = "0.7.0", features = [] }
+wasm-bindgen = { version = "=0.2.108", optional = true }
 
 rand = "0.9"
 serde = { version = "1.0", features = ["derive"] }
@@ -50,6 +51,7 @@ web-sys = { version = "0.3", features = ["Window", "Storage"] }
 [features]
 # Default to a native dev build.
 default = ["dev_native"]
+native = []
 dev = [
     # Improve compile times for dev builds by linking Bevy as a dynamic library.
     "bevy/dynamic_linking",
@@ -57,26 +59,19 @@ dev = [
     "bevy/bevy_ui_debug",
     # Improve error messages coming from Bevy
     "bevy/track_location",
+    "avian3d/diagnostic_ui",
+    "bevy_seedling/dev",
 ]
 dev_native = [
     "dev",
+    "native",
     # Enable asset hot reloading for native dev builds.
     "bevy/file_watcher",
     # Enable embedded asset hot reloading for native dev builds.
     "bevy/embedded_watcher",
 ]
-
-
-[package.metadata.bevy_cli.release]
-# Disable dev features for release builds.
-default-features = false
-
-[package.metadata.bevy_cli.web]
-# Disable native features for web builds.
-default-features = false
-
-[package.metadata.bevy_cli.web.dev]
-features = ["dev"]
+web = ["bevy/webgpu", "bevy_seedling/web_audio", "dep:wasm-bindgen"]
+release = []
 
 
 [lints.rust]
@@ -98,6 +93,30 @@ nonstandard_macro_braces = "warn"
 # panicking_methods = "deny"
 # pedantic = "warn"
 
+
+[package.metadata.bevy_cli]
+default-features = false
+
+[package.metadata.bevy_cli.native]
+features = ["native"]
+
+[package.metadata.bevy_cli.native.dev]
+features = ["dev_native"]
+
+[package.metadata.bevy_cli.native.release]
+features = ["release"]
+
+[package.metadata.bevy_cli.web]
+features = ["web"]
+
+[package.metadata.bevy_cli.web.dev]
+features = ["dev"]
+
+[package.metadata.bevy_cli.web.release]
+features = ["release"]
+
+[package.metadata.bevy_cli.unstable]
+web-multi-threading = true
 
 # Compile with Performance Optimizations:
 # <https://bevyengine.org/learn/quick-start/getting-started/setup/#compile-with-performance-optimizations>

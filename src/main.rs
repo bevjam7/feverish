@@ -49,12 +49,14 @@ impl Plugin for AppPlugin {
                     primary_window: Window {
                         title: "Feverish".to_string(),
                         fit_canvas_to_parent: true,
+                        #[cfg(feature = "web")]
+                        prevent_default_event_handling: true,
                         ..default()
                     }
                     .into(),
                     ..default()
                 })
-                .set(ImagePlugin::default_nearest())
+                .set(ImagePlugin::default_linear())
                 .set(GltfPlugin {
                     convert_coordinates: GltfConvertCoordinates {
                         rotate_scene_entity: true,
@@ -66,7 +68,10 @@ impl Plugin for AppPlugin {
 
         // Add 3rd party plugins
         app.add_plugins((
+            #[cfg(feature = "native")]
             bevy_seedling::SeedlingPlugin::default(),
+            #[cfg(feature = "web")]
+            bevy_seedling::SeedlingPlugin::new_web_audio(),
             avian3d::PhysicsPlugins::default(),
             (
                 TrenchBroomPlugins(
