@@ -1,11 +1,14 @@
 use bevy::prelude::*;
 use bevy_seedling::prelude::*;
 
+use crate::settings::GameSettings;
+
 pub(crate) struct AudioPlugin;
 
 impl Plugin for AudioPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, set_up_mixer);
+        app.add_systems(Startup, set_up_mixer)
+            .add_systems(Update, apply_mixer_settings);
     }
 }
 
@@ -25,7 +28,31 @@ fn set_up_mixer(mut cmd: Commands) {
     .connect(mixer::WorldSfxBus);
 }
 
-// Various mixer channels for settings tuning
+fn apply_mixer_settings(
+    settings: Res<GameSettings>,
+    mut buses: ParamSet<(
+        Query<&mut VolumeNode, With<mixer::MusicBus>>,
+        Query<&mut VolumeNode, With<mixer::UiSfxBus>>,
+        Query<&mut VolumeNode, With<mixer::WorldSfxBus>>,
+    )>,
+) {
+    let master = settings.master_volume.clamp(0.0, 1.5);
+    let music = settings.music_volume.clamp(0.0, 1.5);
+    let ui_sfx = settings.ui_sfx_volume.clamp(0.0, 1.5);
+    let world_sfx = settings.world_sfx_volume.clamp(0.0, 1.5);
+
+    if let Ok(mut node) = buses.p0().single_mut() {
+        node.volume = Volume::Linear(master * music);
+    }
+    if let Ok(mut node) = buses.p1().single_mut() {
+        node.volume = Volume::Linear(master * ui_sfx);
+    }
+    if let Ok(mut node) = buses.p2().single_mut() {
+        node.volume = Volume::Linear(master * world_sfx);
+    }
+}
+
+// mixer channels that can be controlled in settings.
 
 pub(crate) mod mixer {
     use bevy_seedling::prelude::*;
