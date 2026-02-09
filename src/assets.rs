@@ -22,4 +22,6 @@ pub struct GameAssets {
     pub level_hallway: Handle<Scene>,
     #[asset(key = "levels.exterior")]
     pub level_exterior: Handle<Scene>,
+    #[asset(key = "models", collection(typed))]
+    pub models: Vec<Handle<Gltf>>,
 }

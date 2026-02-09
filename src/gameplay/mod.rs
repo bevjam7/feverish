@@ -161,4 +161,5 @@ pub enum PhysLayer {
     #[default]
     Default,
     Usable,
+    Npc,
 }

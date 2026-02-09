@@ -5,3 +5,5 @@
 .DS_Store
 *.mmcr
 assets/maps/autosave/
+*.afphoto~lock~
+*.blend1

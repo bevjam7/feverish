@@ -16,6 +16,7 @@ impl Plugin for InputPlugin {
 pub(crate) fn controller_bundle() -> impl Bundle {
     (
         bevy_ahoy::CharacterController {
+            standing_view_height: 1.6,
             stop_speed: 2.0,
             friction_hz: 16.0,
             crouch_speed_scale: 1.0 / 2.0,
