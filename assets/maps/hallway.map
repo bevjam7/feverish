@@ -177,8 +177,8 @@
 // entity 9
 {
 "classname" "npc"
-"origin" "864.686 616.686 -64"
-"angles" "0 0 0"
+"origin" "890 642 -64"
+"idle_animation" "cower"
 "model" "models/npc_a/npc_a.gltf"
-"idle_animation" "idle_lean"
+"angles" "0 0 0"
 }

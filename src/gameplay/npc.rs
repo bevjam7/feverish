@@ -48,7 +48,7 @@ impl Npc {
         // heavily specific :( jam moment!
         let mut graph = AnimationGraph::new();
 
-        let clips = ["idle_a", "idle_lean", "walk"];
+        let clips = ["idle_a", "idle_lean", "walk", "cower"];
         let register_animation = |clip_name: &'static str| -> (&'static str, AnimationNodeIndex) {
             (
                 clip_name,
