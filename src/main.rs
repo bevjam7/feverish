@@ -8,12 +8,14 @@ mod camera;
 mod gameplay;
 mod input;
 mod map;
+mod ui;
 
 use avian3d::prelude::{CollisionLayers, LayerMask};
 use bevy::{
     asset::AssetMetaCheck,
     ecs::{lifecycle::HookContext, world::DeferredWorld},
     gltf::{GltfPlugin, convert_coordinates::GltfConvertCoordinates},
+    image::ImagePlugin,
     prelude::*,
 };
 use bevy_trenchbroom::{config::DefaultFaceAttributes, prelude::*};
@@ -47,6 +49,7 @@ impl Plugin for AppPlugin {
                     .into(),
                     ..default()
                 })
+                .set(ImagePlugin::default_nearest())
                 .set(GltfPlugin {
                     convert_coordinates: GltfConvertCoordinates {
                         rotate_scene_entity: true,
@@ -105,8 +108,16 @@ impl Plugin for AppPlugin {
             map::MapPlugin,
             gameplay::GameplayPlugin,
             input::InputPlugin,
-        ));
+            // our ui :3
+            ui::UiPlugin,
+        ))
+        .add_systems(Startup, spawn_default_main_menu);
     }
+}
+
+// debug thing for the menu
+fn spawn_default_main_menu(mut commands: Commands) {
+    commands.spawn((Name::new("Main Menu Driver"), ui::MainMenuUi));
 }
 
 /// High-level groupings of systems for the app in the `Update` schedule.
