@@ -1,0 +1,24 @@
+// script: npc.default
+// entry: greeting
+
+[greeting]
+speaker: mr. d.
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: hey there! i'm mr d.
+hook: npc.default.greeting
+> who are you? -> identity [id: ask_identity] [hook: npc.default.option.identity]
+> what happened here? -> place [id: ask_place] [hook: npc.default.option.place]
+> i should go. [id: leave] [hook: npc.default.option.leave]
+
+[identity]
+speaker: mr. d.
+portrait: models/npc_a/npc_a.png
+text: i am mr d!!!!!
+-> greeting
+
+[place]
+speaker: mr. d.
+portrait: models/npc_a/npc_a.png
+text: its doom time
+-> greeting

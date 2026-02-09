@@ -1,0 +1,63 @@
+(
+    id: "npc.default",
+    entry: "greeting",
+    nodes: [
+        (
+            id: "greeting",
+            speaker: "mr. d.",
+            text: "hey there! i\'m mr d.",
+            portrait_path: "models/npc_a/npc_a.png",
+            voice: neutral_npc,
+            next: None,
+            hooks: [
+                "npc.default.greeting",
+            ],
+            options: [
+                (
+                    id: Some("ask_identity"),
+                    text: "who are you?",
+                    next: Some("identity"),
+                    hooks: [
+                        "npc.default.option.identity",
+                    ],
+                ),
+                (
+                    id: Some("ask_place"),
+                    text: "what happened here?",
+                    next: Some("place"),
+                    hooks: [
+                        "npc.default.option.place",
+                    ],
+                ),
+                (
+                    id: Some("leave"),
+                    text: "i should go.",
+                    next: None,
+                    hooks: [
+                        "npc.default.option.leave",
+                    ],
+                ),
+            ],
+        ),
+        (
+            id: "identity",
+            speaker: "mr. d.",
+            text: "i am mr d!!!!!",
+            portrait_path: "models/npc_a/npc_a.png",
+            voice: neutral_npc,
+            next: Some("greeting"),
+            hooks: [],
+            options: [],
+        ),
+        (
+            id: "place",
+            speaker: "mr. d.",
+            text: "its doom time",
+            portrait_path: "models/npc_a/npc_a.png",
+            voice: neutral_npc,
+            next: Some("greeting"),
+            hooks: [],
+            options: [],
+        ),
+    ],
+)
