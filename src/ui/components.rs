@@ -1,10 +1,24 @@
 use bevy::prelude::*;
 
+use crate::settings::SettingKey;
+
 #[derive(Component, Debug, Clone, Copy)]
 pub struct MainMenuUi;
 
 #[derive(Component, Debug, Clone, Copy)]
 pub struct PauseMenuUi;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(super) enum PauseMenuPage {
+    Status,
+    Settings,
+}
+
+#[derive(Component, Debug, Clone, Copy, PartialEq, Eq)]
+pub(super) struct PauseMenuState {
+    pub owner: Entity,
+    pub page: PauseMenuPage,
+}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Reflect)]
 pub enum DiscoveryKind {
@@ -18,6 +32,8 @@ pub struct DiscoveryEntry {
     pub title: String,
     pub subtitle: String,
     pub description: String,
+    pub image_path: Option<String>,
+    pub model_path: Option<String>,
     pub seen: bool,
 }
 
@@ -28,6 +44,8 @@ impl DiscoveryEntry {
             title: title.into(),
             subtitle: String::new(),
             description: String::new(),
+            image_path: None,
+            model_path: None,
             seen: false,
         }
     }
@@ -39,6 +57,16 @@ impl DiscoveryEntry {
 
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.description = description.into();
+        self
+    }
+
+    pub fn image_path(mut self, path: impl Into<String>) -> Self {
+        self.image_path = Some(path.into());
+        self
+    }
+
+    pub fn model_path(mut self, path: impl Into<String>) -> Self {
+        self.model_path = Some(path.into());
         self
     }
 
@@ -75,6 +103,37 @@ pub enum UiMenuAction {
     Resume(Entity),
     BackToMainMenu(Entity),
     QuitGame(Entity),
+}
+
+#[derive(Debug, Clone)]
+pub struct UiDialogueOption {
+    pub text: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct UiDialoguePreview {
+    pub title: String,
+    pub subtitle: String,
+    pub description: String,
+    pub image_path: Option<String>,
+    pub model_path: Option<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct UiDialogueRequest {
+    pub speaker: String,
+    pub text: String,
+    pub portrait_path: String,
+    pub preview: Option<UiDialoguePreview>,
+    pub options: Vec<UiDialogueOption>,
+    pub reveal_duration_secs: f32,
+}
+
+#[derive(Message, Debug, Clone)]
+pub enum UiDialogueCommand {
+    Start(UiDialogueRequest),
+    Advance,
+    Close,
 }
 
 #[derive(Component, Debug, Clone, Copy)]
@@ -114,6 +173,7 @@ pub(super) struct MenuConfirmState {
 pub(super) enum ButtonAction {
     SelectPage(MainMenuPage),
     SelectDiscovery(DiscoveryKind, usize),
+    AdjustSetting(SettingKey, i32),
     Play,
     Continue,
     Resume,
@@ -137,6 +197,7 @@ pub(super) enum MainMenuPage {
     Credits,
     DiscoveredItems,
     PhoneList,
+    Settings,
 }
 
 #[derive(Component, Debug, Clone, Copy)]
@@ -185,6 +246,21 @@ pub(super) struct MainMenuGalleryPanel {
 }
 
 #[derive(Component, Debug, Clone, Copy)]
+pub(super) struct MainMenuSettingsPanel {
+    pub owner: Entity,
+}
+
+#[derive(Component, Debug, Clone, Copy)]
+pub(super) struct PauseMenuStatusPanel {
+    pub owner: Entity,
+}
+
+#[derive(Component, Debug, Clone, Copy)]
+pub(super) struct PauseMenuSettingsPanel {
+    pub owner: Entity,
+}
+
+#[derive(Component, Debug, Clone, Copy)]
 pub(super) struct GalleryListRoot {
     pub owner: Entity,
 }
@@ -210,6 +286,12 @@ pub(super) struct GalleryDetailStatus {
 }
 
 #[derive(Component, Debug, Clone, Copy)]
+pub(super) struct SettingsValueText {
+    pub owner: Entity,
+    pub key: SettingKey,
+}
+
+#[derive(Component, Debug, Clone, Copy)]
 pub(super) struct GalleryListCache {
     pub owner: Entity,
     pub kind: DiscoveryKind,
@@ -230,3 +312,6 @@ pub(super) struct DitherPixel {
 
 #[derive(Component, Debug, Clone, Copy)]
 pub(super) struct UiCursorSprite;
+
+#[derive(Component, Debug, Clone, Copy)]
+pub struct DialogueUiRoot;

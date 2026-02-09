@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 
 use bevy::{
+    input::mouse::{MouseScrollUnit, MouseWheel},
+    picking::hover::HoverMap,
     prelude::*,
     ui::{FocusPolicy, UiScale},
     window::{CursorOptions, PrimaryWindow},
@@ -8,18 +10,20 @@ use bevy::{
 
 use super::{
     components::{
-        ButtonAction, ConfirmAction, ConfirmDialogMessage, ConfirmDialogRoot, DisabledButton,
-        DiscoveryEntry, DiscoveryKind, DitherPixel, GalleryDetailDescription, GalleryDetailStatus,
-        GalleryDetailSubtitle, GalleryDetailTitle, GalleryListCache, GalleryListRoot,
-        MainMenuGalleryPanel, MainMenuHeading, MainMenuLine, MainMenuPage, MainMenuState,
-        MainMenuTerminalPanel, MainMenuTicker, MainMenuUi, MenuButton, MenuConfirmState, MenuOwner,
-        PauseMenuUi, UiCursorSprite, UiDiscoveryCommand, UiMenuAction,
+        ButtonAction, ConfirmAction, ConfirmDialogMessage, ConfirmDialogRoot, DialogueUiRoot,
+        DisabledButton, DiscoveryEntry, DiscoveryKind, DitherPixel, GalleryDetailDescription,
+        GalleryDetailStatus, GalleryDetailSubtitle, GalleryDetailTitle, GalleryListCache,
+        GalleryListRoot, MainMenuGalleryPanel, MainMenuHeading, MainMenuLine, MainMenuPage,
+        MainMenuSettingsPanel, MainMenuState, MainMenuTerminalPanel, MainMenuTicker, MainMenuUi,
+        MenuButton, MenuConfirmState, MenuOwner, PauseMenuPage, PauseMenuSettingsPanel,
+        PauseMenuState, PauseMenuStatusPanel, PauseMenuUi, SettingsValueText, UiCursorSprite,
+        UiDiscoveryCommand, UiMenuAction,
     },
     main_menu::spawn_main_menu,
     pause_menu::spawn_pause_menu,
     theme,
 };
-use crate::{AppState, GameState, Paused};
+use crate::{AppState, GameState, Paused, settings::GameSettings};
 
 #[derive(Resource)]
 pub(super) struct UiFonts {
@@ -53,6 +57,7 @@ impl Default for UiDiscoveryDb {
                 DiscoveryEntry::new("rat-toy", "rat toy")
                     .subtitle("rat wooden toy")
                     .description("a weird rat toy. you can read the word 'Jan' carved in.")
+                    .model_path("models/rat_toy/rattoy.glb#Scene0")
                     .seen(true),
             ],
             npcs: vec![
@@ -137,6 +142,7 @@ pub(super) fn load_fonts(mut commands: Commands, assets: Res<AssetServer>) {
 pub(super) fn update_ui_scale(
     mut ui_scale: ResMut<UiScale>,
     windows: Query<&Window, With<PrimaryWindow>>,
+    settings: Res<GameSettings>,
 ) {
     let Ok(window) = windows.single() else {
         return;
@@ -146,7 +152,12 @@ pub(super) fn update_ui_scale(
     if width <= 0.0 || height <= 0.0 {
         return;
     }
-    let next_scale = (width / theme::UI_WIDTH).min(height / theme::UI_HEIGHT);
+    let auto_scale = (width / theme::UI_WIDTH).min(height / theme::UI_HEIGHT);
+    let next_scale = if settings.ui_scale_auto {
+        auto_scale
+    } else {
+        settings.manual_ui_scale.clamp(0.6, 2.0)
+    };
     if (ui_scale.0 - next_scale).abs() > 0.001 {
         ui_scale.0 = next_scale;
     }
@@ -154,11 +165,12 @@ pub(super) fn update_ui_scale(
 
 pub(super) fn update_ui_cursor(
     mut commands: Commands,
-    ui_visible: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>)>>,
+    ui_visible: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>, With<DialogueUiRoot>)>>,
     cursors: Res<UiCursorIcons>,
     mouse: Res<ButtonInput<MouseButton>>,
     time: Res<Time>,
     ui_scale: Res<UiScale>,
+    settings: Res<GameSettings>,
     mut click_timer: Local<f32>,
     mut last_cursor_pos: Local<Option<Vec2>>,
     mut move_energy: Local<f32>,
@@ -248,6 +260,13 @@ pub(super) fn update_ui_cursor(
             theme::CURSOR_TINT
         };
 
+        if !settings.cursor_motion {
+            transform.translation = Val2::ZERO;
+            transform.scale = Vec2::splat(2.0);
+            transform.rotation = Rot2::IDENTITY;
+            continue;
+        }
+
         let t = (*click_timer).min(0.18);
         let click_pulse = if t < 0.18 {
             (1.0 - t / 0.18) * (t * 80.0).sin().abs()
@@ -324,7 +343,7 @@ pub(super) fn reset_ticker_on_scale_change(
 
 pub(super) fn cleanup_ui_cursor(
     mut commands: Commands,
-    ui_visible: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>)>>,
+    ui_visible: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>, With<DialogueUiRoot>)>>,
     cursor_sprite: Query<Entity, With<UiCursorSprite>>,
 ) {
     if !ui_visible.is_empty() {
@@ -336,7 +355,7 @@ pub(super) fn cleanup_ui_cursor(
 }
 
 pub(super) fn restore_native_cursor_on_exit(
-    ui_visible: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>)>>,
+    ui_visible: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>, With<DialogueUiRoot>)>>,
     mut windows: Query<&mut CursorOptions, With<PrimaryWindow>>,
 ) {
     if !ui_visible.is_empty() {
@@ -352,8 +371,9 @@ pub(super) fn handle_menu_actions(
     mut actions: MessageReader<UiMenuAction>,
     mut exit: MessageWriter<AppExit>,
     mut next_app: ResMut<NextState<AppState>>,
-    mut next_game: ResMut<NextState<GameState>>,
+    mut next_game: Option<ResMut<NextState<GameState>>>,
     mut next_paused: ResMut<NextState<Paused>>,
+    current_app_state: Option<Res<State<AppState>>>,
 ) {
     for action in actions.read() {
         match *action {
@@ -361,8 +381,15 @@ pub(super) fn handle_menu_actions(
                 commands.entity(owner).remove::<MainMenuUi>();
                 commands.entity(owner).remove::<PauseMenuUi>();
                 next_paused.set(Paused(false));
-                next_app.set(AppState::Game);
-                next_game.set(GameState::Prepare);
+                let app_is_game = current_app_state
+                    .as_ref()
+                    .is_some_and(|state| *state.get() == AppState::Game);
+                if !app_is_game {
+                    next_app.set(AppState::Game);
+                }
+                if let Some(next_game) = &mut next_game {
+                    next_game.set(GameState::Prepare);
+                }
             }
             UiMenuAction::Resume(owner) => {
                 commands.entity(owner).remove::<PauseMenuUi>();
@@ -385,8 +412,12 @@ pub(super) fn handle_pause_shortcut(
     keys: Res<ButtonInput<KeyCode>>,
     mut next_paused: ResMut<NextState<Paused>>,
     owners: Query<(Entity, Option<&Name>, Has<MainMenuUi>, Has<PauseMenuUi>)>,
+    dialogue_ui: Query<(), With<DialogueUiRoot>>,
 ) {
     if !keys.just_pressed(KeyCode::Escape) {
+        return;
+    }
+    if !dialogue_ui.is_empty() {
         return;
     }
 
@@ -410,6 +441,72 @@ pub(super) fn handle_pause_shortcut(
             next_paused.set(Paused(true));
         }
         return;
+    }
+}
+
+pub(super) fn handle_scroll(
+    mut mouse_wheel_events: MessageReader<MouseWheel>,
+    hover_map: Res<HoverMap>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
+    mut query: Query<(&mut ScrollPosition, &Node, &ComputedNode, &InheritedVisibility)>,
+) {
+    const SCROLL_LINE: f32 = 24.0;
+
+    for event in mouse_wheel_events.read() {
+        let mut delta = -Vec2::new(event.x, event.y);
+        if event.unit == MouseScrollUnit::Line {
+            delta *= SCROLL_LINE;
+        }
+        if keyboard_input.any_pressed([KeyCode::ControlLeft, KeyCode::ControlRight]) {
+            std::mem::swap(&mut delta.x, &mut delta.y);
+        }
+
+        let mut consumed = false;
+        for pointer_map in hover_map.values() {
+            let mut remaining = delta;
+            for entity in pointer_map.keys().copied() {
+                let Ok((mut scroll, node, computed, visibility)) = query.get_mut(entity) else {
+                    continue;
+                };
+                if !visibility.get() {
+                    continue;
+                }
+
+                let max_offset =
+                    (computed.content_size() - computed.size()) * computed.inverse_scale_factor();
+                if node.overflow.x == OverflowAxis::Scroll && remaining.x != 0.0 {
+                    let at_edge = if remaining.x > 0.0 {
+                        scroll.x >= max_offset.x
+                    } else {
+                        scroll.x <= 0.0
+                    };
+                    if !at_edge {
+                        scroll.x = (scroll.x + remaining.x).clamp(0.0, max_offset.x.max(0.0));
+                        remaining.x = 0.0;
+                    }
+                }
+
+                if node.overflow.y == OverflowAxis::Scroll && remaining.y != 0.0 {
+                    let at_edge = if remaining.y > 0.0 {
+                        scroll.y >= max_offset.y
+                    } else {
+                        scroll.y <= 0.0
+                    };
+                    if !at_edge {
+                        scroll.y = (scroll.y + remaining.y).clamp(0.0, max_offset.y.max(0.0));
+                        remaining.y = 0.0;
+                    }
+                }
+
+                if remaining == Vec2::ZERO {
+                    consumed = true;
+                    break;
+                }
+            }
+            if consumed {
+                break;
+            }
+        }
     }
 }
 
@@ -462,8 +559,6 @@ pub(super) fn spawn_main_menu_on_added(
     fonts: Res<UiFonts>,
     added: Query<Entity, Added<MainMenuUi>>,
 ) {
-    let count = added.iter().count();
-
     for owner in &added {
         if registry.main_roots.contains_key(&owner) {
             continue;
@@ -527,9 +622,11 @@ pub(super) fn handle_button_interactions(
         Changed<Interaction>,
     >,
     mut states: Query<&mut MainMenuState>,
+    mut pause_states: Query<&mut PauseMenuState>,
     mut confirms: Query<&mut MenuConfirmState>,
     mut actions: MessageWriter<UiMenuAction>,
     db: Res<UiDiscoveryDb>,
+    mut settings: ResMut<GameSettings>,
 ) {
     for (interaction, mut background, mut border, button, owner, disabled) in &mut interactions {
         if disabled {
@@ -544,7 +641,7 @@ pub(super) fn handle_button_interactions(
                 *border = theme::border(false);
 
                 match button.action {
-                    ButtonAction::SelectPage(page) =>
+                    ButtonAction::SelectPage(page) => {
                         for mut state in &mut states {
                             if state.owner != owner.0 {
                                 continue;
@@ -562,7 +659,17 @@ pub(super) fn handle_button_interactions(
                             {
                                 state.selected_npc = Some(0);
                             }
-                        },
+                        }
+                        for mut state in &mut pause_states {
+                            if state.owner != owner.0 {
+                                continue;
+                            }
+                            match page {
+                                MainMenuPage::Settings => state.page = PauseMenuPage::Settings,
+                                _ => state.page = PauseMenuPage::Status,
+                            }
+                        }
+                    }
                     ButtonAction::SelectDiscovery(kind, index) =>
                         for mut state in &mut states {
                             if state.owner != owner.0 {
@@ -579,6 +686,9 @@ pub(super) fn handle_button_interactions(
                                 }
                             }
                         },
+                    ButtonAction::AdjustSetting(key, step) => {
+                        settings.adjust(key, step);
+                    }
                     ButtonAction::Play => {
                         actions.write(UiMenuAction::Play(owner.0));
                     }
@@ -693,6 +803,7 @@ pub(super) fn refresh_main_menu_panels(
     mut panel_sets: ParamSet<(
         Query<(&MainMenuTerminalPanel, &mut Node)>,
         Query<(&MainMenuGalleryPanel, &mut Node)>,
+        Query<(&MainMenuSettingsPanel, &mut Node)>,
     )>,
 ) {
     for state in &changed_states {
@@ -700,13 +811,15 @@ pub(super) fn refresh_main_menu_panels(
             state.page,
             MainMenuPage::DiscoveredItems | MainMenuPage::PhoneList
         );
+        let show_settings = state.page == MainMenuPage::Settings;
+        let show_terminal = !show_gallery && !show_settings;
 
         for (tag, mut node) in &mut panel_sets.p0() {
             if tag.owner == state.owner {
-                node.display = if show_gallery {
-                    Display::None
-                } else {
+                node.display = if show_terminal {
                     Display::Flex
+                } else {
+                    Display::None
                 };
             }
         }
@@ -714,6 +827,49 @@ pub(super) fn refresh_main_menu_panels(
         for (tag, mut node) in &mut panel_sets.p1() {
             if tag.owner == state.owner {
                 node.display = if show_gallery {
+                    Display::Flex
+                } else {
+                    Display::None
+                };
+            }
+        }
+
+        for (tag, mut node) in &mut panel_sets.p2() {
+            if tag.owner == state.owner {
+                node.display = if show_settings {
+                    Display::Flex
+                } else {
+                    Display::None
+                };
+            }
+        }
+    }
+}
+
+pub(super) fn refresh_pause_menu_panels(
+    changed_states: Query<&PauseMenuState, Or<(Changed<PauseMenuState>, Added<PauseMenuState>)>>,
+    mut panel_sets: ParamSet<(
+        Query<(&PauseMenuStatusPanel, &mut Node)>,
+        Query<(&PauseMenuSettingsPanel, &mut Node)>,
+    )>,
+) {
+    for state in &changed_states {
+        let show_settings = state.page == PauseMenuPage::Settings;
+        let show_status = !show_settings;
+
+        for (tag, mut node) in &mut panel_sets.p0() {
+            if tag.owner == state.owner {
+                node.display = if show_status {
+                    Display::Flex
+                } else {
+                    Display::None
+                };
+            }
+        }
+
+        for (tag, mut node) in &mut panel_sets.p1() {
+            if tag.owner == state.owner {
+                node.display = if show_settings {
                     Display::Flex
                 } else {
                     Display::None
@@ -793,7 +949,6 @@ pub(super) fn rebuild_gallery_lists(
                 return;
             }
 
-        
             // this is a messy workaround but should work
             for (index, entry) in entries.iter().enumerate() {
                 let is_active = selected == Some(index);
@@ -898,6 +1053,16 @@ pub(super) fn refresh_gallery_details(
                 it.description.clone()
             });
         *text = Text::new(desc);
+    }
+}
+
+pub(super) fn refresh_settings_values(
+    settings: Res<GameSettings>,
+    mut texts: Query<(&SettingsValueText, &mut Text)>,
+) {
+    for (tag, mut text) in &mut texts {
+        let _ = tag.owner;
+        *text = Text::new(settings.value_text(tag.key));
     }
 }
 
@@ -1041,6 +1206,17 @@ fn main_menu_page_content(page: MainMenuPage) -> (&'static str, &'static [&'stat
                 "right panel = details",
                 "",
                 "",
+                "",
+            ],
+        ),
+        MainMenuPage::Settings => (
+            "SETTINGS",
+            &[
+                "runtime controls online",
+                "audio, voice and ui tuning",
+                "",
+                "left button = decrease/toggle",
+                "right button = increase/toggle",
                 "",
             ],
         ),
