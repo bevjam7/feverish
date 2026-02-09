@@ -123,6 +123,7 @@
 {
 "classname" "light_point"
 "origin" "944 616 40"
+"shadows_enabled" "true"
 }
 // entity 3
 {
@@ -168,7 +169,8 @@
 // entity 8
 {
 "classname" "npc"
-"origin" "900.686 540.686 -64"
-"angles" "0 90 0"
+"origin" "864.686 548.686 -64"
+"angles" "0 0 0"
 "model" "models/npc_a/npc_a.gltf"
+"idle_animation" "idle_lean"
 }

@@ -1,3 +1,6 @@
+mod npc;
+mod props;
+
 use avian3d::prelude::*;
 use bevy::{
     asset::AssetPath,

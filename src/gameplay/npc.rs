@@ -1,22 +1,31 @@
-use avian3d::prelude::{
-    ColliderConstructor, ColliderConstructorHierarchy, CollisionLayers, RigidBody,
-};
+use avian3d::prelude::{ColliderConstructor, CollisionLayers, RigidBody};
 use bevy::{
     asset::AssetPath,
     ecs::{lifecycle::HookContext, world::DeferredWorld},
+    platform::collections::HashMap,
     prelude::*,
     scene::SceneInstanceReady,
 };
 use bevy_trenchbroom::prelude::*;
 
-use crate::{assets::GameAssets, gameplay::PhysLayer};
+use crate::gameplay::PhysLayer;
 
 #[point_class(base(Transform, Visibility), model("models/npc_a/npc_a.gltf"))]
-#[derive(Default)]
 #[component(on_add=Self::on_add_hook)]
 pub(crate) struct Npc {
     #[class(default = "models/npc_a/npc_a.gltf", must_set)]
     model: String,
+    #[class(default = "idle_a")]
+    idle_animation: String,
+}
+
+impl Default for Npc {
+    fn default() -> Self {
+        Self {
+            model: Default::default(),
+            idle_animation: "idle_a".into(),
+        }
+    }
 }
 
 impl Npc {
@@ -38,21 +47,29 @@ impl Npc {
         // Build the animation graph in a yucky gross way that isn't serialized and is
         // heavily specific :( jam moment!
         let mut graph = AnimationGraph::new();
-        let idle_walk_blend = graph.add_blend(0.0, graph.root);
-        let idle = graph.add_clip(
-            animations.get("idle_a").unwrap().clone(),
-            1.0,
-            idle_walk_blend,
-        );
-        let walk = graph.add_clip(
-            animations.get("walk").unwrap().clone(),
-            0.0,
-            idle_walk_blend,
-        );
 
-        let mut graphs = world.resource_mut::<Assets<AnimationGraph>>();
-        let graph_handle = graphs.add(graph);
-
+        let clips = ["idle_a", "idle_lean", "walk"];
+        let register_animation = |clip_name: &'static str| -> (&'static str, AnimationNodeIndex) {
+            (
+                clip_name,
+                graph.add_clip(
+                    animations
+                        .get(clip_name)
+                        .expect(&format!("No animation named {clip_name}"))
+                        .clone(),
+                    match clip_name == &npc.idle_animation {
+                        true => 1.0,
+                        false => 0.0,
+                    },
+                    graph.root,
+                ),
+            )
+        };
+        let animations = clips.into_iter().map(register_animation).collect();
+        let graph_handle = {
+            let mut graphs = world.resource_mut::<Assets<AnimationGraph>>();
+            graphs.add(graph)
+        };
         world
             .commands()
             .entity(hook.entity)
@@ -67,11 +84,8 @@ impl Npc {
                 ),
                 RigidBody::Kinematic,
                 SceneRoot(scene_handle.clone()),
-                AnimationGraphHandle(graph_handle.clone()),
                 NpcAnimationControls {
-                    idle_walk_blend,
-                    idle,
-                    walk,
+                    animations,
                     graph_handle,
                 },
             ))
@@ -91,8 +105,9 @@ fn idle_on_spawn(
         if let Ok(mut animator) = animators.get_mut(child) {
             // Tell the animation player to start the animation and keep
             // repeating it.
-            animator.play(controls.idle).repeat();
-            animator.play(controls.walk).repeat();
+            for animation in controls.animations.iter() {
+                animator.play(animation.1.clone()).repeat();
+            }
 
             // Add the animation graph. This only needs to be done once to
             // connect the animation player to the mesh.
@@ -104,8 +119,6 @@ fn idle_on_spawn(
 
 #[derive(Component)]
 pub(crate) struct NpcAnimationControls {
-    pub(crate) idle_walk_blend: AnimationNodeIndex,
-    pub(crate) idle: AnimationNodeIndex,
-    pub(crate) walk: AnimationNodeIndex,
+    pub(crate) animations: HashMap<&'static str, AnimationNodeIndex>,
     pub(crate) graph_handle: Handle<AnimationGraph>,
 }
