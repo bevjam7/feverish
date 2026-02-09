@@ -3,7 +3,11 @@ use bevy::{
     core_pipeline::tonemapping::Tonemapping,
     post_process::auto_exposure::AutoExposure,
     prelude::*,
-    render::{render_resource::BlendState, view::Hdr},
+    render::{
+        alpha::AlphaMode,
+        render_resource::{BlendState, Face},
+        view::Hdr,
+    },
 };
 
 pub(crate) struct CameraPlugin;
@@ -11,6 +15,7 @@ pub(crate) struct CameraPlugin;
 impl Plugin for CameraPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, spawn_ui_camera)
+            .add_systems(Update, force_opaque_material_depth)
             .add_observer(make_hdr_compatible);
     }
 }
@@ -48,6 +53,11 @@ pub(crate) fn player_camera_bundle() -> impl Bundle {
             ..default()
         },
         Camera3d::default(),
+        Projection::Perspective(PerspectiveProjection {
+            near: 0.2,
+            far: 600.0,
+            ..default()
+        }),
         (
             Msaa::Off,
             bevy::anti_alias::taa::TemporalAntiAliasing::default(),
@@ -58,6 +68,20 @@ pub(crate) fn player_camera_bundle() -> impl Bundle {
         Tonemapping::TonyMcMapface,
         Hdr,
     )
+}
+
+fn force_opaque_material_depth(mut materials: ResMut<Assets<StandardMaterial>>) {
+    for (_, material) in materials.iter_mut() {
+        if !matches!(material.alpha_mode, AlphaMode::Blend) {
+            continue;
+        }
+        if material.base_color.alpha() <= 0.99 {
+            continue;
+        }
+        material.alpha_mode = AlphaMode::Opaque;
+        material.double_sided = false;
+        material.cull_mode = Some(Face::Back);
+    }
 }
 
 fn make_hdr_compatible(
