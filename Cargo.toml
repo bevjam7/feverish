@@ -5,7 +5,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-bevy = { version = "0.18", default-features = false, features = [
+bevy = { version = "0.18", default-features = true, features = [
     "3d_api",
     "3d_bevy_render",
     "default_platform",
@@ -16,6 +16,7 @@ bevy = { version = "0.18", default-features = false, features = [
     "bevy_gilrs",
     "bevy_gizmos",
     "bevy_ui_render",
+    "bevy_scene",
 ] }
 bevy_ahoy = "0.1.0-rc.1"
 avian3d = "0.6.0-rc.1"

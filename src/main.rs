@@ -9,6 +9,8 @@ mod gameplay;
 mod input;
 mod map;
 mod ui;
+mod npc;
+mod props;
 
 use avian3d::prelude::{CollisionLayers, LayerMask};
 use bevy::{
