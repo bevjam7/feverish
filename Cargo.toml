@@ -45,6 +45,7 @@ tracing = { version = "0.1", features = [
 
 [target.wasm32-unknown-unknown.dependencies]
 getrandom = { version = "0.4.1", features = ["wasm_js"] }
+web-sys = { version = "0.3", features = ["Window", "Storage"] }
 
 [features]
 # Default to a native dev build.
