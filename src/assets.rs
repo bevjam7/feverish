@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
+use bevy_seedling::sample::AudioSample;
 
 use crate::AppState;
 
@@ -24,4 +25,6 @@ pub struct GameAssets {
     pub level_exterior: Handle<Scene>,
     #[asset(key = "models", collection(typed))]
     pub models: Vec<Handle<Gltf>>,
+    #[asset(key = "audio", collection(typed))]
+    pub audio: Vec<Handle<AudioSample>>,
 }

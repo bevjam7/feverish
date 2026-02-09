@@ -174,3 +174,11 @@
 "model" "models/npc_a/npc_a.gltf"
 "idle_animation" "idle_lean"
 }
+// entity 9
+{
+"classname" "npc"
+"origin" "864.686 616.686 -64"
+"angles" "0 0 0"
+"model" "models/npc_a/npc_a.gltf"
+"idle_animation" "idle_lean"
+}

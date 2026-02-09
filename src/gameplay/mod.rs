@@ -1,5 +1,6 @@
 mod npc;
 mod props;
+mod sound;
 
 use avian3d::prelude::*;
 use bevy::{
@@ -8,6 +9,7 @@ use bevy::{
     prelude::*,
 };
 use bevy_ahoy::prelude::*;
+use bevy_seedling::spatial::SpatialListener3D;
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
@@ -38,7 +40,20 @@ pub(crate) struct PlayerRoot;
 
 #[point_class(group("player"), classname("spawn"), size(-16 -16 -32, 16 16 32), base(Transform))]
 #[derive(Clone, Copy)]
+#[component(on_add=Self::on_add_hook)]
 pub struct SpawnPoint;
+
+impl SpawnPoint {
+    fn on_add_hook(mut world: DeferredWorld, hook: HookContext) {
+        if world.is_scene_world() {
+            return;
+        }
+        world
+            .commands()
+            .entity(hook.entity)
+            .insert(SpatialListener3D::default());
+    }
+}
 
 /// Transition between two doors across different levels
 #[solid_class(group("func"), classname("door_portal"), size(-16 -16 -32, 16 16 32), base(Transform, Target))]

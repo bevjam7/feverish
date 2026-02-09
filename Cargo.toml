@@ -29,7 +29,7 @@ bevy_asset_loader = { version = "0.25.0", features = [
     "standard_dynamic_assets",
 ] }
 bevy_framepace = { git = "https://github.com/aevyrie/bevy_framepace" }
-bevy_seedling = "0.7.0"
+bevy_seedling = { version = "0.7.0", features = [] }
 
 rand = "0.9"
 # Compile out low-severity logs to improve performance.

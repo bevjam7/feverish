@@ -128,3 +128,10 @@
 "origin" "888 -72 72"
 "color" "1 0.9 0.8"
 }
+// entity 6
+{
+"classname" "sound_point"
+"origin" "888 8 56"
+"sample" "audio/radio_static.ogg"
+"volume" "0.25"
+}

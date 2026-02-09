@@ -1,1 +1,76 @@
+use bevy::{
+    asset::AssetPath,
+    ecs::{lifecycle::HookContext, world::DeferredWorld},
+    prelude::*,
+};
+use bevy_seedling::{
+    prelude::VolumeNode,
+    sample::{AudioSample, SamplePlayer},
+};
+use bevy_trenchbroom::prelude::*;
 
+use crate::audio::mixer::WorldSfxPool;
+
+#[point_class(
+    group("sound"),
+    classname("point"),
+    base(Transform),
+    iconsprite({ path: "sprites/audio_emitter.png", scale: 0.125 }),
+)]
+#[derive(Clone)]
+#[component(on_add=Self::on_add_hook)]
+pub struct SoundPoint {
+    volume: f32,
+    #[class(default = "audio/sound.ogg", must_set)]
+    sample: String,
+    repeat: bool,
+    play_immediately: bool,
+    repeat_count: Option<usize>,
+}
+
+impl Default for SoundPoint {
+    fn default() -> Self {
+        Self {
+            volume: 1.0,
+            sample: Default::default(),
+            repeat: true,
+            play_immediately: true,
+            repeat_count: None,
+        }
+    }
+}
+
+impl SoundPoint {
+    fn on_add_hook(mut world: DeferredWorld, hook: HookContext) {
+        if world.is_scene_world() {
+            return;
+        }
+        let point = world.get::<Self>(hook.entity).unwrap();
+        let samples = world.resource::<Assets<AudioSample>>();
+        let assets = world.resource::<AssetServer>();
+        let (sample_id, _) = samples
+            .iter()
+            .find(|(x, _)| assets.get_path(*x).unwrap() == AssetPath::from(point.sample.clone()))
+            .expect(&format!("Could not load sample {}", point.sample));
+        let sample = assets.get_id_handle(sample_id).unwrap();
+
+        let mut sampler = SamplePlayer::new(sample);
+        // TODO: make this work lol
+        if point.play_immediately {}
+        if point.repeat {
+            sampler.repeat_mode = match point.repeat_count {
+                Some(count) => bevy_seedling::prelude::RepeatMode::RepeatMultiple {
+                    num_times_to_repeat: count as u32,
+                },
+                None => bevy_seedling::prelude::RepeatMode::RepeatEndlessly,
+            };
+        }
+        let volume = point.volume;
+
+        world.commands().entity(hook.entity).insert((
+            sampler,
+            VolumeNode::from_linear(volume),
+            WorldSfxPool,
+        ));
+    }
+}

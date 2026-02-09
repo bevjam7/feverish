@@ -4,6 +4,7 @@
 #![cfg_attr(not(feature = "dev"), windows_subsystem = "windows")]
 
 mod assets;
+mod audio;
 mod camera;
 mod gameplay;
 mod input;
@@ -61,6 +62,7 @@ impl Plugin for AppPlugin {
 
         // Add 3rd party plugins
         app.add_plugins((
+            bevy_seedling::SeedlingPlugin::default(),
             avian3d::PhysicsPlugins::default(),
             (
                 TrenchBroomPlugins(
@@ -108,6 +110,7 @@ impl Plugin for AppPlugin {
             map::MapPlugin,
             gameplay::GameplayPlugin,
             input::InputPlugin,
+            audio::AudioPlugin,
             // our ui :3
             ui::UiPlugin,
         ))
