@@ -67,8 +67,8 @@ impl From<ron::error::SpannedError> for RatScriptAssetLoaderError {
 
 impl AssetLoader for RatScriptAssetLoader {
     type Asset = RatScriptAsset;
-    type Settings = ();
     type Error = RatScriptAssetLoaderError;
+    type Settings = ();
 
     async fn load(
         &self,
@@ -636,8 +636,8 @@ fn choose_option(
                 script_id: active_snapshot.script_id.clone(),
                 node_id: active_snapshot.node_id.clone(),
                 option_id: Some(item.id.clone()),
-                    target: active_snapshot.target,
-                });
+                target: active_snapshot.target,
+            });
             if let Some(active_mut) = runtime.active.as_mut() {
                 active_mut.overlay = DialogueOverlay::ItemResponse;
             }
@@ -661,7 +661,7 @@ fn choose_option(
             runtime,
             state,
             discovery_db,
-            false,
+            true,
         );
         return;
     }
@@ -678,7 +678,7 @@ fn choose_option(
             runtime,
             state,
             discovery_db,
-            false,
+            true,
         );
         return;
     }
@@ -793,6 +793,7 @@ fn show_current_node(
     }));
 
     if speak {
+        commands.write_message(StopVoice);
         let mut speak_msg = Speak::new(node.text.clone()).voice(node.voice);
         if let Some(target) = active.target {
             speak_msg = speak_msg.target(target);
@@ -801,18 +802,23 @@ fn show_current_node(
     }
 }
 
-fn dialogue_options_for_node(node: &RatNode, discovery_db: &UiDiscoveryDb) -> Vec<UiDialogueOption> {
+fn dialogue_options_for_node(
+    node: &RatNode,
+    discovery_db: &UiDiscoveryDb,
+) -> Vec<UiDialogueOption> {
     let mut options: Vec<UiDialogueOption> = node
         .options
         .iter()
         .map(|option| UiDialogueOption {
             text: option.text.clone(),
+            preview: None,
         })
         .collect();
 
     if !discovery_db.entries(DiscoveryKind::Item).is_empty() {
         options.push(UiDialogueOption {
             text: "show item...".to_string(),
+            preview: None,
         });
     }
     options
@@ -827,17 +833,27 @@ fn open_inventory_picker(
         .iter()
         .map(|entry| UiDialogueOption {
             text: entry.title.clone(),
+            preview: Some(UiDialoguePreview {
+                title: entry.title.clone(),
+                subtitle: entry.subtitle.clone(),
+                description: entry.description.clone(),
+                image_path: entry.image_path.clone(),
+                model_path: entry.model_path.clone(),
+            }),
         })
         .collect();
     options.push(UiDialogueOption {
         text: "back".to_string(),
+        preview: None,
     });
+
+    let initial_preview = options.first().and_then(|option| option.preview.clone());
 
     ui_commands.write(UiDialogueCommand::Start(UiDialogueRequest {
         speaker: "inventory".to_string(),
         text: "pick an item to show".to_string(),
         portrait_path: "models/npc_a/npc_a.png".to_string(),
-        preview: None,
+        preview: initial_preview,
         options,
         reveal_duration_secs: 0.0,
     }));
@@ -870,6 +886,7 @@ fn show_item_response(
         }),
         options: vec![UiDialogueOption {
             text: "back".to_string(),
+            preview: None,
         }],
         reveal_duration_secs: estimate_speech_duration_secs(&line, node.voice),
     }));
