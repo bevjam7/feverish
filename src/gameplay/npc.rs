@@ -8,7 +8,7 @@ use bevy::{
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-    gameplay::{PhysLayer, props::AnimationControls},
+    gameplay::{ColliderHierarchyChildOf, PhysLayer, props::AnimationControls},
     input::Use,
     ratspinner::{RatCommand, RatStart},
 };
@@ -73,28 +73,40 @@ impl Npc {
             let mut graphs = world.resource_mut::<Assets<AnimationGraph>>();
             graphs.add(graph)
         };
+
+        const HEIGHT: f32 = 1.8;
+        let layers = CollisionLayers::new(
+            [PhysLayer::Npc, PhysLayer::Usable],
+            [PhysLayer::Npc, PhysLayer::Default, PhysLayer::Usable],
+        );
         world
             .commands()
             .entity(hook.entity)
             .insert((
-                ColliderConstructor::Capsule {
-                    radius: 0.5,
-                    height: 1.8,
-                },
-                CollisionLayers::new(
-                    [PhysLayer::Npc, PhysLayer::Usable],
-                    [PhysLayer::Npc, PhysLayer::Default, PhysLayer::Usable],
-                ),
-                RigidBody::Kinematic,
                 SceneRoot(scene_handle.clone()),
                 AnimationControls {
                     animations,
                     graph_handle,
                 },
                 NpcDialogueProfile::default(),
+                layers,
             ))
-            .observe(idle_on_spawn)
-            .observe(npc_on_use);
+            .with_children(|cmd| {
+                // Spawn the NPC collider in the center, since the npc models origins are at the
+                // feet
+                cmd.spawn((
+                    ColliderConstructor::Capsule {
+                        radius: 0.5,
+                        height: HEIGHT,
+                    },
+                    layers,
+                    RigidBody::Kinematic,
+                    Transform::from_translation(Vec3::Y * HEIGHT * 0.5),
+                    ColliderHierarchyChildOf(cmd.target_entity()),
+                ));
+            })
+            .observe(npc_on_use)
+            .observe(idle_on_spawn);
     }
 }
 

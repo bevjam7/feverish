@@ -1,3 +1,4 @@
+mod door;
 mod inventory;
 mod npc;
 mod props;
@@ -25,7 +26,7 @@ impl Plugin for GameplayPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (handle_added_spawn_point_camera).in_set(AppSystems::Update),
+            (handle_added_spawn_point_camera, door::rotate_doors).in_set(AppSystems::Update),
         );
     }
 }

@@ -1,0 +1,7933 @@
+{
+	"connections": [
+		{
+			"from": "graph_4",
+			"from_port": 1,
+			"to": "blend2_2",
+			"to_port": 0
+		},
+		{
+			"from": "uniform",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 0
+		},
+		{
+			"from": "graph_4",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 1
+		},
+		{
+			"from": "graph_4",
+			"from_port": 3,
+			"to": "blend2",
+			"to_port": 2
+		},
+		{
+			"from": "graph_4",
+			"from_port": 2,
+			"to": "normal_blend",
+			"to_port": 0
+		},
+		{
+			"from": "graph_3",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 3
+		},
+		{
+			"from": "graph_3",
+			"from_port": 1,
+			"to": "blend2_2",
+			"to_port": 1
+		},
+		{
+			"from": "graph_3",
+			"from_port": 2,
+			"to": "normal_blend",
+			"to_port": 1
+		},
+		{
+			"from": "graph_3",
+			"from_port": 3,
+			"to": "blend2",
+			"to_port": 4
+		},
+		{
+			"from": "graph_2",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 5
+		},
+		{
+			"from": "graph_2",
+			"from_port": 3,
+			"to": "blend2",
+			"to_port": 6
+		},
+		{
+			"from": "graph_2",
+			"from_port": 1,
+			"to": "blend2_2",
+			"to_port": 3
+		},
+		{
+			"from": "graph_2",
+			"from_port": 2,
+			"to": "normal_blend",
+			"to_port": 3
+		},
+		{
+			"from": "graph_5",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 7
+		},
+		{
+			"from": "graph_5",
+			"from_port": 3,
+			"to": "blend2",
+			"to_port": 8
+		},
+		{
+			"from": "graph_6",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 9
+		},
+		{
+			"from": "graph_6",
+			"from_port": 3,
+			"to": "blend2",
+			"to_port": 10
+		},
+		{
+			"from": "graph_7",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 11
+		},
+		{
+			"from": "graph_7",
+			"from_port": 3,
+			"to": "blend2",
+			"to_port": 12
+		},
+		{
+			"from": "graph_5",
+			"from_port": 1,
+			"to": "blend2_2",
+			"to_port": 5
+		},
+		{
+			"from": "graph_6",
+			"from_port": 1,
+			"to": "blend2_2",
+			"to_port": 7
+		},
+		{
+			"from": "graph_7",
+			"from_port": 1,
+			"to": "blend2_2",
+			"to_port": 9
+		},
+		{
+			"from": "graph_5",
+			"from_port": 2,
+			"to": "normal_blend",
+			"to_port": 5
+		},
+		{
+			"from": "graph_6",
+			"from_port": 2,
+			"to": "normal_blend",
+			"to_port": 7
+		},
+		{
+			"from": "graph_7",
+			"from_port": 2,
+			"to": "normal_blend",
+			"to_port": 9
+		},
+		{
+			"from": "blend2_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 1
+		},
+		{
+			"from": "normal_blend",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "graph_9",
+			"from_port": 2,
+			"to": "normal_blend",
+			"to_port": 11
+		},
+		{
+			"from": "graph_8",
+			"from_port": 2,
+			"to": "normal_blend",
+			"to_port": 13
+		},
+		{
+			"from": "graph_10",
+			"from_port": 2,
+			"to": "normal_blend",
+			"to_port": 15
+		},
+		{
+			"from": "graph_9",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 13
+		},
+		{
+			"from": "graph_8",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 15
+		},
+		{
+			"from": "graph_10",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 17
+		},
+		{
+			"from": "graph_9",
+			"from_port": 3,
+			"to": "blend2",
+			"to_port": 14
+		},
+		{
+			"from": "graph_8",
+			"from_port": 3,
+			"to": "blend2",
+			"to_port": 16
+		},
+		{
+			"from": "graph_10",
+			"from_port": 3,
+			"to": "blend2",
+			"to_port": 18
+		},
+		{
+			"from": "graph_9",
+			"from_port": 1,
+			"to": "blend2_2",
+			"to_port": 11
+		},
+		{
+			"from": "graph_8",
+			"from_port": 1,
+			"to": "blend2_2",
+			"to_port": 13
+		},
+		{
+			"from": "graph_10",
+			"from_port": 1,
+			"to": "blend2_2",
+			"to_port": 15
+		},
+		{
+			"from": "image",
+			"from_port": 0,
+			"to": "make_tileable",
+			"to_port": 0
+		},
+		{
+			"from": "make_tileable",
+			"from_port": 0,
+			"to": "make_tileable_2",
+			"to_port": 0
+		},
+		{
+			"from": "make_tileable_2",
+			"from_port": 0,
+			"to": "make_tileable_3",
+			"to_port": 0
+		},
+		{
+			"from": "make_tileable_3",
+			"from_port": 0,
+			"to": "blend2_3",
+			"to_port": 0
+		},
+		{
+			"from": "blend2_3",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "graph_4",
+			"from_port": 3,
+			"to": "blend2_4",
+			"to_port": 0
+		},
+		{
+			"from": "graph_3",
+			"from_port": 3,
+			"to": "blend2_4",
+			"to_port": 1
+		},
+		{
+			"from": "graph_2",
+			"from_port": 3,
+			"to": "blend2_4",
+			"to_port": 3
+		},
+		{
+			"from": "graph_5",
+			"from_port": 3,
+			"to": "blend2_4",
+			"to_port": 5
+		},
+		{
+			"from": "graph_6",
+			"from_port": 3,
+			"to": "blend2_4",
+			"to_port": 7
+		},
+		{
+			"from": "graph_7",
+			"from_port": 3,
+			"to": "blend2_4",
+			"to_port": 9
+		},
+		{
+			"from": "graph_9",
+			"from_port": 3,
+			"to": "blend2_4",
+			"to_port": 11
+		},
+		{
+			"from": "graph_8",
+			"from_port": 3,
+			"to": "blend2_4",
+			"to_port": 13
+		},
+		{
+			"from": "graph_10",
+			"from_port": 3,
+			"to": "blend2_4",
+			"to_port": 15
+		},
+		{
+			"from": "blend2",
+			"from_port": 0,
+			"to": "decompose",
+			"to_port": 0
+		},
+		{
+			"from": "decompose",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 0
+		},
+		{
+			"from": "blend2_4",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 3
+		},
+		{
+			"from": "decompose",
+			"from_port": 1,
+			"to": "combine",
+			"to_port": 1
+		},
+		{
+			"from": "decompose",
+			"from_port": 2,
+			"to": "combine",
+			"to_port": 2
+		},
+		{
+			"from": "combine",
+			"from_port": 0,
+			"to": "blend2_3",
+			"to_port": 1
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "@Node@10566",
+	"node_position": {
+		"x": 0.0,
+		"y": 0.0
+	},
+	"nodes": [
+		{
+			"export_last_target": "Bevy Trenchbroom",
+			"export_paths": {
+				"Bevy Trenchbroom": "/Users/doomy/Code/feverish/assets/textures/number_plate"
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 1697.5244140625,
+				"y": -523.675720214844
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
+					"type": "Color"
+				},
+				"ao": 1.0,
+				"depth_scale": 0.5,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 0.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 8,
+				"sss": 1.0
+			},
+			"seed_int": 0,
+			"type": "material"
+		},
+		{
+			"generic_size": 9,
+			"name": "blend2",
+			"node_position": {
+				"x": 284.136932373047,
+				"y": -1286.77160644531
+			},
+			"parameters": {
+				"amount1": 1.0,
+				"amount2": 1.0,
+				"amount3": 1.0,
+				"amount4": 1.0,
+				"amount5": 1.0,
+				"amount6": 1.0,
+				"amount7": 1.0,
+				"amount8": 1.0,
+				"amount9": 1.0,
+				"blend_type1": 0.0,
+				"blend_type2": 0.0,
+				"blend_type3": 0.0,
+				"blend_type4": 0.0,
+				"blend_type5": 0.0,
+				"blend_type6": 0.0,
+				"blend_type7": 0.0,
+				"blend_type8": 0.0,
+				"blend_type9": 0.0
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"generic_size": 8,
+			"name": "blend2_2",
+			"node_position": {
+				"x": 263.268768310547,
+				"y": -708.496765136719
+			},
+			"parameters": {
+				"amount1": 1.0,
+				"amount2": 1.0,
+				"amount3": 1.0,
+				"amount4": 1.0,
+				"amount5": 1.0,
+				"amount6": 1.0,
+				"amount7": 1.0,
+				"amount8": 1.0,
+				"blend_type1": 12,
+				"blend_type2": 12,
+				"blend_type3": 12,
+				"blend_type4": 12,
+				"blend_type5": 12,
+				"blend_type6": 0.0,
+				"blend_type7": 0.0,
+				"blend_type8": 0.0
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"generic_size": 8,
+			"name": "normal_blend",
+			"node_position": {
+				"x": 273.361267089844,
+				"y": -107.759338378906
+			},
+			"parameters": {
+				"amount1": 1.0,
+				"amount2": 1.0,
+				"amount3": 1.0,
+				"amount4": 1.0,
+				"amount5": 1.0,
+				"amount6": 1.0,
+				"amount7": 1.0,
+				"amount8": 0.5
+			},
+			"seed_int": 0,
+			"type": "normal_blend2"
+		},
+		{
+			"connections": [
+				{
+					"from": "image",
+					"from_port": 0,
+					"to": "make_tileable",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable",
+					"from_port": 0,
+					"to": "make_tileable_2",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable_2",
+					"from_port": 0,
+					"to": "make_tileable_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_box",
+					"from_port": 0,
+					"to": "raymarching",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 3
+				},
+				{
+					"from": "make_tileable_3",
+					"from_port": 0,
+					"to": "decompose",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 1,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "decompose",
+					"from_port": 2,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 1,
+					"to": "normal_blend",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map2",
+					"from_port": 0,
+					"to": "normal_blend",
+					"to_port": 1
+				},
+				{
+					"from": "colorize_2",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_2",
+					"from_port": 0,
+					"to": "invert",
+					"to_port": 0
+				},
+				{
+					"from": "invert",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 1
+				},
+				{
+					"from": "blend2",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_3",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 1
+				},
+				{
+					"from": "normal_blend",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 2,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "transform2",
+					"from_port": 0,
+					"to": "decompose_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 0,
+					"to": "combine_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 1,
+					"to": "combine_2",
+					"to_port": 1
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 2,
+					"to": "combine_2",
+					"to_port": 2
+				},
+				{
+					"from": "combine_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 3
+				},
+				{
+					"from": "transform2",
+					"from_port": 3,
+					"to": "gen_outputs",
+					"to_port": 3
+				},
+				{
+					"from": "sdbox",
+					"from_port": 0,
+					"to": "sdshow",
+					"to_port": 0
+				},
+				{
+					"from": "sdshow",
+					"from_port": 0,
+					"to": "edge_detect",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 1
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "colorize_2",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "normal_map2",
+					"to_port": 0
+				},
+				{
+					"from": "text",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_4",
+					"from_port": 0,
+					"to": "reroute",
+					"to_port": 0
+				},
+				{
+					"from": "edge_detect",
+					"from_port": 0,
+					"to": "colorize_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_3",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 1
+				}
+			],
+			"label": "Graph",
+			"longdesc": "",
+			"name": "graph_4",
+			"node_position": {
+				"x": -439.511505126953,
+				"y": -694.874206542969
+			},
+			"nodes": [
+				{
+					"name": "image",
+					"node_position": {
+						"x": -647.194580078125,
+						"y": -58.902027130127
+					},
+					"parameters": {
+						"clamp": false,
+						"fix_ar": false,
+						"image": "%PROJECT_PATH%/interior_door.png"
+					},
+					"seed_int": 0,
+					"type": "image"
+				},
+				{
+					"name": "make_tileable",
+					"node_position": {
+						"x": -463.873809814453,
+						"y": -33.3573455810547
+					},
+					"parameters": {
+						"w": 0.25
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "make_tileable_2",
+					"node_position": {
+						"x": -532.360656738281,
+						"y": 45.8398857116699
+					},
+					"parameters": {
+						"w": 0.29
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "normal_map2",
+					"node_position": {
+						"x": -56.0575218200684,
+						"y": 371.431182861328
+					},
+					"parameters": {
+						"buffer": 1.0,
+						"param2": 0.0,
+						"size": 10.0,
+						"strength": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_map2"
+				},
+				{
+					"name": "make_tileable_3",
+					"node_position": {
+						"x": -291.519683837891,
+						"y": -99.8906784057617
+					},
+					"parameters": {
+						"w": 0.42
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": -384.511535644531,
+						"y": 309.981201171875
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53529534351145,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53531534351145,
+									"r": 0.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": -156.28190612793,
+						"y": 181.820251464844
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "decompose",
+					"node_position": {
+						"x": -248.5810546875,
+						"y": 19.1734218597412
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "sdf3d_box",
+					"node_position": {
+						"x": -533.7724609375,
+						"y": 580.451049804688
+					},
+					"parameters": {
+						"r": 0.04,
+						"sx": 0.42,
+						"sy": 0.23,
+						"sz": 0.31
+					},
+					"seed_int": 0,
+					"type": "sdf3d_box"
+				},
+				{
+					"name": "raymarching",
+					"node_position": {
+						"x": -306.346466064453,
+						"y": 510.091857910156
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "raymarching"
+				},
+				{
+					"generic_size": 1,
+					"name": "normal_blend",
+					"node_position": {
+						"x": 160.452484130859,
+						"y": 579.061218261719
+					},
+					"parameters": {
+						"amount1": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2",
+					"node_position": {
+						"x": 353.715515136719,
+						"y": -247.191909790039
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_2",
+					"node_position": {
+						"x": 134.844482421875,
+						"y": 324.037231445312
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -391.823944091797,
+						"y": 387.455230712891
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.23562833455093,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 1.0,
+									"g": 1.0,
+									"pos": 0.23564833455093,
+									"r": 1.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "invert",
+					"node_position": {
+						"x": 178.642486572266,
+						"y": 121.331199645996
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "invert"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_3",
+					"node_position": {
+						"x": 321.684448242188,
+						"y": -19.1788215637207
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 2.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1175.06140136719,
+						"y": 148.872741699219
+					},
+					"parameters": {
+
+					},
+					"ports": [],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 1445.80334472656,
+						"y": -185.243911743164
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgb"
+						},
+						{
+							"name": "port1",
+							"type": "rgba"
+						},
+						{
+							"name": "port2",
+							"type": "rgba"
+						},
+						{
+							"name": "unnamed",
+							"type": "rgba"
+						}
+					],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -381.417022705078,
+						"y": -391.904693603516
+					},
+					"parameters": {
+						"param0": "346",
+						"param1": 3.0,
+						"param2": 3.0,
+						"param3": 0.0,
+						"param4": 0.0
+					},
+					"seed_int": 0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Number",
+							"linked_widgets": [
+								{
+									"node": "text",
+									"widget": "text"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"default": 0.5,
+							"label": "columns",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param1",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 0.5,
+							"label": "rows",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param2",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "column",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param3",
+							"step": 1.0,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "row",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param4",
+							"step": 1.0,
+							"type": "named_parameter"
+						}
+					]
+				},
+				{
+					"name": "text",
+					"node_position": {
+						"x": -1718.63195800781,
+						"y": 305.267669677734
+					},
+					"parameters": {
+						"alignment": 1.0,
+						"bg": {
+							"a": 0.0,
+							"b": 0.0,
+							"g": 0.0,
+							"r": 0.0,
+							"type": "Color"
+						},
+						"center": true,
+						"fg": {
+							"a": 1.0,
+							"b": 0.66619873046875,
+							"g": 0.845172107219696,
+							"r": 0.921875,
+							"type": "Color"
+						},
+						"font": "/Users/doomy/Downloads/Inter-4.1-1/extras/ttf/InterDisplay-ExtraBoldItalic.ttf",
+						"font_size": 560.0,
+						"line_spacing": 0.0,
+						"text": "346",
+						"x": 0.0,
+						"y": 0.0
+					},
+					"seed_int": 0,
+					"type": "text"
+				},
+				{
+					"generic_size": 4,
+					"name": "transform2",
+					"node_position": {
+						"x": 733.046813964844,
+						"y": 1.346675157547
+					},
+					"parameters": {
+						"mode": 0.0,
+						"rotate": 0.0,
+						"scale_x": "1/$param1",
+						"scale_y": "1/$param2",
+						"translate_x": "(-1/$param1)+($param3*(1/$param1))",
+						"translate_y": "(-1/$param2)+($param4*(1/$param2))"
+					},
+					"seed_int": 0,
+					"type": "transform2"
+				},
+				{
+					"name": "decompose_2",
+					"node_position": {
+						"x": 809.036560058594,
+						"y": -264.962005615234
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "combine_2",
+					"node_position": {
+						"x": 1012.43505859375,
+						"y": -455.956756591797
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "shape",
+					"node_position": {
+						"x": -1362.81066894531,
+						"y": 799.939819335938
+					},
+					"parameters": {
+						"edge": 0.1,
+						"radius": 0.8,
+						"shape": 1.0,
+						"sides": 4.0
+					},
+					"seed_int": 0,
+					"type": "shape"
+				},
+				{
+					"name": "sdbox",
+					"node_position": {
+						"x": -1203.77844238281,
+						"y": 803.569763183594
+					},
+					"parameters": {
+						"cx": 0.0,
+						"cy": 0.01,
+						"h": 0.23,
+						"w": 0.43
+					},
+					"seed_int": 0,
+					"type": "sdbox"
+				},
+				{
+					"name": "sdshow",
+					"node_position": {
+						"x": -1003.65551757812,
+						"y": 804.935791015625
+					},
+					"parameters": {
+						"base": 0.0,
+						"bevel": 0.04
+					},
+					"seed_int": 0,
+					"type": "sdshow"
+				},
+				{
+					"name": "edge_detect",
+					"node_position": {
+						"x": -848.611450195312,
+						"y": 802.886657714844
+					},
+					"parameters": {
+						"size": 8,
+						"threshold": 0.4,
+						"width": 2.0
+					},
+					"seed_int": 0,
+					"type": "edge_detect"
+				},
+				{
+					"name": "reroute",
+					"node_position": {
+						"x": -915.185546875,
+						"y": 262.636993408203
+					},
+					"parameters": {
+						"preview": 0
+					},
+					"seed_int": 0,
+					"type": "reroute"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_4",
+					"node_position": {
+						"x": -1146.51342773438,
+						"y": 303.631805419922
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 12
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize_3",
+					"node_position": {
+						"x": -1301.7080078125,
+						"y": 527.639099121094
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 0.0,
+									"r": 0.921568632125854
+								},
+								{
+									"a": 1.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 1.0,
+									"r": 0.921568632125854
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				}
+			],
+			"parameters": {
+				"param0": "346",
+				"param1": 3.0,
+				"param2": 3.0,
+				"param3": 0.0,
+				"param4": 0.0
+			},
+			"seed_int": 0,
+			"shortdesc": "",
+			"type": "graph"
+		},
+		{
+			"name": "uniform",
+			"node_position": {
+				"x": -239.504455566406,
+				"y": -870.216186523438
+			},
+			"parameters": {
+				"color": {
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.0,
+					"r": 0.0,
+					"type": "Color"
+				}
+			},
+			"seed_int": 0,
+			"type": "uniform"
+		},
+		{
+			"connections": [
+				{
+					"from": "image",
+					"from_port": 0,
+					"to": "make_tileable",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable",
+					"from_port": 0,
+					"to": "make_tileable_2",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable_2",
+					"from_port": 0,
+					"to": "make_tileable_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_box",
+					"from_port": 0,
+					"to": "raymarching",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 3
+				},
+				{
+					"from": "make_tileable_3",
+					"from_port": 0,
+					"to": "decompose",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 1,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "decompose",
+					"from_port": 2,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 1,
+					"to": "normal_blend",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map2",
+					"from_port": 0,
+					"to": "normal_blend",
+					"to_port": 1
+				},
+				{
+					"from": "colorize_2",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_2",
+					"from_port": 0,
+					"to": "invert",
+					"to_port": 0
+				},
+				{
+					"from": "invert",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 1
+				},
+				{
+					"from": "blend2",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_3",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 1
+				},
+				{
+					"from": "normal_blend",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 2,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "transform2",
+					"from_port": 0,
+					"to": "decompose_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 0,
+					"to": "combine_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 1,
+					"to": "combine_2",
+					"to_port": 1
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 2,
+					"to": "combine_2",
+					"to_port": 2
+				},
+				{
+					"from": "combine_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 3
+				},
+				{
+					"from": "transform2",
+					"from_port": 3,
+					"to": "gen_outputs",
+					"to_port": 3
+				},
+				{
+					"from": "sdbox",
+					"from_port": 0,
+					"to": "sdshow",
+					"to_port": 0
+				},
+				{
+					"from": "sdshow",
+					"from_port": 0,
+					"to": "edge_detect",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 1
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "colorize_2",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "normal_map2",
+					"to_port": 0
+				},
+				{
+					"from": "text",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_4",
+					"from_port": 0,
+					"to": "reroute",
+					"to_port": 0
+				},
+				{
+					"from": "edge_detect",
+					"from_port": 0,
+					"to": "colorize_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_3",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 1
+				}
+			],
+			"label": "Graph",
+			"longdesc": "",
+			"name": "graph_3",
+			"node_position": {
+				"x": -487.665832519531,
+				"y": -381.251556396484
+			},
+			"nodes": [
+				{
+					"name": "image",
+					"node_position": {
+						"x": -647.194580078125,
+						"y": -58.902027130127
+					},
+					"parameters": {
+						"clamp": false,
+						"fix_ar": false,
+						"image": "%PROJECT_PATH%/interior_door.png"
+					},
+					"seed_int": 0,
+					"type": "image"
+				},
+				{
+					"name": "make_tileable",
+					"node_position": {
+						"x": -463.873809814453,
+						"y": -33.3573455810547
+					},
+					"parameters": {
+						"w": 0.25
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "make_tileable_2",
+					"node_position": {
+						"x": -532.360656738281,
+						"y": 45.8398857116699
+					},
+					"parameters": {
+						"w": 0.29
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "normal_map2",
+					"node_position": {
+						"x": -56.0575218200684,
+						"y": 371.431182861328
+					},
+					"parameters": {
+						"buffer": 1.0,
+						"param2": 0.0,
+						"size": 10.0,
+						"strength": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_map2"
+				},
+				{
+					"name": "make_tileable_3",
+					"node_position": {
+						"x": -291.519683837891,
+						"y": -99.8906784057617
+					},
+					"parameters": {
+						"w": 0.42
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": -384.511535644531,
+						"y": 309.981201171875
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53529534351145,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53531534351145,
+									"r": 0.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": -156.28190612793,
+						"y": 181.820251464844
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "decompose",
+					"node_position": {
+						"x": -248.5810546875,
+						"y": 19.1734218597412
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "sdf3d_box",
+					"node_position": {
+						"x": -533.7724609375,
+						"y": 580.451049804688
+					},
+					"parameters": {
+						"r": 0.04,
+						"sx": 0.42,
+						"sy": 0.23,
+						"sz": 0.31
+					},
+					"seed_int": 0,
+					"type": "sdf3d_box"
+				},
+				{
+					"name": "raymarching",
+					"node_position": {
+						"x": -306.346466064453,
+						"y": 510.091857910156
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "raymarching"
+				},
+				{
+					"generic_size": 1,
+					"name": "normal_blend",
+					"node_position": {
+						"x": 160.452484130859,
+						"y": 579.061218261719
+					},
+					"parameters": {
+						"amount1": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2",
+					"node_position": {
+						"x": 353.715515136719,
+						"y": -247.191909790039
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_2",
+					"node_position": {
+						"x": 134.844482421875,
+						"y": 324.037231445312
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -391.823944091797,
+						"y": 387.455230712891
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.23562833455093,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 1.0,
+									"g": 1.0,
+									"pos": 0.23564833455093,
+									"r": 1.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "invert",
+					"node_position": {
+						"x": 178.642486572266,
+						"y": 121.331199645996
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "invert"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_3",
+					"node_position": {
+						"x": 321.684448242188,
+						"y": -19.1788215637207
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 2.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1175.06140136719,
+						"y": 148.872741699219
+					},
+					"parameters": {
+
+					},
+					"ports": [],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 1445.80334472656,
+						"y": -185.243911743164
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgb"
+						},
+						{
+							"name": "port1",
+							"type": "rgba"
+						},
+						{
+							"name": "port2",
+							"type": "rgba"
+						},
+						{
+							"name": "unnamed",
+							"type": "rgba"
+						}
+					],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -381.417022705078,
+						"y": -391.904693603516
+					},
+					"parameters": {
+						"param0": "348",
+						"param1": 3.0,
+						"param2": 3.0,
+						"param3": 1.0,
+						"param4": 0.0
+					},
+					"seed_int": 0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Number",
+							"linked_widgets": [
+								{
+									"node": "text",
+									"widget": "text"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"default": 0.5,
+							"label": "columns",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param1",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 0.5,
+							"label": "rows",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param2",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "column",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param3",
+							"step": 1.0,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "row",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param4",
+							"step": 1.0,
+							"type": "named_parameter"
+						}
+					]
+				},
+				{
+					"name": "text",
+					"node_position": {
+						"x": -1718.63195800781,
+						"y": 305.267669677734
+					},
+					"parameters": {
+						"alignment": 1.0,
+						"bg": {
+							"a": 0.0,
+							"b": 0.0,
+							"g": 0.0,
+							"r": 0.0,
+							"type": "Color"
+						},
+						"center": true,
+						"fg": {
+							"a": 1.0,
+							"b": 0.66619873046875,
+							"g": 0.845172107219696,
+							"r": 0.921875,
+							"type": "Color"
+						},
+						"font": "/Users/doomy/Downloads/Inter-4.1-1/extras/ttf/InterDisplay-ExtraBoldItalic.ttf",
+						"font_size": 560.0,
+						"line_spacing": 0.0,
+						"text": "348",
+						"x": 0.0,
+						"y": 0.0
+					},
+					"seed_int": 0,
+					"type": "text"
+				},
+				{
+					"generic_size": 4,
+					"name": "transform2",
+					"node_position": {
+						"x": 733.046813964844,
+						"y": 1.346675157547
+					},
+					"parameters": {
+						"mode": 0.0,
+						"rotate": 0.0,
+						"scale_x": "1/$param1",
+						"scale_y": "1/$param2",
+						"translate_x": "(-1/$param1)+($param3*(1/$param1))",
+						"translate_y": "(-1/$param2)+($param4*(1/$param2))"
+					},
+					"seed_int": 0,
+					"type": "transform2"
+				},
+				{
+					"name": "decompose_2",
+					"node_position": {
+						"x": 809.036560058594,
+						"y": -264.962005615234
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "combine_2",
+					"node_position": {
+						"x": 1012.43505859375,
+						"y": -455.956756591797
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "shape",
+					"node_position": {
+						"x": -1362.81066894531,
+						"y": 799.939819335938
+					},
+					"parameters": {
+						"edge": 0.1,
+						"radius": 0.8,
+						"shape": 1.0,
+						"sides": 4.0
+					},
+					"seed_int": 0,
+					"type": "shape"
+				},
+				{
+					"name": "sdbox",
+					"node_position": {
+						"x": -1203.77844238281,
+						"y": 803.569763183594
+					},
+					"parameters": {
+						"cx": 0.0,
+						"cy": 0.01,
+						"h": 0.23,
+						"w": 0.43
+					},
+					"seed_int": 0,
+					"type": "sdbox"
+				},
+				{
+					"name": "sdshow",
+					"node_position": {
+						"x": -1003.65551757812,
+						"y": 804.935791015625
+					},
+					"parameters": {
+						"base": 0.0,
+						"bevel": 0.04
+					},
+					"seed_int": 0,
+					"type": "sdshow"
+				},
+				{
+					"name": "edge_detect",
+					"node_position": {
+						"x": -848.611450195312,
+						"y": 802.886657714844
+					},
+					"parameters": {
+						"size": 8.0,
+						"threshold": 0.4,
+						"width": 2.0
+					},
+					"seed_int": 0,
+					"type": "edge_detect"
+				},
+				{
+					"name": "reroute",
+					"node_position": {
+						"x": -915.185546875,
+						"y": 262.636993408203
+					},
+					"parameters": {
+						"preview": 0.0
+					},
+					"seed_int": 0,
+					"type": "reroute"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_4",
+					"node_position": {
+						"x": -1146.51342773438,
+						"y": 303.631805419922
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 12.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize_3",
+					"node_position": {
+						"x": -1301.7080078125,
+						"y": 527.639099121094
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 0.0,
+									"r": 0.921568632125854
+								},
+								{
+									"a": 1.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 1.0,
+									"r": 0.921568632125854
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				}
+			],
+			"parameters": {
+				"param0": "348",
+				"param1": 3.0,
+				"param2": 3.0,
+				"param3": 1.0,
+				"param4": 0.0
+			},
+			"seed_int": 0,
+			"shortdesc": "",
+			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "image",
+					"from_port": 0,
+					"to": "make_tileable",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable",
+					"from_port": 0,
+					"to": "make_tileable_2",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable_2",
+					"from_port": 0,
+					"to": "make_tileable_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_box",
+					"from_port": 0,
+					"to": "raymarching",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 3
+				},
+				{
+					"from": "make_tileable_3",
+					"from_port": 0,
+					"to": "decompose",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 1,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "decompose",
+					"from_port": 2,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 1,
+					"to": "normal_blend",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map2",
+					"from_port": 0,
+					"to": "normal_blend",
+					"to_port": 1
+				},
+				{
+					"from": "colorize_2",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_2",
+					"from_port": 0,
+					"to": "invert",
+					"to_port": 0
+				},
+				{
+					"from": "invert",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 1
+				},
+				{
+					"from": "blend2",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_3",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 1
+				},
+				{
+					"from": "normal_blend",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 2,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "transform2",
+					"from_port": 0,
+					"to": "decompose_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 0,
+					"to": "combine_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 1,
+					"to": "combine_2",
+					"to_port": 1
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 2,
+					"to": "combine_2",
+					"to_port": 2
+				},
+				{
+					"from": "combine_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 3
+				},
+				{
+					"from": "transform2",
+					"from_port": 3,
+					"to": "gen_outputs",
+					"to_port": 3
+				},
+				{
+					"from": "sdbox",
+					"from_port": 0,
+					"to": "sdshow",
+					"to_port": 0
+				},
+				{
+					"from": "sdshow",
+					"from_port": 0,
+					"to": "edge_detect",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 1
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "colorize_2",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "normal_map2",
+					"to_port": 0
+				},
+				{
+					"from": "text",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_4",
+					"from_port": 0,
+					"to": "reroute",
+					"to_port": 0
+				},
+				{
+					"from": "edge_detect",
+					"from_port": 0,
+					"to": "colorize_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_3",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 1
+				}
+			],
+			"label": "Graph",
+			"longdesc": "",
+			"name": "graph_2",
+			"node_position": {
+				"x": -486.455841064453,
+				"y": -202.17155456543
+			},
+			"nodes": [
+				{
+					"name": "image",
+					"node_position": {
+						"x": -647.194580078125,
+						"y": -58.902027130127
+					},
+					"parameters": {
+						"clamp": false,
+						"fix_ar": false,
+						"image": "%PROJECT_PATH%/interior_door.png"
+					},
+					"seed_int": 0,
+					"type": "image"
+				},
+				{
+					"name": "make_tileable",
+					"node_position": {
+						"x": -463.873809814453,
+						"y": -33.3573455810547
+					},
+					"parameters": {
+						"w": 0.25
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "make_tileable_2",
+					"node_position": {
+						"x": -532.360656738281,
+						"y": 45.8398857116699
+					},
+					"parameters": {
+						"w": 0.29
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "normal_map2",
+					"node_position": {
+						"x": -56.0575218200684,
+						"y": 371.431182861328
+					},
+					"parameters": {
+						"buffer": 1.0,
+						"param2": 0.0,
+						"size": 10.0,
+						"strength": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_map2"
+				},
+				{
+					"name": "make_tileable_3",
+					"node_position": {
+						"x": -291.519683837891,
+						"y": -99.8906784057617
+					},
+					"parameters": {
+						"w": 0.42
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": -384.511535644531,
+						"y": 309.981201171875
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53529534351145,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53531534351145,
+									"r": 0.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": -156.28190612793,
+						"y": 181.820251464844
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "decompose",
+					"node_position": {
+						"x": -248.5810546875,
+						"y": 19.1734218597412
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "sdf3d_box",
+					"node_position": {
+						"x": -533.7724609375,
+						"y": 580.451049804688
+					},
+					"parameters": {
+						"r": 0.04,
+						"sx": 0.42,
+						"sy": 0.23,
+						"sz": 0.31
+					},
+					"seed_int": 0,
+					"type": "sdf3d_box"
+				},
+				{
+					"name": "raymarching",
+					"node_position": {
+						"x": -306.346466064453,
+						"y": 510.091857910156
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "raymarching"
+				},
+				{
+					"generic_size": 1,
+					"name": "normal_blend",
+					"node_position": {
+						"x": 160.452484130859,
+						"y": 579.061218261719
+					},
+					"parameters": {
+						"amount1": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2",
+					"node_position": {
+						"x": 353.715515136719,
+						"y": -247.191909790039
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_2",
+					"node_position": {
+						"x": 134.844482421875,
+						"y": 324.037231445312
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -391.823944091797,
+						"y": 387.455230712891
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.23562833455093,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 1.0,
+									"g": 1.0,
+									"pos": 0.23564833455093,
+									"r": 1.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "invert",
+					"node_position": {
+						"x": 178.642486572266,
+						"y": 121.331199645996
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "invert"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_3",
+					"node_position": {
+						"x": 321.684448242188,
+						"y": -19.1788215637207
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 2.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1175.06140136719,
+						"y": 148.872741699219
+					},
+					"parameters": {
+
+					},
+					"ports": [],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 1445.80334472656,
+						"y": -185.243911743164
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgb"
+						},
+						{
+							"name": "port1",
+							"type": "rgba"
+						},
+						{
+							"name": "port2",
+							"type": "rgba"
+						},
+						{
+							"name": "unnamed",
+							"type": "rgba"
+						}
+					],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -381.417022705078,
+						"y": -391.904693603516
+					},
+					"parameters": {
+						"param0": "350",
+						"param1": 3.0,
+						"param2": 3.0,
+						"param3": 2.0,
+						"param4": 0.0
+					},
+					"seed_int": 0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Number",
+							"linked_widgets": [
+								{
+									"node": "text",
+									"widget": "text"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"default": 0.5,
+							"label": "columns",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param1",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 0.5,
+							"label": "rows",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param2",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "column",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param3",
+							"step": 1.0,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "row",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param4",
+							"step": 1.0,
+							"type": "named_parameter"
+						}
+					]
+				},
+				{
+					"name": "text",
+					"node_position": {
+						"x": -1718.63195800781,
+						"y": 305.267669677734
+					},
+					"parameters": {
+						"alignment": 1.0,
+						"bg": {
+							"a": 0.0,
+							"b": 0.0,
+							"g": 0.0,
+							"r": 0.0,
+							"type": "Color"
+						},
+						"center": true,
+						"fg": {
+							"a": 1.0,
+							"b": 0.66619873046875,
+							"g": 0.845172107219696,
+							"r": 0.921875,
+							"type": "Color"
+						},
+						"font": "/Users/doomy/Downloads/Inter-4.1-1/extras/ttf/InterDisplay-ExtraBoldItalic.ttf",
+						"font_size": 560.0,
+						"line_spacing": 0.0,
+						"text": "350",
+						"x": 0.0,
+						"y": 0.0
+					},
+					"seed_int": 0,
+					"type": "text"
+				},
+				{
+					"generic_size": 4,
+					"name": "transform2",
+					"node_position": {
+						"x": 733.046813964844,
+						"y": 1.346675157547
+					},
+					"parameters": {
+						"mode": 0.0,
+						"rotate": 0.0,
+						"scale_x": "1/$param1",
+						"scale_y": "1/$param2",
+						"translate_x": "(-1/$param1)+($param3*(1/$param1))",
+						"translate_y": "(-1/$param2)+($param4*(1/$param2))"
+					},
+					"seed_int": 0,
+					"type": "transform2"
+				},
+				{
+					"name": "decompose_2",
+					"node_position": {
+						"x": 809.036560058594,
+						"y": -264.962005615234
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "combine_2",
+					"node_position": {
+						"x": 1012.43505859375,
+						"y": -455.956756591797
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "shape",
+					"node_position": {
+						"x": -1362.81066894531,
+						"y": 799.939819335938
+					},
+					"parameters": {
+						"edge": 0.1,
+						"radius": 0.8,
+						"shape": 1.0,
+						"sides": 4.0
+					},
+					"seed_int": 0,
+					"type": "shape"
+				},
+				{
+					"name": "sdbox",
+					"node_position": {
+						"x": -1203.77844238281,
+						"y": 803.569763183594
+					},
+					"parameters": {
+						"cx": 0.0,
+						"cy": 0.01,
+						"h": 0.23,
+						"w": 0.43
+					},
+					"seed_int": 0,
+					"type": "sdbox"
+				},
+				{
+					"name": "sdshow",
+					"node_position": {
+						"x": -1003.65551757812,
+						"y": 804.935791015625
+					},
+					"parameters": {
+						"base": 0.0,
+						"bevel": 0.04
+					},
+					"seed_int": 0,
+					"type": "sdshow"
+				},
+				{
+					"name": "edge_detect",
+					"node_position": {
+						"x": -848.611450195312,
+						"y": 802.886657714844
+					},
+					"parameters": {
+						"size": 8.0,
+						"threshold": 0.4,
+						"width": 2.0
+					},
+					"seed_int": 0,
+					"type": "edge_detect"
+				},
+				{
+					"name": "reroute",
+					"node_position": {
+						"x": -915.185546875,
+						"y": 262.636993408203
+					},
+					"parameters": {
+						"preview": 0.0
+					},
+					"seed_int": 0,
+					"type": "reroute"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_4",
+					"node_position": {
+						"x": -1146.51342773438,
+						"y": 303.631805419922
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 12.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize_3",
+					"node_position": {
+						"x": -1301.7080078125,
+						"y": 527.639099121094
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 0.0,
+									"r": 0.921568632125854
+								},
+								{
+									"a": 1.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 1.0,
+									"r": 0.921568632125854
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				}
+			],
+			"parameters": {
+				"param0": "350",
+				"param1": 3.0,
+				"param2": 3.0,
+				"param3": 2.0,
+				"param4": 0.0
+			},
+			"seed_int": 0,
+			"shortdesc": "",
+			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "image",
+					"from_port": 0,
+					"to": "make_tileable",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable",
+					"from_port": 0,
+					"to": "make_tileable_2",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable_2",
+					"from_port": 0,
+					"to": "make_tileable_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_box",
+					"from_port": 0,
+					"to": "raymarching",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 3
+				},
+				{
+					"from": "make_tileable_3",
+					"from_port": 0,
+					"to": "decompose",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 1,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "decompose",
+					"from_port": 2,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 1,
+					"to": "normal_blend",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map2",
+					"from_port": 0,
+					"to": "normal_blend",
+					"to_port": 1
+				},
+				{
+					"from": "colorize_2",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_2",
+					"from_port": 0,
+					"to": "invert",
+					"to_port": 0
+				},
+				{
+					"from": "invert",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 1
+				},
+				{
+					"from": "blend2",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_3",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 1
+				},
+				{
+					"from": "normal_blend",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 2,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "transform2",
+					"from_port": 0,
+					"to": "decompose_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 0,
+					"to": "combine_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 1,
+					"to": "combine_2",
+					"to_port": 1
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 2,
+					"to": "combine_2",
+					"to_port": 2
+				},
+				{
+					"from": "combine_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 3
+				},
+				{
+					"from": "transform2",
+					"from_port": 3,
+					"to": "gen_outputs",
+					"to_port": 3
+				},
+				{
+					"from": "sdbox",
+					"from_port": 0,
+					"to": "sdshow",
+					"to_port": 0
+				},
+				{
+					"from": "sdshow",
+					"from_port": 0,
+					"to": "edge_detect",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 1
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "colorize_2",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "normal_map2",
+					"to_port": 0
+				},
+				{
+					"from": "text",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_4",
+					"from_port": 0,
+					"to": "reroute",
+					"to_port": 0
+				},
+				{
+					"from": "edge_detect",
+					"from_port": 0,
+					"to": "colorize_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_3",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 1
+				}
+			],
+			"label": "Graph",
+			"longdesc": "",
+			"name": "graph_5",
+			"node_position": {
+				"x": -485.245910644531,
+				"y": 33.7784538269043
+			},
+			"nodes": [
+				{
+					"name": "image",
+					"node_position": {
+						"x": -647.194580078125,
+						"y": -58.902027130127
+					},
+					"parameters": {
+						"clamp": false,
+						"fix_ar": false,
+						"image": "%PROJECT_PATH%/interior_door.png"
+					},
+					"seed_int": 0,
+					"type": "image"
+				},
+				{
+					"name": "make_tileable",
+					"node_position": {
+						"x": -463.873809814453,
+						"y": -33.3573455810547
+					},
+					"parameters": {
+						"w": 0.25
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "make_tileable_2",
+					"node_position": {
+						"x": -532.360656738281,
+						"y": 45.8398857116699
+					},
+					"parameters": {
+						"w": 0.29
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "normal_map2",
+					"node_position": {
+						"x": -56.0575218200684,
+						"y": 371.431182861328
+					},
+					"parameters": {
+						"buffer": 1.0,
+						"param2": 0.0,
+						"size": 10.0,
+						"strength": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_map2"
+				},
+				{
+					"name": "make_tileable_3",
+					"node_position": {
+						"x": -291.519683837891,
+						"y": -99.8906784057617
+					},
+					"parameters": {
+						"w": 0.42
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": -384.511535644531,
+						"y": 309.981201171875
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53529534351145,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53531534351145,
+									"r": 0.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": -156.28190612793,
+						"y": 181.820251464844
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "decompose",
+					"node_position": {
+						"x": -248.5810546875,
+						"y": 19.1734218597412
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "sdf3d_box",
+					"node_position": {
+						"x": -533.7724609375,
+						"y": 580.451049804688
+					},
+					"parameters": {
+						"r": 0.04,
+						"sx": 0.42,
+						"sy": 0.23,
+						"sz": 0.31
+					},
+					"seed_int": 0,
+					"type": "sdf3d_box"
+				},
+				{
+					"name": "raymarching",
+					"node_position": {
+						"x": -306.346466064453,
+						"y": 510.091857910156
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "raymarching"
+				},
+				{
+					"generic_size": 1,
+					"name": "normal_blend",
+					"node_position": {
+						"x": 160.452484130859,
+						"y": 579.061218261719
+					},
+					"parameters": {
+						"amount1": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2",
+					"node_position": {
+						"x": 353.715515136719,
+						"y": -247.191909790039
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_2",
+					"node_position": {
+						"x": 134.844482421875,
+						"y": 324.037231445312
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -391.823944091797,
+						"y": 387.455230712891
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.23562833455093,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 1.0,
+									"g": 1.0,
+									"pos": 0.23564833455093,
+									"r": 1.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "invert",
+					"node_position": {
+						"x": 178.642486572266,
+						"y": 121.331199645996
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "invert"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_3",
+					"node_position": {
+						"x": 321.684448242188,
+						"y": -19.1788215637207
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 2.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1175.06140136719,
+						"y": 148.872741699219
+					},
+					"parameters": {
+
+					},
+					"ports": [],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 1445.80334472656,
+						"y": -185.243911743164
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgb"
+						},
+						{
+							"name": "port1",
+							"type": "rgba"
+						},
+						{
+							"name": "port2",
+							"type": "rgba"
+						},
+						{
+							"name": "unnamed",
+							"type": "rgba"
+						}
+					],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -381.417022705078,
+						"y": -391.904693603516
+					},
+					"parameters": {
+						"param0": "352",
+						"param1": 3.0,
+						"param2": 3.0,
+						"param3": 0.0,
+						"param4": 1.0
+					},
+					"seed_int": 0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Number",
+							"linked_widgets": [
+								{
+									"node": "text",
+									"widget": "text"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"default": 0.5,
+							"label": "columns",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param1",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 0.5,
+							"label": "rows",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param2",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "column",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param3",
+							"step": 1.0,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "row",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param4",
+							"step": 1.0,
+							"type": "named_parameter"
+						}
+					]
+				},
+				{
+					"name": "text",
+					"node_position": {
+						"x": -1718.63195800781,
+						"y": 305.267669677734
+					},
+					"parameters": {
+						"alignment": 1.0,
+						"bg": {
+							"a": 0.0,
+							"b": 0.0,
+							"g": 0.0,
+							"r": 0.0,
+							"type": "Color"
+						},
+						"center": true,
+						"fg": {
+							"a": 1.0,
+							"b": 0.66619873046875,
+							"g": 0.845172107219696,
+							"r": 0.921875,
+							"type": "Color"
+						},
+						"font": "/Users/doomy/Downloads/Inter-4.1-1/extras/ttf/InterDisplay-ExtraBoldItalic.ttf",
+						"font_size": 560.0,
+						"line_spacing": 0.0,
+						"text": "352",
+						"x": 0.0,
+						"y": 0.0
+					},
+					"seed_int": 0,
+					"type": "text"
+				},
+				{
+					"generic_size": 4,
+					"name": "transform2",
+					"node_position": {
+						"x": 733.046813964844,
+						"y": 1.346675157547
+					},
+					"parameters": {
+						"mode": 0.0,
+						"rotate": 0.0,
+						"scale_x": "1/$param1",
+						"scale_y": "1/$param2",
+						"translate_x": "(-1/$param1)+($param3*(1/$param1))",
+						"translate_y": "(-1/$param2)+($param4*(1/$param2))"
+					},
+					"seed_int": 0,
+					"type": "transform2"
+				},
+				{
+					"name": "decompose_2",
+					"node_position": {
+						"x": 809.036560058594,
+						"y": -264.962005615234
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "combine_2",
+					"node_position": {
+						"x": 1012.43505859375,
+						"y": -455.956756591797
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "shape",
+					"node_position": {
+						"x": -1362.81066894531,
+						"y": 799.939819335938
+					},
+					"parameters": {
+						"edge": 0.1,
+						"radius": 0.8,
+						"shape": 1.0,
+						"sides": 4.0
+					},
+					"seed_int": 0,
+					"type": "shape"
+				},
+				{
+					"name": "sdbox",
+					"node_position": {
+						"x": -1203.77844238281,
+						"y": 803.569763183594
+					},
+					"parameters": {
+						"cx": 0.0,
+						"cy": 0.01,
+						"h": 0.23,
+						"w": 0.43
+					},
+					"seed_int": 0,
+					"type": "sdbox"
+				},
+				{
+					"name": "sdshow",
+					"node_position": {
+						"x": -1003.65551757812,
+						"y": 804.935791015625
+					},
+					"parameters": {
+						"base": 0.0,
+						"bevel": 0.04
+					},
+					"seed_int": 0,
+					"type": "sdshow"
+				},
+				{
+					"name": "edge_detect",
+					"node_position": {
+						"x": -848.611450195312,
+						"y": 802.886657714844
+					},
+					"parameters": {
+						"size": 8.0,
+						"threshold": 0.4,
+						"width": 2.0
+					},
+					"seed_int": 0,
+					"type": "edge_detect"
+				},
+				{
+					"name": "reroute",
+					"node_position": {
+						"x": -915.185546875,
+						"y": 262.636993408203
+					},
+					"parameters": {
+						"preview": 0.0
+					},
+					"seed_int": 0,
+					"type": "reroute"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_4",
+					"node_position": {
+						"x": -1146.51342773438,
+						"y": 303.631805419922
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 12.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize_3",
+					"node_position": {
+						"x": -1301.7080078125,
+						"y": 527.639099121094
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 0.0,
+									"r": 0.921568632125854
+								},
+								{
+									"a": 1.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 1.0,
+									"r": 0.921568632125854
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				}
+			],
+			"parameters": {
+				"param0": "352",
+				"param1": 3.0,
+				"param2": 3.0,
+				"param3": 0.0,
+				"param4": 1.0
+			},
+			"seed_int": 0,
+			"shortdesc": "",
+			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "image",
+					"from_port": 0,
+					"to": "make_tileable",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable",
+					"from_port": 0,
+					"to": "make_tileable_2",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable_2",
+					"from_port": 0,
+					"to": "make_tileable_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_box",
+					"from_port": 0,
+					"to": "raymarching",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 3
+				},
+				{
+					"from": "make_tileable_3",
+					"from_port": 0,
+					"to": "decompose",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 1,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "decompose",
+					"from_port": 2,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 1,
+					"to": "normal_blend",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map2",
+					"from_port": 0,
+					"to": "normal_blend",
+					"to_port": 1
+				},
+				{
+					"from": "colorize_2",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_2",
+					"from_port": 0,
+					"to": "invert",
+					"to_port": 0
+				},
+				{
+					"from": "invert",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 1
+				},
+				{
+					"from": "blend2",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_3",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 1
+				},
+				{
+					"from": "normal_blend",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 2,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "transform2",
+					"from_port": 0,
+					"to": "decompose_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 0,
+					"to": "combine_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 1,
+					"to": "combine_2",
+					"to_port": 1
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 2,
+					"to": "combine_2",
+					"to_port": 2
+				},
+				{
+					"from": "combine_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 3
+				},
+				{
+					"from": "transform2",
+					"from_port": 3,
+					"to": "gen_outputs",
+					"to_port": 3
+				},
+				{
+					"from": "sdbox",
+					"from_port": 0,
+					"to": "sdshow",
+					"to_port": 0
+				},
+				{
+					"from": "sdshow",
+					"from_port": 0,
+					"to": "edge_detect",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 1
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "colorize_2",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "normal_map2",
+					"to_port": 0
+				},
+				{
+					"from": "text",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_4",
+					"from_port": 0,
+					"to": "reroute",
+					"to_port": 0
+				},
+				{
+					"from": "edge_detect",
+					"from_port": 0,
+					"to": "colorize_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_3",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 1
+				}
+			],
+			"label": "Graph",
+			"longdesc": "",
+			"name": "graph_6",
+			"node_position": {
+				"x": -649.805908203125,
+				"y": 237.058471679688
+			},
+			"nodes": [
+				{
+					"name": "image",
+					"node_position": {
+						"x": -647.194580078125,
+						"y": -58.902027130127
+					},
+					"parameters": {
+						"clamp": false,
+						"fix_ar": false,
+						"image": "%PROJECT_PATH%/interior_door.png"
+					},
+					"seed_int": 0,
+					"type": "image"
+				},
+				{
+					"name": "make_tileable",
+					"node_position": {
+						"x": -463.873809814453,
+						"y": -33.3573455810547
+					},
+					"parameters": {
+						"w": 0.25
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "make_tileable_2",
+					"node_position": {
+						"x": -532.360656738281,
+						"y": 45.8398857116699
+					},
+					"parameters": {
+						"w": 0.29
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "normal_map2",
+					"node_position": {
+						"x": -56.0575218200684,
+						"y": 371.431182861328
+					},
+					"parameters": {
+						"buffer": 1.0,
+						"param2": 0.0,
+						"size": 10.0,
+						"strength": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_map2"
+				},
+				{
+					"name": "make_tileable_3",
+					"node_position": {
+						"x": -291.519683837891,
+						"y": -99.8906784057617
+					},
+					"parameters": {
+						"w": 0.42
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": -384.511535644531,
+						"y": 309.981201171875
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53529534351145,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53531534351145,
+									"r": 0.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": -156.28190612793,
+						"y": 181.820251464844
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "decompose",
+					"node_position": {
+						"x": -248.5810546875,
+						"y": 19.1734218597412
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "sdf3d_box",
+					"node_position": {
+						"x": -533.7724609375,
+						"y": 580.451049804688
+					},
+					"parameters": {
+						"r": 0.04,
+						"sx": 0.42,
+						"sy": 0.23,
+						"sz": 0.31
+					},
+					"seed_int": 0,
+					"type": "sdf3d_box"
+				},
+				{
+					"name": "raymarching",
+					"node_position": {
+						"x": -306.346466064453,
+						"y": 510.091857910156
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "raymarching"
+				},
+				{
+					"generic_size": 1,
+					"name": "normal_blend",
+					"node_position": {
+						"x": 160.452484130859,
+						"y": 579.061218261719
+					},
+					"parameters": {
+						"amount1": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2",
+					"node_position": {
+						"x": 353.715515136719,
+						"y": -247.191909790039
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_2",
+					"node_position": {
+						"x": 134.844482421875,
+						"y": 324.037231445312
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -391.823944091797,
+						"y": 387.455230712891
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.23562833455093,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 1.0,
+									"g": 1.0,
+									"pos": 0.23564833455093,
+									"r": 1.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "invert",
+					"node_position": {
+						"x": 178.642486572266,
+						"y": 121.331199645996
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "invert"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_3",
+					"node_position": {
+						"x": 321.684448242188,
+						"y": -19.1788215637207
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 2.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1175.06140136719,
+						"y": 148.872741699219
+					},
+					"parameters": {
+
+					},
+					"ports": [],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 1445.80334472656,
+						"y": -185.243911743164
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgb"
+						},
+						{
+							"name": "port1",
+							"type": "rgba"
+						},
+						{
+							"name": "port2",
+							"type": "rgba"
+						},
+						{
+							"name": "unnamed",
+							"type": "rgba"
+						}
+					],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -381.417022705078,
+						"y": -391.904693603516
+					},
+					"parameters": {
+						"param0": "354",
+						"param1": 3.0,
+						"param2": 3.0,
+						"param3": 1.0,
+						"param4": 1.0
+					},
+					"seed_int": 0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Number",
+							"linked_widgets": [
+								{
+									"node": "text",
+									"widget": "text"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"default": 0.5,
+							"label": "columns",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param1",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 0.5,
+							"label": "rows",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param2",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "column",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param3",
+							"step": 1.0,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "row",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param4",
+							"step": 1.0,
+							"type": "named_parameter"
+						}
+					]
+				},
+				{
+					"name": "text",
+					"node_position": {
+						"x": -1718.63195800781,
+						"y": 305.267669677734
+					},
+					"parameters": {
+						"alignment": 1.0,
+						"bg": {
+							"a": 0.0,
+							"b": 0.0,
+							"g": 0.0,
+							"r": 0.0,
+							"type": "Color"
+						},
+						"center": true,
+						"fg": {
+							"a": 1.0,
+							"b": 0.66619873046875,
+							"g": 0.845172107219696,
+							"r": 0.921875,
+							"type": "Color"
+						},
+						"font": "/Users/doomy/Downloads/Inter-4.1-1/extras/ttf/InterDisplay-ExtraBoldItalic.ttf",
+						"font_size": 560.0,
+						"line_spacing": 0.0,
+						"text": "354",
+						"x": 0.0,
+						"y": 0.0
+					},
+					"seed_int": 0,
+					"type": "text"
+				},
+				{
+					"generic_size": 4,
+					"name": "transform2",
+					"node_position": {
+						"x": 733.046813964844,
+						"y": 1.346675157547
+					},
+					"parameters": {
+						"mode": 0.0,
+						"rotate": 0.0,
+						"scale_x": "1/$param1",
+						"scale_y": "1/$param2",
+						"translate_x": "(-1/$param1)+($param3*(1/$param1))",
+						"translate_y": "(-1/$param2)+($param4*(1/$param2))"
+					},
+					"seed_int": 0,
+					"type": "transform2"
+				},
+				{
+					"name": "decompose_2",
+					"node_position": {
+						"x": 809.036560058594,
+						"y": -264.962005615234
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "combine_2",
+					"node_position": {
+						"x": 1012.43505859375,
+						"y": -455.956756591797
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "shape",
+					"node_position": {
+						"x": -1362.81066894531,
+						"y": 799.939819335938
+					},
+					"parameters": {
+						"edge": 0.1,
+						"radius": 0.8,
+						"shape": 1.0,
+						"sides": 4.0
+					},
+					"seed_int": 0,
+					"type": "shape"
+				},
+				{
+					"name": "sdbox",
+					"node_position": {
+						"x": -1203.77844238281,
+						"y": 803.569763183594
+					},
+					"parameters": {
+						"cx": 0.0,
+						"cy": 0.01,
+						"h": 0.23,
+						"w": 0.43
+					},
+					"seed_int": 0,
+					"type": "sdbox"
+				},
+				{
+					"name": "sdshow",
+					"node_position": {
+						"x": -1003.65551757812,
+						"y": 804.935791015625
+					},
+					"parameters": {
+						"base": 0.0,
+						"bevel": 0.04
+					},
+					"seed_int": 0,
+					"type": "sdshow"
+				},
+				{
+					"name": "edge_detect",
+					"node_position": {
+						"x": -848.611450195312,
+						"y": 802.886657714844
+					},
+					"parameters": {
+						"size": 8.0,
+						"threshold": 0.4,
+						"width": 2.0
+					},
+					"seed_int": 0,
+					"type": "edge_detect"
+				},
+				{
+					"name": "reroute",
+					"node_position": {
+						"x": -915.185546875,
+						"y": 262.636993408203
+					},
+					"parameters": {
+						"preview": 0.0
+					},
+					"seed_int": 0,
+					"type": "reroute"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_4",
+					"node_position": {
+						"x": -1146.51342773438,
+						"y": 303.631805419922
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 12.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize_3",
+					"node_position": {
+						"x": -1301.7080078125,
+						"y": 527.639099121094
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 0.0,
+									"r": 0.921568632125854
+								},
+								{
+									"a": 1.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 1.0,
+									"r": 0.921568632125854
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				}
+			],
+			"parameters": {
+				"param0": "354",
+				"param1": 3.0,
+				"param2": 3.0,
+				"param3": 1.0,
+				"param4": 1.0
+			},
+			"seed_int": 0,
+			"shortdesc": "",
+			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "image",
+					"from_port": 0,
+					"to": "make_tileable",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable",
+					"from_port": 0,
+					"to": "make_tileable_2",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable_2",
+					"from_port": 0,
+					"to": "make_tileable_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_box",
+					"from_port": 0,
+					"to": "raymarching",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 3
+				},
+				{
+					"from": "make_tileable_3",
+					"from_port": 0,
+					"to": "decompose",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 1,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "decompose",
+					"from_port": 2,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 1,
+					"to": "normal_blend",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map2",
+					"from_port": 0,
+					"to": "normal_blend",
+					"to_port": 1
+				},
+				{
+					"from": "colorize_2",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_2",
+					"from_port": 0,
+					"to": "invert",
+					"to_port": 0
+				},
+				{
+					"from": "invert",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 1
+				},
+				{
+					"from": "blend2",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_3",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 1
+				},
+				{
+					"from": "normal_blend",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 2,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "transform2",
+					"from_port": 0,
+					"to": "decompose_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 0,
+					"to": "combine_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 1,
+					"to": "combine_2",
+					"to_port": 1
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 2,
+					"to": "combine_2",
+					"to_port": 2
+				},
+				{
+					"from": "combine_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 3
+				},
+				{
+					"from": "transform2",
+					"from_port": 3,
+					"to": "gen_outputs",
+					"to_port": 3
+				},
+				{
+					"from": "sdbox",
+					"from_port": 0,
+					"to": "sdshow",
+					"to_port": 0
+				},
+				{
+					"from": "sdshow",
+					"from_port": 0,
+					"to": "edge_detect",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 1
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "colorize_2",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "normal_map2",
+					"to_port": 0
+				},
+				{
+					"from": "text",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_4",
+					"from_port": 0,
+					"to": "reroute",
+					"to_port": 0
+				},
+				{
+					"from": "edge_detect",
+					"from_port": 0,
+					"to": "colorize_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_3",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 1
+				}
+			],
+			"label": "Graph",
+			"longdesc": "",
+			"name": "graph_7",
+			"node_position": {
+				"x": -548.407653808594,
+				"y": 482.902496337891
+			},
+			"nodes": [
+				{
+					"name": "image",
+					"node_position": {
+						"x": -647.194580078125,
+						"y": -58.902027130127
+					},
+					"parameters": {
+						"clamp": false,
+						"fix_ar": false,
+						"image": "%PROJECT_PATH%/interior_door.png"
+					},
+					"seed_int": 0,
+					"type": "image"
+				},
+				{
+					"name": "make_tileable",
+					"node_position": {
+						"x": -463.873809814453,
+						"y": -33.3573455810547
+					},
+					"parameters": {
+						"w": 0.25
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "make_tileable_2",
+					"node_position": {
+						"x": -532.360656738281,
+						"y": 45.8398857116699
+					},
+					"parameters": {
+						"w": 0.29
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "normal_map2",
+					"node_position": {
+						"x": -56.0575218200684,
+						"y": 371.431182861328
+					},
+					"parameters": {
+						"buffer": 1.0,
+						"param2": 0.0,
+						"size": 10.0,
+						"strength": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_map2"
+				},
+				{
+					"name": "make_tileable_3",
+					"node_position": {
+						"x": -291.519683837891,
+						"y": -99.8906784057617
+					},
+					"parameters": {
+						"w": 0.42
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": -384.511535644531,
+						"y": 309.981201171875
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53529534351145,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53531534351145,
+									"r": 0.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": -156.28190612793,
+						"y": 181.820251464844
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "decompose",
+					"node_position": {
+						"x": -248.5810546875,
+						"y": 19.1734218597412
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "sdf3d_box",
+					"node_position": {
+						"x": -533.7724609375,
+						"y": 580.451049804688
+					},
+					"parameters": {
+						"r": 0.04,
+						"sx": 0.42,
+						"sy": 0.23,
+						"sz": 0.31
+					},
+					"seed_int": 0,
+					"type": "sdf3d_box"
+				},
+				{
+					"name": "raymarching",
+					"node_position": {
+						"x": -306.346466064453,
+						"y": 510.091857910156
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "raymarching"
+				},
+				{
+					"generic_size": 1,
+					"name": "normal_blend",
+					"node_position": {
+						"x": 160.452484130859,
+						"y": 579.061218261719
+					},
+					"parameters": {
+						"amount1": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2",
+					"node_position": {
+						"x": 353.715515136719,
+						"y": -247.191909790039
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_2",
+					"node_position": {
+						"x": 134.844482421875,
+						"y": 324.037231445312
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -391.823944091797,
+						"y": 387.455230712891
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.23562833455093,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 1.0,
+									"g": 1.0,
+									"pos": 0.23564833455093,
+									"r": 1.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "invert",
+					"node_position": {
+						"x": 178.642486572266,
+						"y": 121.331199645996
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "invert"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_3",
+					"node_position": {
+						"x": 321.684448242188,
+						"y": -19.1788215637207
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 2.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1175.06140136719,
+						"y": 148.872741699219
+					},
+					"parameters": {
+
+					},
+					"ports": [],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 1445.80334472656,
+						"y": -185.243911743164
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgb"
+						},
+						{
+							"name": "port1",
+							"type": "rgba"
+						},
+						{
+							"name": "port2",
+							"type": "rgba"
+						},
+						{
+							"name": "unnamed",
+							"type": "rgba"
+						}
+					],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -381.417022705078,
+						"y": -391.904693603516
+					},
+					"parameters": {
+						"param0": "三？/",
+						"param1": 3.0,
+						"param2": 3.0,
+						"param3": 2.0,
+						"param4": 1.0
+					},
+					"seed_int": 0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Number",
+							"linked_widgets": [
+								{
+									"node": "text",
+									"widget": "text"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"default": 0.5,
+							"label": "columns",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param1",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 0.5,
+							"label": "rows",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param2",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "column",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param3",
+							"step": 1.0,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "row",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param4",
+							"step": 1.0,
+							"type": "named_parameter"
+						}
+					]
+				},
+				{
+					"name": "text",
+					"node_position": {
+						"x": -1718.63195800781,
+						"y": 305.267669677734
+					},
+					"parameters": {
+						"alignment": 1.0,
+						"bg": {
+							"a": 0.0,
+							"b": 0.0,
+							"g": 0.0,
+							"r": 0.0,
+							"type": "Color"
+						},
+						"center": true,
+						"fg": {
+							"a": 1.0,
+							"b": 0.66619873046875,
+							"g": 0.845172107219696,
+							"r": 0.921875,
+							"type": "Color"
+						},
+						"font": "/Users/doomy/Downloads/Inter-4.1-1/extras/ttf/InterDisplay-ExtraBoldItalic.ttf",
+						"font_size": 560.0,
+						"line_spacing": 0.0,
+						"text": "三？/",
+						"x": 0.0,
+						"y": 0.0
+					},
+					"seed_int": 0,
+					"type": "text"
+				},
+				{
+					"generic_size": 4,
+					"name": "transform2",
+					"node_position": {
+						"x": 733.046813964844,
+						"y": 1.346675157547
+					},
+					"parameters": {
+						"mode": 0.0,
+						"rotate": 0.0,
+						"scale_x": "1/$param1",
+						"scale_y": "1/$param2",
+						"translate_x": "(-1/$param1)+($param3*(1/$param1))",
+						"translate_y": "(-1/$param2)+($param4*(1/$param2))"
+					},
+					"seed_int": 0,
+					"type": "transform2"
+				},
+				{
+					"name": "decompose_2",
+					"node_position": {
+						"x": 809.036560058594,
+						"y": -264.962005615234
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "combine_2",
+					"node_position": {
+						"x": 1012.43505859375,
+						"y": -455.956756591797
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "shape",
+					"node_position": {
+						"x": -1362.81066894531,
+						"y": 799.939819335938
+					},
+					"parameters": {
+						"edge": 0.1,
+						"radius": 0.8,
+						"shape": 1.0,
+						"sides": 4.0
+					},
+					"seed_int": 0,
+					"type": "shape"
+				},
+				{
+					"name": "sdbox",
+					"node_position": {
+						"x": -1203.77844238281,
+						"y": 803.569763183594
+					},
+					"parameters": {
+						"cx": 0.0,
+						"cy": 0.01,
+						"h": 0.23,
+						"w": 0.43
+					},
+					"seed_int": 0,
+					"type": "sdbox"
+				},
+				{
+					"name": "sdshow",
+					"node_position": {
+						"x": -1003.65551757812,
+						"y": 804.935791015625
+					},
+					"parameters": {
+						"base": 0.0,
+						"bevel": 0.04
+					},
+					"seed_int": 0,
+					"type": "sdshow"
+				},
+				{
+					"name": "edge_detect",
+					"node_position": {
+						"x": -848.611450195312,
+						"y": 802.886657714844
+					},
+					"parameters": {
+						"size": 8.0,
+						"threshold": 0.4,
+						"width": 2.0
+					},
+					"seed_int": 0,
+					"type": "edge_detect"
+				},
+				{
+					"name": "reroute",
+					"node_position": {
+						"x": -915.185546875,
+						"y": 262.636993408203
+					},
+					"parameters": {
+						"preview": 0.0
+					},
+					"seed_int": 0,
+					"type": "reroute"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_4",
+					"node_position": {
+						"x": -1146.51342773438,
+						"y": 303.631805419922
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 12.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize_3",
+					"node_position": {
+						"x": -1301.7080078125,
+						"y": 527.639099121094
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 0.0,
+									"r": 0.921568632125854
+								},
+								{
+									"a": 1.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 1.0,
+									"r": 0.921568632125854
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				}
+			],
+			"parameters": {
+				"param0": "三？/",
+				"param1": 3.0,
+				"param2": 3.0,
+				"param3": 2.0,
+				"param4": 1.0
+			},
+			"seed_int": 0,
+			"shortdesc": "",
+			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "image",
+					"from_port": 0,
+					"to": "make_tileable",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable",
+					"from_port": 0,
+					"to": "make_tileable_2",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable_2",
+					"from_port": 0,
+					"to": "make_tileable_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_box",
+					"from_port": 0,
+					"to": "raymarching",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 3
+				},
+				{
+					"from": "make_tileable_3",
+					"from_port": 0,
+					"to": "decompose",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 1,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "decompose",
+					"from_port": 2,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 1,
+					"to": "normal_blend",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map2",
+					"from_port": 0,
+					"to": "normal_blend",
+					"to_port": 1
+				},
+				{
+					"from": "colorize_2",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_2",
+					"from_port": 0,
+					"to": "invert",
+					"to_port": 0
+				},
+				{
+					"from": "invert",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 1
+				},
+				{
+					"from": "blend2",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_3",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 1
+				},
+				{
+					"from": "normal_blend",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 2,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "transform2",
+					"from_port": 0,
+					"to": "decompose_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 0,
+					"to": "combine_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 1,
+					"to": "combine_2",
+					"to_port": 1
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 2,
+					"to": "combine_2",
+					"to_port": 2
+				},
+				{
+					"from": "combine_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 3
+				},
+				{
+					"from": "transform2",
+					"from_port": 3,
+					"to": "gen_outputs",
+					"to_port": 3
+				},
+				{
+					"from": "sdbox",
+					"from_port": 0,
+					"to": "sdshow",
+					"to_port": 0
+				},
+				{
+					"from": "sdshow",
+					"from_port": 0,
+					"to": "edge_detect",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 1
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "colorize_2",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "normal_map2",
+					"to_port": 0
+				},
+				{
+					"from": "text",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_4",
+					"from_port": 0,
+					"to": "reroute",
+					"to_port": 0
+				},
+				{
+					"from": "edge_detect",
+					"from_port": 0,
+					"to": "colorize_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_3",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 1
+				}
+			],
+			"label": "Graph",
+			"longdesc": "",
+			"name": "graph_8",
+			"node_position": {
+				"x": -430.724548339844,
+				"y": 1040.6103515625
+			},
+			"nodes": [
+				{
+					"name": "image",
+					"node_position": {
+						"x": -647.194580078125,
+						"y": -58.902027130127
+					},
+					"parameters": {
+						"clamp": false,
+						"fix_ar": false,
+						"image": "%PROJECT_PATH%/interior_door.png"
+					},
+					"seed_int": 0,
+					"type": "image"
+				},
+				{
+					"name": "make_tileable",
+					"node_position": {
+						"x": -463.873809814453,
+						"y": -33.3573455810547
+					},
+					"parameters": {
+						"w": 0.25
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "make_tileable_2",
+					"node_position": {
+						"x": -532.360656738281,
+						"y": 45.8398857116699
+					},
+					"parameters": {
+						"w": 0.29
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "normal_map2",
+					"node_position": {
+						"x": -56.0575218200684,
+						"y": 371.431182861328
+					},
+					"parameters": {
+						"buffer": 1.0,
+						"param2": 0.0,
+						"size": 10.0,
+						"strength": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_map2"
+				},
+				{
+					"name": "make_tileable_3",
+					"node_position": {
+						"x": -291.519683837891,
+						"y": -99.8906784057617
+					},
+					"parameters": {
+						"w": 0.42
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": -384.511535644531,
+						"y": 309.981201171875
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53529534351145,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53531534351145,
+									"r": 0.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": -156.28190612793,
+						"y": 181.820251464844
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "decompose",
+					"node_position": {
+						"x": -248.5810546875,
+						"y": 19.1734218597412
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "sdf3d_box",
+					"node_position": {
+						"x": -533.7724609375,
+						"y": 580.451049804688
+					},
+					"parameters": {
+						"r": 0.04,
+						"sx": 0.42,
+						"sy": 0.23,
+						"sz": 0.31
+					},
+					"seed_int": 0,
+					"type": "sdf3d_box"
+				},
+				{
+					"name": "raymarching",
+					"node_position": {
+						"x": -306.346466064453,
+						"y": 510.091857910156
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "raymarching"
+				},
+				{
+					"generic_size": 1,
+					"name": "normal_blend",
+					"node_position": {
+						"x": 160.452484130859,
+						"y": 579.061218261719
+					},
+					"parameters": {
+						"amount1": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2",
+					"node_position": {
+						"x": 353.715515136719,
+						"y": -247.191909790039
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_2",
+					"node_position": {
+						"x": 134.844482421875,
+						"y": 324.037231445312
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -391.823944091797,
+						"y": 387.455230712891
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.23562833455093,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 1.0,
+									"g": 1.0,
+									"pos": 0.23564833455093,
+									"r": 1.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "invert",
+					"node_position": {
+						"x": 178.642486572266,
+						"y": 121.331199645996
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "invert"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_3",
+					"node_position": {
+						"x": 321.684448242188,
+						"y": -19.1788215637207
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 2.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1175.06140136719,
+						"y": 148.872741699219
+					},
+					"parameters": {
+
+					},
+					"ports": [],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 1445.80334472656,
+						"y": -185.243911743164
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgb"
+						},
+						{
+							"name": "port1",
+							"type": "rgba"
+						},
+						{
+							"name": "port2",
+							"type": "rgba"
+						},
+						{
+							"name": "unnamed",
+							"type": "rgba"
+						}
+					],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -381.417022705078,
+						"y": -391.904693603516
+					},
+					"parameters": {
+						"param0": "359",
+						"param1": 3.0,
+						"param2": 3.0,
+						"param3": 1.0,
+						"param4": 2.0
+					},
+					"seed_int": 0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Number",
+							"linked_widgets": [
+								{
+									"node": "text",
+									"widget": "text"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"default": 0.5,
+							"label": "columns",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param1",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 0.5,
+							"label": "rows",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param2",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "column",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param3",
+							"step": 1.0,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "row",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param4",
+							"step": 1.0,
+							"type": "named_parameter"
+						}
+					]
+				},
+				{
+					"name": "text",
+					"node_position": {
+						"x": -1718.63195800781,
+						"y": 305.267669677734
+					},
+					"parameters": {
+						"alignment": 1.0,
+						"bg": {
+							"a": 0.0,
+							"b": 0.0,
+							"g": 0.0,
+							"r": 0.0,
+							"type": "Color"
+						},
+						"center": true,
+						"fg": {
+							"a": 1.0,
+							"b": 0.66619873046875,
+							"g": 0.845172107219696,
+							"r": 0.921875,
+							"type": "Color"
+						},
+						"font": "/Users/doomy/Downloads/Inter-4.1-1/extras/ttf/InterDisplay-ExtraBoldItalic.ttf",
+						"font_size": 560.0,
+						"line_spacing": 0.0,
+						"text": "359",
+						"x": 0.0,
+						"y": 0.0
+					},
+					"seed_int": 0,
+					"type": "text"
+				},
+				{
+					"generic_size": 4,
+					"name": "transform2",
+					"node_position": {
+						"x": 733.046813964844,
+						"y": 1.346675157547
+					},
+					"parameters": {
+						"mode": 0.0,
+						"rotate": 0.0,
+						"scale_x": "1/$param1",
+						"scale_y": "1/$param2",
+						"translate_x": "(-1/$param1)+($param3*(1/$param1))",
+						"translate_y": "(-1/$param2)+($param4*(1/$param2))"
+					},
+					"seed_int": 0,
+					"type": "transform2"
+				},
+				{
+					"name": "decompose_2",
+					"node_position": {
+						"x": 809.036560058594,
+						"y": -264.962005615234
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "combine_2",
+					"node_position": {
+						"x": 1012.43505859375,
+						"y": -455.956756591797
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "shape",
+					"node_position": {
+						"x": -1362.81066894531,
+						"y": 799.939819335938
+					},
+					"parameters": {
+						"edge": 0.1,
+						"radius": 0.8,
+						"shape": 1.0,
+						"sides": 4.0
+					},
+					"seed_int": 0,
+					"type": "shape"
+				},
+				{
+					"name": "sdbox",
+					"node_position": {
+						"x": -1203.77844238281,
+						"y": 803.569763183594
+					},
+					"parameters": {
+						"cx": 0.0,
+						"cy": 0.01,
+						"h": 0.23,
+						"w": 0.43
+					},
+					"seed_int": 0,
+					"type": "sdbox"
+				},
+				{
+					"name": "sdshow",
+					"node_position": {
+						"x": -1003.65551757812,
+						"y": 804.935791015625
+					},
+					"parameters": {
+						"base": 0.0,
+						"bevel": 0.04
+					},
+					"seed_int": 0,
+					"type": "sdshow"
+				},
+				{
+					"name": "edge_detect",
+					"node_position": {
+						"x": -848.611450195312,
+						"y": 802.886657714844
+					},
+					"parameters": {
+						"size": 8.0,
+						"threshold": 0.4,
+						"width": 2.0
+					},
+					"seed_int": 0,
+					"type": "edge_detect"
+				},
+				{
+					"name": "reroute",
+					"node_position": {
+						"x": -915.185546875,
+						"y": 262.636993408203
+					},
+					"parameters": {
+						"preview": 0.0
+					},
+					"seed_int": 0,
+					"type": "reroute"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_4",
+					"node_position": {
+						"x": -1146.51342773438,
+						"y": 303.631805419922
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 12.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize_3",
+					"node_position": {
+						"x": -1301.7080078125,
+						"y": 527.639099121094
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 0.0,
+									"r": 0.921568632125854
+								},
+								{
+									"a": 1.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 1.0,
+									"r": 0.921568632125854
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				}
+			],
+			"parameters": {
+				"param0": "359",
+				"param1": 3.0,
+				"param2": 3.0,
+				"param3": 1.0,
+				"param4": 2.0
+			},
+			"seed_int": 0,
+			"shortdesc": "",
+			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "image",
+					"from_port": 0,
+					"to": "make_tileable",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable",
+					"from_port": 0,
+					"to": "make_tileable_2",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable_2",
+					"from_port": 0,
+					"to": "make_tileable_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_box",
+					"from_port": 0,
+					"to": "raymarching",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 3
+				},
+				{
+					"from": "make_tileable_3",
+					"from_port": 0,
+					"to": "decompose",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 1,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "decompose",
+					"from_port": 2,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 1,
+					"to": "normal_blend",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map2",
+					"from_port": 0,
+					"to": "normal_blend",
+					"to_port": 1
+				},
+				{
+					"from": "colorize_2",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_2",
+					"from_port": 0,
+					"to": "invert",
+					"to_port": 0
+				},
+				{
+					"from": "invert",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 1
+				},
+				{
+					"from": "blend2",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_3",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 1
+				},
+				{
+					"from": "normal_blend",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 2,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "transform2",
+					"from_port": 0,
+					"to": "decompose_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 0,
+					"to": "combine_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 1,
+					"to": "combine_2",
+					"to_port": 1
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 2,
+					"to": "combine_2",
+					"to_port": 2
+				},
+				{
+					"from": "combine_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 3
+				},
+				{
+					"from": "transform2",
+					"from_port": 3,
+					"to": "gen_outputs",
+					"to_port": 3
+				},
+				{
+					"from": "sdbox",
+					"from_port": 0,
+					"to": "sdshow",
+					"to_port": 0
+				},
+				{
+					"from": "sdshow",
+					"from_port": 0,
+					"to": "edge_detect",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 1
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "colorize_2",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "normal_map2",
+					"to_port": 0
+				},
+				{
+					"from": "text",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_4",
+					"from_port": 0,
+					"to": "reroute",
+					"to_port": 0
+				},
+				{
+					"from": "edge_detect",
+					"from_port": 0,
+					"to": "colorize_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_3",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 1
+				}
+			],
+			"label": "Graph",
+			"longdesc": "",
+			"name": "graph_9",
+			"node_position": {
+				"x": -266.164520263672,
+				"y": 837.330261230469
+			},
+			"nodes": [
+				{
+					"name": "image",
+					"node_position": {
+						"x": -647.194580078125,
+						"y": -58.902027130127
+					},
+					"parameters": {
+						"clamp": false,
+						"fix_ar": false,
+						"image": "%PROJECT_PATH%/interior_door.png"
+					},
+					"seed_int": 0,
+					"type": "image"
+				},
+				{
+					"name": "make_tileable",
+					"node_position": {
+						"x": -463.873809814453,
+						"y": -33.3573455810547
+					},
+					"parameters": {
+						"w": 0.25
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "make_tileable_2",
+					"node_position": {
+						"x": -532.360656738281,
+						"y": 45.8398857116699
+					},
+					"parameters": {
+						"w": 0.29
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "normal_map2",
+					"node_position": {
+						"x": -56.0575218200684,
+						"y": 371.431182861328
+					},
+					"parameters": {
+						"buffer": 1.0,
+						"param2": 0.0,
+						"size": 10.0,
+						"strength": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_map2"
+				},
+				{
+					"name": "make_tileable_3",
+					"node_position": {
+						"x": -291.519683837891,
+						"y": -99.8906784057617
+					},
+					"parameters": {
+						"w": 0.42
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": -384.511535644531,
+						"y": 309.981201171875
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53529534351145,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53531534351145,
+									"r": 0.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": -156.28190612793,
+						"y": 181.820251464844
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "decompose",
+					"node_position": {
+						"x": -248.5810546875,
+						"y": 19.1734218597412
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "sdf3d_box",
+					"node_position": {
+						"x": -533.7724609375,
+						"y": 580.451049804688
+					},
+					"parameters": {
+						"r": 0.04,
+						"sx": 0.42,
+						"sy": 0.23,
+						"sz": 0.31
+					},
+					"seed_int": 0,
+					"type": "sdf3d_box"
+				},
+				{
+					"name": "raymarching",
+					"node_position": {
+						"x": -306.346466064453,
+						"y": 510.091857910156
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "raymarching"
+				},
+				{
+					"generic_size": 1,
+					"name": "normal_blend",
+					"node_position": {
+						"x": 160.452484130859,
+						"y": 579.061218261719
+					},
+					"parameters": {
+						"amount1": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2",
+					"node_position": {
+						"x": 353.715515136719,
+						"y": -247.191909790039
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_2",
+					"node_position": {
+						"x": 134.844482421875,
+						"y": 324.037231445312
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -391.823944091797,
+						"y": 387.455230712891
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.23562833455093,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 1.0,
+									"g": 1.0,
+									"pos": 0.23564833455093,
+									"r": 1.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "invert",
+					"node_position": {
+						"x": 178.642486572266,
+						"y": 121.331199645996
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "invert"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_3",
+					"node_position": {
+						"x": 321.684448242188,
+						"y": -19.1788215637207
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 2.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1175.06140136719,
+						"y": 148.872741699219
+					},
+					"parameters": {
+
+					},
+					"ports": [],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 1445.80334472656,
+						"y": -185.243911743164
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgb"
+						},
+						{
+							"name": "port1",
+							"type": "rgba"
+						},
+						{
+							"name": "port2",
+							"type": "rgba"
+						},
+						{
+							"name": "unnamed",
+							"type": "rgba"
+						}
+					],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -381.417022705078,
+						"y": -391.904693603516
+					},
+					"parameters": {
+						"param0": "358",
+						"param1": 3.0,
+						"param2": 3.0,
+						"param3": 0.0,
+						"param4": 2.0
+					},
+					"seed_int": 0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Number",
+							"linked_widgets": [
+								{
+									"node": "text",
+									"widget": "text"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"default": 0.5,
+							"label": "columns",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param1",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 0.5,
+							"label": "rows",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param2",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "column",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param3",
+							"step": 1.0,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "row",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param4",
+							"step": 1.0,
+							"type": "named_parameter"
+						}
+					]
+				},
+				{
+					"name": "text",
+					"node_position": {
+						"x": -1718.63195800781,
+						"y": 305.267669677734
+					},
+					"parameters": {
+						"alignment": 1.0,
+						"bg": {
+							"a": 0.0,
+							"b": 0.0,
+							"g": 0.0,
+							"r": 0.0,
+							"type": "Color"
+						},
+						"center": true,
+						"fg": {
+							"a": 1.0,
+							"b": 0.66619873046875,
+							"g": 0.845172107219696,
+							"r": 0.921875,
+							"type": "Color"
+						},
+						"font": "/Users/doomy/Downloads/Inter-4.1-1/extras/ttf/InterDisplay-ExtraBoldItalic.ttf",
+						"font_size": 560.0,
+						"line_spacing": 0.0,
+						"text": "358",
+						"x": 0.0,
+						"y": 0.0
+					},
+					"seed_int": 0,
+					"type": "text"
+				},
+				{
+					"generic_size": 4,
+					"name": "transform2",
+					"node_position": {
+						"x": 733.046813964844,
+						"y": 1.346675157547
+					},
+					"parameters": {
+						"mode": 0.0,
+						"rotate": 0.0,
+						"scale_x": "1/$param1",
+						"scale_y": "1/$param2",
+						"translate_x": "(-1/$param1)+($param3*(1/$param1))",
+						"translate_y": "(-1/$param2)+($param4*(1/$param2))"
+					},
+					"seed_int": 0,
+					"type": "transform2"
+				},
+				{
+					"name": "decompose_2",
+					"node_position": {
+						"x": 809.036560058594,
+						"y": -264.962005615234
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "combine_2",
+					"node_position": {
+						"x": 1012.43505859375,
+						"y": -455.956756591797
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "shape",
+					"node_position": {
+						"x": -1362.81066894531,
+						"y": 799.939819335938
+					},
+					"parameters": {
+						"edge": 0.1,
+						"radius": 0.8,
+						"shape": 1.0,
+						"sides": 4.0
+					},
+					"seed_int": 0,
+					"type": "shape"
+				},
+				{
+					"name": "sdbox",
+					"node_position": {
+						"x": -1203.77844238281,
+						"y": 803.569763183594
+					},
+					"parameters": {
+						"cx": 0.0,
+						"cy": 0.01,
+						"h": 0.23,
+						"w": 0.43
+					},
+					"seed_int": 0,
+					"type": "sdbox"
+				},
+				{
+					"name": "sdshow",
+					"node_position": {
+						"x": -1003.65551757812,
+						"y": 804.935791015625
+					},
+					"parameters": {
+						"base": 0.0,
+						"bevel": 0.04
+					},
+					"seed_int": 0,
+					"type": "sdshow"
+				},
+				{
+					"name": "edge_detect",
+					"node_position": {
+						"x": -848.611450195312,
+						"y": 802.886657714844
+					},
+					"parameters": {
+						"size": 8.0,
+						"threshold": 0.4,
+						"width": 2.0
+					},
+					"seed_int": 0,
+					"type": "edge_detect"
+				},
+				{
+					"name": "reroute",
+					"node_position": {
+						"x": -915.185546875,
+						"y": 262.636993408203
+					},
+					"parameters": {
+						"preview": 0.0
+					},
+					"seed_int": 0,
+					"type": "reroute"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_4",
+					"node_position": {
+						"x": -1146.51342773438,
+						"y": 303.631805419922
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 12.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize_3",
+					"node_position": {
+						"x": -1301.7080078125,
+						"y": 527.639099121094
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 0.0,
+									"r": 0.921568632125854
+								},
+								{
+									"a": 1.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 1.0,
+									"r": 0.921568632125854
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				}
+			],
+			"parameters": {
+				"param0": "358",
+				"param1": 3.0,
+				"param2": 3.0,
+				"param3": 0.0,
+				"param4": 2.0
+			},
+			"seed_int": 0,
+			"shortdesc": "",
+			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "image",
+					"from_port": 0,
+					"to": "make_tileable",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable",
+					"from_port": 0,
+					"to": "make_tileable_2",
+					"to_port": 0
+				},
+				{
+					"from": "make_tileable_2",
+					"from_port": 0,
+					"to": "make_tileable_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_box",
+					"from_port": 0,
+					"to": "raymarching",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 3
+				},
+				{
+					"from": "make_tileable_3",
+					"from_port": 0,
+					"to": "decompose",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 1,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "decompose",
+					"from_port": 2,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 0
+				},
+				{
+					"from": "raymarching",
+					"from_port": 1,
+					"to": "normal_blend",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map2",
+					"from_port": 0,
+					"to": "normal_blend",
+					"to_port": 1
+				},
+				{
+					"from": "colorize_2",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_2",
+					"from_port": 0,
+					"to": "invert",
+					"to_port": 0
+				},
+				{
+					"from": "invert",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend2_3",
+					"to_port": 1
+				},
+				{
+					"from": "blend2",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_3",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 1
+				},
+				{
+					"from": "normal_blend",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 2,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
+					"from": "transform2",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "transform2",
+					"from_port": 0,
+					"to": "decompose_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 0,
+					"to": "combine_2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 1,
+					"to": "combine_2",
+					"to_port": 1
+				},
+				{
+					"from": "decompose_2",
+					"from_port": 2,
+					"to": "combine_2",
+					"to_port": 2
+				},
+				{
+					"from": "combine_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 3
+				},
+				{
+					"from": "transform2",
+					"from_port": 3,
+					"to": "gen_outputs",
+					"to_port": 3
+				},
+				{
+					"from": "sdbox",
+					"from_port": 0,
+					"to": "sdshow",
+					"to_port": 0
+				},
+				{
+					"from": "sdshow",
+					"from_port": 0,
+					"to": "edge_detect",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "blend2",
+					"to_port": 1
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "colorize_2",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "normal_map2",
+					"to_port": 0
+				},
+				{
+					"from": "text",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_4",
+					"from_port": 0,
+					"to": "reroute",
+					"to_port": 0
+				},
+				{
+					"from": "edge_detect",
+					"from_port": 0,
+					"to": "colorize_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_3",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 1
+				}
+			],
+			"label": "Graph",
+			"longdesc": "",
+			"name": "graph_10",
+			"node_position": {
+				"x": -329.326232910156,
+				"y": 1286.45434570312
+			},
+			"nodes": [
+				{
+					"name": "image",
+					"node_position": {
+						"x": -647.194580078125,
+						"y": -58.902027130127
+					},
+					"parameters": {
+						"clamp": false,
+						"fix_ar": false,
+						"image": "%PROJECT_PATH%/interior_door.png"
+					},
+					"seed_int": 0,
+					"type": "image"
+				},
+				{
+					"name": "make_tileable",
+					"node_position": {
+						"x": -463.873809814453,
+						"y": -33.3573455810547
+					},
+					"parameters": {
+						"w": 0.25
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "make_tileable_2",
+					"node_position": {
+						"x": -532.360656738281,
+						"y": 45.8398857116699
+					},
+					"parameters": {
+						"w": 0.29
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "normal_map2",
+					"node_position": {
+						"x": -56.0575218200684,
+						"y": 371.431182861328
+					},
+					"parameters": {
+						"buffer": 1.0,
+						"param2": 0.0,
+						"size": 10.0,
+						"strength": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_map2"
+				},
+				{
+					"name": "make_tileable_3",
+					"node_position": {
+						"x": -291.519683837891,
+						"y": -99.8906784057617
+					},
+					"parameters": {
+						"w": 0.42
+					},
+					"seed_int": 0,
+					"type": "make_tileable"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": -384.511535644531,
+						"y": 309.981201171875
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 0.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53529534351145,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.53531534351145,
+									"r": 0.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": -156.28190612793,
+						"y": 181.820251464844
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "decompose",
+					"node_position": {
+						"x": -248.5810546875,
+						"y": 19.1734218597412
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "sdf3d_box",
+					"node_position": {
+						"x": -533.7724609375,
+						"y": 580.451049804688
+					},
+					"parameters": {
+						"r": 0.04,
+						"sx": 0.42,
+						"sy": 0.23,
+						"sz": 0.31
+					},
+					"seed_int": 0,
+					"type": "sdf3d_box"
+				},
+				{
+					"name": "raymarching",
+					"node_position": {
+						"x": -306.346466064453,
+						"y": 510.091857910156
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "raymarching"
+				},
+				{
+					"generic_size": 1,
+					"name": "normal_blend",
+					"node_position": {
+						"x": 160.452484130859,
+						"y": 579.061218261719
+					},
+					"parameters": {
+						"amount1": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2",
+					"node_position": {
+						"x": 353.715515136719,
+						"y": -247.191909790039
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_2",
+					"node_position": {
+						"x": 134.844482421875,
+						"y": 324.037231445312
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -391.823944091797,
+						"y": 387.455230712891
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.23562833455093,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 1.0,
+									"g": 1.0,
+									"pos": 0.23564833455093,
+									"r": 1.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "invert",
+					"node_position": {
+						"x": 178.642486572266,
+						"y": 121.331199645996
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "invert"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_3",
+					"node_position": {
+						"x": 321.684448242188,
+						"y": -19.1788215637207
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 2.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1175.06140136719,
+						"y": 148.872741699219
+					},
+					"parameters": {
+
+					},
+					"ports": [],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 1445.80334472656,
+						"y": -185.243911743164
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgb"
+						},
+						{
+							"name": "port1",
+							"type": "rgba"
+						},
+						{
+							"name": "port2",
+							"type": "rgba"
+						},
+						{
+							"name": "unnamed",
+							"type": "rgba"
+						}
+					],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -381.417022705078,
+						"y": -391.904693603516
+					},
+					"parameters": {
+						"param0": "360",
+						"param1": 3.0,
+						"param2": 3.0,
+						"param3": 2.0,
+						"param4": 2.0
+					},
+					"seed_int": 0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Number",
+							"linked_widgets": [
+								{
+									"node": "text",
+									"widget": "text"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"default": 0.5,
+							"label": "columns",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param1",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 0.5,
+							"label": "rows",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param2",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "column",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param3",
+							"step": 1.0,
+							"type": "named_parameter"
+						},
+						{
+							"default": 3.0,
+							"label": "row",
+							"max": 1.0,
+							"min": 0.0,
+							"name": "param4",
+							"step": 1.0,
+							"type": "named_parameter"
+						}
+					]
+				},
+				{
+					"name": "text",
+					"node_position": {
+						"x": -1718.63195800781,
+						"y": 305.267669677734
+					},
+					"parameters": {
+						"alignment": 1.0,
+						"bg": {
+							"a": 0.0,
+							"b": 0.0,
+							"g": 0.0,
+							"r": 0.0,
+							"type": "Color"
+						},
+						"center": true,
+						"fg": {
+							"a": 1.0,
+							"b": 0.66619873046875,
+							"g": 0.845172107219696,
+							"r": 0.921875,
+							"type": "Color"
+						},
+						"font": "/Users/doomy/Downloads/Inter-4.1-1/extras/ttf/InterDisplay-ExtraBoldItalic.ttf",
+						"font_size": 560.0,
+						"line_spacing": 0.0,
+						"text": "360",
+						"x": 0.0,
+						"y": 0.0
+					},
+					"seed_int": 0,
+					"type": "text"
+				},
+				{
+					"generic_size": 4,
+					"name": "transform2",
+					"node_position": {
+						"x": 733.046813964844,
+						"y": 1.346675157547
+					},
+					"parameters": {
+						"mode": 0.0,
+						"rotate": 0.0,
+						"scale_x": "1/$param1",
+						"scale_y": "1/$param2",
+						"translate_x": "(-1/$param1)+($param3*(1/$param1))",
+						"translate_y": "(-1/$param2)+($param4*(1/$param2))"
+					},
+					"seed_int": 0,
+					"type": "transform2"
+				},
+				{
+					"name": "decompose_2",
+					"node_position": {
+						"x": 809.036560058594,
+						"y": -264.962005615234
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "combine_2",
+					"node_position": {
+						"x": 1012.43505859375,
+						"y": -455.956756591797
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "shape",
+					"node_position": {
+						"x": -1362.81066894531,
+						"y": 799.939819335938
+					},
+					"parameters": {
+						"edge": 0.1,
+						"radius": 0.8,
+						"shape": 1.0,
+						"sides": 4.0
+					},
+					"seed_int": 0,
+					"type": "shape"
+				},
+				{
+					"name": "sdbox",
+					"node_position": {
+						"x": -1203.77844238281,
+						"y": 803.569763183594
+					},
+					"parameters": {
+						"cx": 0.0,
+						"cy": 0.01,
+						"h": 0.23,
+						"w": 0.43
+					},
+					"seed_int": 0,
+					"type": "sdbox"
+				},
+				{
+					"name": "sdshow",
+					"node_position": {
+						"x": -1003.65551757812,
+						"y": 804.935791015625
+					},
+					"parameters": {
+						"base": 0.0,
+						"bevel": 0.04
+					},
+					"seed_int": 0,
+					"type": "sdshow"
+				},
+				{
+					"name": "edge_detect",
+					"node_position": {
+						"x": -848.611450195312,
+						"y": 802.886657714844
+					},
+					"parameters": {
+						"size": 8.0,
+						"threshold": 0.4,
+						"width": 2.0
+					},
+					"seed_int": 0,
+					"type": "edge_detect"
+				},
+				{
+					"name": "reroute",
+					"node_position": {
+						"x": -915.185546875,
+						"y": 262.636993408203
+					},
+					"parameters": {
+						"preview": 0.0
+					},
+					"seed_int": 0,
+					"type": "reroute"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_4",
+					"node_position": {
+						"x": -1146.51342773438,
+						"y": 303.631805419922
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 12.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize_3",
+					"node_position": {
+						"x": -1301.7080078125,
+						"y": 527.639099121094
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 0.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 0.0,
+									"r": 0.921568632125854
+								},
+								{
+									"a": 1.0,
+									"b": 0.666666686534882,
+									"g": 0.847058832645416,
+									"pos": 1.0,
+									"r": 0.921568632125854
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				}
+			],
+			"parameters": {
+				"param0": "360",
+				"param1": 3.0,
+				"param2": 3.0,
+				"param3": 2.0,
+				"param4": 2.0
+			},
+			"seed_int": 0,
+			"shortdesc": "",
+			"type": "graph"
+		},
+		{
+			"name": "make_tileable",
+			"node_position": {
+				"x": 902.310729980469,
+				"y": 138.813812255859
+			},
+			"parameters": {
+				"w": 0.25
+			},
+			"seed_int": 0,
+			"type": "make_tileable"
+		},
+		{
+			"name": "make_tileable_2",
+			"node_position": {
+				"x": 833.823913574219,
+				"y": 218.011047363281
+			},
+			"parameters": {
+				"w": 0.29
+			},
+			"seed_int": 0,
+			"type": "make_tileable"
+		},
+		{
+			"name": "make_tileable_3",
+			"node_position": {
+				"x": 1074.66491699219,
+				"y": 58.107982635498
+			},
+			"parameters": {
+				"w": 0.42
+			},
+			"seed_int": 0,
+			"type": "make_tileable"
+		},
+		{
+			"name": "image",
+			"node_position": {
+				"x": 718.989929199219,
+				"y": 113.26912689209
+			},
+			"parameters": {
+				"clamp": false,
+				"fix_ar": false,
+				"image": "%PROJECT_PATH%/interior_door.png"
+			},
+			"seed_int": 0,
+			"type": "image"
+		},
+		{
+			"generic_size": 1,
+			"name": "blend2_3",
+			"node_position": {
+				"x": 1294.7939453125,
+				"y": -1185.53002929688
+			},
+			"parameters": {
+				"amount1": 1.0,
+				"blend_type1": 0.0
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"generic_size": 8,
+			"name": "blend2_4",
+			"node_position": {
+				"x": 761.553955078125,
+				"y": -1015.46020507812
+			},
+			"parameters": {
+				"amount1": 1.0,
+				"amount2": 1.0,
+				"amount3": 1.0,
+				"amount4": 1.0,
+				"amount5": 1.0,
+				"amount6": 1.0,
+				"amount7": 1.0,
+				"amount8": 1.0,
+				"blend_type1": 12,
+				"blend_type2": 12,
+				"blend_type3": 12,
+				"blend_type4": 12,
+				"blend_type5": 12,
+				"blend_type6": 12,
+				"blend_type7": 12,
+				"blend_type8": 12
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"name": "decompose",
+			"node_position": {
+				"x": 818.243957519531,
+				"y": -1368.00085449219
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "decompose"
+		},
+		{
+			"name": "combine",
+			"node_position": {
+				"x": 1039.68908691406,
+				"y": -1337.88427734375
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "combine"
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

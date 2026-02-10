@@ -1,0 +1,258 @@
+{
+	"connections": [
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "sdpolygon",
+			"from_port": 0,
+			"to": "sdshow",
+			"to_port": 0
+		},
+		{
+			"from": "sdshow",
+			"from_port": 0,
+			"to": "blend2_2",
+			"to_port": 1
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "blend2_2",
+			"to_port": 0
+		},
+		{
+			"from": "blend2_2",
+			"from_port": 0,
+			"to": "invert",
+			"to_port": 0
+		},
+		{
+			"from": "invert",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 2
+		},
+		{
+			"from": "image_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "image_2",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "image_2",
+			"from_port": 0,
+			"to": "normal_map2",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "@Node@9038",
+	"node_position": {
+		"x": 0.0,
+		"y": 0.0
+	},
+	"nodes": [
+		{
+			"export_paths": {
+
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 327.0,
+				"y": -14.0
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
+					"type": "Color"
+				},
+				"ao": 1.0,
+				"depth_scale": 0.5,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 0.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 8,
+				"sss": 1.0
+			},
+			"seed_int": 0,
+			"type": "material"
+		},
+		{
+			"name": "normal_map2",
+			"node_position": {
+				"x": -363.5,
+				"y": 411.0
+			},
+			"parameters": {
+				"buffer": 1.0,
+				"param2": 0.0,
+				"size": 8,
+				"strength": 1.0
+			},
+			"seed_int": 0,
+			"type": "normal_map2"
+		},
+		{
+			"name": "sdpolygon",
+			"node_position": {
+				"x": -728.5,
+				"y": 355.0
+			},
+			"parameters": {
+				"polygon": {
+					"points": [
+						{
+							"x": 0.154231116175652,
+							"y": 0.591446757316589
+						},
+						{
+							"x": 0.16696996986866,
+							"y": 0.580527722835541
+						},
+						{
+							"x": 0.165150120854378,
+							"y": 0.524112820625305
+						},
+						{
+							"x": 0.240673333406448,
+							"y": 0.524112820625305
+						},
+						{
+							"x": 0.240673333406448,
+							"y": 0.514103710651398
+						},
+						{
+							"x": 0.163330301642418,
+							"y": 0.51592355966568
+						},
+						{
+							"x": 0.164240211248398,
+							"y": 0.496815294027328
+						},
+						{
+							"x": 0.149044588208199,
+							"y": 0.485714286565781
+						},
+						{
+							"x": 0.13521383702755,
+							"y": 0.497998178005219
+						},
+						{
+							"x": 0.137670591473579,
+							"y": 0.584713339805603
+						}
+					],
+					"type": "Polygon"
+				}
+			},
+			"seed_int": 0,
+			"type": "sdpolygon"
+		},
+		{
+			"name": "sdshow",
+			"node_position": {
+				"x": -546.5,
+				"y": 337.0
+			},
+			"parameters": {
+				"base": 0.0,
+				"bevel": 0.0
+			},
+			"seed_int": 0,
+			"type": "sdshow"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -285.5,
+				"y": 126.0
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 0.146484375,
+							"g": 0.146484375,
+							"pos": 0.0,
+							"r": 0.146484375
+						},
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 1.0,
+							"r": 1.0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"generic_size": 1,
+			"name": "blend2_2",
+			"node_position": {
+				"x": -132.5,
+				"y": 161.0
+			},
+			"parameters": {
+				"amount1": 1.0,
+				"blend_type1": 12
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"name": "invert",
+			"node_position": {
+				"x": 112.5,
+				"y": 69.0
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "invert"
+		},
+		{
+			"name": "image_2",
+			"node_position": {
+				"x": -350.5,
+				"y": -137.0
+			},
+			"parameters": {
+				"clamp": false,
+				"fix_ar": false,
+				"image": "%PROJECT_PATH%/interior_door.png"
+			},
+			"seed_int": 0,
+			"type": "image"
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

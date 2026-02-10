@@ -1,0 +1,10 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "interior_door.png"
+normal_map_texture = "interior_door_normal.png"
+metallic_roughness_texture = "interior_door_mr.png"
+metallic = 1.0
+perceptual_roughness = 1.0
+
+
+

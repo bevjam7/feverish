@@ -1,0 +1,10 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "wood_floor.png"
+normal_map_texture = "wood_floor_normal.png"
+metallic_roughness_texture = "wood_floor_mr.png"
+metallic = 0.0
+perceptual_roughness = 1.0
+
+
+

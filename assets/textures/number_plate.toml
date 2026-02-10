@@ -1,0 +1,10 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "number_plate.png"
+normal_map_texture = "number_plate_normal.png"
+metallic_roughness_texture = "number_plate_mr.png"
+metallic = 1.0
+perceptual_roughness = 1.0
+
+
+
