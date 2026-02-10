@@ -278,9 +278,8 @@ impl VoiceSynth {
 
             // aspiration + whisper layers
             let breath = self.colored_noise(0.24, 0.06) * self.params.breathiness * 0.10;
-            let whisper = self.colored_noise(0.30, 0.10)
-                * self.params.whisper_mix
-                * (0.05 + 0.06 * creep);
+            let whisper =
+                self.colored_noise(0.30, 0.10) * self.params.whisper_mix * (0.05 + 0.06 * creep);
 
             // formant filtering (source-filter)
             let voiced = src + breath;

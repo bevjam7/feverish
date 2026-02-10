@@ -1,7 +1,8 @@
-use bevy::prelude::*;
-use serde::{Deserialize, Serialize};
 #[cfg(not(target_arch = "wasm32"))]
 use std::{fs, path::Path};
+
+use bevy::prelude::*;
+use serde::{Deserialize, Serialize};
 
 pub struct SettingsPlugin;
 

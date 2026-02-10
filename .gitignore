@@ -7,3 +7,6 @@
 assets/maps/autosave/
 *.afphoto~lock~
 *.blend1
+# forgot to add this one lol
+/saves
+saves/settings.ron
