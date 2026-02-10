@@ -50,6 +50,13 @@ pub struct UiDiscoveryDb {
     revision: u64,
 }
 
+#[derive(EntityEvent, Debug)]
+#[entity_event(propagate, auto_propagate)]
+pub(super) struct UiScrollEvent {
+    entity: Entity,
+    delta: Vec2,
+}
+
 impl Default for UiDiscoveryDb {
     fn default() -> Self {
         Self {
@@ -444,11 +451,11 @@ pub(super) fn handle_pause_shortcut(
     }
 }
 
-pub(super) fn handle_scroll(
+pub(super) fn send_scroll_events(
     mut mouse_wheel_events: MessageReader<MouseWheel>,
     hover_map: Res<HoverMap>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    mut query: Query<(&mut ScrollPosition, &Node, &ComputedNode, &InheritedVisibility)>,
+    mut commands: Commands,
 ) {
     const SCROLL_LINE: f32 = 24.0;
 
@@ -461,52 +468,62 @@ pub(super) fn handle_scroll(
             std::mem::swap(&mut delta.x, &mut delta.y);
         }
 
-        let mut consumed = false;
         for pointer_map in hover_map.values() {
-            let mut remaining = delta;
             for entity in pointer_map.keys().copied() {
-                let Ok((mut scroll, node, computed, visibility)) = query.get_mut(entity) else {
-                    continue;
-                };
-                if !visibility.get() {
-                    continue;
-                }
-
-                let max_offset =
-                    (computed.content_size() - computed.size()) * computed.inverse_scale_factor();
-                if node.overflow.x == OverflowAxis::Scroll && remaining.x != 0.0 {
-                    let at_edge = if remaining.x > 0.0 {
-                        scroll.x >= max_offset.x
-                    } else {
-                        scroll.x <= 0.0
-                    };
-                    if !at_edge {
-                        scroll.x = (scroll.x + remaining.x).clamp(0.0, max_offset.x.max(0.0));
-                        remaining.x = 0.0;
-                    }
-                }
-
-                if node.overflow.y == OverflowAxis::Scroll && remaining.y != 0.0 {
-                    let at_edge = if remaining.y > 0.0 {
-                        scroll.y >= max_offset.y
-                    } else {
-                        scroll.y <= 0.0
-                    };
-                    if !at_edge {
-                        scroll.y = (scroll.y + remaining.y).clamp(0.0, max_offset.y.max(0.0));
-                        remaining.y = 0.0;
-                    }
-                }
-
-                if remaining == Vec2::ZERO {
-                    consumed = true;
-                    break;
-                }
-            }
-            if consumed {
-                break;
+                commands.trigger(UiScrollEvent { entity, delta });
             }
         }
+    }
+}
+
+pub(super) fn on_ui_scroll(
+    mut scroll: On<UiScrollEvent>,
+    mut query: Query<(
+        &mut ScrollPosition,
+        &Node,
+        &ComputedNode,
+        &InheritedVisibility,
+    )>,
+) {
+    let Ok((mut scroll_position, node, computed, visibility)) = query.get_mut(scroll.entity) else {
+        return;
+    };
+    if !visibility.get() {
+        return;
+    }
+
+    let max_offset = (computed.content_size() - computed.size()) * computed.inverse_scale_factor();
+    let max_offset = Vec2::new(max_offset.x.max(0.0), max_offset.y.max(0.0));
+
+    let delta = &mut scroll.delta;
+    if node.overflow.x == OverflowAxis::Scroll && delta.x != 0.0 {
+        let at_edge = if delta.x > 0.0 {
+            scroll_position.x >= max_offset.x
+        } else {
+            scroll_position.x <= 0.0
+        };
+
+        if !at_edge {
+            scroll_position.x = (scroll_position.x + delta.x).clamp(0.0, max_offset.x);
+            delta.x = 0.0;
+        }
+    }
+
+    if node.overflow.y == OverflowAxis::Scroll && delta.y != 0.0 {
+        let at_edge = if delta.y > 0.0 {
+            scroll_position.y >= max_offset.y
+        } else {
+            scroll_position.y <= 0.0
+        };
+
+        if !at_edge {
+            scroll_position.y = (scroll_position.y + delta.y).clamp(0.0, max_offset.y);
+            delta.y = 0.0;
+        }
+    }
+
+    if *delta == Vec2::ZERO {
+        scroll.propagate(false);
     }
 }
 
