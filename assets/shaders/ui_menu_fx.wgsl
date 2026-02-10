@@ -99,6 +99,29 @@ fn autonomous_blob(uv: vec2<f32>, time: f32, slot: f32, chance: f32) -> f32 {
     return envelope * core;
 }
 
+fn luma709(c: vec3<f32>) -> f32 {
+    return dot(c, vec3<f32>(0.2126, 0.7152, 0.0722));
+}
+
+fn cool_emissive_weight(c: vec3<f32>) -> f32 {
+    let l = luma709(c);
+    let chroma_vec = c - vec3<f32>(l);
+    let chroma = length(chroma_vec);
+    let sat = chroma / max(l + 0.0001, 0.0001);
+
+    let blue_ref = vec3<f32>(0.14, 0.30, 0.94);
+    let purple_ref = vec3<f32>(0.62, 0.24, 0.88);
+    let blue_ref_chroma = normalize(blue_ref - vec3<f32>(luma709(blue_ref)));
+    let purple_ref_chroma = normalize(purple_ref - vec3<f32>(luma709(purple_ref)));
+    let hue_vec = chroma_vec / max(chroma, 0.0001);
+    let hue_match = max(dot(hue_vec, blue_ref_chroma), dot(hue_vec, purple_ref_chroma));
+
+    let hue_w = smoothstep(0.22, 0.84, hue_match);
+    let sat_w = smoothstep(0.06, 0.42, sat);
+    let light_w = smoothstep(0.01, 0.40, l + chroma * 0.45);
+    return clamp(hue_w * sat_w * light_w, 0.0, 1.0);
+}
+
 @fragment
 fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
     let uv = in.uv;
@@ -173,6 +196,50 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
     rgb = mix(rgb, side.rgb, melt_field * 0.28);
     rgb = mix(rgb, fused.rgb, melt_field * 0.35);
 
+    // VHS pass (subtle hopefuly): head-switching, phosphor persistence, and vertical hold micro drift
+    let line_id = floor(uv_monitor.y * ui_viewport.y * 0.22);
+    let line_seed = hash12(vec2<f32>(line_id, floor(t * 8.0)));
+    let line_gate = step(0.985, line_seed);
+    let vhs_strength = effect_mix * (0.22 + 0.34 * monitor_mix);
+    let hold_phase = fract(t * 0.105);
+    let hold_env = smooth_event_envelope(hold_phase);
+    let hold_drift =
+        (sin(t * 0.37) * 0.00065 + sin(t * 1.9) * 0.00028)
+        * (0.45 + 0.55 * hold_env)
+        * vhs_strength;
+    let wobble = (sin(t * 2.6 + uv_monitor.y * 120.0) + sin(t * 4.1 + uv_monitor.y * 47.0)) * 0.5;
+    let tape_jitter = vec2<f32>(
+        (wobble * 0.0009 + line_gate * (line_seed - 0.5) * 0.008) * vhs_strength,
+        0.0
+    );
+    let hs_event = step(0.90, hash12(vec2<f32>(floor(t * 2.2), 41.0)));
+    let hs_center = 0.90 + (hash12(vec2<f32>(floor(t * 2.2), 93.0)) - 0.5) * 0.08;
+    let hs_band =
+        (1.0 - smoothstep(0.0, 0.030, abs(uv_monitor.y - hs_center)))
+        * hs_event
+        * monitor_mix
+        * effect_mix;
+    let hs_shift = (hash12(vec2<f32>(line_id, floor(t * 120.0))) - 0.5) * 0.028 * hs_band;
+    let uv_vhs = clamp(uv_main + tape_jitter + vec2<f32>(hs_shift, hold_drift), vec2<f32>(0.0), vec2<f32>(1.0));
+    let vhs_ca = (0.00035 + 0.00055 * monitor_mix + 0.0007 * line_gate + 0.0009 * hs_band) * vhs_strength;
+    let vhs_r = textureSample(ui_tex, ui_sampler, clamp(uv_vhs + vec2<f32>(vhs_ca, 0.0), vec2<f32>(0.0), vec2<f32>(1.0))).r;
+    let vhs_g = textureSample(ui_tex, ui_sampler, uv_vhs).g;
+    let vhs_b = textureSample(ui_tex, ui_sampler, clamp(uv_vhs - vec2<f32>(vhs_ca * 1.35, 0.0), vec2<f32>(0.0), vec2<f32>(1.0))).b;
+    let vhs_rgb = vec3<f32>(vhs_r, vhs_g, vhs_b);
+    let ghost_uv = clamp(uv_vhs + vec2<f32>(0.004 + 0.003 * line_gate, 0.0), vec2<f32>(0.0), vec2<f32>(1.0));
+    let ghost = textureSample(ui_tex, ui_sampler, ghost_uv).rgb;
+    let trail_a = textureSample(ui_tex, ui_sampler, clamp(uv_vhs - vec2<f32>(0.0026, 0.0), vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+    let trail_b = textureSample(ui_tex, ui_sampler, clamp(uv_vhs - vec2<f32>(0.0052, 0.0), vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+    let beam_luma = dot(vhs_rgb, vec3<f32>(0.299, 0.587, 0.114));
+    let persistence = smoothstep(0.32, 0.92, beam_luma) * (0.45 + 0.55 * monitor_mix) * effect_mix;
+    let phosphor_trail = trail_a * vec3<f32>(0.06, 0.12, 0.09) + trail_b * vec3<f32>(0.04, 0.08, 0.10);
+    rgb = mix(rgb, vhs_rgb, 0.12 * vhs_strength);
+    rgb = mix(rgb, ghost, (0.02 + 0.025 * line_gate + 0.04 * hs_band) * vhs_strength);
+    rgb += phosphor_trail * 0.55 * persistence;
+    let hs_snow = (hash12(vec2<f32>(grid_px.y + floor(t * 160.0), line_id + 17.0)) - 0.5) * 0.10 * hs_band;
+    let grain = (hash12(grid_px + vec2<f32>(t * 60.0, t * 23.0)) - 0.5) * (0.015 + 0.02 * line_gate) * vhs_strength + hs_snow;
+    rgb += vec3<f32>(grain);
+
     // only on borders: tiny color separation for CRT edge feel
     let ca = fold_mask * fold_mask * effect_mix * 0.00075;
     let edge_r = textureSample(ui_tex, ui_sampler, clamp(uv_main + vec2<f32>(ca, 0.0), vec2<f32>(0.0), vec2<f32>(1.0))).r;
@@ -186,6 +253,59 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
 
     let scan = scanline_mask(grid_px.y, t);
     rgb *= mix(1.0, scan, effect_mix * 0.65 * monitor_mix);
+
+    // CRT glow driven by color math: cool-hue emissive extraction + softer, wider bloom taps :p
+    let glow_uv = mix(uv_vhs, uv_monitor, 0.72 * effect_mix);
+    let glow_step = ui_viewport.zw * (1.6 + 1.2 * monitor_mix);
+    let glow_step_far = glow_step * 2.1;
+    let g0 = textureSample(ui_tex, ui_sampler, glow_uv).rgb;
+    let gx0 = textureSample(ui_tex, ui_sampler, clamp(glow_uv + vec2<f32>(glow_step.x, 0.0), vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+    let gx1 = textureSample(ui_tex, ui_sampler, clamp(glow_uv - vec2<f32>(glow_step.x, 0.0), vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+    let gy0 = textureSample(ui_tex, ui_sampler, clamp(glow_uv + vec2<f32>(0.0, glow_step.y), vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+    let gy1 = textureSample(ui_tex, ui_sampler, clamp(glow_uv - vec2<f32>(0.0, glow_step.y), vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+    let gd0 = textureSample(ui_tex, ui_sampler, clamp(glow_uv + glow_step, vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+    let gd1 = textureSample(ui_tex, ui_sampler, clamp(glow_uv + vec2<f32>(glow_step.x, -glow_step.y), vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+    let gd2 = textureSample(ui_tex, ui_sampler, clamp(glow_uv + vec2<f32>(-glow_step.x, glow_step.y), vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+    let gd3 = textureSample(ui_tex, ui_sampler, clamp(glow_uv - glow_step, vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+    let gxx0 = textureSample(ui_tex, ui_sampler, clamp(glow_uv + vec2<f32>(glow_step_far.x, 0.0), vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+    let gxx1 = textureSample(ui_tex, ui_sampler, clamp(glow_uv - vec2<f32>(glow_step_far.x, 0.0), vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+    let gyy0 = textureSample(ui_tex, ui_sampler, clamp(glow_uv + vec2<f32>(0.0, glow_step_far.y), vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+    let gyy1 = textureSample(ui_tex, ui_sampler, clamp(glow_uv - vec2<f32>(0.0, glow_step_far.y), vec2<f32>(0.0), vec2<f32>(1.0))).rgb;
+
+    let w0 = cool_emissive_weight(g0) * 0.22;
+    let wx0 = cool_emissive_weight(gx0) * 0.14;
+    let wx1 = cool_emissive_weight(gx1) * 0.14;
+    let wy0 = cool_emissive_weight(gy0) * 0.14;
+    let wy1 = cool_emissive_weight(gy1) * 0.14;
+    let wd0 = cool_emissive_weight(gd0) * 0.09;
+    let wd1 = cool_emissive_weight(gd1) * 0.09;
+    let wd2 = cool_emissive_weight(gd2) * 0.09;
+    let wd3 = cool_emissive_weight(gd3) * 0.09;
+    let wxx0 = cool_emissive_weight(gxx0) * 0.055;
+    let wxx1 = cool_emissive_weight(gxx1) * 0.055;
+    let wyy0 = cool_emissive_weight(gyy0) * 0.055;
+    let wyy1 = cool_emissive_weight(gyy1) * 0.055;
+
+    let glow_w = w0 + wx0 + wx1 + wy0 + wy1 + wd0 + wd1 + wd2 + wd3 + wxx0 + wxx1 + wyy0 + wyy1;
+    let glow_sum =
+        g0 * w0
+        + gx0 * wx0
+        + gx1 * wx1
+        + gy0 * wy0
+        + gy1 * wy1
+        + gd0 * wd0
+        + gd1 * wd1
+        + gd2 * wd2
+        + gd3 * wd3
+        + gxx0 * wxx0
+        + gxx1 * wxx1
+        + gyy0 * wyy0
+        + gyy1 * wyy1;
+    let glow_color = glow_sum / max(glow_w, 0.0001);
+    let glow_presence = smoothstep(0.025, 0.33, glow_w);
+    let glow_gain = effect_mix * (0.072 + 0.096 * monitor_mix);
+    rgb += glow_color * glow_presence * glow_gain;
+    rgb = clamp(rgb, vec3<f32>(0.0), vec3<f32>(1.0));
 
     rgb = mix(rgb, rgb * ui_tint.rgb, ui_tint.a * effect_mix);
     let out_rgb = mix(base.rgb, rgb, effect_mix);
