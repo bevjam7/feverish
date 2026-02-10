@@ -1,3 +1,4 @@
+mod inventory;
 mod npc;
 mod props;
 mod sound;
@@ -56,7 +57,7 @@ impl SpawnPoint {
 }
 
 /// Transition between two doors across different levels
-#[solid_class(group("func"), classname("door_portal"), size(-16 -16 -32, 16 16 32), base(Transform, Target))]
+#[solid_class(group("func"), classname("door_portal"), base(Transform, Target))]
 #[derive(Clone, Default)]
 #[component(on_add=Self::on_add_hook)]
 #[require(Usable)]
@@ -180,4 +181,23 @@ pub enum PhysLayer {
     Default,
     Usable,
     Npc,
+    Prop,
+}
+
+#[derive(Component)]
+pub(crate) struct ColliderHierarchyChildOf(pub(crate) Entity);
+
+fn link_hierarchal_colliders(
+    trigger: On<ColliderConstructorHierarchyReady>,
+    children: Query<&Children>,
+    colliders: Query<&Collider>,
+    mut cmd: Commands,
+) {
+    for child in children.iter_descendants(trigger.entity) {
+        println!("a");
+        if colliders.contains(child) {
+            cmd.entity(child)
+                .insert(ColliderHierarchyChildOf(trigger.entity));
+        }
+    }
 }

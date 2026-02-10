@@ -9,7 +9,7 @@ use bevy::{
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-    gameplay::PhysLayer,
+    gameplay::{PhysLayer, props::AnimationControls},
     input::Use,
     ratspinner::{RatCommand, RatStart},
 };
@@ -88,7 +88,7 @@ impl Npc {
                 ),
                 RigidBody::Kinematic,
                 SceneRoot(scene_handle.clone()),
-                NpcAnimationControls {
+                AnimationControls {
                     animations,
                     graph_handle,
                 },
@@ -101,7 +101,7 @@ impl Npc {
 
 fn idle_on_spawn(
     scene_ready: On<SceneInstanceReady>,
-    controls: Query<&NpcAnimationControls>,
+    controls: Query<&AnimationControls>,
     children: Query<&Children>,
     mut animators: Query<&mut AnimationPlayer>,
     mut cmd: Commands,
@@ -121,12 +121,6 @@ fn idle_on_spawn(
                 .insert(AnimationGraphHandle(controls.graph_handle.clone()));
         }
     }
-}
-
-#[derive(Component)]
-pub(crate) struct NpcAnimationControls {
-    pub(crate) animations: HashMap<&'static str, AnimationNodeIndex>,
-    pub(crate) graph_handle: Handle<AnimationGraph>,
 }
 
 #[derive(Component, Clone)]

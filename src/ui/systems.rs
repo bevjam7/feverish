@@ -60,13 +60,7 @@ pub(super) struct UiScrollEvent {
 impl Default for UiDiscoveryDb {
     fn default() -> Self {
         Self {
-            items: vec![
-                DiscoveryEntry::new("rat-toy", "rat toy")
-                    .subtitle("rat wooden toy")
-                    .description("a weird rat toy. you can read the word 'Jan' carved in.")
-                    .model_path("models/rat_toy/rattoy.glb#Scene0")
-                    .seen(true),
-            ],
+            items: vec![],
             npcs: vec![
                 DiscoveryEntry::new("D.", "Mr. D.")
                     .subtitle("room 400")
@@ -456,6 +450,12 @@ pub(super) fn send_scroll_events(
     hover_map: Res<HoverMap>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
     mut commands: Commands,
+    mut query: Query<(
+        &mut ScrollPosition,
+        &Node,
+        &ComputedNode,
+        &InheritedVisibility,
+    )>,
 ) {
     const SCROLL_LINE: f32 = 24.0;
 

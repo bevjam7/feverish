@@ -1,9 +1,9 @@
-use avian3d::prelude::{CollisionLayers, RayHits};
+use avian3d::prelude::{ColliderConstructorHierarchy, CollisionLayers, RayHits};
 use bevy::prelude::*;
 use bevy_enhanced_input::prelude::*;
 
 use crate::{
-    gameplay::{PhysLayer, Player},
+    gameplay::{ColliderHierarchyChildOf, PhysLayer, Player},
     ratspinner::RatDialogueState,
     ui::{DialogueUiRoot, UiDialogueCommand},
 };
@@ -88,6 +88,7 @@ fn apply_use(
     hits: Query<&RayHits>,
     layers: Query<&CollisionLayers>,
     dialogue_ui: Query<(), With<DialogueUiRoot>>,
+    hierarchy: Query<&ColliderHierarchyChildOf>,
 ) {
     if !dialogue_ui.is_empty() {
         cmd.write_message(UiDialogueCommand::Advance);
@@ -96,11 +97,16 @@ fn apply_use(
 
     let hits = hits.get(caster.entity()).unwrap();
     if let Some(hit) = hits.first() {
+        let target = match hierarchy.get(hit.entity).ok() {
+            Some(ColliderHierarchyChildOf(entity)) => *entity,
+            None => hit.entity,
+        };
+
         // check if the layer is usable. we also collide with walls to prevent using
         // things through the environment
-        let layer = layers.get(hit.entity).unwrap();
+        let layer = layers.get(target).unwrap();
         if layer.memberships.has_all(PhysLayer::Usable) {
-            cmd.entity(hit.entity).trigger(Use);
+            cmd.entity(target).trigger(Use);
         }
     }
 }
