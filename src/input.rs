@@ -6,24 +6,34 @@ use bevy::{
 use bevy_enhanced_input::prelude::*;
 
 use crate::{
+    GameState,
     gameplay::{ColliderHierarchyChildOf, PhysLayer, Player},
     ratspinner::RatDialogueState,
-    ui::{DialogueUiRoot, UiDialogueCommand},
+    ui::{DialogueUiRoot, MainMenuUi, PauseMenuUi, UiDialogueCommand},
 };
 
 pub(crate) struct InputPlugin;
 
 impl Plugin for InputPlugin {
     fn build(&self, app: &mut App) {
-        app.add_input_context::<PlayerInput>()
+        app.add_sub_state::<PlayerInputState>()
+            .add_input_context::<PlayerInput>()
             .add_observer(apply_use)
-            // .add_systems(OnEnter(GameState::Main), lock_cursor)
-            .add_systems(Update, sync_player_input_lock);
+            .add_systems(
+                Update,
+                sync_player_input_state.run_if(in_state(GameState::Main)),
+            )
+            .add_systems(OnEnter(PlayerInputState::Active), activate_player_input)
+            .add_systems(OnEnter(PlayerInputState::Locked), lock_player_input);
     }
 }
 
-fn lock_cursor(mut cursor_options: Single<&mut CursorOptions>) {
-    cursor_options.grab_mode = CursorGrabMode::Locked;
+#[derive(SubStates, Clone, Eq, PartialEq, Hash, Debug, Default)]
+#[source(GameState = GameState::Main)]
+pub(crate) enum PlayerInputState {
+    #[default]
+    Active,
+    Locked,
 }
 
 pub(crate) fn controller_bundle() -> impl Bundle {
@@ -86,9 +96,6 @@ pub struct Use(pub Entity);
 #[derive(Component)]
 pub struct UseRaycaster;
 
-#[derive(Component)]
-struct DialogueInputLocked;
-
 fn apply_use(
     _action: On<Start<UseAction>>,
     mut cmd: Commands,
@@ -119,18 +126,41 @@ fn apply_use(
     }
 }
 
-fn sync_player_input_lock(
+fn sync_player_input_state(
     dialogue: Res<RatDialogueState>,
+    ui_lock: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>, With<DialogueUiRoot>)>>,
+    state: Res<State<PlayerInputState>>,
+    mut next_state: ResMut<NextState<PlayerInputState>>,
+) {
+    let should_lock = dialogue.active || !ui_lock.is_empty();
+    let target = if should_lock {
+        PlayerInputState::Locked
+    } else {
+        PlayerInputState::Active
+    };
+    if state.get() != &target {
+        next_state.set(target);
+    }
+}
+
+fn activate_player_input(
     mut commands: Commands,
-    enabled: Query<
-        (Entity, &Actions<PlayerInput>),
-        (
-            With<Player>,
-            With<PlayerInput>,
-            Without<DialogueInputLocked>,
-        ),
-    >,
-    locked: Query<Entity, (With<Player>, With<PlayerInput>, With<DialogueInputLocked>)>,
+    players: Query<Entity, (With<Player>, With<PlayerInput>)>,
+    mut windows: Query<&mut CursorOptions>,
+) {
+    if let Ok(mut cursor_options) = windows.single_mut() {
+        cursor_options.grab_mode = CursorGrabMode::Locked;
+    }
+    for entity in &players {
+        commands
+            .entity(entity)
+            .insert(ContextActivity::<PlayerInput>::ACTIVE);
+    }
+}
+
+fn lock_player_input(
+    mut commands: Commands,
+    players: Query<(Entity, &Actions<PlayerInput>), (With<Player>, With<PlayerInput>)>,
     mut action_values: Query<&mut ActionValue>,
     mut action_states: Query<&mut ActionState>,
     mut action_events: Query<&mut ActionEvents>,
@@ -140,62 +170,46 @@ fn sync_player_input_lock(
     mut crouch_actions: Query<&mut Action<bevy_ahoy::input::Crouch>>,
     mut rotate_actions: Query<&mut Action<bevy_ahoy::input::RotateCamera>>,
     mut use_actions: Query<&mut Action<UseAction>>,
-    mut lock_logged: Local<bool>,
+    mut windows: Query<&mut CursorOptions>,
 ) {
-    if dialogue.active {
-        for (entity, actions) in &enabled {
-            // clear latched action values from the current frame bfore disabling context
-            // updates
-            for action_entity in actions.iter() {
-                if let Ok(mut value) = action_values.get_mut(action_entity) {
-                    *value = ActionValue::zero(value.dim());
-                }
-                if let Ok(mut state) = action_states.get_mut(action_entity) {
-                    *state = ActionState::None;
-                }
-                if let Ok(mut events) = action_events.get_mut(action_entity) {
-                    *events = ActionEvents::default();
-                }
-                if let Ok(mut time) = action_times.get_mut(action_entity) {
-                    *time = ActionTime::default();
-                }
-
-                if let Ok(mut action) = movement_actions.get_mut(action_entity) {
-                    *action = Action::default();
-                }
-                if let Ok(mut action) = jump_actions.get_mut(action_entity) {
-                    *action = Action::default();
-                }
-                if let Ok(mut action) = crouch_actions.get_mut(action_entity) {
-                    *action = Action::default();
-                }
-                if let Ok(mut action) = rotate_actions.get_mut(action_entity) {
-                    *action = Action::default();
-                }
-                if let Ok(mut action) = use_actions.get_mut(action_entity) {
-                    *action = Action::default();
-                }
+    if let Ok(mut cursor_options) = windows.single_mut() {
+        cursor_options.grab_mode = CursorGrabMode::None;
+    }
+    for (entity, actions) in &players {
+        // clear any latched values once before disabling the input context
+        for action_entity in actions.iter() {
+            if let Ok(mut value) = action_values.get_mut(action_entity) {
+                *value = ActionValue::zero(value.dim());
+            }
+            if let Ok(mut state) = action_states.get_mut(action_entity) {
+                *state = ActionState::None;
+            }
+            if let Ok(mut events) = action_events.get_mut(action_entity) {
+                *events = ActionEvents::default();
+            }
+            if let Ok(mut time) = action_times.get_mut(action_entity) {
+                *time = ActionTime::default();
             }
 
-            commands
-                .entity(entity)
-                .insert(ContextActivity::<PlayerInput>::INACTIVE)
-                .insert(DialogueInputLocked);
+            if let Ok(mut action) = movement_actions.get_mut(action_entity) {
+                *action = Action::default();
+            }
+            if let Ok(mut action) = jump_actions.get_mut(action_entity) {
+                *action = Action::default();
+            }
+            if let Ok(mut action) = crouch_actions.get_mut(action_entity) {
+                *action = Action::default();
+            }
+            if let Ok(mut action) = rotate_actions.get_mut(action_entity) {
+                *action = Action::default();
+            }
+            if let Ok(mut action) = use_actions.get_mut(action_entity) {
+                *action = Action::default();
+            }
         }
-        if !*lock_logged {
-            info!("dialogue active: locking player input");
-            *lock_logged = true;
-        }
-    } else {
-        for entity in &locked {
-            commands
-                .entity(entity)
-                .insert(ContextActivity::<PlayerInput>::ACTIVE)
-                .remove::<DialogueInputLocked>();
-        }
-        if *lock_logged {
-            info!("dialogue closed: restoring player input");
-            *lock_logged = false;
-        }
+
+        commands
+            .entity(entity)
+            .insert(ContextActivity::<PlayerInput>::INACTIVE);
     }
 }
