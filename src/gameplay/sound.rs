@@ -4,7 +4,8 @@ use bevy::{
     prelude::*,
 };
 use bevy_seedling::{
-    prelude::VolumeNode,
+    edge::Connect,
+    prelude::{HrtfNode, VolumeNode},
     sample::{AudioSample, SamplePlayer},
 };
 use bevy_trenchbroom::prelude::*;
@@ -61,7 +62,9 @@ impl SoundPoint {
         // not finsing AudioSample in assets
         let sample: Handle<AudioSample> = assets.load(AssetPath::from(point.sample.clone()));
 
-        let mut sampler = SamplePlayer::new(sample);
+        let volume = point.volume;
+        let mut sampler =
+            SamplePlayer::new(sample).with_volume(bevy_seedling::prelude::Volume::Linear(volume));
         // TODO: make this work lol
         if point.play_immediately {}
         if point.repeat {
@@ -72,11 +75,10 @@ impl SoundPoint {
                 None => bevy_seedling::prelude::RepeatMode::RepeatEndlessly,
             };
         }
-        let volume = point.volume;
 
         world.commands().entity(hook.entity).insert((
             sampler,
-            VolumeNode::from_linear(volume),
+            bevy_seedling::sample_effects![HrtfNode::default()],
             WorldSfxPool,
         ));
     }

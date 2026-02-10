@@ -2,6 +2,6 @@
     "levels.exterior": File(path: "maps/exterior.map#Scene"),
     "levels.hallway": File(path: "maps/hallway.map#Scene"),
     "models": Files(paths: ["models/npc_a/npc_a.gltf", "models/rat_toy/rat_toy.gltf"]),
-    "audio": Files(paths: ["audio/radio_static.ogg"]),
+    "audio": Files(paths: ["audio/radio_static.ogg", "audio/hum.ogg"]),
     "ratspinner.scripts": Files(paths: ["ratspinner/npc.default.rat"]),
 })

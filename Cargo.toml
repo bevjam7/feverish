@@ -30,7 +30,7 @@ bevy_asset_loader = { version = "0.25.0", features = [
     "standard_dynamic_assets",
 ] }
 bevy_framepace = { git = "https://github.com/aevyrie/bevy_framepace" }
-bevy_seedling = { version = "0.7.0", features = [] }
+bevy_seedling = { version = "0.7.0", features = ["hrtf"] }
 wasm-bindgen = { version = "=0.2.108", optional = true }
 
 rand = "0.10"

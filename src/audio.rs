@@ -23,7 +23,7 @@ fn set_up_mixer(mut cmd: Commands) {
         .connect(mixer::UiSfxBus);
     cmd.spawn((
         SamplerPool(mixer::WorldSfxPool),
-        sample_effects![(SpatialBasicNode::default(), SpatialScale(Vec3::splat(2.0)))],
+        sample_effects![(SpatialBasicNode::default(), SpatialScale(Vec3::splat(1.0)))],
     ))
     .connect(mixer::WorldSfxBus);
 }

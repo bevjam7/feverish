@@ -131,15 +131,7 @@
 // entity 6
 {
 "classname" "sound_point"
-"origin" "888 8 56"
+"origin" "664 152 56"
 "sample" "audio/radio_static.ogg"
-"volume" "0.1"
-}
-// entity 7
-{
-"classname" "npc"
-"origin" "616 56 120"
-"idle_animation" "cower"
-"model" "models/npc_a/npc_a.gltf"
-"angles" "0 0 0"
+"volume" "0.25"
 }
