@@ -72,13 +72,13 @@ struct UiMenuFxMaterial {
     // x: pixel_size, y: quant_steps, z: dither_strength, w: liquid_strength
     #[uniform(3)]
     params_a: Vec4,
-    // x: glitch_chance, y: glitch_speed, z: reserved, w: effect_mix
+    // x: glitch_chance, y: glitch_speed, z: monitor_distortion_on, w: effect_mix
     #[uniform(4)]
     params_b: Vec4,
     // x: width, y: height, z: inv_width, w: inv_height
     #[uniform(5)]
     viewport: Vec4,
-    // x: cursor_u, y: cursor_v, z: cursor_visible, w: reserved
+    // x: cursor_u, y: cursor_v, z: cursor_visible, w: cursor_distortion_on
     #[uniform(6)]
     cursor: Vec4,
 }
@@ -254,16 +254,33 @@ fn update_ui_fx_material(
     let height = window.resolution.height().max(1.0);
     material.viewport = Vec4::new(width, height, 1.0 / width, 1.0 / height);
 
-    let menu_active = !menus.is_empty() && settings.ui_fx;
-    material.params_b.w = if menu_active { 1.0 } else { 0.0 };
+    let menu_visible = !menus.is_empty();
+    let shader_on = menu_visible && settings.ui_fx;
+    material.params_b.w = if shader_on { 1.0 } else { 0.0 };
+    material.params_b.z = if settings.ui_monitor_distortion {
+        1.0
+    } else {
+        0.0
+    };
     // keep the melt subtle and slowly breathing to avoid a constant wacky look
     let pulse = (time.elapsed_secs() * 0.23).sin() * 0.5 + 0.5;
     material.params_a.w = 0.14 + pulse * 0.08;
 
-    material.cursor = if menu_active {
+    material.cursor = if menu_visible {
         window
             .cursor_position()
-            .map(|pos| Vec4::new(pos.x / width, pos.y / height, 1.0, 0.0))
+            .map(|pos| {
+                Vec4::new(
+                    pos.x / width,
+                    pos.y / height,
+                    1.0,
+                    if settings.ui_cursor_distortion {
+                        1.0
+                    } else {
+                        0.0
+                    },
+                )
+            })
             .unwrap_or(Vec4::ZERO)
     } else {
         Vec4::ZERO
