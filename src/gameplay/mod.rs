@@ -18,6 +18,7 @@ use crate::{
     AppSystems, GameState, Usable,
     input::{Use, UseRaycaster},
     map::LevelToPrepare,
+    psx::{PsxCamera, PsxConfig},
 };
 
 pub(crate) struct GameplayPlugin;
@@ -156,6 +157,8 @@ fn handle_added_spawn_point_camera(
         let camera_entity = cmd
             .spawn((
                 crate::camera::player_camera_bundle(),
+                PsxCamera,
+                PsxConfig::default(),
                 CharacterControllerCameraOf::new(player_root),
                 Player,
             ))

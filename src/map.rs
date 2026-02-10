@@ -6,6 +6,7 @@ use crate::{
     GameState,
     assets::GameAssets,
     gameplay::{Player, PlayerRoot},
+    psx::PsxWorldRoot,
 };
 
 pub(crate) struct MapPlugin;
@@ -41,7 +42,7 @@ fn spawn_map(
             warn!("GameAssets missing during map spawn; loading fallback scene path directly.");
             asset_server.load("maps/exterior.map#Scene")
         });
-    cmd.spawn((SceneRoot(level), Level))
+    cmd.spawn((SceneRoot(level), Level, PsxWorldRoot))
         .observe(move_and_transition_after_spawned);
 }
 
