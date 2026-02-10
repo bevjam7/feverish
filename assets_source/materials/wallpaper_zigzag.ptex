@@ -1,0 +1,2477 @@
+{
+	"connections": [
+		{
+			"from": "sdmoon",
+			"from_port": 0,
+			"to": "sdrotate",
+			"to_port": 0
+		},
+		{
+			"from": "graph_2",
+			"from_port": 1,
+			"to": "colorize_5",
+			"to_port": 0
+		},
+		{
+			"from": "math",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 2
+		},
+		{
+			"from": "sdrotate",
+			"from_port": 0,
+			"to": "sdscale_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdscale_2",
+			"from_port": 0,
+			"to": "sdtranslate",
+			"to_port": 0
+		},
+		{
+			"from": "sdrotate",
+			"from_port": 0,
+			"to": "sdboolean",
+			"to_port": 0
+		},
+		{
+			"from": "sdtranslate",
+			"from_port": 0,
+			"to": "sdboolean",
+			"to_port": 1
+		},
+		{
+			"from": "reroute_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "reroute_3",
+			"from_port": 0,
+			"to": "reroute",
+			"to_port": 0
+		},
+		{
+			"from": "graph_2",
+			"from_port": 0,
+			"to": "reroute_3",
+			"to_port": 0
+		},
+		{
+			"from": "graph_2",
+			"from_port": 2,
+			"to": "reroute_4",
+			"to_port": 0
+		},
+		{
+			"from": "reroute_4",
+			"from_port": 0,
+			"to": "reroute_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdstairs",
+			"from_port": 0,
+			"to": "sdboolean_3",
+			"to_port": 0
+		},
+		{
+			"from": "sdstairs_2",
+			"from_port": 0,
+			"to": "sdrotate_4",
+			"to_port": 0
+		},
+		{
+			"from": "sdrotate_4",
+			"from_port": 0,
+			"to": "sdboolean_3",
+			"to_port": 1
+		},
+		{
+			"from": "sdboolean_3",
+			"from_port": 0,
+			"to": "sdrotate_2",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_5",
+			"from_port": 0,
+			"to": "math",
+			"to_port": 0
+		},
+		{
+			"from": "sdrotate_2",
+			"from_port": 0,
+			"to": "sdboolean_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdcircle",
+			"from_port": 0,
+			"to": "sdboolean_2",
+			"to_port": 1
+		},
+		{
+			"from": "sdboolean_2",
+			"from_port": 0,
+			"to": "graph_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdcircle_2",
+			"from_port": 0,
+			"to": "sdboolean_2",
+			"to_port": 2
+		},
+		{
+			"from": "gradient",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 3
+		},
+		{
+			"from": "dirt_3",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "decompose",
+			"to_port": 0
+		},
+		{
+			"from": "decompose",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 0
+		},
+		{
+			"from": "decompose",
+			"from_port": 1,
+			"to": "combine",
+			"to_port": 1
+		},
+		{
+			"from": "decompose",
+			"from_port": 2,
+			"to": "combine",
+			"to_port": 2
+		},
+		{
+			"from": "combine",
+			"from_port": 0,
+			"to": "blend2_2",
+			"to_port": 1
+		},
+		{
+			"from": "gradient",
+			"from_port": 0,
+			"to": "colorize_6",
+			"to_port": 0
+		},
+		{
+			"from": "graph_2",
+			"from_port": 0,
+			"to": "blend2_2",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_6",
+			"from_port": 0,
+			"to": "math",
+			"to_port": 1
+		},
+		{
+			"from": "blend2_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "_Node_13065",
+	"node_position": {
+		"x": 0.0,
+		"y": 0.0
+	},
+	"nodes": [
+		{
+			"export": {
+
+			},
+			"export_last_target": "Bevy Trenchbroom",
+			"export_paths": {
+				"Bevy Trenchbroom": "/Users/doomy/Code/bevy_trench_template/assets/textures/wallpaper_zigzag"
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 1893.94750976562,
+				"y": -723.834838867188
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
+					"type": "Color"
+				},
+				"ao": 1.0,
+				"depth_scale": 0.5,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 0.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 8,
+				"sss": 1.0
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"exports": {
+					"Bevy Trenchbroom": {
+						"export_extension": "toml",
+						"external": true,
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix).png",
+								"output": 0.0,
+								"prompt_overwrite": false,
+								"type": "texture"
+							},
+							{
+								"file_name": "$(path_prefix).toml",
+								"template": "type = \"StandardMaterial\"\n[material]\n$if $(connected:albedo_tex)\nbase_color_texture = \"$(file_prefix).png\"\n$fi\n$if $(connected:normal_tex)\nnormal_map_texture = \"$(file_prefix)_normal.png\"\n$fi\n$if $(connected:metallic_tex) or $(connected:roughness_tex)\nmetallic_roughness_texture = \"$(file_prefix)_mr.png\"\n$fi\nmetallic = 1.0\nperceptual_roughness = 1.0\n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 7.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:metallic_tex) or $(connected:roughness_tex)",
+								"expression": "vec4(0.0, $roughness_tex($uv), $metallic_tex($uv), 1.0)",
+								"file_name": "$(path_prefix)_mr.png",
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"expression": "$emission_tex($uv)",
+								"file_name": "$(path_prefix)_emissive.png",
+								"prompt_overwrite": false,
+								"type": "texture"
+							}
+						],
+						"material": "material",
+						"name": "Bevy Trenchbroom"
+					},
+					"Blender": {
+						"export_extension": "tres",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:roughness_tex)",
+								"file_name": "$(path_prefix)_rough.exr",
+								"output": 13.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_metal.exr",
+								"output": 12.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 7.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_displace.exr",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:sss_tex)",
+								"file_name": "$(path_prefix)_sss.exr",
+								"output": 5.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							}
+						]
+					},
+					"Godot/Godot 3 Spatial": {
+						"export_extension": "tres",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_orm.png",
+								"output": 1.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 3.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_depth.png",
+								"output": 4.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:sss_tex)",
+								"file_name": "$(path_prefix)_sss.png",
+								"output": 5.0,
+								"prompt_overwrite": false,
+								"type": "texture"
+							},
+							{
+								"file_name": "$(path_prefix).tres",
+								"prompt_overwrite": true,
+								"template": "[gd_resource type=\"SpatialMaterial\" load_steps=5 format=2]\n$if $(connected:albedo_tex)\n[ext_resource path=\"$(file_prefix)_albedo.png\" type=\"Texture\" id=1]\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n[ext_resource path=\"$(file_prefix)_orm.png\" type=\"Texture\" id=2]\n$fi\n$if $(connected:normal_tex)\n[ext_resource path=\"$(file_prefix)_normal.png\" type=\"Texture\" id=3]\n$fi\n$if $(connected:depth_tex)\n[ext_resource path=\"$(file_prefix)_depth.png\" type=\"Texture\" id=4]\n$fi\n$if $(connected:emission_tex)\n[ext_resource path=\"$(file_prefix)_emission.png\" type=\"Texture\" id=5]\n$fi\n$if $(connected:sss_tex)\n[ext_resource path=\"$(file_prefix)_sss.png\" type=\"Texture\" id=6]\n$fi\n[resource]\nalbedo_color = Color($(param:albedo_color.r), $(param:albedo_color.g), $(param:albedo_color.b), $(param:albedo_color.a))\n$if $(connected:albedo_tex)\nalbedo_texture = ExtResource( 1 )\n$fi\nmetallic = $(param:metallic)\n$if $(connected:metallic_tex)\nmetallic_texture = ExtResource( 2 )\nmetallic_texture_channel = 2\n$fi\nroughness = $(param:roughness)\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\nroughness_texture = ExtResource( 2 )\nroughness_texture_channel = 1\n$fi\n$if $(connected:normal_tex)\nnormal_enabled = true\nnormal_scale = $(param:normal)\nnormal_texture = ExtResource( 3 )\n$fi\n$if $(connected:emission_tex)\nemission_enabled = true\nemission = Color( 0, 0, 0, 1 )\nemission_energy = $(param:emission_energy)\nemission_operator = 0\nemission_on_uv2 = false\nemission_texture = ExtResource( 5 )\n$fi\n$if $(connected:ao_tex)\nao_enabled = true\nao_texture = ExtResource( 2 )\nao_texture_channel = 0\n$fi\n$if $(connected:depth_tex)\ndepth_enabled = true\ndepth_scale = $(expr:0.2*$(param:depth_scale))\ndepth_deep_parallax = true\ndepth_min_layers = 8\ndepth_max_layers = 32\ndepth_flip_tangent = false\ndepth_flip_binormal = false\ndepth_texture = ExtResource( 4 )\n$fi\n$if $(connected:sss_tex)\nsubsurf_scatter_enabled = true\nsubsurf_scatter_strength = $(param:sss)\nsubsurf_scatter_texture = ExtResource( 6 )\n$fi\n",
+								"type": "template"
+							}
+						]
+					},
+					"Godot/Godot 4 ORM": {
+						"export_extension": "tres",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"prompt_overwrite": false,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_orm.png",
+								"output": 1.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 3.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_heightmap.png",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:sss_tex)",
+								"file_name": "$(path_prefix)_sss.png",
+								"output": 5.0,
+								"prompt_overwrite": false,
+								"type": "texture"
+							},
+							{
+								"file_name": "$(path_prefix).tres",
+								"prompt_overwrite": true,
+								"template": "[gd_resource type=\"ORMMaterial3D\" load_steps=6 format=3]\n$if $(connected:albedo_tex)\n[ext_resource path=\"$(file_prefix)_albedo.png\" type=\"Texture\" id=1]\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n[ext_resource path=\"$(file_prefix)_orm.png\" type=\"Texture\" id=2]\n$fi\n$if $(connected:normal_tex)\n[ext_resource path=\"$(file_prefix)_normal.png\" type=\"Texture\" id=3]\n$fi\n$if $(connected:depth_tex)\n[ext_resource path=\"$(file_prefix)_heightmap.png\" type=\"Texture\" id=4]\n$fi\n$if $(connected:emission_tex)\n[ext_resource path=\"$(file_prefix)_emission.png\" type=\"Texture\" id=5]\n$fi\n$if $(connected:sss_tex)\n[ext_resource path=\"$(file_prefix)_sss.png\" type=\"Texture\" id=6]\n$fi\n[resource]\nalbedo_color = Color($(param:albedo_color.r), $(param:albedo_color.g), $(param:albedo_color.b), $(param:albedo_color.a))\n$if $(connected:albedo_tex)\nalbedo_texture = ExtResource( 1 )\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\norm_texture = ExtResource( 2 )\n$fi\n$if $(connected:normal_tex)\nnormal_enabled = true\nnormal_scale = $(param:normal)\nnormal_texture = ExtResource( 3 )\n$fi\n$if $(connected:emission_tex)\nemission_enabled = true\nemission = Color( 0, 0, 0, 1 )\nemission_energy = $(param:emission_energy)\nemission_operator = 0\nemission_texture = ExtResource( 5 )\n$fi\n$if $(connected:depth_tex)\nheightmap_enabled = true\nheightmap_scale = $(expr:25.0*$(param:depth_scale))\nheightmap_deep_parallax = true\nheightmap_min_layers = 8\nheightmap_max_layers = 32\nheightmap_texture = ExtResource( 4 )\n$fi\n$if $(connected:sss_tex)\nsubsurf_scatter_enabled = true\nsubsurf_scatter_strength = $(param:sss)\nsubsurf_scatter_texture = ExtResource( 6 )\n$fi\n",
+								"type": "template"
+							}
+						]
+					},
+					"Godot/Godot 4 Standard": {
+						"export_extension": "tres",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"prompt_overwrite": false,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_orm.png",
+								"output": 1.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 3.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_heightmap.png",
+								"output": 8.0,
+								"prompt_overwrite": false,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:sss_tex)",
+								"file_name": "$(path_prefix)_sss.png",
+								"output": 5.0,
+								"type": "texture"
+							},
+							{
+								"file_name": "$(path_prefix).tres",
+								"prompt_overwrite": true,
+								"template": "[gd_resource type=\"StandardMaterial3D\" load_steps=5 format=2]\n$if $(connected:albedo_tex)\n[ext_resource path=\"$(file_prefix)_albedo.png\" type=\"Texture\" id=1]\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n[ext_resource path=\"$(file_prefix)_orm.png\" type=\"Texture\" id=2]\n$fi\n$if $(connected:normal_tex)\n[ext_resource path=\"$(file_prefix)_normal.png\" type=\"Texture\" id=3]\n$fi\n$if $(connected:depth_tex)\n[ext_resource path=\"$(file_prefix)_heightmap.png\" type=\"Texture\" id=4]\n$fi\n$if $(connected:emission_tex)\n[ext_resource path=\"$(file_prefix)_emission.png\" type=\"Texture\" id=5]\n$fi\n$if $(connected:sss_tex)\n[ext_resource path=\"$(file_prefix)_sss.png\" type=\"Texture\" id=6]\n$fi\n[resource]\nalbedo_color = Color($(param:albedo_color.r), $(param:albedo_color.g), $(param:albedo_color.b), $(param:albedo_color.a))\n$if $(connected:albedo_tex)\nalbedo_texture = ExtResource( 1 )\n$fi\nmetallic = $(param:metallic)\n$if $(connected:metallic_tex)\nmetallic_texture = ExtResource( 2 )\nmetallic_texture_channel = 2\n$fi\nroughness = $(param:roughness)\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\nroughness_texture = ExtResource( 2 )\nroughness_texture_channel = 1\n$fi\n$if $(connected:normal_tex)\nnormal_enabled = true\nnormal_scale = $(param:normal)\nnormal_texture = ExtResource( 3 )\n$fi\n$if $(connected:emission_tex)\nemission_enabled = true\nemission = Color( 0, 0, 0, 1 )\nemission_energy = $(param:emission_energy)\nemission_operator = 0\nemission_texture = ExtResource( 5 )\n$fi\n$if $(connected:ao_tex)\nao_enabled = true\nao_texture = ExtResource( 2 )\nao_texture_channel = 0\n$fi\n$if $(connected:depth_tex)\nheightmap_enabled = true\nheightmap_scale = $(expr:25.0*$(param:depth_scale))\nheightmap_deep_parallax = true\nheightmap_min_layers = 8\nheightmap_max_layers = 32\nheightmap_texture = ExtResource( 4 )\n$fi\n$if $(connected:sss_tex)\nsubsurf_scatter_enabled = true\nsubsurf_scatter_strength = $(param:sss)\nsubsurf_scatter_texture = ExtResource( 6 )\n$fi\n",
+								"type": "template"
+							}
+						]
+					},
+					"Unity/3D": {
+						"export_extension": "mat",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(0)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_metal_smoothness.png",
+								"output": 6.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_metal_smoothness.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(1)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 7.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(2)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 12\n  mipmaps:\n    mipMapMode: 0\n    enableMipMap: 1\n    sRGBTexture: 0\n    linearTexture: 0\n    fadeOut: 0\n    borderMipMap: 1\n    mipMapsPreserveCoverage: 0\n    alphaTestReferenceValue: 0.5\n    mipMapFadeDistanceStart: 1\n    mipMapFadeDistanceEnd: 3\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    heightScale: 0.25\n    normalMapFilter: 0\n    flipGreenChannel: 0\n  isReadable: 1\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  vTOnly: 0\n  ignoreMipmapLimit: 1\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 0\n  maxTextureSize: 2048\n  textureSettings:\n    serializedVersion: 2\n    filterMode: 1\n    aniso: 1\n    mipBias: 0\n    wrapU: 0\n    wrapV: 0\n    wrapW: 0\n  nPOTScale: 0\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 1\n  textureShape: 1\n  singleChannelComponent: 0\n  flipbookRows: 1\n  flipbookColumns: 1\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  ignorePngGamma: 0\n  applyGammaDecoding: 1\n  swizzle: 50462976\n  cookieLightType: 1\n  platformSettings:\n  - serializedVersion: 3\n    buildTarget: DefaultTexturePlatform\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    ignorePlatformSupport: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  - serializedVersion: 3\n    buildTarget: Standalone\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    ignorePlatformSupport: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n    serializedVersion: 2\n    sprites: []\n    outline: []\n    physicsShape: []\n    bones: []\n    spriteID: \n    internalID: 0\n    vertices: []\n    indices: \n    edges: []\n    weights: []\n    secondaryTextures: []\n    nameFileIdTable: {}\n  mipmapLimitGroupName: \n  pSDRemoveMatte: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(3)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:ao_tex)",
+								"file_name": "$(path_prefix)_occlusion.png",
+								"output": 9.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex)",
+								"file_name": "$(path_prefix)_occlusion.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(4)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(5)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"file_name": "$(path_prefix).mat",
+								"prompt_overwrite": true,
+								"template": "%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!21 &2100000\nMaterial:\n  serializedVersion: 6\n  m_ObjectHideFlags: 0\n  m_CorrespondingSourceObject: {fileID: 0}\n  m_PrefabInstance: {fileID: 0}\n  m_PrefabAsset: {fileID: 0}\n  m_Name: $(file_prefix)\n  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}\n  m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP _PARALLAXMAP\n  m_LightmapFlags: 4\n  m_EnableInstancingVariants: 0\n  m_DoubleSidedGI: 0\n  m_CustomRenderQueue: -1\n  stringTagMap: {}\n  disabledShaderPasses: []\n  m_SavedProperties:\n    serializedVersion: 3\n    m_TexEnvs:\n    - _BumpMap:\n$if $(connected:normal_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(2), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailAlbedoMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailMask:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailNormalMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _EmissionMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MainTex:\n$if $(connected:albedo_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(0), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MetallicGlossMap:\n$if $(connected:roughness_tex) or $(connected:metallic_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(1), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _OcclusionMap:\n$if $(connected:ao_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(4), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _ParallaxMap:\n$if $(connected:depth_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(3), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    m_Floats:\n    - _BumpScale: 1\n    - _Cutoff: 0.5\n    - _DetailNormalMapScale: 1\n    - _DstBlend: 0\n    - _GlossMapScale: 1\n    - _Glossiness: 0.5\n    - _GlossyReflections: 1\n    - _Metallic: 0\n    - _Mode: 0\n    - _OcclusionStrength: 1\n    - _Parallax: 0.02\n    - _SmoothnessTextureChannel: 0\n    - _SpecularHighlights: 1\n    - _SrcBlend: 1\n    - _UVSec: 0\n    - _ZWrite: 1\n    m_Colors:\n    - _Color: {r: 1, g: 1, b: 1, a: 1}\n    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}\n",
+								"type": "template"
+							}
+						],
+						"uids": 6.0
+					},
+					"Unity/HDRP": {
+						"export_extension": "mat",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png.meta",
+								"template": "fileFormatVersion: 2\nguid: $uid(0)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_maskmap.png",
+								"output": 11.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_maskmap.png.meta",
+								"template": "fileFormatVersion: 2\nguid: $uid(1)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 7.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png.meta",
+								"template": "fileFormatVersion: 2\nguid: $uid(2)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 12\n  mipmaps:\n    mipMapMode: 0\n    enableMipMap: 1\n    sRGBTexture: 0\n    linearTexture: 0\n    fadeOut: 0\n    borderMipMap: 0\n    mipMapsPreserveCoverage: 0\n    alphaTestReferenceValue: 0.5\n    mipMapFadeDistanceStart: 1\n    mipMapFadeDistanceEnd: 3\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    heightScale: 0.25\n    normalMapFilter: 0\n    flipGreenChannel: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  vTOnly: 0\n  ignoreMipmapLimit: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n    serializedVersion: 2\n    filterMode: 1\n    aniso: 1\n    mipBias: 0\n    wrapU: 0\n    wrapV: 0\n    wrapW: 0\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 1\n  textureShape: 1\n  singleChannelComponent: 0\n  flipbookRows: 1\n  flipbookColumns: 1\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  ignorePngGamma: 0\n  applyGammaDecoding: 1\n  swizzle: 50462976\n  cookieLightType: 1\n  platformSettings:\n  - serializedVersion: 3\n    buildTarget: DefaultTexturePlatform\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    ignorePlatformSupport: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  - serializedVersion: 3\n    buildTarget: Standalone\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    ignorePlatformSupport: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n    serializedVersion: 2\n    sprites: []\n    outline: []\n    physicsShape: []\n    bones: []\n    spriteID: \n    internalID: 0\n    vertices: []\n    indices: \n    edges: []\n    weights: []\n    secondaryTextures: []\n    nameFileIdTable: {}\n  mipmapLimitGroupName: \n  pSDRemoveMatte: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png.meta",
+								"template": "fileFormatVersion: 2\nguid: $uid(3)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png.meta",
+								"template": "fileFormatVersion: 2\nguid: $uid(4)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"file_name": "$(path_prefix).mat",
+								"template": "%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!21 &2100000\nMaterial:\n  serializedVersion: 6\n  m_ObjectHideFlags: 0\n  m_CorrespondingSourceObject: {fileID: 0}\n  m_PrefabInstance: {fileID: 0}\n  m_PrefabAsset: {fileID: 0}\n  m_Name: $(file_prefix)\n  m_Shader: {fileID: 4800000, guid: 6e4ae4064600d784cac1e41a9e6f2e59, type: 3}\n  m_ShaderKeywords: _NORMALMAP_TANGENT_SPACE _NORMALMAP _HEIGHTMAP _PIXEL_DISPLACEMENT _PIXEL_DISPLACEMENT_LOCK_OBJECT_SCALE _DISPLACEMENT_LOCK_TILING_SCALE _MASKMAP _EMISSIVE_COLOR_MAP\n  m_LightmapFlags: 4\n  m_EnableInstancingVariants: 0\n  m_DoubleSidedGI: 0\n  m_CustomRenderQueue: -1\n  stringTagMap: {}\n  disabledShaderPasses:\n  - DistortionVectors\n  - MOTIONVECTORS\n  - TransparentDepthPrepass\n  - TransparentDepthPostpass\n  - TransparentBackface\n  m_SavedProperties:\n    serializedVersion: 3\n    m_TexEnvs:\n    - _AnisotropyMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _BaseColorMap:\n$if $(connected:albedo_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(0), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _BentNormalMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _BentNormalMapOS:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _CoatMaskMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DistortionVectorMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _EmissiveColorMap:\n$if $(connected:emission_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(4), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _HeightMap:\n$if $(connected:depth_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(3), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _IridescenceMaskMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _IridescenceThicknessMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MainTex:\n$if $(connected:albedo_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(0), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MaskMap:\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(1), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _NormalMap:\n$if $(connected:normal_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(2), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _NormalMapOS:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _SpecularColorMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _SubsurfaceMaskMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _TangentMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _TangentMapOS:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _ThicknessMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _TransmittanceColorMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    m_Floats:\n    - _AORemapMax: 1\n    - _AORemapMin: 0\n    - _ATDistance: 1\n    - _AddPrecomputedVelocity: 0\n    - _AlbedoAffectEmissive: 0\n    - _AlphaCutoff: 0.5\n    - _AlphaCutoffEnable: 0\n    - _AlphaCutoffPostpass: 0.5\n    - _AlphaCutoffPrepass: 0.5\n    - _AlphaCutoffShadow: 0.5\n    - _AlphaDstBlend: 0\n    - _AlphaSrcBlend: 1\n    - _Anisotropy: 0\n    - _BlendMode: 0\n    - _CoatMask: 0\n    - _CullMode: 2\n    - _CullModeForward: 2\n    - _Cutoff: 0.5\n    - _DepthOffsetEnable: 0\n    - _DetailAlbedoScale: 1\n    - _DetailNormalScale: 1\n    - _DetailSmoothnessScale: 1\n    - _DiffusionProfile: 0\n    - _DiffusionProfileHash: 0\n    - _DisplacementLockObjectScale: 1\n    - _DisplacementLockTilingScale: 1\n$if $(connected:depth_tex)\n    - _DisplacementMode: 2\n$else\n    - _DisplacementMode: 0\n$fi\n    - _DistortionBlendMode: 0\n    - _DistortionBlurBlendMode: 0\n    - _DistortionBlurDstBlend: 1\n    - _DistortionBlurRemapMax: 1\n    - _DistortionBlurRemapMin: 0\n    - _DistortionBlurScale: 1\n    - _DistortionBlurSrcBlend: 1\n    - _DistortionDepthTest: 1\n    - _DistortionDstBlend: 1\n    - _DistortionEnable: 0\n    - _DistortionScale: 1\n    - _DistortionSrcBlend: 1\n    - _DistortionVectorBias: -1\n    - _DistortionVectorScale: 2\n    - _DoubleSidedEnable: 0\n    - _DoubleSidedNormalMode: 1\n    - _DstBlend: 0\n    - _EmissiveColorMode: 1\n    - _EmissiveExposureWeight: 1\n    - _EmissiveIntensity: 1\n    - _EmissiveIntensityUnit: 0\n    - _EnableBlendModePreserveSpecularLighting: 1\n    - _EnableFogOnTransparent: 1\n    - _EnableGeometricSpecularAA: 0\n    - _EnergyConservingSpecularColor: 1\n    - _HeightAmplitude: $(expr:0.08*$(param:depth_scale))\n    - _HeightCenter: 1\n    - _HeightMapParametrization: 0\n    - _HeightMax: 1\n    - _HeightMin: -1\n    - _HeightOffset: 0\n    - _HeightPoMAmplitude: $(expr:8*$(param:depth_scale))\n    - _HeightTessAmplitude: 2\n    - _HeightTessCenter: 0.5\n    - _InvTilingScale: 1\n    - _Ior: 1.5\n    - _IridescenceMask: 1\n    - _IridescenceThickness: 1\n    - _LinkDetailsWithBase: 1\n    - _MaterialID: 1\n    - _Metallic: $(param:metallic)\n    - _NormalMapSpace: 0\n    - _NormalScale: $(param:normal)\n    - _PPDLodThreshold: 5\n    - _PPDMaxSamples: 15\n    - _PPDMinSamples: 5\n    - _PPDPrimitiveLength: 1\n    - _PPDPrimitiveWidth: 1\n    - _ReceivesSSR: 1\n    - _RefractionModel: 0\n    - _SSRefractionProjectionModel: 0\n    - _Smoothness: 1\n    - _SmoothnessRemapMax: 1\n    - _SmoothnessRemapMin: $(expr:1-$(param:roughness))\n    - _SpecularAAScreenSpaceVariance: 0.1\n    - _SpecularAAThreshold: 0.2\n    - _SpecularOcclusionMode: 1\n    - _SrcBlend: 1\n    - _StencilRef: 0\n    - _StencilRefDepth: 8\n    - _StencilRefDistortionVec: 4\n    - _StencilRefGBuffer: 10\n    - _StencilRefMV: 40\n    - _StencilWriteMask: 6\n    - _StencilWriteMaskDepth: 8\n    - _StencilWriteMaskDistortionVec: 4\n    - _StencilWriteMaskGBuffer: 14\n    - _StencilWriteMaskMV: 40\n    - _SubsurfaceMask: 1\n    - _SupportDecals: 1\n    - _SurfaceType: 0\n    - _TexWorldScale: 1\n    - _TexWorldScaleEmissive: 1\n    - _Thickness: 1\n    - _TransmissionEnable: 1\n    - _TransparentBackfaceEnable: 0\n    - _TransparentCullMode: 2\n    - _TransparentDepthPostpassEnable: 0\n    - _TransparentDepthPrepassEnable: 0\n    - _TransparentSortPriority: 0\n    - _TransparentWritingMotionVec: 0\n    - _TransparentZWrite: 0\n    - _UVBase: 0\n    - _UVDetail: 0\n    - _UVEmissive: 0\n    - _UseEmissiveIntensity: 0\n    - _UseShadowThreshold: 0\n    - _ZTestDepthEqualForOpaque: 3\n    - _ZTestGBuffer: 4\n    - _ZTestModeDistortion: 4\n    - _ZTestTransparent: 4\n    - _ZWrite: 1\n    m_Colors:\n    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}\n    - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}\n    - _Color: {r: 1, g: 1, b: 1, a: 1}\n    - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}\n    - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}\n    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}\n    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}\n    - _EmissiveColorLDR: {r: 0, g: 0, b: 0, a: 1}\n    - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}\n    - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}\n    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}\n    - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}\n    - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}\n    - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}\n    - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}\n    - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}\n--- !u!114 &8466335806480081788\nMonoBehaviour:\n  m_ObjectHideFlags: 11\n  m_CorrespondingSourceObject: {fileID: 0}\n  m_PrefabInstance: {fileID: 0}\n  m_PrefabAsset: {fileID: 0}\n  m_GameObject: {fileID: 0}\n  m_Enabled: 1\n  m_EditorHideFlags: 0\n  m_Script: {fileID: 11500000, guid: da692e001514ec24dbc4cca1949ff7e8, type: 3}\n  m_Name: \n  m_EditorClassIdentifier: \n  version: 2\n",
+								"type": "template"
+							}
+						],
+						"uids": 5.0
+					},
+					"Unity/URP": {
+						"export_extension": "mat",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(0)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n  buildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_metal_smoothness.png",
+								"output": 6.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_metal_smoothness.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(1)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n  buildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 7.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(2)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n  mipMapMode: 0\n  enableMipMap: 1\n  sRGBTexture: 0\n  linearTexture: 0\n  fadeOut: 0\n  borderMipMap: 0\n  mipMapsPreserveCoverage: 0\n  alphaTestReferenceValue: 0.5\n  mipMapFadeDistanceStart: 1\n  mipMapFadeDistanceEnd: 3\n  bumpmap:\n  convertToNormalMap: 0\n  externalNormalMap: 0\n  heightScale: 0.25\n  normalMapFilter: 0\n  flipGreenChannel: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  vTOnly: 0\n  ignoreMipmapLimit: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n  serializedVersion: 2\n  filterMode: 1\n  aniso: 1\n  mipBias: 0\n  wrapU: 0\n  wrapV: 0\n  wrapW: 0\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 1\n  textureShape: 1\n  singleChannelComponent: 0\n  flipbookRows: 1\n  flipbookColumns: 1\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  ignorePngGamma: 0\n  applyGammaDecoding: 1\n  swizzle: 50462976\n  cookieLightType: 1\n  platformSettings:\n  - serializedVersion: 3\n  buildTarget: DefaultTexturePlatform\n  maxTextureSize: 2048\n  resizeAlgorithm: 0\n  textureFormat: -1\n  textureCompression: 1\n  compressionQuality: 50\n  crunchedCompression: 0\n  allowsAlphaSplitting: 0\n  overridden: 0\n  ignorePlatformSupport: 0\n  androidETC2FallbackOverride: 0\n  forceMaximumCompressionQuality_BC6H_BC7: 0\n  - serializedVersion: 3\n  buildTarget: Standalone\n  maxTextureSize: 2048\n  resizeAlgorithm: 0\n  textureFormat: -1\n  textureCompression: 1\n  compressionQuality: 50\n  crunchedCompression: 0\n  allowsAlphaSplitting: 0\n  overridden: 0\n  ignorePlatformSupport: 0\n  androidETC2FallbackOverride: 0\nforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n  serializedVersion: 2\n  sprites: []\n  outline: []\n  physicsShape: []\n  bones: []\n  spriteID: \n  internalID: 0\n  vertices: []\n  indices: \n  edges: []\n  weights: []\n  secondaryTextures: []\n  nameFileIdTable: {}\n  mipmapLimitGroupName: \n  pSDRemoveMatte: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: ",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(3)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:ao_tex)",
+								"file_name": "$(path_prefix)_occlusion.png",
+								"output": 9.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex)",
+								"file_name": "$(path_prefix)_occlusion.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(4)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(5)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n\tflipGreenChannel: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  vTOnly: 0\n  ignoreMipmapLimit: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: 1\n\taniso: 1\n\tmipBias: 0\n\twrapU: 0\n\twrapV: 0\n\twrapW: 0\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  flipbookRows: 1\n  flipbookColumns: 1\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  ignorePngGamma: 0\n  applyGammaDecoding: 1\n  swizzle: 50462976\n  cookieLightType: 1\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tignorePlatformSupport: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 0\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tignorePlatformSupport: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  - serializedVersion: 3\n\tbuildTarget: Standalone\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tignorePlatformSupport: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n\tnameFileIdTable: {}\n  mipmapLimitGroupName: \n  pSDRemoveMatte: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"file_name": "$(path_prefix).mat",
+								"prompt_overwrite": true,
+								"template": "%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!114 &-486273074595757742\nMonoBehaviour:\n  m_ObjectHideFlags: 11\n  m_CorrespondingSourceObject: {fileID: 0}\n  m_PrefabInstance: {fileID: 0}\n  m_PrefabAsset: {fileID: 0}\n  m_GameObject: {fileID: 0}\n  m_Enabled: 1\n  m_EditorHideFlags: 0\n  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}\n  m_Name: \n  m_EditorClassIdentifier: \n  version: 7\n--- !u!21 &2100000\nMaterial:\n  serializedVersion: 8\n  m_ObjectHideFlags: 0\n  m_CorrespondingSourceObject: {fileID: 0}\n  m_PrefabInstance: {fileID: 0}\n  m_PrefabAsset: {fileID: 0}\n  m_Name: $(file_prefix)\n  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}\n  m_Parent: {fileID: 0}\n  m_ModifiedSerializedProperties: 0\n  m_ValidKeywords:\n  - _NORMALMAP\n  - _PARALLAXMAP\n  - _METALLICSPECGLOSSMAP\n$if $(connected:emission_tex)\n  m_LightmapFlags: 0\n$else\n  m_LightmapFlags: 4\n$fi\n  m_EnableInstancingVariants: 0\n  m_DoubleSidedGI: 0\n  m_CustomRenderQueue: -1\n  stringTagMap:\n    RenderType: Opaque\n  disabledShaderPasses: []\n  m_LockedProperties: \n  m_SavedProperties:\n    serializedVersion: 3\n    m_TexEnvs:\n    - _BaseMap:\n$if $(connected:albedo_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(0), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _BumpMap:\n$if $(connected:normal_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(2), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailAlbedoMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailMask:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailNormalMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _EmissionMap:\n$if $(connected:emission_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(5), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MainTex:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n     - _MetallicGlossMap:\n$if $(connected:roughness_tex) or $(connected:metallic_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(1), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _OcclusionMap:\n$if $(connected:ao_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(4), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _ParallaxMap:\n$if $(connected:depth_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(3), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _SpecGlossMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - unity_Lightmaps:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - unity_LightmapsInd:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - unity_ShadowMasks:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    m_Ints: []\n    m_Floats:\n    - _AlphaClip: 0\n    - _AlphaToMask: 0\n    - _Blend: 0\n    - _BlendModePreserveSpecular: 1\n    - _BumpScale: $(param:normal)\n    - _ClearCoatMask: 0\n    - _ClearCoatSmoothness: 0\n    - _Cull: 2\n    - _Cutoff: 0.5\n    - _DetailAlbedoMapScale: 1\n    - _DetailNormalMapScale: 1\n    - _DstBlend: 0\n    - _DstBlendAlpha: 0\n    - _EnvironmentReflections: 1\n    - _GlossMapScale: 0\n    - _Glossiness: 0\n    - _GlossyReflections: 0\n    - _Metallic: 0\n    - _OcclusionStrength: $(param:ao)\n    - _Parallax: $(expr:0.005+(0.08-0.005)*$(param:depth_scale))\n    - _QueueOffset: 0\n    - _ReceiveShadows: 1\n    - _Smoothness: $(param:roughness))\n    - _SmoothnessTextureChannel: 0\n    - _SpecularHighlights: 1\n    - _SrcBlend: 1\n    - _SrcBlendAlpha: 1\n    - _Surface: 0\n    - _WorkflowMode: 1\n    - _ZWrite: 1\n    m_Colors:\n    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}\n    - _Color: {r: 1, g: 1, b: 1, a: 1}\n    - _EmissionColor: {r: $(param:emission_energy), g: $(param:emission_energy), b: $(param:emission_energy), a: 1}\n    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}\n  m_BuildTextureStacks: []\n",
+								"type": "template"
+							}
+						],
+						"uids": 6.0
+					},
+					"Unreal/Unreal Engine 4": {
+						"export_extension": "mm2ue",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_orm.png",
+								"output": 1.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 10.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"file_name": "$(path_prefix).mm2ue",
+								"template": "/*\nInstructions to setup this material:\n- copy material.uasset and open the copy\n- copy the shader code below and paste it into the Custom node\n$if $(connected:albedo_tex)\n- assign $(file_prefix)_albedo.png to the Albedo texture in the graph\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n- assign $(file_prefix)_orm.png to the ORM texture in the graph\n$fi\n$if $(connected:emission_tex)\n- assign $(file_prefix)_emission.png to the Emission texture in the graph\n$fi\n$if $(connected:normal_tex)\n- assign $(file_prefix)_normal.png to the Normal texture in the graph\n$fi\n$if $(connected:depth_tex)\n- assign $(file_prefix)_height.png to the Height texture in the graph\n$fi\n*/\n",
+								"type": "template"
+							}
+						],
+						"name": "Unreal/Unreal Engine 4"
+					},
+					"Unreal/Unreal Engine 5": {
+						"export_extension": "py",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_orm.png",
+								"output": 1.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 10.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"file_name": "$(path_prefix).py",
+								"template": "import unreal\nimport sys\nsys.path.append('$(material_maker_path)$(path_separator)export')\nimport mm\nfrom importlib import reload\nreload(mm)\nmat = mm.Material('$(file_prefix)', True)\nmat.clear()\nTextureSample_Color = mat.add_node('TextureSample', -400, -176)\nTextureSample_Color.set_editor_property('texture', mm.import_texture('$(path_prefix)_albedo.png', '/Game/Textures'))\nmat.connect_property(TextureSample_Color, 'RGB', unreal.MaterialProperty.MP_BASE_COLOR)\nTextureSample_ORM = mat.add_node('TextureSample', -400, 96)\nTextureSample_ORM.set_editor_property('texture', mm.import_texture('$(path_prefix)_orm.png', '/Game/Textures'))\nmat.connect_property(TextureSample_ORM, 'B', unreal.MaterialProperty.MP_METALLIC)\nmat.connect_property(TextureSample_ORM, 'G', unreal.MaterialProperty.MP_ROUGHNESS)\nmat.connect_property(TextureSample_ORM, 'R', unreal.MaterialProperty.MP_AMBIENT_OCCLUSION)\nTextureSample_Normal = mat.add_node('TextureSample', -400, 368)\nTextureSample_Normal.set_editor_property('texture', mm.import_texture('$(path_prefix)_normal.png', '/Game/Textures'))\nmat.connect_property(TextureSample_Normal, 'RGB', unreal.MaterialProperty.MP_NORMAL)\nMaterialFunctionCall_0 = mat.add_node('MaterialFunctionCall', -976, 32)\nMaterialFunctionCall_0.set_editor_property('material_function', mm.get_object_from_path(\"/Script/Engine.MaterialFunction'/Engine/Functions/Engine_MaterialFunctions01/Texturing/ParallaxOcclusionMapping.ParallaxOcclusionMapping'\"))\nTextureObject_0 = mat.add_node('TextureObject', -1200, -96)\nTextureObject_0.set_editor_property('texture', mm.import_texture('$(path_prefix)_height.png', '/Game/Textures'))\nConstant_0 = mat.add_node('Constant', -1200, 80)\nConstant_0.set_editor_property('r', 0.05)\nConstant_1 = mat.add_node('Constant', -1200, 160)\nConstant_1.set_editor_property('r', 8.0)\nConstant_2 = mat.add_node('Constant', -1200, 240)\nConstant_2.set_editor_property('r', 16.0)\nConstant4Vector_0 = mat.add_node('Constant4Vector', -1200, 320)\nmat.connect_nodes(MaterialFunctionCall_0, 'Parallax UVs', TextureSample_Color, '')\nmat.connect_nodes(MaterialFunctionCall_0, 'Parallax UVs', TextureSample_ORM, '')\nmat.connect_nodes(MaterialFunctionCall_0, 'Parallax UVs', TextureSample_Normal, '')\nmat.connect_nodes(TextureObject_0, '', MaterialFunctionCall_0, 'Heightmap Texture')\nmat.connect_nodes(Constant_0, '', MaterialFunctionCall_0, 'Height Ratio')\nmat.connect_nodes(Constant_1, '', MaterialFunctionCall_0, 'Min Steps')\nmat.connect_nodes(Constant_2, '', MaterialFunctionCall_0, 'Max Steps')\nmat.connect_nodes(Constant4Vector_0, '', MaterialFunctionCall_0, 'Heightmap Channel')\nmat.save()\n",
+								"type": "template"
+							},
+							{
+								"file_name": "clipboard",
+								"template": "\"$(path_prefix).py\"",
+								"type": "template"
+							}
+						],
+						"name": "Unreal/Unreal Engine 4"
+					}
+				},
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec3(1.0)",
+						"group_size": 7.0,
+						"label": "",
+						"name": "albedo_tex",
+						"type": "rgb"
+					},
+					{
+						"default": "0",
+						"label": "",
+						"name": "metallic_tex",
+						"type": "f"
+					},
+					{
+						"default": "0",
+						"label": "",
+						"name": "roughness_tex",
+						"type": "f"
+					},
+					{
+						"default": "vec3(0.0)",
+						"label": "",
+						"name": "emission_tex",
+						"type": "rgb"
+					},
+					{
+						"default": "vec3(0.5)",
+						"label": "",
+						"name": "normal_tex",
+						"type": "rgb"
+					},
+					{
+						"default": "1.0",
+						"label": "",
+						"name": "ao_tex",
+						"type": "f"
+					},
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "depth_tex",
+						"type": "f"
+					},
+					{
+						"default": "1.0",
+						"label": "",
+						"name": "opacity_tex",
+						"type": "f"
+					},
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "sss_tex",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"longdesc": "PBR material with maps generated as static images",
+				"name": "Static PBR Material",
+				"outputs": [
+					{
+						"rgba": "vec4($albedo_tex($uv), $opacity_tex($uv))",
+						"type": "rgba"
+					},
+					{
+						"rgb": "vec3($ao_tex($uv), $roughness_tex($uv), $metallic_tex($uv))",
+						"type": "rgb"
+					},
+					{
+						"rgb": "$emission_tex($uv)",
+						"type": "rgb"
+					},
+					{
+						"rgb": "$normal_tex($uv)*vec3(-1.0, 1.0, -1.0)+vec3(1.0, 0.0, 1.0)",
+						"type": "rgb"
+					},
+					{
+						"f": "clamp($depth_tex($uv), 0.0, 1.0)",
+						"type": "f"
+					},
+					{
+						"f": "$sss_tex($uv)",
+						"type": "f"
+					},
+					{
+						"rgba": "vec4(vec3($metallic_tex($uv)), 1.0-$roughness_tex($uv))",
+						"type": "rgba"
+					},
+					{
+						"rgb": "$normal_tex($uv)*vec3(-1.0, 1.0, -1.0)+vec3(1.0, 0.0, 1.0)",
+						"type": "rgb"
+					},
+					{
+						"f": "1.0-$depth_tex($uv)",
+						"type": "f"
+					},
+					{
+						"f": "$ao_tex($uv)",
+						"type": "f"
+					},
+					{
+						"rgb": "$normal_tex($uv)*vec3(-1.0)+vec3(1.0)",
+						"type": "rgb"
+					},
+					{
+						"rgba": "vec4($metallic_tex($uv), $ao_tex($uv), 1.0, 1.0-$roughness_tex($uv))",
+						"type": "rgba"
+					},
+					{
+						"f": "$metallic_tex($uv)",
+						"type": "f"
+					},
+					{
+						"f": "$roughness_tex($uv)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": {
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"r": 1.0
+						},
+						"label": "Albedo",
+						"name": "albedo_color",
+						"type": "color"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Metallic",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "metallic",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Roughness",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "roughness",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Emission",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "emission_energy",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Normal",
+						"max": 10.0,
+						"min": 0.0,
+						"name": "normal",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Ambient occlusion",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "ao",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Depth",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "depth_scale",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": false,
+						"label": "Transparency",
+						"name": "flags_transparent",
+						"type": "boolean"
+					},
+					{
+						"control": "None",
+						"default": 0.0,
+						"label": "Subsurf. scatter.",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "sss",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": 11.0,
+						"first": 6.0,
+						"label": "Size",
+						"last": 13.0,
+						"name": "size",
+						"type": "size"
+					}
+				],
+				"preview_shader": "shader_type spatial;\nrender_mode blend_mix,cull_back,diffuse_burley,specular_schlick_ggx\n$if $(connected:opacity_tex) and $(param:flags_transparent)\n,depth_prepass_alpha\n$fi\n;\n\nuniform sampler2D texture_albedo : source_color; // $output(0)\nuniform sampler2D texture_emission : hint_default_black; // $output(2)\nuniform sampler2D texture_normal : hint_normal; // $output(3)\nuniform sampler2D texture_orm : hint_default_white; // $output(1)\nuniform sampler2D texture_subsurface_scattering : hint_default_white; // $output(5)\nuniform sampler2D texture_depth : hint_default_black; // $output(4)\nuniform int depth_min_layers = 64;\nuniform int depth_max_layers = 64;\nuniform vec2 depth_flip = vec2(1.0);\n\nuniform vec3 uv1_scale;\nuniform vec3 uv1_offset;\n\n$definitions\n\nvoid vertex() {\n\tUV=UV*uv1_scale.xy+uv1_offset.xy;\n}\n\nvoid fragment() {\n\tvec2 base_uv = UV;\n\tint texture_size = textureSize(texture_albedo, 0).x;\n\tif (texture_size < 256) {\n\t\tbase_uv = floor(float(texture_size)*base_uv+0.5)/float(texture_size);\n\t}\n$if $(connected:depth_tex)\n\t{\n$begin_generate\n\t\tfloat depth_scale = 0.2*$depth_scale;\n$end_generate\n\t\tvec3 view_dir = normalize(normalize(-VERTEX)*mat3(TANGENT*depth_flip.x,-BINORMAL*depth_flip.y,NORMAL));\n\t\tfloat num_layers = mix(float(depth_max_layers),float(depth_min_layers), abs(dot(vec3(0.0, 0.0, 1.0), view_dir)));\n\t\tfloat layer_depth = 1.0 / num_layers;\n\t\tfloat current_layer_depth = 0.0;\n\t\tvec2 P = view_dir.xy * depth_scale;\n\t\tvec2 delta = P / num_layers / dot(VIEW, NORMAL);\n\t\tvec2  ofs = base_uv;\n\t\tfloat depth = textureLod(texture_depth, ofs,0.0).r;\n\t\tfloat current_depth = 0.0;\n\t\twhile(current_depth < depth) {\n\t\t\tofs -= delta;\n\t\t\tdepth = textureLod(texture_depth, ofs,0.0).r;\n\t\t\tcurrent_depth += layer_depth;\n\t\t}\n\t\tvec2 prev_ofs = ofs + delta;\n\t\tfloat after_depth  = depth - current_depth;\n\t\tfloat before_depth = textureLod(texture_depth, prev_ofs, 0.0).r - current_depth + layer_depth;\n\t\tfloat weight = after_depth / (after_depth - before_depth);\n\t\tofs = mix(ofs,prev_ofs,weight);\n\t\tbase_uv=ofs;\n\t}\n$fi\n$begin_generate\n\tvec4 albedo_tex = texture(texture_albedo, base_uv);\n\tALBEDO = $albedo_color.rgb * mix(pow((albedo_tex + vec4(0.055))/vec4(1.055), vec4(2.4)), albedo_tex/vec4(12.92), lessThan(albedo_tex, vec4(0.04045))).rgb;\n\tvec4 orm_tex = texture(texture_orm, base_uv);\n\tMETALLIC = $metallic*orm_tex.b;\n\tROUGHNESS = $roughness*orm_tex.g;\n\tSPECULAR = 0.5;\n\tNORMAL_MAP = texture(texture_normal, base_uv).rgb;\n\tNORMAL_MAP_DEPTH = $normal;\n\tvec3 emission_tex = texture(texture_emission, base_uv).rgb;\n\tEMISSION = emission_tex*$emission_energy;\n\tAO = orm_tex.r;\n\tAO_LIGHT_AFFECT = $ao;\n$if $(connected:opacity_tex) and $(param:flags_transparent)\n\tALPHA = albedo_tex.a;\n\tALPHA_SCISSOR_THRESHOLD = 0.01;\n$fi\n$if $(connected:sss_tex)\n\tfloat sss_tex = texture(texture_subsurface_scattering, base_uv).r;\n\tSSS_STRENGTH=$sss*sss_tex;\n$fi\n$end_generate\n}\n",
+				"shortdesc": "Static PBR Material"
+			},
+			"type": "material_export"
+		},
+		{
+			"connections": [
+				{
+					"from": "dirt",
+					"from_port": 0,
+					"to": "colorize_2",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_2",
+					"from_port": 0,
+					"to": "blend2_5",
+					"to_port": 0
+				},
+				{
+					"from": "dirt_2",
+					"from_port": 0,
+					"to": "colorize_3",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_3",
+					"from_port": 0,
+					"to": "blend2_5",
+					"to_port": 1
+				},
+				{
+					"from": "graph",
+					"from_port": 0,
+					"to": "colorize_4",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_5",
+					"from_port": 0,
+					"to": "blend2_6",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_4",
+					"from_port": 0,
+					"to": "blend2_6",
+					"to_port": 1
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "custom_tiles",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_4",
+					"from_port": 0,
+					"to": "reroute",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_6",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 3
+				},
+				{
+					"from": "decompose",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 1,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "decompose",
+					"from_port": 2,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 3
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 1
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "custom_tiles",
+					"to_port": 0
+				},
+				{
+					"from": "uniform",
+					"from_port": 0,
+					"to": "blend2_4",
+					"to_port": 0
+				},
+				{
+					"from": "uniform_2",
+					"from_port": 0,
+					"to": "decompose",
+					"to_port": 0
+				},
+				{
+					"from": "reroute",
+					"from_port": 0,
+					"to": "greyscale_2",
+					"to_port": 0
+				},
+				{
+					"from": "greyscale_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "greyscale_3",
+					"to_port": 0
+				},
+				{
+					"from": "blend2_6",
+					"from_port": 0,
+					"to": "normal_map2",
+					"to_port": 0
+				},
+				{
+					"from": "greyscale_3",
+					"from_port": 0,
+					"to": "normal_map2_2",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map2_2",
+					"from_port": 0,
+					"to": "normal_blend",
+					"to_port": 1
+				},
+				{
+					"from": "normal_blend",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
+					"from": "uniform_3",
+					"from_port": 0,
+					"to": "normal_map2_3",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map2_3",
+					"from_port": 0,
+					"to": "normal_blend_2",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map2",
+					"from_port": 0,
+					"to": "normal_blend_2",
+					"to_port": 1
+				},
+				{
+					"from": "normal_blend_2",
+					"from_port": 0,
+					"to": "normal_blend",
+					"to_port": 0
+				}
+			],
+			"label": "Graph",
+			"longdesc": "",
+			"name": "graph_2",
+			"node_position": {
+				"x": 538.001525878906,
+				"y": -641.145690917969
+			},
+			"nodes": [
+				{
+					"name": "dirt",
+					"node_position": {
+						"x": 255.641235351562,
+						"y": -742.826843261719
+					},
+					"parameters": {
+						"d_scale": 1.0,
+						"param0": 2.0,
+						"param1": 11.0
+					},
+					"seed_int": 0,
+					"type": "dirt"
+				},
+				{
+					"generic_size": 2,
+					"name": "blend2_4",
+					"node_position": {
+						"x": 440.762939453125,
+						"y": -174.513763427734
+					},
+					"parameters": {
+						"amount1": 0.84,
+						"amount2": 1.0,
+						"blend_type1": 0.0,
+						"blend_type2": 2.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": 447.691589355469,
+						"y": -727.591369628906
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 0.006378173828125,
+									"g": 0.171875,
+									"pos": 0.0,
+									"r": 0.0231864452362061
+								},
+								{
+									"a": 1.0,
+									"b": 0.712890625,
+									"g": 0.871025085449219,
+									"pos": 1.0,
+									"r": 1.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "dirt_2",
+					"node_position": {
+						"x": 195.140365600586,
+						"y": -578.588989257812
+					},
+					"parameters": {
+						"d_scale": 2.0,
+						"param0": 1.0,
+						"param1": 11.0
+					},
+					"seed_int": 0,
+					"type": "dirt"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_5",
+					"node_position": {
+						"x": 532.277526855469,
+						"y": -634.682067871094
+					},
+					"parameters": {
+						"amount1": 0.83,
+						"blend_type1": 0.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "colorize_3",
+					"node_position": {
+						"x": 368.173858642578,
+						"y": -578.242309570312
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 0.712890625,
+									"g": 0.871025085449219,
+									"pos": 0.443763063665022,
+									"r": 1.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.006378173828125,
+									"g": 0.171875,
+									"pos": 0.691670735677083,
+									"r": 0.0231864452362061
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"connections": [
+						{
+							"from": "perlin",
+							"from_port": 0,
+							"to": "transform",
+							"to_port": 1
+						},
+						{
+							"from": "perlin",
+							"from_port": 0,
+							"to": "transform",
+							"to_port": 2
+						},
+						{
+							"from": "perlin",
+							"from_port": 0,
+							"to": "transform",
+							"to_port": 0
+						},
+						{
+							"from": "transform",
+							"from_port": 0,
+							"to": "gen_outputs",
+							"to_port": 0
+						}
+					],
+					"label": "Warp 1",
+					"longdesc": "",
+					"name": "graph",
+					"node_position": {
+						"x": 227.901565551758,
+						"y": -418.824310302734
+					},
+					"nodes": [
+						{
+							"name": "transform",
+							"node_position": {
+								"x": -259.25,
+								"y": -658.0
+							},
+							"parameters": {
+								"repeat": true,
+								"rotate": 0.0,
+								"scale_x": 1.0,
+								"scale_y": 1.0,
+								"translate_x": 0.01,
+								"translate_y": 0.5
+							},
+							"seed": 32461.0,
+							"type": "transform"
+						},
+						{
+							"name": "perlin",
+							"node_position": {
+								"x": -502.25,
+								"y": -653.0
+							},
+							"parameters": {
+								"iterations": 7.0,
+								"persistence": 0.75,
+								"scale_x": 19.0,
+								"scale_y": 16.0
+							},
+							"seed": 1093.0,
+							"type": "perlin"
+						},
+						{
+							"name": "gen_inputs",
+							"node_position": {
+								"x": -670.25,
+								"y": -647.5
+							},
+							"parameters": {
+
+							},
+							"ports": [],
+							"seed": 29095.0,
+							"type": "ios"
+						},
+						{
+							"name": "gen_outputs",
+							"node_position": {
+								"x": 18.75,
+								"y": -657.5
+							},
+							"parameters": {
+
+							},
+							"ports": [
+								{
+									"name": "port0",
+									"type": "rgba"
+								}
+							],
+							"seed": -12991.0,
+							"type": "ios"
+						},
+						{
+							"name": "gen_parameters",
+							"node_position": {
+								"x": -315.75,
+								"y": -893.0
+							},
+							"parameters": {
+								"param0": 19.0,
+								"param1": 16.0,
+								"param2": 7.0,
+								"param3": 0.75,
+								"param4": 0.01,
+								"param5": 0.5
+							},
+							"seed": 18520.0,
+							"type": "remote",
+							"widgets": [
+								{
+									"label": "Scale X",
+									"linked_widgets": [
+										{
+											"node": "perlin",
+											"widget": "scale_x"
+										}
+									],
+									"name": "param0",
+									"type": "linked_control"
+								},
+								{
+									"label": "Scale Y",
+									"linked_widgets": [
+										{
+											"node": "perlin",
+											"widget": "scale_y"
+										}
+									],
+									"name": "param1",
+									"type": "linked_control"
+								},
+								{
+									"label": "Iterations",
+									"linked_widgets": [
+										{
+											"node": "perlin",
+											"widget": "iterations"
+										}
+									],
+									"name": "param2",
+									"type": "linked_control"
+								},
+								{
+									"label": "Persistance",
+									"linked_widgets": [
+										{
+											"node": "perlin",
+											"widget": "persistence"
+										}
+									],
+									"name": "param3",
+									"type": "linked_control"
+								},
+								{
+									"label": "Warp X",
+									"linked_widgets": [
+										{
+											"node": "transform",
+											"widget": "translate_x"
+										}
+									],
+									"name": "param4",
+									"type": "linked_control"
+								},
+								{
+									"label": "Warp Y",
+									"linked_widgets": [
+										{
+											"node": "transform",
+											"widget": "translate_y"
+										}
+									],
+									"name": "param5",
+									"type": "linked_control"
+								}
+							]
+						}
+					],
+					"parameters": {
+						"param0": 19.0,
+						"param1": 16.0,
+						"param2": 7.0,
+						"param3": 0.75,
+						"param4": 0.01,
+						"param5": 0.5
+					},
+					"seed_int": 0,
+					"shortdesc": "",
+					"type": "graph"
+				},
+				{
+					"name": "colorize_4",
+					"node_position": {
+						"x": 480.032470703125,
+						"y": -436.840423583984
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 1.0,
+									"g": 1.0,
+									"pos": 0.622807552939967,
+									"r": 1.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.00784314051270485,
+									"g": 0.133302703499794,
+									"pos": 0.926470304790296,
+									"r": 0.172549024224281
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"generic_size": 1,
+					"name": "blend2_6",
+					"node_position": {
+						"x": 646.89111328125,
+						"y": -465.224792480469
+					},
+					"parameters": {
+						"amount1": 1.0,
+						"blend_type1": 2.0
+					},
+					"seed_int": 0,
+					"type": "blend2"
+				},
+				{
+					"name": "normal_map2",
+					"node_position": {
+						"x": 716.439819335938,
+						"y": 98.7290496826172
+					},
+					"parameters": {
+						"buffer": 1.0,
+						"param2": 0.0,
+						"size": 10.0,
+						"strength": 0.04
+					},
+					"seed_int": 0,
+					"type": "normal_map2"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -939.69921875,
+						"y": -155.359161376953
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "unnamed",
+							"type": "sdf2d"
+						}
+					],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 1293.150390625,
+						"y": -306.414306640625
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						},
+						{
+							"name": "port1",
+							"type": "f"
+						},
+						{
+							"name": "port2",
+							"type": "rgb"
+						}
+					],
+					"seed_int": 0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -504.184875488281,
+						"y": -437.960266113281
+					},
+					"parameters": {
+						"param1": {
+							"a": 1.0,
+							"b": 0.07183837890625,
+							"g": 0.171875,
+							"r": 0.158198118209839,
+							"type": "Color"
+						},
+						"param2": {
+							"a": 1.0,
+							"b": 0.196720123291016,
+							"g": 0.271484375,
+							"r": 0.23944254219532,
+							"type": "Color"
+						},
+						"param3": 0.84,
+						"param4": 1.0,
+						"param5": 0.11,
+						"param6": 0.59
+					},
+					"seed_int": 0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Color bg",
+							"linked_widgets": [
+								{
+									"node": "uniform",
+									"widget": "color"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						},
+						{
+							"label": "Color fg",
+							"linked_widgets": [
+								{
+									"node": "uniform_2",
+									"widget": "color"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						},
+						{
+							"label": "Opacity fg",
+							"linked_widgets": [
+								{
+									"node": "blend2_4",
+									"widget": "amount1"
+								}
+							],
+							"name": "param3",
+							"type": "linked_control"
+						},
+						{
+							"label": "Opacity dirt",
+							"linked_widgets": [
+								{
+									"node": "blend2_4",
+									"widget": "amount2"
+								}
+							],
+							"name": "param4",
+							"type": "linked_control"
+						},
+						{
+							"label": "Emboss",
+							"linked_widgets": [
+								{
+									"node": "normal_blend",
+									"widget": "amount1"
+								}
+							],
+							"name": "param5",
+							"type": "linked_control"
+						},
+						{
+							"label": "Dirt emboss",
+							"linked_widgets": [
+								{
+									"node": "normal_blend_2",
+									"widget": "amount1"
+								}
+							],
+							"name": "param6",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "reroute",
+					"node_position": {
+						"x": 817.046508789062,
+						"y": -60.6340103149414
+					},
+					"parameters": {
+						"preview": 0.0
+					},
+					"seed_int": 0,
+					"type": "reroute"
+				},
+				{
+					"name": "custom_tiles",
+					"node_position": {
+						"x": -440.998657226562,
+						"y": 18.899881362915
+					},
+					"parameters": {
+						"bevel": 0.11,
+						"columns": 8.0,
+						"mirror": false,
+						"mortar": 0.0,
+						"row_offset": 0.43,
+						"rows": 14.0
+					},
+					"seed_int": 0,
+					"type": "custom_tiles"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -182.14518737793,
+						"y": 118.28490447998
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.555836097176535,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 1.0,
+									"g": 1.0,
+									"pos": 0.555856097176535,
+									"r": 1.0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_int": 0,
+					"type": "colorize"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": 87.2943878173828,
+						"y": -44.4226341247559
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "combine"
+				},
+				{
+					"name": "decompose",
+					"node_position": {
+						"x": -243.862030029297,
+						"y": -86.2508392333984
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "decompose"
+				},
+				{
+					"name": "uniform",
+					"node_position": {
+						"x": -35.953987121582,
+						"y": -398.445739746094
+					},
+					"parameters": {
+						"color": {
+							"a": 1.0,
+							"b": 0.07183837890625,
+							"g": 0.171875,
+							"r": 0.158198118209839,
+							"type": "Color"
+						}
+					},
+					"seed_int": 0,
+					"type": "uniform"
+				},
+				{
+					"name": "uniform_2",
+					"node_position": {
+						"x": -6.97449970245361,
+						"y": -218.827560424805
+					},
+					"parameters": {
+						"color": {
+							"a": 1.0,
+							"b": 0.196720123291016,
+							"g": 0.271484375,
+							"r": 0.23944254219532,
+							"type": "Color"
+						}
+					},
+					"seed_int": 0,
+					"type": "uniform"
+				},
+				{
+					"name": "greyscale_2",
+					"node_position": {
+						"x": 947.254455566406,
+						"y": -77.8011703491211
+					},
+					"parameters": {
+						"mode": 0.0
+					},
+					"seed_int": 0,
+					"type": "greyscale"
+				},
+				{
+					"name": "greyscale_3",
+					"node_position": {
+						"x": 186.487854003906,
+						"y": 181.547393798828
+					},
+					"parameters": {
+						"mode": 2.0
+					},
+					"seed_int": 0,
+					"type": "greyscale"
+				},
+				{
+					"name": "normal_map2_2",
+					"node_position": {
+						"x": 760.410034179688,
+						"y": 423.802581787109
+					},
+					"parameters": {
+						"buffer": 0.0,
+						"param2": 0.0,
+						"size": 10.0,
+						"strength": 0.04
+					},
+					"seed_int": 0,
+					"type": "normal_map2"
+				},
+				{
+					"generic_size": 1,
+					"name": "normal_blend",
+					"node_position": {
+						"x": 1222.91979980469,
+						"y": 222.551773071289
+					},
+					"parameters": {
+						"amount1": 0.11
+					},
+					"seed_int": 0,
+					"type": "normal_blend2"
+				},
+				{
+					"generic_size": 1,
+					"name": "normal_blend_2",
+					"node_position": {
+						"x": 1051.02868652344,
+						"y": 69.9496002197266
+					},
+					"parameters": {
+						"amount1": 0.59
+					},
+					"seed_int": 0,
+					"type": "normal_blend2"
+				},
+				{
+					"name": "normal_map2_3",
+					"node_position": {
+						"x": 636.520568847656,
+						"y": 292.920654296875
+					},
+					"parameters": {
+						"buffer": 1.0,
+						"param2": 0.0,
+						"size": 10.0,
+						"strength": 1.0
+					},
+					"seed_int": 0,
+					"type": "normal_map2"
+				},
+				{
+					"name": "uniform_3",
+					"node_position": {
+						"x": 538.510559082031,
+						"y": 177.970611572266
+					},
+					"parameters": {
+						"color": {
+							"a": 1.0,
+							"b": 1.0,
+							"g": 0.415686011314392,
+							"r": 0.0,
+							"type": "Color"
+						}
+					},
+					"seed_int": 0,
+					"type": "uniform"
+				}
+			],
+			"parameters": {
+				"param1": {
+					"a": 1.0,
+					"b": 0.07183837890625,
+					"g": 0.171875,
+					"r": 0.158198118209839,
+					"type": "Color"
+				},
+				"param2": {
+					"a": 1.0,
+					"b": 0.196720123291016,
+					"g": 0.271484375,
+					"r": 0.23944254219532,
+					"type": "Color"
+				},
+				"param3": 0.84,
+				"param4": 1.0,
+				"param5": 0.11,
+				"param6": 0.59
+			},
+			"preview": 2,
+			"seed_int": 0,
+			"shortdesc": "",
+			"type": "graph"
+		},
+		{
+			"name": "sdmoon",
+			"node_position": {
+				"x": -420.0,
+				"y": -560.0
+			},
+			"parameters": {
+				"cx": 0.0,
+				"cy": 0.0,
+				"d": 0.2,
+				"ra": 0.6,
+				"rb": 0.53
+			},
+			"seed_int": 0,
+			"type": "sdmoon"
+		},
+		{
+			"generic_size": 1,
+			"name": "sdrotate",
+			"node_position": {
+				"x": -234.100021362305,
+				"y": -497.299987792969
+			},
+			"parameters": {
+				"a": 0.0
+			},
+			"seed_int": 0,
+			"type": "sdrotate"
+		},
+		{
+			"name": "colorize_5",
+			"node_position": {
+				"x": 852.066162109375,
+				"y": -549.752075195312
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.0,
+							"r": 1.0
+						},
+						{
+							"a": 1.0,
+							"b": 0.44140625,
+							"g": 0.44140625,
+							"pos": 0.369825597394977,
+							"r": 0.44140625
+						},
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.582106205455044,
+							"r": 1.0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "math",
+			"node_position": {
+				"x": 1035.79992675781,
+				"y": -543.512023925781
+			},
+			"parameters": {
+				"clamp": true,
+				"default_in1": 0.0,
+				"default_in2": 1.23,
+				"op": 2.0
+			},
+			"seed_int": 0,
+			"type": "math"
+		},
+		{
+			"generic_size": 1,
+			"name": "sdscale_2",
+			"node_position": {
+				"x": -60.0,
+				"y": -380.0
+			},
+			"parameters": {
+				"s": 0.73
+			},
+			"seed_int": 0,
+			"type": "sdscale"
+		},
+		{
+			"generic_size": 1,
+			"name": "sdtranslate",
+			"node_position": {
+				"x": 80.0,
+				"y": -380.0
+			},
+			"parameters": {
+				"x": -0.15,
+				"y": 0.12
+			},
+			"seed_int": 0,
+			"type": "sdtranslate"
+		},
+		{
+			"generic_size": 1,
+			"name": "sdboolean",
+			"node_position": {
+				"x": 234.654556274414,
+				"y": -493.581848144531
+			},
+			"parameters": {
+				"op1": 0.0
+			},
+			"seed_int": 0,
+			"type": "sdboolean_v"
+		},
+		{
+			"name": "reroute",
+			"node_position": {
+				"x": 1240.0,
+				"y": -760.0
+			},
+			"parameters": {
+				"preview": 0.0
+			},
+			"seed_int": 0,
+			"type": "reroute"
+		},
+		{
+			"name": "reroute_2",
+			"node_position": {
+				"x": 1280.0,
+				"y": -220.0
+			},
+			"parameters": {
+				"preview": 0.0
+			},
+			"seed_int": 0,
+			"type": "reroute"
+		},
+		{
+			"name": "reroute_3",
+			"node_position": {
+				"x": 900.0,
+				"y": -760.0
+			},
+			"parameters": {
+				"preview": 0.0
+			},
+			"seed_int": 0,
+			"type": "reroute"
+		},
+		{
+			"name": "reroute_4",
+			"node_position": {
+				"x": 840.0,
+				"y": -220.0
+			},
+			"parameters": {
+				"preview": 0.0
+			},
+			"seed_int": 0,
+			"type": "reroute"
+		},
+		{
+			"name": "sdstairs",
+			"node_position": {
+				"x": -188.821426391602,
+				"y": -941.27001953125
+			},
+			"parameters": {
+				"cx": 0.0,
+				"cy": 0.0,
+				"h": 1.0,
+				"steps": 5.0,
+				"w": 1.0
+			},
+			"seed_int": 0,
+			"type": "sdstairs"
+		},
+		{
+			"generic_size": 1,
+			"name": "sdrotate_2",
+			"node_position": {
+				"x": 212.341369628906,
+				"y": -750.282348632812
+			},
+			"parameters": {
+				"a": 83.0
+			},
+			"seed_int": 0,
+			"type": "sdrotate"
+		},
+		{
+			"name": "sdstairs_2",
+			"node_position": {
+				"x": -222.335723876953,
+				"y": -707.703369140625
+			},
+			"parameters": {
+				"cx": -0.61,
+				"cy": 0.62,
+				"h": 1.0,
+				"steps": 5.0,
+				"w": 1.0
+			},
+			"seed_int": 0,
+			"type": "sdstairs"
+		},
+		{
+			"generic_size": 1,
+			"name": "sdboolean_3",
+			"node_position": {
+				"x": 11.7098197937012,
+				"y": -771.248901367188
+			},
+			"parameters": {
+				"op1": 2.0
+			},
+			"seed_int": 0,
+			"type": "sdboolean_v"
+		},
+		{
+			"generic_size": 1,
+			"name": "sdrotate_4",
+			"node_position": {
+				"x": -22.4720420837402,
+				"y": -629.157897949219
+			},
+			"parameters": {
+				"a": -180.0
+			},
+			"seed_int": 0,
+			"type": "sdrotate"
+		},
+		{
+			"generic_size": 1,
+			"name": "blend2",
+			"node_position": {
+				"x": 137.006317138672,
+				"y": -932.080688476562
+			},
+			"parameters": {
+				"amount1": 0.5,
+				"blend_type1": 0.0
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"name": "sdcircle",
+			"node_position": {
+				"x": 72.5888595581055,
+				"y": -589.230102539062
+			},
+			"parameters": {
+				"cx": -0.02,
+				"cy": 0.24,
+				"r": 0.12
+			},
+			"seed_int": 0,
+			"type": "sdcircle"
+		},
+		{
+			"generic_size": 2,
+			"name": "sdboolean_2",
+			"node_position": {
+				"x": 357.648223876953,
+				"y": -643.984069824219
+			},
+			"parameters": {
+				"op1": 0.0,
+				"op2": 0.0
+			},
+			"seed_int": 0,
+			"type": "sdboolean_v"
+		},
+		{
+			"name": "sdcircle_2",
+			"node_position": {
+				"x": 371.641693115234,
+				"y": -343.429931640625
+			},
+			"parameters": {
+				"cx": -0.16,
+				"cy": 0.24,
+				"r": 0.12
+			},
+			"seed_int": 0,
+			"type": "sdcircle"
+		},
+		{
+			"generic_size": 1,
+			"name": "blend2_2",
+			"node_position": {
+				"x": 1498.97485351562,
+				"y": -1226.78991699219
+			},
+			"parameters": {
+				"amount1": 0.5,
+				"blend_type1": 0.0
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"name": "combine",
+			"node_position": {
+				"x": 1655.48315429688,
+				"y": -1487.72314453125
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "combine"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": 1135.11706542969,
+				"y": -1564.833984375
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 0.0284042358398438,
+							"g": 0.0684571266174316,
+							"pos": 0.0,
+							"r": 0.099609375
+						},
+						{
+							"a": 1.0,
+							"b": 0.170894622802734,
+							"g": 0.195310905575752,
+							"pos": 0.0667059803737029,
+							"r": 0.212890625
+						},
+						{
+							"a": 1.0,
+							"b": 0.0981903076171875,
+							"g": 0.313494950532913,
+							"pos": 0.19838536968668,
+							"r": 0.45703125
+						},
+						{
+							"a": 1.0,
+							"b": 0.0326156616210938,
+							"g": 0.048828125,
+							"pos": 0.345331934572176,
+							"r": 0.0365421175956726
+						},
+						{
+							"a": 1.0,
+							"b": 0.0396537780761719,
+							"g": 0.189156487584114,
+							"pos": 0.524721218429449,
+							"r": 0.193359375
+						},
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 1.0,
+							"r": 1.0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "decompose",
+			"node_position": {
+				"x": 1345.57861328125,
+				"y": -1658.37231445312
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "decompose"
+		},
+		{
+			"name": "colorize_6",
+			"node_position": {
+				"x": 1180.71875,
+				"y": -970.813415527344
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 0.689453125,
+							"g": 0.689453125,
+							"pos": 0.0,
+							"r": 0.689453125
+						},
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.527546297039902,
+							"r": 1.0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "gradient",
+			"node_position": {
+				"x": 1060.3447265625,
+				"y": -1321.24438476562
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 3,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.0,
+							"r": 1.0
+						},
+						{
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.525341606140137,
+							"r": 0.0
+						},
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 1.0,
+							"r": 1.0
+						}
+					],
+					"type": "Gradient"
+				},
+				"mirror": false,
+				"repeat": 1.0,
+				"rotate": -90.0000000000278
+			},
+			"seed_int": 0,
+			"type": "gradient"
+		},
+		{
+			"name": "dirt_3",
+			"node_position": {
+				"x": 953.886352539062,
+				"y": -1516.11608886719
+			},
+			"parameters": {
+				"d_scale": 1.0,
+				"param0": 0.0,
+				"param1": 9
+			},
+			"seed_int": 0,
+			"type": "dirt"
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

@@ -4,8 +4,7 @@ use bevy::{
     prelude::*,
 };
 use bevy_seedling::{
-    edge::Connect,
-    prelude::{HrtfNode, VolumeNode},
+    prelude::HrtfNode,
     sample::{AudioSample, SamplePlayer},
 };
 use bevy_trenchbroom::prelude::*;

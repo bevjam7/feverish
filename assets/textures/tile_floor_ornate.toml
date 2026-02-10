@@ -1,0 +1,10 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "tile_floor_ornate.png"
+normal_map_texture = "tile_floor_ornate_normal.png"
+metallic_roughness_texture = "tile_floor_ornate_mr.png"
+metallic = 1.0
+perceptual_roughness = 1.0
+
+
+

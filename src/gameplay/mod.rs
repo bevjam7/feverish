@@ -195,7 +195,6 @@ fn link_hierarchal_colliders(
     mut cmd: Commands,
 ) {
     for child in children.iter_descendants(trigger.entity) {
-        println!("a");
         if colliders.contains(child) {
             cmd.entity(child)
                 .insert(ColliderHierarchyChildOf(trigger.entity));

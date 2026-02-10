@@ -1,7 +1,16 @@
 ({
     "levels.exterior": File(path: "maps/exterior.map#Scene"),
     "levels.hallway": File(path: "maps/hallway.map#Scene"),
-    "models": Files(paths: ["models/npc_a/npc_a.gltf", "models/rat_toy/rat_toy.gltf", "models/plant/plant.gltf"]),
+    "models": Files(paths: [
+        "models/npc_a/npc_a.gltf",
+        "models/rat_toy/rat_toy.gltf",
+        "models/plant/plant.gltf",
+        "models/tree_a/tree_a.gltf",
+        "models/mailbox/mailbox.gltf",
+        "models/tree_a/tree_a.gltf",
+        "models/tree_b/tree_b.gltf",
+        "models/telephone_pole/telephone_pole.gltf",
+    ]),
     "audio": Files(paths: ["audio/radio_static.ogg", "audio/hum.ogg"]),
     "ratspinner.scripts": Files(paths: ["ratspinner/npc.default.rat"]),
 })

@@ -1,0 +1,9 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "dirt.png"
+normal_map_texture = "dirt_normal.png"
+metallic = 0.0
+perceptual_roughness = 1.0
+
+
+

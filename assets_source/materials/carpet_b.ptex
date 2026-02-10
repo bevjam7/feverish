@@ -1,0 +1,2806 @@
+{
+	"connections": [
+		{
+			"from": "fbm3",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "gaussian_blur",
+			"from_port": 0,
+			"to": "blend2_2",
+			"to_port": 0
+		},
+		{
+			"from": "fbm3_3",
+			"from_port": 0,
+			"to": "blend2_2",
+			"to_port": 1
+		},
+		{
+			"from": "pattern",
+			"from_port": 0,
+			"to": "edge_detect",
+			"to_port": 0
+		},
+		{
+			"from": "edge_detect",
+			"from_port": 0,
+			"to": "edge_detect_2",
+			"to_port": 0
+		},
+		{
+			"from": "edge_detect_2",
+			"from_port": 0,
+			"to": "tiler",
+			"to_port": 0
+		},
+		{
+			"from": "gaussian_blur_2",
+			"from_port": 0,
+			"to": "colorize_3",
+			"to_port": 0
+		},
+		{
+			"from": "gaussian_blur_3",
+			"from_port": 0,
+			"to": "edge_detect_3",
+			"to_port": 0
+		},
+		{
+			"from": "edge_detect_3",
+			"from_port": 0,
+			"to": "colorize_4",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_3",
+			"from_port": 0,
+			"to": "blend2_3",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_4",
+			"from_port": 0,
+			"to": "blend2_3",
+			"to_port": 1
+		},
+		{
+			"from": "blend2_3",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "tiler",
+			"from_port": 0,
+			"to": "shear",
+			"to_port": 0
+		},
+		{
+			"from": "shear",
+			"from_port": 0,
+			"to": "gaussian_blur_3",
+			"to_port": 0
+		},
+		{
+			"from": "shear",
+			"from_port": 0,
+			"to": "gaussian_blur_2",
+			"to_port": 0
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "gaussian_blur",
+			"to_port": 0
+		},
+		{
+			"from": "gaussian_blur_2",
+			"from_port": 0,
+			"to": "colorize_2",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 1
+		},
+		{
+			"from": "blend2_2",
+			"from_port": 0,
+			"to": "colorize_5",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_5",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 0
+		},
+		{
+			"from": "blend2",
+			"from_port": 0,
+			"to": "normal_map2",
+			"to_port": 0
+		},
+		{
+			"from": "gaussian_blur_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 1
+		},
+		{
+			"from": "uniform",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 2
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "_Node_752",
+	"node_position": {
+		"x": 0.0,
+		"y": 0.0
+	},
+	"nodes": [
+		{
+			"export": {
+
+			},
+			"export_last_target": "Bevy Trenchbroom",
+			"export_paths": {
+				"Bevy Trenchbroom": "/Users/doomy/Code/bevy_trench_template/assets/textures/carpet_b"
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 1714.32653808594,
+				"y": 590.121215820312
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
+					"type": "Color"
+				},
+				"ao": 1.0,
+				"depth_scale": 0.5,
+				"emission_energy": 1.0,
+				"flags_transparent": false,
+				"metallic": 1.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 8,
+				"sss": 1.0
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"exports": {
+					"Bevy Trenchbroom": {
+						"export_extension": "toml",
+						"external": true,
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix).png",
+								"output": 0.0,
+								"prompt_overwrite": false,
+								"type": "texture"
+							},
+							{
+								"file_name": "$(path_prefix).toml",
+								"template": "type = \"StandardMaterial\"\n[material]\n$if $(connected:albedo_tex)\nbase_color_texture = \"$(file_prefix).png\"\n$fi\n$if $(connected:normal_tex)\nnormal_map_texture = \"$(file_prefix)_normal.png\"\n$fi\n$if $(connected:metallic_tex) or $(connected:roughness_tex)\nmetallic_roughness_texture = \"$(file_prefix)_mr.png\"\n$fi\nmetallic = $(param:metallic)\nperceptual_roughness = $(param:roughness)\n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 7.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:metallic_tex) or $(connected:roughness_tex)",
+								"expression": "vec4(0.0, $roughness_tex($uv), $metallic_tex($uv), 1.0)",
+								"file_name": "$(path_prefix)_mr.png",
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"expression": "$emission_tex($uv)",
+								"file_name": "$(path_prefix)_emissive.png",
+								"prompt_overwrite": false,
+								"type": "texture"
+							}
+						],
+						"material": "material",
+						"name": "Bevy Trenchbroom"
+					},
+					"Blender": {
+						"export_extension": "tres",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:roughness_tex)",
+								"file_name": "$(path_prefix)_rough.exr",
+								"output": 13.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_metal.exr",
+								"output": 12.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 7.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_displace.exr",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:sss_tex)",
+								"file_name": "$(path_prefix)_sss.exr",
+								"output": 5.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							}
+						]
+					},
+					"Godot/Godot 3 Spatial": {
+						"export_extension": "tres",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_orm.png",
+								"output": 1.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 3.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_depth.png",
+								"output": 4.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:sss_tex)",
+								"file_name": "$(path_prefix)_sss.png",
+								"output": 5.0,
+								"prompt_overwrite": false,
+								"type": "texture"
+							},
+							{
+								"file_name": "$(path_prefix).tres",
+								"prompt_overwrite": true,
+								"template": "[gd_resource type=\"SpatialMaterial\" load_steps=5 format=2]\n$if $(connected:albedo_tex)\n[ext_resource path=\"$(file_prefix)_albedo.png\" type=\"Texture\" id=1]\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n[ext_resource path=\"$(file_prefix)_orm.png\" type=\"Texture\" id=2]\n$fi\n$if $(connected:normal_tex)\n[ext_resource path=\"$(file_prefix)_normal.png\" type=\"Texture\" id=3]\n$fi\n$if $(connected:depth_tex)\n[ext_resource path=\"$(file_prefix)_depth.png\" type=\"Texture\" id=4]\n$fi\n$if $(connected:emission_tex)\n[ext_resource path=\"$(file_prefix)_emission.png\" type=\"Texture\" id=5]\n$fi\n$if $(connected:sss_tex)\n[ext_resource path=\"$(file_prefix)_sss.png\" type=\"Texture\" id=6]\n$fi\n[resource]\nalbedo_color = Color($(param:albedo_color.r), $(param:albedo_color.g), $(param:albedo_color.b), $(param:albedo_color.a))\n$if $(connected:albedo_tex)\nalbedo_texture = ExtResource( 1 )\n$fi\nmetallic = $(param:metallic)\n$if $(connected:metallic_tex)\nmetallic_texture = ExtResource( 2 )\nmetallic_texture_channel = 2\n$fi\nroughness = $(param:roughness)\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\nroughness_texture = ExtResource( 2 )\nroughness_texture_channel = 1\n$fi\n$if $(connected:normal_tex)\nnormal_enabled = true\nnormal_scale = $(param:normal)\nnormal_texture = ExtResource( 3 )\n$fi\n$if $(connected:emission_tex)\nemission_enabled = true\nemission = Color( 0, 0, 0, 1 )\nemission_energy = $(param:emission_energy)\nemission_operator = 0\nemission_on_uv2 = false\nemission_texture = ExtResource( 5 )\n$fi\n$if $(connected:ao_tex)\nao_enabled = true\nao_texture = ExtResource( 2 )\nao_texture_channel = 0\n$fi\n$if $(connected:depth_tex)\ndepth_enabled = true\ndepth_scale = $(expr:0.2*$(param:depth_scale))\ndepth_deep_parallax = true\ndepth_min_layers = 8\ndepth_max_layers = 32\ndepth_flip_tangent = false\ndepth_flip_binormal = false\ndepth_texture = ExtResource( 4 )\n$fi\n$if $(connected:sss_tex)\nsubsurf_scatter_enabled = true\nsubsurf_scatter_strength = $(param:sss)\nsubsurf_scatter_texture = ExtResource( 6 )\n$fi\n",
+								"type": "template"
+							}
+						]
+					},
+					"Godot/Godot 4 ORM": {
+						"export_extension": "tres",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"prompt_overwrite": false,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_orm.png",
+								"output": 1.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 3.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_heightmap.png",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:sss_tex)",
+								"file_name": "$(path_prefix)_sss.png",
+								"output": 5.0,
+								"prompt_overwrite": false,
+								"type": "texture"
+							},
+							{
+								"file_name": "$(path_prefix).tres",
+								"prompt_overwrite": true,
+								"template": "[gd_resource type=\"ORMMaterial3D\" load_steps=6 format=3]\n$if $(connected:albedo_tex)\n[ext_resource path=\"$(file_prefix)_albedo.png\" type=\"Texture\" id=1]\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n[ext_resource path=\"$(file_prefix)_orm.png\" type=\"Texture\" id=2]\n$fi\n$if $(connected:normal_tex)\n[ext_resource path=\"$(file_prefix)_normal.png\" type=\"Texture\" id=3]\n$fi\n$if $(connected:depth_tex)\n[ext_resource path=\"$(file_prefix)_heightmap.png\" type=\"Texture\" id=4]\n$fi\n$if $(connected:emission_tex)\n[ext_resource path=\"$(file_prefix)_emission.png\" type=\"Texture\" id=5]\n$fi\n$if $(connected:sss_tex)\n[ext_resource path=\"$(file_prefix)_sss.png\" type=\"Texture\" id=6]\n$fi\n[resource]\nalbedo_color = Color($(param:albedo_color.r), $(param:albedo_color.g), $(param:albedo_color.b), $(param:albedo_color.a))\n$if $(connected:albedo_tex)\nalbedo_texture = ExtResource( 1 )\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\norm_texture = ExtResource( 2 )\n$fi\n$if $(connected:normal_tex)\nnormal_enabled = true\nnormal_scale = $(param:normal)\nnormal_texture = ExtResource( 3 )\n$fi\n$if $(connected:emission_tex)\nemission_enabled = true\nemission = Color( 0, 0, 0, 1 )\nemission_energy = $(param:emission_energy)\nemission_operator = 0\nemission_texture = ExtResource( 5 )\n$fi\n$if $(connected:depth_tex)\nheightmap_enabled = true\nheightmap_scale = $(expr:25.0*$(param:depth_scale))\nheightmap_deep_parallax = true\nheightmap_min_layers = 8\nheightmap_max_layers = 32\nheightmap_texture = ExtResource( 4 )\n$fi\n$if $(connected:sss_tex)\nsubsurf_scatter_enabled = true\nsubsurf_scatter_strength = $(param:sss)\nsubsurf_scatter_texture = ExtResource( 6 )\n$fi\n",
+								"type": "template"
+							}
+						]
+					},
+					"Godot/Godot 4 Standard": {
+						"export_extension": "tres",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"prompt_overwrite": false,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_orm.png",
+								"output": 1.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 3.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_heightmap.png",
+								"output": 8.0,
+								"prompt_overwrite": false,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:sss_tex)",
+								"file_name": "$(path_prefix)_sss.png",
+								"output": 5.0,
+								"type": "texture"
+							},
+							{
+								"file_name": "$(path_prefix).tres",
+								"prompt_overwrite": true,
+								"template": "[gd_resource type=\"StandardMaterial3D\" load_steps=5 format=2]\n$if $(connected:albedo_tex)\n[ext_resource path=\"$(file_prefix)_albedo.png\" type=\"Texture\" id=1]\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n[ext_resource path=\"$(file_prefix)_orm.png\" type=\"Texture\" id=2]\n$fi\n$if $(connected:normal_tex)\n[ext_resource path=\"$(file_prefix)_normal.png\" type=\"Texture\" id=3]\n$fi\n$if $(connected:depth_tex)\n[ext_resource path=\"$(file_prefix)_heightmap.png\" type=\"Texture\" id=4]\n$fi\n$if $(connected:emission_tex)\n[ext_resource path=\"$(file_prefix)_emission.png\" type=\"Texture\" id=5]\n$fi\n$if $(connected:sss_tex)\n[ext_resource path=\"$(file_prefix)_sss.png\" type=\"Texture\" id=6]\n$fi\n[resource]\nalbedo_color = Color($(param:albedo_color.r), $(param:albedo_color.g), $(param:albedo_color.b), $(param:albedo_color.a))\n$if $(connected:albedo_tex)\nalbedo_texture = ExtResource( 1 )\n$fi\nmetallic = $(param:metallic)\n$if $(connected:metallic_tex)\nmetallic_texture = ExtResource( 2 )\nmetallic_texture_channel = 2\n$fi\nroughness = $(param:roughness)\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\nroughness_texture = ExtResource( 2 )\nroughness_texture_channel = 1\n$fi\n$if $(connected:normal_tex)\nnormal_enabled = true\nnormal_scale = $(param:normal)\nnormal_texture = ExtResource( 3 )\n$fi\n$if $(connected:emission_tex)\nemission_enabled = true\nemission = Color( 0, 0, 0, 1 )\nemission_energy = $(param:emission_energy)\nemission_operator = 0\nemission_texture = ExtResource( 5 )\n$fi\n$if $(connected:ao_tex)\nao_enabled = true\nao_texture = ExtResource( 2 )\nao_texture_channel = 0\n$fi\n$if $(connected:depth_tex)\nheightmap_enabled = true\nheightmap_scale = $(expr:25.0*$(param:depth_scale))\nheightmap_deep_parallax = true\nheightmap_min_layers = 8\nheightmap_max_layers = 32\nheightmap_texture = ExtResource( 4 )\n$fi\n$if $(connected:sss_tex)\nsubsurf_scatter_enabled = true\nsubsurf_scatter_strength = $(param:sss)\nsubsurf_scatter_texture = ExtResource( 6 )\n$fi\n",
+								"type": "template"
+							}
+						]
+					},
+					"Unity/3D": {
+						"export_extension": "mat",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(0)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_metal_smoothness.png",
+								"output": 6.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_metal_smoothness.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(1)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 7.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(2)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 12\n  mipmaps:\n    mipMapMode: 0\n    enableMipMap: 1\n    sRGBTexture: 0\n    linearTexture: 0\n    fadeOut: 0\n    borderMipMap: 1\n    mipMapsPreserveCoverage: 0\n    alphaTestReferenceValue: 0.5\n    mipMapFadeDistanceStart: 1\n    mipMapFadeDistanceEnd: 3\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    heightScale: 0.25\n    normalMapFilter: 0\n    flipGreenChannel: 0\n  isReadable: 1\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  vTOnly: 0\n  ignoreMipmapLimit: 1\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 0\n  maxTextureSize: 2048\n  textureSettings:\n    serializedVersion: 2\n    filterMode: 1\n    aniso: 1\n    mipBias: 0\n    wrapU: 0\n    wrapV: 0\n    wrapW: 0\n  nPOTScale: 0\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 1\n  textureShape: 1\n  singleChannelComponent: 0\n  flipbookRows: 1\n  flipbookColumns: 1\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  ignorePngGamma: 0\n  applyGammaDecoding: 1\n  swizzle: 50462976\n  cookieLightType: 1\n  platformSettings:\n  - serializedVersion: 3\n    buildTarget: DefaultTexturePlatform\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    ignorePlatformSupport: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  - serializedVersion: 3\n    buildTarget: Standalone\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    ignorePlatformSupport: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n    serializedVersion: 2\n    sprites: []\n    outline: []\n    physicsShape: []\n    bones: []\n    spriteID: \n    internalID: 0\n    vertices: []\n    indices: \n    edges: []\n    weights: []\n    secondaryTextures: []\n    nameFileIdTable: {}\n  mipmapLimitGroupName: \n  pSDRemoveMatte: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(3)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:ao_tex)",
+								"file_name": "$(path_prefix)_occlusion.png",
+								"output": 9.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex)",
+								"file_name": "$(path_prefix)_occlusion.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(4)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(5)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"file_name": "$(path_prefix).mat",
+								"prompt_overwrite": true,
+								"template": "%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!21 &2100000\nMaterial:\n  serializedVersion: 6\n  m_ObjectHideFlags: 0\n  m_CorrespondingSourceObject: {fileID: 0}\n  m_PrefabInstance: {fileID: 0}\n  m_PrefabAsset: {fileID: 0}\n  m_Name: $(file_prefix)\n  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}\n  m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP _PARALLAXMAP\n  m_LightmapFlags: 4\n  m_EnableInstancingVariants: 0\n  m_DoubleSidedGI: 0\n  m_CustomRenderQueue: -1\n  stringTagMap: {}\n  disabledShaderPasses: []\n  m_SavedProperties:\n    serializedVersion: 3\n    m_TexEnvs:\n    - _BumpMap:\n$if $(connected:normal_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(2), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailAlbedoMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailMask:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailNormalMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _EmissionMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MainTex:\n$if $(connected:albedo_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(0), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MetallicGlossMap:\n$if $(connected:roughness_tex) or $(connected:metallic_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(1), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _OcclusionMap:\n$if $(connected:ao_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(4), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _ParallaxMap:\n$if $(connected:depth_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(3), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    m_Floats:\n    - _BumpScale: 1\n    - _Cutoff: 0.5\n    - _DetailNormalMapScale: 1\n    - _DstBlend: 0\n    - _GlossMapScale: 1\n    - _Glossiness: 0.5\n    - _GlossyReflections: 1\n    - _Metallic: 0\n    - _Mode: 0\n    - _OcclusionStrength: 1\n    - _Parallax: 0.02\n    - _SmoothnessTextureChannel: 0\n    - _SpecularHighlights: 1\n    - _SrcBlend: 1\n    - _UVSec: 0\n    - _ZWrite: 1\n    m_Colors:\n    - _Color: {r: 1, g: 1, b: 1, a: 1}\n    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}\n",
+								"type": "template"
+							}
+						],
+						"uids": 6.0
+					},
+					"Unity/HDRP": {
+						"export_extension": "mat",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png.meta",
+								"template": "fileFormatVersion: 2\nguid: $uid(0)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_maskmap.png",
+								"output": 11.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_maskmap.png.meta",
+								"template": "fileFormatVersion: 2\nguid: $uid(1)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 7.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png.meta",
+								"template": "fileFormatVersion: 2\nguid: $uid(2)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 12\n  mipmaps:\n    mipMapMode: 0\n    enableMipMap: 1\n    sRGBTexture: 0\n    linearTexture: 0\n    fadeOut: 0\n    borderMipMap: 0\n    mipMapsPreserveCoverage: 0\n    alphaTestReferenceValue: 0.5\n    mipMapFadeDistanceStart: 1\n    mipMapFadeDistanceEnd: 3\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    heightScale: 0.25\n    normalMapFilter: 0\n    flipGreenChannel: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  vTOnly: 0\n  ignoreMipmapLimit: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n    serializedVersion: 2\n    filterMode: 1\n    aniso: 1\n    mipBias: 0\n    wrapU: 0\n    wrapV: 0\n    wrapW: 0\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 1\n  textureShape: 1\n  singleChannelComponent: 0\n  flipbookRows: 1\n  flipbookColumns: 1\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  ignorePngGamma: 0\n  applyGammaDecoding: 1\n  swizzle: 50462976\n  cookieLightType: 1\n  platformSettings:\n  - serializedVersion: 3\n    buildTarget: DefaultTexturePlatform\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    ignorePlatformSupport: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  - serializedVersion: 3\n    buildTarget: Standalone\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    ignorePlatformSupport: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n    serializedVersion: 2\n    sprites: []\n    outline: []\n    physicsShape: []\n    bones: []\n    spriteID: \n    internalID: 0\n    vertices: []\n    indices: \n    edges: []\n    weights: []\n    secondaryTextures: []\n    nameFileIdTable: {}\n  mipmapLimitGroupName: \n  pSDRemoveMatte: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png.meta",
+								"template": "fileFormatVersion: 2\nguid: $uid(3)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png.meta",
+								"template": "fileFormatVersion: 2\nguid: $uid(4)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"file_name": "$(path_prefix).mat",
+								"template": "%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!21 &2100000\nMaterial:\n  serializedVersion: 6\n  m_ObjectHideFlags: 0\n  m_CorrespondingSourceObject: {fileID: 0}\n  m_PrefabInstance: {fileID: 0}\n  m_PrefabAsset: {fileID: 0}\n  m_Name: $(file_prefix)\n  m_Shader: {fileID: 4800000, guid: 6e4ae4064600d784cac1e41a9e6f2e59, type: 3}\n  m_ShaderKeywords: _NORMALMAP_TANGENT_SPACE _NORMALMAP _HEIGHTMAP _PIXEL_DISPLACEMENT _PIXEL_DISPLACEMENT_LOCK_OBJECT_SCALE _DISPLACEMENT_LOCK_TILING_SCALE _MASKMAP _EMISSIVE_COLOR_MAP\n  m_LightmapFlags: 4\n  m_EnableInstancingVariants: 0\n  m_DoubleSidedGI: 0\n  m_CustomRenderQueue: -1\n  stringTagMap: {}\n  disabledShaderPasses:\n  - DistortionVectors\n  - MOTIONVECTORS\n  - TransparentDepthPrepass\n  - TransparentDepthPostpass\n  - TransparentBackface\n  m_SavedProperties:\n    serializedVersion: 3\n    m_TexEnvs:\n    - _AnisotropyMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _BaseColorMap:\n$if $(connected:albedo_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(0), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _BentNormalMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _BentNormalMapOS:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _CoatMaskMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DistortionVectorMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _EmissiveColorMap:\n$if $(connected:emission_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(4), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _HeightMap:\n$if $(connected:depth_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(3), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _IridescenceMaskMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _IridescenceThicknessMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MainTex:\n$if $(connected:albedo_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(0), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MaskMap:\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(1), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _NormalMap:\n$if $(connected:normal_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(2), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _NormalMapOS:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _SpecularColorMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _SubsurfaceMaskMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _TangentMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _TangentMapOS:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _ThicknessMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _TransmittanceColorMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    m_Floats:\n    - _AORemapMax: 1\n    - _AORemapMin: 0\n    - _ATDistance: 1\n    - _AddPrecomputedVelocity: 0\n    - _AlbedoAffectEmissive: 0\n    - _AlphaCutoff: 0.5\n    - _AlphaCutoffEnable: 0\n    - _AlphaCutoffPostpass: 0.5\n    - _AlphaCutoffPrepass: 0.5\n    - _AlphaCutoffShadow: 0.5\n    - _AlphaDstBlend: 0\n    - _AlphaSrcBlend: 1\n    - _Anisotropy: 0\n    - _BlendMode: 0\n    - _CoatMask: 0\n    - _CullMode: 2\n    - _CullModeForward: 2\n    - _Cutoff: 0.5\n    - _DepthOffsetEnable: 0\n    - _DetailAlbedoScale: 1\n    - _DetailNormalScale: 1\n    - _DetailSmoothnessScale: 1\n    - _DiffusionProfile: 0\n    - _DiffusionProfileHash: 0\n    - _DisplacementLockObjectScale: 1\n    - _DisplacementLockTilingScale: 1\n$if $(connected:depth_tex)\n    - _DisplacementMode: 2\n$else\n    - _DisplacementMode: 0\n$fi\n    - _DistortionBlendMode: 0\n    - _DistortionBlurBlendMode: 0\n    - _DistortionBlurDstBlend: 1\n    - _DistortionBlurRemapMax: 1\n    - _DistortionBlurRemapMin: 0\n    - _DistortionBlurScale: 1\n    - _DistortionBlurSrcBlend: 1\n    - _DistortionDepthTest: 1\n    - _DistortionDstBlend: 1\n    - _DistortionEnable: 0\n    - _DistortionScale: 1\n    - _DistortionSrcBlend: 1\n    - _DistortionVectorBias: -1\n    - _DistortionVectorScale: 2\n    - _DoubleSidedEnable: 0\n    - _DoubleSidedNormalMode: 1\n    - _DstBlend: 0\n    - _EmissiveColorMode: 1\n    - _EmissiveExposureWeight: 1\n    - _EmissiveIntensity: 1\n    - _EmissiveIntensityUnit: 0\n    - _EnableBlendModePreserveSpecularLighting: 1\n    - _EnableFogOnTransparent: 1\n    - _EnableGeometricSpecularAA: 0\n    - _EnergyConservingSpecularColor: 1\n    - _HeightAmplitude: $(expr:0.08*$(param:depth_scale))\n    - _HeightCenter: 1\n    - _HeightMapParametrization: 0\n    - _HeightMax: 1\n    - _HeightMin: -1\n    - _HeightOffset: 0\n    - _HeightPoMAmplitude: $(expr:8*$(param:depth_scale))\n    - _HeightTessAmplitude: 2\n    - _HeightTessCenter: 0.5\n    - _InvTilingScale: 1\n    - _Ior: 1.5\n    - _IridescenceMask: 1\n    - _IridescenceThickness: 1\n    - _LinkDetailsWithBase: 1\n    - _MaterialID: 1\n    - _Metallic: $(param:metallic)\n    - _NormalMapSpace: 0\n    - _NormalScale: $(param:normal)\n    - _PPDLodThreshold: 5\n    - _PPDMaxSamples: 15\n    - _PPDMinSamples: 5\n    - _PPDPrimitiveLength: 1\n    - _PPDPrimitiveWidth: 1\n    - _ReceivesSSR: 1\n    - _RefractionModel: 0\n    - _SSRefractionProjectionModel: 0\n    - _Smoothness: 1\n    - _SmoothnessRemapMax: 1\n    - _SmoothnessRemapMin: $(expr:1-$(param:roughness))\n    - _SpecularAAScreenSpaceVariance: 0.1\n    - _SpecularAAThreshold: 0.2\n    - _SpecularOcclusionMode: 1\n    - _SrcBlend: 1\n    - _StencilRef: 0\n    - _StencilRefDepth: 8\n    - _StencilRefDistortionVec: 4\n    - _StencilRefGBuffer: 10\n    - _StencilRefMV: 40\n    - _StencilWriteMask: 6\n    - _StencilWriteMaskDepth: 8\n    - _StencilWriteMaskDistortionVec: 4\n    - _StencilWriteMaskGBuffer: 14\n    - _StencilWriteMaskMV: 40\n    - _SubsurfaceMask: 1\n    - _SupportDecals: 1\n    - _SurfaceType: 0\n    - _TexWorldScale: 1\n    - _TexWorldScaleEmissive: 1\n    - _Thickness: 1\n    - _TransmissionEnable: 1\n    - _TransparentBackfaceEnable: 0\n    - _TransparentCullMode: 2\n    - _TransparentDepthPostpassEnable: 0\n    - _TransparentDepthPrepassEnable: 0\n    - _TransparentSortPriority: 0\n    - _TransparentWritingMotionVec: 0\n    - _TransparentZWrite: 0\n    - _UVBase: 0\n    - _UVDetail: 0\n    - _UVEmissive: 0\n    - _UseEmissiveIntensity: 0\n    - _UseShadowThreshold: 0\n    - _ZTestDepthEqualForOpaque: 3\n    - _ZTestGBuffer: 4\n    - _ZTestModeDistortion: 4\n    - _ZTestTransparent: 4\n    - _ZWrite: 1\n    m_Colors:\n    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}\n    - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}\n    - _Color: {r: 1, g: 1, b: 1, a: 1}\n    - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}\n    - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}\n    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}\n    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}\n    - _EmissiveColorLDR: {r: 0, g: 0, b: 0, a: 1}\n    - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}\n    - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}\n    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}\n    - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}\n    - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}\n    - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}\n    - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}\n    - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}\n--- !u!114 &8466335806480081788\nMonoBehaviour:\n  m_ObjectHideFlags: 11\n  m_CorrespondingSourceObject: {fileID: 0}\n  m_PrefabInstance: {fileID: 0}\n  m_PrefabAsset: {fileID: 0}\n  m_GameObject: {fileID: 0}\n  m_Enabled: 1\n  m_EditorHideFlags: 0\n  m_Script: {fileID: 11500000, guid: da692e001514ec24dbc4cca1949ff7e8, type: 3}\n  m_Name: \n  m_EditorClassIdentifier: \n  version: 2\n",
+								"type": "template"
+							}
+						],
+						"uids": 5.0
+					},
+					"Unity/URP": {
+						"export_extension": "mat",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(0)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n  buildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_metal_smoothness.png",
+								"output": 6.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_metal_smoothness.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(1)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n  buildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 7.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(2)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n  mipMapMode: 0\n  enableMipMap: 1\n  sRGBTexture: 0\n  linearTexture: 0\n  fadeOut: 0\n  borderMipMap: 0\n  mipMapsPreserveCoverage: 0\n  alphaTestReferenceValue: 0.5\n  mipMapFadeDistanceStart: 1\n  mipMapFadeDistanceEnd: 3\n  bumpmap:\n  convertToNormalMap: 0\n  externalNormalMap: 0\n  heightScale: 0.25\n  normalMapFilter: 0\n  flipGreenChannel: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  vTOnly: 0\n  ignoreMipmapLimit: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n  serializedVersion: 2\n  filterMode: 1\n  aniso: 1\n  mipBias: 0\n  wrapU: 0\n  wrapV: 0\n  wrapW: 0\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 1\n  textureShape: 1\n  singleChannelComponent: 0\n  flipbookRows: 1\n  flipbookColumns: 1\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  ignorePngGamma: 0\n  applyGammaDecoding: 1\n  swizzle: 50462976\n  cookieLightType: 1\n  platformSettings:\n  - serializedVersion: 3\n  buildTarget: DefaultTexturePlatform\n  maxTextureSize: 2048\n  resizeAlgorithm: 0\n  textureFormat: -1\n  textureCompression: 1\n  compressionQuality: 50\n  crunchedCompression: 0\n  allowsAlphaSplitting: 0\n  overridden: 0\n  ignorePlatformSupport: 0\n  androidETC2FallbackOverride: 0\n  forceMaximumCompressionQuality_BC6H_BC7: 0\n  - serializedVersion: 3\n  buildTarget: Standalone\n  maxTextureSize: 2048\n  resizeAlgorithm: 0\n  textureFormat: -1\n  textureCompression: 1\n  compressionQuality: 50\n  crunchedCompression: 0\n  allowsAlphaSplitting: 0\n  overridden: 0\n  ignorePlatformSupport: 0\n  androidETC2FallbackOverride: 0\nforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n  serializedVersion: 2\n  sprites: []\n  outline: []\n  physicsShape: []\n  bones: []\n  spriteID: \n  internalID: 0\n  vertices: []\n  indices: \n  edges: []\n  weights: []\n  secondaryTextures: []\n  nameFileIdTable: {}\n  mipmapLimitGroupName: \n  pSDRemoveMatte: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: ",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(3)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:ao_tex)",
+								"file_name": "$(path_prefix)_occlusion.png",
+								"output": 9.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex)",
+								"file_name": "$(path_prefix)_occlusion.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(4)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: -1\n\taniso: -1\n\tmipBias: -100\n\twrapU: -1\n\twrapV: -1\n\twrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png.meta",
+								"prompt_overwrite": true,
+								"template": "fileFormatVersion: 2\nguid: $uid(5)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n\tmipMapMode: 0\n\tenableMipMap: 1\n\tsRGBTexture: 1\n\tlinearTexture: 0\n\tfadeOut: 0\n\tborderMipMap: 0\n\tmipMapsPreserveCoverage: 0\n\talphaTestReferenceValue: 0.5\n\tmipMapFadeDistanceStart: 1\n\tmipMapFadeDistanceEnd: 3\n  bumpmap:\n\tconvertToNormalMap: 0\n\texternalNormalMap: 0\n\theightScale: 0.25\n\tnormalMapFilter: 0\n\tflipGreenChannel: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  vTOnly: 0\n  ignoreMipmapLimit: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n\tserializedVersion: 2\n\tfilterMode: 1\n\taniso: 1\n\tmipBias: 0\n\twrapU: 0\n\twrapV: 0\n\twrapW: 0\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  flipbookRows: 1\n  flipbookColumns: 1\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  ignorePngGamma: 0\n  applyGammaDecoding: 1\n  swizzle: 50462976\n  cookieLightType: 1\n  platformSettings:\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tignorePlatformSupport: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  - serializedVersion: 3\n\tbuildTarget: DefaultTexturePlatform\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 0\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tignorePlatformSupport: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  - serializedVersion: 3\n\tbuildTarget: Standalone\n\tmaxTextureSize: 2048\n\tresizeAlgorithm: 0\n\ttextureFormat: -1\n\ttextureCompression: 1\n\tcompressionQuality: 50\n\tcrunchedCompression: 0\n\tallowsAlphaSplitting: 0\n\toverridden: 0\n\tignorePlatformSupport: 0\n\tandroidETC2FallbackOverride: 0\n\tforceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n\tserializedVersion: 2\n\tsprites: []\n\toutline: []\n\tphysicsShape: []\n\tbones: []\n\tspriteID: \n\tinternalID: 0\n\tvertices: []\n\tindices: \n\tedges: []\n\tweights: []\n\tsecondaryTextures: []\n\tnameFileIdTable: {}\n  mipmapLimitGroupName: \n  pSDRemoveMatte: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+								"type": "template"
+							},
+							{
+								"file_name": "$(path_prefix).mat",
+								"prompt_overwrite": true,
+								"template": "%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!114 &-486273074595757742\nMonoBehaviour:\n  m_ObjectHideFlags: 11\n  m_CorrespondingSourceObject: {fileID: 0}\n  m_PrefabInstance: {fileID: 0}\n  m_PrefabAsset: {fileID: 0}\n  m_GameObject: {fileID: 0}\n  m_Enabled: 1\n  m_EditorHideFlags: 0\n  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}\n  m_Name: \n  m_EditorClassIdentifier: \n  version: 7\n--- !u!21 &2100000\nMaterial:\n  serializedVersion: 8\n  m_ObjectHideFlags: 0\n  m_CorrespondingSourceObject: {fileID: 0}\n  m_PrefabInstance: {fileID: 0}\n  m_PrefabAsset: {fileID: 0}\n  m_Name: $(file_prefix)\n  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}\n  m_Parent: {fileID: 0}\n  m_ModifiedSerializedProperties: 0\n  m_ValidKeywords:\n  - _NORMALMAP\n  - _PARALLAXMAP\n  - _METALLICSPECGLOSSMAP\n$if $(connected:emission_tex)\n  m_LightmapFlags: 0\n$else\n  m_LightmapFlags: 4\n$fi\n  m_EnableInstancingVariants: 0\n  m_DoubleSidedGI: 0\n  m_CustomRenderQueue: -1\n  stringTagMap:\n    RenderType: Opaque\n  disabledShaderPasses: []\n  m_LockedProperties: \n  m_SavedProperties:\n    serializedVersion: 3\n    m_TexEnvs:\n    - _BaseMap:\n$if $(connected:albedo_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(0), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _BumpMap:\n$if $(connected:normal_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(2), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailAlbedoMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailMask:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailNormalMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _EmissionMap:\n$if $(connected:emission_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(5), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MainTex:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n     - _MetallicGlossMap:\n$if $(connected:roughness_tex) or $(connected:metallic_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(1), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _OcclusionMap:\n$if $(connected:ao_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(4), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _ParallaxMap:\n$if $(connected:depth_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(3), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _SpecGlossMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - unity_Lightmaps:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - unity_LightmapsInd:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - unity_ShadowMasks:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    m_Ints: []\n    m_Floats:\n    - _AlphaClip: 0\n    - _AlphaToMask: 0\n    - _Blend: 0\n    - _BlendModePreserveSpecular: 1\n    - _BumpScale: $(param:normal)\n    - _ClearCoatMask: 0\n    - _ClearCoatSmoothness: 0\n    - _Cull: 2\n    - _Cutoff: 0.5\n    - _DetailAlbedoMapScale: 1\n    - _DetailNormalMapScale: 1\n    - _DstBlend: 0\n    - _DstBlendAlpha: 0\n    - _EnvironmentReflections: 1\n    - _GlossMapScale: 0\n    - _Glossiness: 0\n    - _GlossyReflections: 0\n    - _Metallic: 0\n    - _OcclusionStrength: $(param:ao)\n    - _Parallax: $(expr:0.005+(0.08-0.005)*$(param:depth_scale))\n    - _QueueOffset: 0\n    - _ReceiveShadows: 1\n    - _Smoothness: $(param:roughness))\n    - _SmoothnessTextureChannel: 0\n    - _SpecularHighlights: 1\n    - _SrcBlend: 1\n    - _SrcBlendAlpha: 1\n    - _Surface: 0\n    - _WorkflowMode: 1\n    - _ZWrite: 1\n    m_Colors:\n    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}\n    - _Color: {r: 1, g: 1, b: 1, a: 1}\n    - _EmissionColor: {r: $(param:emission_energy), g: $(param:emission_energy), b: $(param:emission_energy), a: 1}\n    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}\n  m_BuildTextureStacks: []\n",
+								"type": "template"
+							}
+						],
+						"uids": 6.0
+					},
+					"Unreal/Unreal Engine 4": {
+						"export_extension": "mm2ue",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_orm.png",
+								"output": 1.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 10.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"file_name": "$(path_prefix).mm2ue",
+								"template": "/*\nInstructions to setup this material:\n- copy material.uasset and open the copy\n- copy the shader code below and paste it into the Custom node\n$if $(connected:albedo_tex)\n- assign $(file_prefix)_albedo.png to the Albedo texture in the graph\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n- assign $(file_prefix)_orm.png to the ORM texture in the graph\n$fi\n$if $(connected:emission_tex)\n- assign $(file_prefix)_emission.png to the Emission texture in the graph\n$fi\n$if $(connected:normal_tex)\n- assign $(file_prefix)_normal.png to the Normal texture in the graph\n$fi\n$if $(connected:depth_tex)\n- assign $(file_prefix)_height.png to the Height texture in the graph\n$fi\n*/\n",
+								"type": "template"
+							}
+						],
+						"name": "Unreal/Unreal Engine 4"
+					},
+					"Unreal/Unreal Engine 5": {
+						"export_extension": "py",
+						"files": [
+							{
+								"conditions": "$(connected:albedo_tex)",
+								"file_name": "$(path_prefix)_albedo.png",
+								"output": 0.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+								"file_name": "$(path_prefix)_orm.png",
+								"output": 1.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:emission_tex)",
+								"file_name": "$(path_prefix)_emission.png",
+								"output": 2.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:normal_tex)",
+								"file_name": "$(path_prefix)_normal.png",
+								"output": 10.0,
+								"type": "texture"
+							},
+							{
+								"conditions": "$(connected:depth_tex)",
+								"file_name": "$(path_prefix)_height.png",
+								"output": 8.0,
+								"type": "texture"
+							},
+							{
+								"file_name": "$(path_prefix).py",
+								"template": "import unreal\nimport sys\nsys.path.append('$(material_maker_path)$(path_separator)export')\nimport mm\nfrom importlib import reload\nreload(mm)\nmat = mm.Material('$(file_prefix)', True)\nmat.clear()\nTextureSample_Color = mat.add_node('TextureSample', -400, -176)\nTextureSample_Color.set_editor_property('texture', mm.import_texture('$(path_prefix)_albedo.png', '/Game/Textures'))\nmat.connect_property(TextureSample_Color, 'RGB', unreal.MaterialProperty.MP_BASE_COLOR)\nTextureSample_ORM = mat.add_node('TextureSample', -400, 96)\nTextureSample_ORM.set_editor_property('texture', mm.import_texture('$(path_prefix)_orm.png', '/Game/Textures'))\nmat.connect_property(TextureSample_ORM, 'B', unreal.MaterialProperty.MP_METALLIC)\nmat.connect_property(TextureSample_ORM, 'G', unreal.MaterialProperty.MP_ROUGHNESS)\nmat.connect_property(TextureSample_ORM, 'R', unreal.MaterialProperty.MP_AMBIENT_OCCLUSION)\nTextureSample_Normal = mat.add_node('TextureSample', -400, 368)\nTextureSample_Normal.set_editor_property('texture', mm.import_texture('$(path_prefix)_normal.png', '/Game/Textures'))\nmat.connect_property(TextureSample_Normal, 'RGB', unreal.MaterialProperty.MP_NORMAL)\nMaterialFunctionCall_0 = mat.add_node('MaterialFunctionCall', -976, 32)\nMaterialFunctionCall_0.set_editor_property('material_function', mm.get_object_from_path(\"/Script/Engine.MaterialFunction'/Engine/Functions/Engine_MaterialFunctions01/Texturing/ParallaxOcclusionMapping.ParallaxOcclusionMapping'\"))\nTextureObject_0 = mat.add_node('TextureObject', -1200, -96)\nTextureObject_0.set_editor_property('texture', mm.import_texture('$(path_prefix)_height.png', '/Game/Textures'))\nConstant_0 = mat.add_node('Constant', -1200, 80)\nConstant_0.set_editor_property('r', 0.05)\nConstant_1 = mat.add_node('Constant', -1200, 160)\nConstant_1.set_editor_property('r', 8.0)\nConstant_2 = mat.add_node('Constant', -1200, 240)\nConstant_2.set_editor_property('r', 16.0)\nConstant4Vector_0 = mat.add_node('Constant4Vector', -1200, 320)\nmat.connect_nodes(MaterialFunctionCall_0, 'Parallax UVs', TextureSample_Color, '')\nmat.connect_nodes(MaterialFunctionCall_0, 'Parallax UVs', TextureSample_ORM, '')\nmat.connect_nodes(MaterialFunctionCall_0, 'Parallax UVs', TextureSample_Normal, '')\nmat.connect_nodes(TextureObject_0, '', MaterialFunctionCall_0, 'Heightmap Texture')\nmat.connect_nodes(Constant_0, '', MaterialFunctionCall_0, 'Height Ratio')\nmat.connect_nodes(Constant_1, '', MaterialFunctionCall_0, 'Min Steps')\nmat.connect_nodes(Constant_2, '', MaterialFunctionCall_0, 'Max Steps')\nmat.connect_nodes(Constant4Vector_0, '', MaterialFunctionCall_0, 'Heightmap Channel')\nmat.save()\n",
+								"type": "template"
+							},
+							{
+								"file_name": "clipboard",
+								"template": "\"$(path_prefix).py\"",
+								"type": "template"
+							}
+						],
+						"name": "Unreal/Unreal Engine 4"
+					}
+				},
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec3(1.0)",
+						"group_size": 7.0,
+						"label": "",
+						"name": "albedo_tex",
+						"type": "rgb"
+					},
+					{
+						"default": "0",
+						"label": "",
+						"name": "metallic_tex",
+						"type": "f"
+					},
+					{
+						"default": "1",
+						"label": "",
+						"name": "roughness_tex",
+						"type": "f"
+					},
+					{
+						"default": "vec3(0.0)",
+						"label": "",
+						"name": "emission_tex",
+						"type": "rgb"
+					},
+					{
+						"default": "vec3(0.5)",
+						"label": "",
+						"name": "normal_tex",
+						"type": "rgb"
+					},
+					{
+						"default": "1.0",
+						"label": "",
+						"name": "ao_tex",
+						"type": "f"
+					},
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "depth_tex",
+						"type": "f"
+					},
+					{
+						"default": "1.0",
+						"label": "",
+						"name": "opacity_tex",
+						"type": "f"
+					},
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "sss_tex",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"longdesc": "PBR material with maps generated as static images",
+				"name": "Static PBR Material",
+				"outputs": [
+					{
+						"rgba": "vec4($albedo_tex($uv), $opacity_tex($uv))",
+						"type": "rgba"
+					},
+					{
+						"rgb": "vec3($ao_tex($uv), $roughness_tex($uv), $metallic_tex($uv))",
+						"type": "rgb"
+					},
+					{
+						"rgb": "$emission_tex($uv)",
+						"type": "rgb"
+					},
+					{
+						"rgb": "$normal_tex($uv)*vec3(-1.0, 1.0, -1.0)+vec3(1.0, 0.0, 1.0)",
+						"type": "rgb"
+					},
+					{
+						"f": "clamp($depth_tex($uv), 0.0, 1.0)",
+						"type": "f"
+					},
+					{
+						"f": "$sss_tex($uv)",
+						"type": "f"
+					},
+					{
+						"rgba": "vec4(vec3($metallic_tex($uv)), 1.0-$roughness_tex($uv))",
+						"type": "rgba"
+					},
+					{
+						"rgb": "$normal_tex($uv)*vec3(-1.0, 1.0, -1.0)+vec3(1.0, 0.0, 1.0)",
+						"type": "rgb"
+					},
+					{
+						"f": "1.0-$depth_tex($uv)",
+						"type": "f"
+					},
+					{
+						"f": "$ao_tex($uv)",
+						"type": "f"
+					},
+					{
+						"rgb": "$normal_tex($uv)*vec3(-1.0)+vec3(1.0)",
+						"type": "rgb"
+					},
+					{
+						"rgba": "vec4($metallic_tex($uv), $ao_tex($uv), 1.0, 1.0-$roughness_tex($uv))",
+						"type": "rgba"
+					},
+					{
+						"f": "$metallic_tex($uv)",
+						"type": "f"
+					},
+					{
+						"f": "$roughness_tex($uv)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": {
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"r": 1.0
+						},
+						"label": "Albedo",
+						"name": "albedo_color",
+						"type": "color"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Metallic",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "metallic",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Roughness",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "roughness",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Emission",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "emission_energy",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Normal",
+						"max": 10.0,
+						"min": 0.0,
+						"name": "normal",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Ambient occlusion",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "ao",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Depth",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "depth_scale",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": false,
+						"label": "Transparency",
+						"name": "flags_transparent",
+						"type": "boolean"
+					},
+					{
+						"control": "None",
+						"default": 0.0,
+						"label": "Subsurf. scatter.",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "sss",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": 11.0,
+						"first": 6.0,
+						"label": "Size",
+						"last": 13.0,
+						"name": "size",
+						"type": "size"
+					}
+				],
+				"preview_shader": "shader_type spatial;\nrender_mode blend_mix,cull_back,diffuse_burley,specular_schlick_ggx\n$if $(connected:opacity_tex) and $(param:flags_transparent)\n,depth_prepass_alpha\n$fi\n;\n\nuniform sampler2D texture_albedo : source_color; // $output(0)\nuniform sampler2D texture_emission : hint_default_black; // $output(2)\nuniform sampler2D texture_normal : hint_normal; // $output(3)\nuniform sampler2D texture_orm : hint_default_white; // $output(1)\nuniform sampler2D texture_subsurface_scattering : hint_default_white; // $output(5)\nuniform sampler2D texture_depth : hint_default_black; // $output(4)\nuniform int depth_min_layers = 64;\nuniform int depth_max_layers = 64;\nuniform vec2 depth_flip = vec2(1.0);\n\nuniform vec3 uv1_scale;\nuniform vec3 uv1_offset;\n\n$definitions\n\nvoid vertex() {\n\tUV=UV*uv1_scale.xy+uv1_offset.xy;\n}\n\nvoid fragment() {\n\tvec2 base_uv = UV;\n\tint texture_size = textureSize(texture_albedo, 0).x;\n\tif (texture_size < 256) {\n\t\tbase_uv = floor(float(texture_size)*base_uv+0.5)/float(texture_size);\n\t}\n$if $(connected:depth_tex)\n\t{\n$begin_generate\n\t\tfloat depth_scale = 0.2*$depth_scale;\n$end_generate\n\t\tvec3 view_dir = normalize(normalize(-VERTEX)*mat3(TANGENT*depth_flip.x,-BINORMAL*depth_flip.y,NORMAL));\n\t\tfloat num_layers = mix(float(depth_max_layers),float(depth_min_layers), abs(dot(vec3(0.0, 0.0, 1.0), view_dir)));\n\t\tfloat layer_depth = 1.0 / num_layers;\n\t\tfloat current_layer_depth = 0.0;\n\t\tvec2 P = view_dir.xy * depth_scale;\n\t\tvec2 delta = P / num_layers / dot(VIEW, NORMAL);\n\t\tvec2  ofs = base_uv;\n\t\tfloat depth = textureLod(texture_depth, ofs,0.0).r;\n\t\tfloat current_depth = 0.0;\n\t\twhile(current_depth < depth) {\n\t\t\tofs -= delta;\n\t\t\tdepth = textureLod(texture_depth, ofs,0.0).r;\n\t\t\tcurrent_depth += layer_depth;\n\t\t}\n\t\tvec2 prev_ofs = ofs + delta;\n\t\tfloat after_depth  = depth - current_depth;\n\t\tfloat before_depth = textureLod(texture_depth, prev_ofs, 0.0).r - current_depth + layer_depth;\n\t\tfloat weight = after_depth / (after_depth - before_depth);\n\t\tofs = mix(ofs,prev_ofs,weight);\n\t\tbase_uv=ofs;\n\t}\n$fi\n$begin_generate\n\tvec4 albedo_tex = texture(texture_albedo, base_uv);\n\tALBEDO = $albedo_color.rgb * mix(pow((albedo_tex + vec4(0.055))/vec4(1.055), vec4(2.4)), albedo_tex/vec4(12.92), lessThan(albedo_tex, vec4(0.04045))).rgb;\n\tvec4 orm_tex = texture(texture_orm, base_uv);\n\tMETALLIC = $metallic*orm_tex.b;\n\tROUGHNESS = $roughness*orm_tex.g;\n\tSPECULAR = 0.5;\n\tNORMAL_MAP = texture(texture_normal, base_uv).rgb;\n\tNORMAL_MAP_DEPTH = $normal;\n\tvec3 emission_tex = texture(texture_emission, base_uv).rgb;\n\tEMISSION = emission_tex*$emission_energy;\n\tAO = orm_tex.r;\n\tAO_LIGHT_AFFECT = $ao;\n$if $(connected:opacity_tex) and $(param:flags_transparent)\n\tALPHA = albedo_tex.a;\n\tALPHA_SCISSOR_THRESHOLD = 0.01;\n$fi\n$if $(connected:sss_tex)\n\tfloat sss_tex = texture(texture_subsurface_scattering, base_uv).r;\n\tSSS_STRENGTH=$sss*sss_tex;\n$fi\n$end_generate\n}\n",
+				"shortdesc": "Static PBR Material"
+			},
+			"type": "material_export"
+		},
+		{
+			"name": "perlin",
+			"node_position": {
+				"x": 14.0,
+				"y": 128.0
+			},
+			"parameters": {
+				"iterations": 10.0,
+				"persistence": 1.0,
+				"scale_x": 1.0,
+				"scale_y": 1.0
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "float perlin(vec2 uv, vec2 size, int iterations, float persistence, float seed) {\n\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));\n\tfloat rv = 0.0;\n\tfloat coef = 1.0;\n\tfloat acc = 0.0;\n\tfor (int i = 0; i < iterations; ++i) {\n\t\tvec2 step = vec2(1.0)/size;\n\t\tvec2 xy = floor(uv*size);\n\t\tfloat f0 = rand(seed2+mod(xy, size));\n\t\tfloat f1 = rand(seed2+mod(xy+vec2(1.0, 0.0), size));\n\t\tfloat f2 = rand(seed2+mod(xy+vec2(0.0, 1.0), size));\n\t\tfloat f3 = rand(seed2+mod(xy+vec2(1.0, 1.0), size));\n\t\tvec2 mixval = smoothstep(0.0, 1.0, fract(uv*size));\n\t\trv += coef * mix(mix(f0, f1, mixval.x), mix(f2, f3, mixval.x), mixval.y);\n\t\tacc += coef;\n\t\tsize *= 2.0;\n\t\tcoef *= persistence;\n\t}\n\t\n\treturn rv / acc;\n}\n",
+				"inputs": [],
+				"instance": "",
+				"longdesc": "Generates several octaves of grayscale value noise",
+				"name": "Value Noise",
+				"outputs": [
+					{
+						"f": "perlin($(uv), vec2($(scale_x), $(scale_y)), int($(iterations)), $(persistence), $(seed))",
+						"longdesc": "Shows a grayscale value noise",
+						"shortdesc": "Output",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 4.0,
+						"label": "Scale X",
+						"longdesc": "The scale along the X axis",
+						"max": 32.0,
+						"min": 1.0,
+						"name": "scale_x",
+						"shortdesc": "Scale.x",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 4.0,
+						"label": "Scale Y",
+						"longdesc": "The scale along the Y axis",
+						"max": 32.0,
+						"min": 1.0,
+						"name": "scale_y",
+						"shortdesc": "Scale.y",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 3.0,
+						"label": "Iterations",
+						"longdesc": "The number of octaves (higher values might affect performance)",
+						"max": 10.0,
+						"min": 1.0,
+						"name": "iterations",
+						"shortdesc": "Octaves",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Persistence",
+						"longdesc": "The persistence between two consecutive octaves",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "persistence",
+						"shortdesc": "Persistence",
+						"step": 0.05,
+						"type": "float"
+					}
+				],
+				"shortdesc": "Value Noise"
+			},
+			"type": "shader"
+		},
+		{
+			"name": "fbm3",
+			"node_position": {
+				"x": 7.0,
+				"y": 418.0
+			},
+			"parameters": {
+				"folds": 2.0,
+				"iterations": 6.0,
+				"noise": 9.0,
+				"offset": 0.0,
+				"persistence": 0.84,
+				"scale_x": 100.0,
+				"scale_y": 100.0
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "float value_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat p00 = rand(mod(o, size));\n\tfloat p01 = rand(mod(o + vec2(0.0, 1.0), size));\n\tfloat p10 = rand(mod(o + vec2(1.0, 0.0), size));\n\tfloat p11 = rand(mod(o + vec2(1.0, 1.0), size));\n\tp00 = sin(p00 * 6.28318530718 + offset * 6.28318530718) / 2.0 + 0.5;\n\tp01 = sin(p01 * 6.28318530718 + offset * 6.28318530718) / 2.0 + 0.5;\n\tp10 = sin(p10 * 6.28318530718 + offset * 6.28318530718) / 2.0 + 0.5;\n\tp11 = sin(p11 * 6.28318530718 + offset * 6.28318530718) / 2.0 + 0.5;\n\tvec2 t =  f * f * f * (f * (f * 6.0 - 15.0) + 10.0);\n\treturn mix(mix(p00, p10, t.x), mix(p01, p11, t.x), t.y);\n}\n\nfloat fbm_2d_value(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = value_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat perlin_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat a00 = rand(mod(o, size)) * 6.28318530718 + offset * 6.28318530718;\n\tfloat a01 = rand(mod(o + vec2(0.0, 1.0), size)) * 6.28318530718 + offset * 6.28318530718;\n\tfloat a10 = rand(mod(o + vec2(1.0, 0.0), size)) * 6.28318530718 + offset * 6.28318530718;\n\tfloat a11 = rand(mod(o + vec2(1.0, 1.0), size)) * 6.28318530718 + offset * 6.28318530718;\n\tvec2 v00 = vec2(cos(a00), sin(a00));\n\tvec2 v01 = vec2(cos(a01), sin(a01));\n\tvec2 v10 = vec2(cos(a10), sin(a10));\n\tvec2 v11 = vec2(cos(a11), sin(a11));\n\tfloat p00 = dot(v00, f);\n\tfloat p01 = dot(v01, f - vec2(0.0, 1.0));\n\tfloat p10 = dot(v10, f - vec2(1.0, 0.0));\n\tfloat p11 = dot(v11, f - vec2(1.0, 1.0));\n\tvec2 t =  f * f * f * (f * (f * 6.0 - 15.0) + 10.0);\n\treturn 0.5 + mix(mix(p00, p10, t.x), mix(p01, p11, t.x), t.y);\n}\n\nfloat fbm_2d_perlin(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = perlin_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat perlinabs_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\treturn abs(2.0*perlin_noise_2d(coord, size, offset, seed)-1.0);\n}\n\nfloat fbm_2d_perlinabs(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = perlinabs_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat fbm_2d_mod289(float x) {\n\treturn x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nfloat fbm_2d_permute(float x) {\n\treturn fbm_2d_mod289(((x * 34.0) + 1.0) * x);\n}\n\nvec2 fbm_2d_rgrad2(vec2 p, float rot, float seed) {\n\tfloat u = fbm_2d_permute(fbm_2d_permute(p.x) + p.y) * 0.0243902439 + rot; // Rotate by shift\n\tu = fract(u+seed) * 6.28318530718; // 2*pi\n\treturn vec2(cos(u), sin(u));\n}\n\nfloat simplex_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tcoord *= 2.0; // needed for it to tile\n\tcoord += rand2(vec2(seed, 1.0-seed)) + size;\n\tsize *= 2.0; // needed for it to tile\n\tcoord.y += 0.001;\n\tvec2 uv = vec2(coord.x + coord.y*0.5, coord.y);\n\tvec2 i0 = floor(uv);\n\tvec2 f0 = fract(uv);\n\tvec2 i1 = (f0.x > f0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);\n\tvec2 p0 = vec2(i0.x - i0.y * 0.5, i0.y);\n\tvec2 p1 = vec2(p0.x + i1.x - i1.y * 0.5, p0.y + i1.y);\n\tvec2 p2 = vec2(p0.x + 0.5, p0.y + 1.0);\n\ti1 = i0 + i1;\n\tvec2 i2 = i0 + vec2(1.0, 1.0);\n\tvec2 d0 = coord - p0;\n\tvec2 d1 = coord - p1;\n\tvec2 d2 = coord - p2;\n\tvec3 xw = mod(vec3(p0.x, p1.x, p2.x), size.x);\n\tvec3 yw = mod(vec3(p0.y, p1.y, p2.y), size.y);\n\tvec3 iuw = xw + 0.5 * yw;\n\tvec3 ivw = yw;\n\tvec2 g0 = fbm_2d_rgrad2(vec2(iuw.x, ivw.x), offset, seed);\n\tvec2 g1 = fbm_2d_rgrad2(vec2(iuw.y, ivw.y), offset, seed);\n\tvec2 g2 = fbm_2d_rgrad2(vec2(iuw.z, ivw.z), offset, seed);\n\tvec3 w = vec3(dot(g0, d0), dot(g1, d1), dot(g2, d2));\n\tvec3 t = 0.8 - vec3(dot(d0, d0), dot(d1, d1), dot(d2, d2));\n\tt = max(t, vec3(0.0));\n\tvec3 t2 = t * t;\n\tvec3 t4 = t2 * t2;\n\tfloat n = dot(t4, w);\n\treturn 0.5 + 5.5 * n;\n}\n\nfloat fbm_2d_simplex(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = simplex_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat cellular_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 neighbor = vec2(float(x),float(y));\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tnode =  0.5 + 0.25 * sin(offset * 6.28318530718 + 6.28318530718 * node);\n\t\t\tvec2 diff = neighbor + node - f;\n\t\t\tfloat dist = length(diff);\n\t\t\tmin_dist = min(min_dist, dist);\n\t\t}\n\t}\n\treturn min_dist;\n}\n\nfloat fbm_2d_cellular(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = cellular_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat cellular2_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist1 = 2.0;\n\tfloat min_dist2 = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 neighbor = vec2(float(x),float(y));\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tnode = 0.5 + 0.25 * sin(offset * 6.28318530718 + 6.28318530718*node);\n\t\t\tvec2 diff = neighbor + node - f;\n\t\t\tfloat dist = length(diff);\n\t\t\tif (min_dist1 > dist) {\n\t\t\t\tmin_dist2 = min_dist1;\n\t\t\t\tmin_dist1 = dist;\n\t\t\t} else if (min_dist2 > dist) {\n\t\t\t\tmin_dist2 = dist;\n\t\t\t}\n\t\t}\n\t}\n\treturn min_dist2-min_dist1;\n}\n\nfloat fbm_2d_cellular2(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = cellular2_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat cellular3_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 neighbor = vec2(float(x),float(y));\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tnode = 0.5 + 0.25 * sin(offset * 6.28318530718 + 6.28318530718*node);\n\t\t\tvec2 diff = neighbor + node - f;\n\t\t\tfloat dist = abs((diff).x) + abs((diff).y);\n\t\t\tmin_dist = min(min_dist, dist);\n\t\t}\n\t}\n\treturn min_dist;\n}\n\nfloat fbm_2d_cellular3(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = cellular3_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat cellular4_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist1 = 2.0;\n\tfloat min_dist2 = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 neighbor = vec2(float(x),float(y));\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tnode = 0.5 + 0.25 * sin(offset * 6.28318530718 + 6.28318530718*node);\n\t\t\tvec2 diff = neighbor + node - f;\n\t\t\tfloat dist = abs((diff).x) + abs((diff).y);\n\t\t\tif (min_dist1 > dist) {\n\t\t\t\tmin_dist2 = min_dist1;\n\t\t\t\tmin_dist1 = dist;\n\t\t\t} else if (min_dist2 > dist) {\n\t\t\t\tmin_dist2 = dist;\n\t\t\t}\n\t\t}\n\t}\n\treturn min_dist2-min_dist1;\n}\n\nfloat fbm_2d_cellular4(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = cellular4_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat cellular5_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 neighbor = vec2(float(x),float(y));\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tnode = 0.5 + 0.5 * sin(offset * 6.28318530718 + 6.28318530718*node);\n\t\t\tvec2 diff = neighbor + node - f;\n\t\t\tfloat dist = max(abs((diff).x), abs((diff).y));\n\t\t\tmin_dist = min(min_dist, dist);\n\t\t}\n\t}\n\treturn min_dist;\n}\n\nfloat fbm_2d_cellular5(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = cellular5_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat cellular6_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist1 = 2.0;\n\tfloat min_dist2 = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 neighbor = vec2(float(x),float(y));\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tnode = 0.5 + 0.25 * sin(offset * 6.28318530718 + 6.28318530718*node);\n\t\t\tvec2 diff = neighbor + node - f;\n\t\t\tfloat dist = max(abs((diff).x), abs((diff).y));\n\t\t\tif (min_dist1 > dist) {\n\t\t\t\tmin_dist2 = min_dist1;\n\t\t\t\tmin_dist1 = dist;\n\t\t\t} else if (min_dist2 > dist) {\n\t\t\t\tmin_dist2 = dist;\n\t\t\t}\n\t\t}\n\t}\n\treturn min_dist2-min_dist1;\n}\n\nfloat fbm_2d_cellular6(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = cellular6_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\n// MIT License Inigo Quilez - https://www.shadertoy.com/view/Xd23Dh\nfloat voronoise_noise_2d( vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 i = floor(coord) + rand2(vec2(seed, 1.0-seed)) + size;\n\tvec2 f = fract(coord);\n\t\n\tvec2 a = vec2(0.0);\n\t\n\tfor( int y=-2; y<=2; y++ ) {\n\t\tfor( int x=-2; x<=2; x++ ) {\n\t\t\tvec2  g = vec2( float(x), float(y) );\n\t\t\tvec3  o = rand3( mod(i + g, size) + vec2(seed) );\n\t\t\to.xy += 0.25 * sin(offset * 6.28318530718 + 6.28318530718*o.xy);\n\t\t\tvec2  d = g - f + o.xy;\n\t\t\tfloat w = pow( 1.0-smoothstep(0.0, 1.414, length(d)), 1.0 );\n\t\t\ta += vec2(o.z*w,w);\n\t\t}\n\t}\n\t\n\treturn a.x/a.y;\n}\n\nfloat fbm_2d_voronoise(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = voronoise_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n",
+				"inputs": [
+					{
+						"default": "$offset",
+						"label": "7:",
+						"longdesc": "An optional input to drive the offset",
+						"name": "offset_in",
+						"shortdesc": "Offset Input",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"longdesc": "Generates a noise made of several octaves of a simple noise",
+				"name": "FBM Noise",
+				"outputs": [
+					{
+						"f": "fbm_2d_$noise($(uv), vec2($(scale_x), $(scale_y)), int($(folds)), int($(iterations)), $(persistence), $offset_in($uv), $(seed))",
+						"longdesc": "Shows a grayscale image of the generated noise",
+						"shortdesc": "Output",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 2.0,
+						"label": "Noise",
+						"longdesc": "The simple noise type",
+						"name": "noise",
+						"shortdesc": "Noise type",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Value",
+								"value": "value"
+							},
+							{
+								"name": "Perlin",
+								"value": "perlin"
+							},
+							{
+								"name": "Simplex",
+								"value": "simplex"
+							},
+							{
+								"name": "Cellular",
+								"value": "cellular"
+							},
+							{
+								"name": "Cellular 2",
+								"value": "cellular2"
+							},
+							{
+								"name": "Cellular 3",
+								"value": "cellular3"
+							},
+							{
+								"name": "Cellular 4",
+								"value": "cellular4"
+							},
+							{
+								"name": "Cellular 5",
+								"value": "cellular5"
+							},
+							{
+								"name": "Cellular 6",
+								"value": "cellular6"
+							},
+							{
+								"name": "Voronoise",
+								"value": "voronoise"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 4.0,
+						"label": "Scale X",
+						"longdesc": "The scale of the first octave along the X axis",
+						"max": 32.0,
+						"min": 1.0,
+						"name": "scale_x",
+						"shortdesc": "Scale.x",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 4.0,
+						"label": "Scale Y",
+						"longdesc": "The scale of the first octave along the Y axis",
+						"max": 32.0,
+						"min": 1.0,
+						"name": "scale_y",
+						"shortdesc": "Scale.y",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.0,
+						"label": "Folds",
+						"longdesc": "The number of times the basic noise is folded",
+						"max": 5.0,
+						"min": 0.0,
+						"name": "folds",
+						"shortdesc": "Folds",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 3.0,
+						"label": "Iterations",
+						"longdesc": "The number of noise octaves",
+						"max": 10.0,
+						"min": 1.0,
+						"name": "iterations",
+						"shortdesc": "Octaves",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Persistence",
+						"longdesc": "The persistence between two consecutive octaves",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "persistence",
+						"shortdesc": "Persistence",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.0,
+						"label": "Offset",
+						"longdesc": "Offsets the points of the noise, can be used to animate the noise with \"$time\"",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "offset",
+						"shortdesc": "Offset",
+						"step": 0.01,
+						"type": "float"
+					}
+				],
+				"shortdesc": "Fractional Brownian Motion Noise"
+			},
+			"type": "shader"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": 320.675079345703,
+				"y": 344.801391601562
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 0.0448393821716309,
+							"g": 0.234375,
+							"pos": 0.0,
+							"r": 0.0128173828125
+						},
+						{
+							"a": 1.0,
+							"b": 0.367702633142471,
+							"g": 0.669921875,
+							"pos": 0.798676568108636,
+							"r": 0.192340850830078
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "$uv.x",
+						"label": "",
+						"longdesc": "The input grayscale image",
+						"name": "input",
+						"shortdesc": "Input",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"longdesc": "Remaps a grayscale image to a custom gradient",
+				"name": "Colorize",
+				"outputs": [
+					{
+						"longdesc": "The remapped RGBA image",
+						"rgba": "$gradient($input($uv))",
+						"shortdesc": "Output",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"default": {
+							"interpolation": 1.0,
+							"points": [
+								{
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
+									"pos": 0.0,
+									"r": 0.0
+								},
+								{
+									"a": 1.0,
+									"b": 1.0,
+									"g": 1.0,
+									"pos": 1.0,
+									"r": 1.0
+								}
+							],
+							"type": "Gradient"
+						},
+						"label": "",
+						"longdesc": "The gradient to which the input is remapped",
+						"name": "gradient",
+						"shortdesc": "Gradient",
+						"type": "gradient"
+					}
+				],
+				"shortdesc": "Colorize"
+			},
+			"type": "shader"
+		},
+		{
+			"name": "pattern",
+			"node_position": {
+				"x": -6.25858736038208,
+				"y": 985.532775878906
+			},
+			"parameters": {
+				"mix": 1.0,
+				"x_scale": 3.0,
+				"x_wave": 0.0,
+				"y_scale": 3.0,
+				"y_wave": 3.0
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "float wave_constant(float x) {\n\treturn 1.0;\n}\n\nfloat wave_sine(float x) {\n\treturn 0.5-0.5*cos(3.14159265359*2.0*x);\n}\n\nfloat wave_triangle(float x) {\n\tx = fract(x);\n\treturn min(2.0*x, 2.0-2.0*x);\n}\n\nfloat wave_sawtooth(float x) {\n\treturn fract(x);\n}\n\nfloat wave_square(float x) {\n\treturn (fract(x) < 0.5) ? 0.0 : 1.0;\n}\n\nfloat wave_bounce(float x) {\n\tx = 2.0*(fract(x)-0.5);\n\treturn sqrt(1.0-x*x);\n}\n\nfloat mix_mul(float x, float y) {\n\treturn x*y;\n}\n\nfloat mix_add(float x, float y) {\n\treturn min(x+y, 1.0);\n}\n\nfloat mix_max(float x, float y) {\n\treturn max(x, y);\n}\n\nfloat mix_min(float x, float y) {\n\treturn min(x, y);\n}\n\nfloat mix_xor(float x, float y) {\n\treturn min(x+y, 2.0-x-y);\n}\n\nfloat mix_pow(float x, float y) {\n\treturn pow(x, y);\n}",
+				"inputs": [],
+				"instance": "",
+				"longdesc": "Generates pattern from common waveform shapes",
+				"name": "Pattern",
+				"outputs": [
+					{
+						"f": "mix_$(mix)(wave_$(x_wave)($(x_scale)*$uv.x), wave_$(y_wave)($(y_scale)*$uv.y))",
+						"longdesc": "A grayscale image that combines the horizontal and vertical patterns",
+						"shortdesc": "Output",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 0.0,
+						"label": "Combiner",
+						"longdesc": "The operation used to combine the horizontal and the vertical patterns",
+						"name": "mix",
+						"shortdesc": "Combine",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Multiply",
+								"value": "mul"
+							},
+							{
+								"name": "Add",
+								"value": "add"
+							},
+							{
+								"name": "Max",
+								"value": "max"
+							},
+							{
+								"name": "Min",
+								"value": "min"
+							},
+							{
+								"name": "Xor",
+								"value": "xor"
+							},
+							{
+								"name": "Pow",
+								"value": "pow"
+							}
+						]
+					},
+					{
+						"default": 5.0,
+						"label": "X",
+						"longdesc": "Pattern generated along the X axis",
+						"name": "x_wave",
+						"shortdesc": "X Pattern",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Sine",
+								"value": "sine"
+							},
+							{
+								"name": "Triangle",
+								"value": "triangle"
+							},
+							{
+								"name": "Square",
+								"value": "square"
+							},
+							{
+								"name": "Sawtooth",
+								"value": "sawtooth"
+							},
+							{
+								"name": "Constant",
+								"value": "constant"
+							},
+							{
+								"name": "Bounce",
+								"value": "bounce"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 4.0,
+						"label": "2:",
+						"longdesc": "Repetitions of the pattern along X axis",
+						"max": 32.0,
+						"min": 0.0,
+						"name": "x_scale",
+						"shortdesc": "X Repeat",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"default": 5.0,
+						"label": "Y",
+						"longdesc": "Pattern generated along the Y axis",
+						"name": "y_wave",
+						"shortdesc": "Y Pattern",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Sine",
+								"value": "sine"
+							},
+							{
+								"name": "Triangle",
+								"value": "triangle"
+							},
+							{
+								"name": "Square",
+								"value": "square"
+							},
+							{
+								"name": "Sawtooth",
+								"value": "sawtooth"
+							},
+							{
+								"name": "Constant",
+								"value": "constant"
+							},
+							{
+								"name": "Bounce",
+								"value": "bounce"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 4.0,
+						"label": "3:",
+						"longdesc": "Repetitions of the pattern along Y axis",
+						"max": 32.0,
+						"min": 0.0,
+						"name": "y_scale",
+						"shortdesc": "Y Repeat",
+						"step": 1.0,
+						"type": "float"
+					}
+				],
+				"shortdesc": "Pattern"
+			},
+			"type": "shader"
+		},
+		{
+			"connections": [
+				{
+					"from": "edge_detect_1",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "switch",
+					"from_port": 0,
+					"to": "edge_detect_1",
+					"to_port": 0
+				},
+				{
+					"from": "buffer_2",
+					"from_port": 0,
+					"to": "switch",
+					"to_port": 1
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "ensure_greyscale",
+					"to_port": 0
+				},
+				{
+					"from": "ensure_greyscale",
+					"from_port": 0,
+					"to": "buffer_2",
+					"to_port": 0
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "switch",
+					"to_port": 0
+				}
+			],
+			"label": "Normal Map",
+			"longdesc": "Generates a normal map from a height map",
+			"name": "normal_map2",
+			"node_position": {
+				"x": 1350.52221679688,
+				"y": 909.777893066406
+			},
+			"nodes": [
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -802.91015625,
+						"y": -293.916687011719
+					},
+					"parameters": {
+						"buffer": 1.0,
+						"param2": 0.0,
+						"size": 9,
+						"strength": 0.34
+					},
+					"seed": 56582.0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "",
+							"linked_widgets": [
+								{
+									"node": "edge_detect_1",
+									"widget": "algo"
+								}
+							],
+							"longdesc": "The algorithm used to generate the normal map",
+							"name": "param2",
+							"shortdesc": "Algorithm",
+							"type": "linked_control"
+						},
+						{
+							"label": "",
+							"linked_widgets": [
+								{
+									"node": "edge_detect_1",
+									"widget": "size"
+								},
+								{
+									"node": "buffer_2",
+									"widget": "size"
+								}
+							],
+							"longdesc": "The resolution of the generated normal map",
+							"name": "size",
+							"shortdesc": "Resolution",
+							"type": "linked_control"
+						},
+						{
+							"label": "",
+							"linked_widgets": [
+								{
+									"node": "edge_detect_1",
+									"widget": "amount"
+								}
+							],
+							"longdesc": "The strength of the normal map filter",
+							"name": "strength",
+							"shortdesc": "Strength",
+							"type": "linked_control"
+						},
+						{
+							"configurations": {
+								"False": [
+									{
+										"node": "switch",
+										"value": 0.0,
+										"widget": "source"
+									}
+								],
+								"True": [
+									{
+										"node": "switch",
+										"value": 1.0,
+										"widget": "source"
+									}
+								]
+							},
+							"label": "Buffer",
+							"linked_widgets": [
+								{
+									"node": "switch",
+									"widget": "source"
+								}
+							],
+							"longdesc": "When set, a buffer is used to sample the input before the normal map filter",
+							"name": "buffer",
+							"shortdesc": "Buffer",
+							"type": "config_control"
+						}
+					]
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": -458.663818359375,
+						"y": 73.04736328125
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0.0,
+							"longdesc": "Shows the generated normal map",
+							"name": "Normal",
+							"shortdesc": "Output",
+							"type": "rgb"
+						}
+					],
+					"seed": -6314.0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1147.91015625,
+						"y": 77.9473648071289
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0.0,
+							"longdesc": "The input height map",
+							"name": "Bump",
+							"shortdesc": "Input",
+							"type": "f"
+						}
+					],
+					"seed": 12483.0,
+					"seed_locked": true,
+					"type": "ios"
+				},
+				{
+					"name": "switch",
+					"node_position": {
+						"x": -683.5,
+						"y": 141.29736328125
+					},
+					"parameters": {
+						"choices": 2.0,
+						"outputs": 1.0,
+						"source": 1.0
+					},
+					"seed": -53264.0,
+					"type": "switch"
+				},
+				{
+					"name": "edge_detect_1",
+					"node_position": {
+						"x": -691.092529296875,
+						"y": 239.868774414062
+					},
+					"parameters": {
+						"algo": 0.0,
+						"amount": 0.34,
+						"size": 9
+					},
+					"seed": -11547.0,
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "0.0",
+								"function": true,
+								"label": "",
+								"name": "in",
+								"type": "f"
+							}
+						],
+						"instance": "vec3 nm_$name(vec2 uv, float amount, float size) {\n\tvec3 e = vec3(1.0/size, -1.0/size, 0);\n\tvec2 rv;\n\tif ($algo == 0) {\n\t\trv = vec2(1.0, -1.0)*$in(uv+e.xy);\n\t\trv += vec2(-1.0, 1.0)*$in(uv-e.xy);\n\t\trv += vec2(1.0, 1.0)*$in(uv+e.xx);\n\t\trv += vec2(-1.0, -1.0)*$in(uv-e.xx);\n\t\trv += vec2(2.0, 0.0)*$in(uv+e.xz);\n\t\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);\n\t\trv += vec2(0.0, 2.0)*$in(uv+e.zx);\n\t\trv += vec2(0.0, -2.0)*$in(uv-e.zx);\n\t\trv *= size*amount/128.0;\n\t} else if ($algo == 1) {\n\t\trv = vec2(3.0, -3.0)*$in(uv+e.xy);\n\t\trv += vec2(-3.0, 3.0)*$in(uv-e.xy);\n\t\trv += vec2(3.0, 3.0)*$in(uv+e.xx);\n\t\trv += vec2(-3.0, -3.0)*$in(uv-e.xx);\n\t\trv += vec2(10.0, 0.0)*$in(uv+e.xz);\n\t\trv += vec2(-10.0, 0.0)*$in(uv-e.xz);\n\t\trv += vec2(0.0, 10.0)*$in(uv+e.zx);\n\t\trv += vec2(0.0, -10.0)*$in(uv-e.zx);\n\t\trv *= size*amount/512.0;\n\t} else if ($algo == 2) {\n\t\trv = vec2(2.0, 0.0)*$in(uv+e.xz);\n\t\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);\n\t\trv += vec2(0.0, 2.0)*$in(uv+e.zx);\n\t\trv += vec2(0.0, -2.0)*$in(uv-e.zx);\n\t\trv *= size*amount/64.0;\n\t} else {\n\t\trv = vec2(1.0, 0.0)*$in(uv+e.xz);\n\t\trv += vec2(0.0, 1.0)*$in(uv+e.zx);\n\t\trv += vec2(-1.0, -1.0)*$in(uv);\n\t\trv *= size*amount/20.0;\n\t}\n\treturn vec3(0.5)+0.5*normalize(vec3(rv, -1.0));\n}\n",
+						"name": "Normal map",
+						"outputs": [
+							{
+								"rgb": "nm_$name($uv, $amount, $size)",
+								"type": "rgb"
+							}
+						],
+						"parameters": [
+							{
+								"default": 3.0,
+								"label": "",
+								"name": "algo",
+								"type": "enum",
+								"values": [
+									{
+										"name": "Sobel",
+										"value": "0"
+									},
+									{
+										"name": "Scharr",
+										"value": "1"
+									},
+									{
+										"name": "Simple",
+										"value": "2"
+									},
+									{
+										"name": "Cheap",
+										"value": "3"
+									}
+								]
+							},
+							{
+								"default": 9.0,
+								"first": 4.0,
+								"label": "",
+								"last": 12.0,
+								"name": "size",
+								"type": "size"
+							},
+							{
+								"control": "None",
+								"default": 0.5,
+								"label": "",
+								"max": 2.0,
+								"min": 0.0,
+								"name": "amount",
+								"step": 0.01,
+								"type": "float"
+							}
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "buffer_2",
+					"node_position": {
+						"x": -702.5,
+						"y": -27.0291137695312
+					},
+					"parameters": {
+						"f32": true,
+						"filter": true,
+						"mipmap": false,
+						"size": 9
+					},
+					"seed_int": 0,
+					"type": "buffer",
+					"version": 2
+				},
+				{
+					"name": "ensure_greyscale",
+					"node_position": {
+						"x": -703.5,
+						"y": -84.9617156982422
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"type": "ensure_greyscale"
+				}
+			],
+			"parameters": {
+				"buffer": 1.0,
+				"param2": 0.0,
+				"size": 9,
+				"strength": 0.34
+			},
+			"seed_int": 0,
+			"shortdesc": "Normal map",
+			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "switch",
+					"from_port": 0,
+					"to": "switch_2",
+					"to_port": 1
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "switch",
+					"to_port": 1
+				},
+				{
+					"from": "gaussian_blur_x",
+					"from_port": 0,
+					"to": "switch",
+					"to_port": 0
+				},
+				{
+					"from": "gaussian_blur_y",
+					"from_port": 0,
+					"to": "switch_2",
+					"to_port": 0
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 1,
+					"to": "gaussian_blur_x",
+					"to_port": 1
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 1,
+					"to": "gaussian_blur_y",
+					"to_port": 1
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "buffer_4",
+					"to_port": 0
+				},
+				{
+					"from": "buffer_4",
+					"from_port": 0,
+					"to": "gaussian_blur_x",
+					"to_port": 0
+				},
+				{
+					"from": "switch",
+					"from_port": 0,
+					"to": "buffer_5",
+					"to_port": 0
+				},
+				{
+					"from": "buffer_5",
+					"from_port": 0,
+					"to": "gaussian_blur_y",
+					"to_port": 0
+				},
+				{
+					"from": "switch_2",
+					"from_port": 0,
+					"to": "buffer_2",
+					"to_port": 0
+				},
+				{
+					"from": "buffer_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				}
+			],
+			"label": "Gaussian Blur",
+			"longdesc": "Applies a gaussian blur on its input",
+			"name": "gaussian_blur",
+			"node_position": {
+				"x": 638.531188964844,
+				"y": 566.200927734375
+			},
+			"nodes": [
+				{
+					"name": "switch",
+					"node_position": {
+						"x": -365.452392578125,
+						"y": -238.166656494141
+					},
+					"parameters": {
+						"choices": 2.0,
+						"outputs": 1.0,
+						"source": 0.0
+					},
+					"seed": 19598.0,
+					"type": "switch"
+				},
+				{
+					"name": "switch_2",
+					"node_position": {
+						"x": -148.452392578125,
+						"y": -159.666656494141
+					},
+					"parameters": {
+						"choices": 2.0,
+						"outputs": 1.0,
+						"source": 0.0
+					},
+					"seed": 11659.0,
+					"type": "switch"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -519.666625976562,
+						"y": -694.666625976562
+					},
+					"parameters": {
+						"param0": 10.0,
+						"param1": 0.0,
+						"param2": 0.0,
+						"param3": false
+					},
+					"seed": 24559.0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Grid size:",
+							"linked_widgets": [
+								{
+									"node": "gaussian_blur_x",
+									"widget": "size"
+								},
+								{
+									"node": "gaussian_blur_y",
+									"widget": "size"
+								},
+								{
+									"node": "buffer_4",
+									"widget": "size"
+								},
+								{
+									"node": "buffer_5",
+									"widget": "size"
+								},
+								{
+									"node": "buffer_2",
+									"widget": "size"
+								}
+							],
+							"longdesc": "The resolution of the input image",
+							"name": "param0",
+							"shortdesc": "Size",
+							"type": "linked_control"
+						},
+						{
+							"label": "Sigma:",
+							"linked_widgets": [
+								{
+									"node": "gaussian_blur_x",
+									"widget": "sigma"
+								},
+								{
+									"node": "gaussian_blur_y",
+									"widget": "sigma"
+								}
+							],
+							"longdesc": "The strength of the blur filter",
+							"name": "param1",
+							"shortdesc": "Sigma",
+							"type": "linked_control"
+						},
+						{
+							"configurations": {
+								"Both": [
+									{
+										"node": "switch",
+										"value": 0.0,
+										"widget": "source"
+									},
+									{
+										"node": "switch_2",
+										"value": 0.0,
+										"widget": "source"
+									}
+								],
+								"X": [
+									{
+										"node": "switch",
+										"value": 0.0,
+										"widget": "source"
+									},
+									{
+										"node": "switch_2",
+										"value": 1.0,
+										"widget": "source"
+									}
+								],
+								"Y": [
+									{
+										"node": "switch",
+										"value": 1.0,
+										"widget": "source"
+									},
+									{
+										"node": "switch_2",
+										"value": 0.0,
+										"widget": "source"
+									}
+								]
+							},
+							"label": "Direction:",
+							"linked_widgets": [
+								{
+									"node": "switch",
+									"widget": "source"
+								},
+								{
+									"node": "switch_2",
+									"widget": "source"
+								}
+							],
+							"longdesc": "Apply the blur filter horizontally, vertically of in both directions",
+							"name": "param2",
+							"shortdesc": "Direction",
+							"type": "config_control"
+						},
+						{
+							"label": "32 bits",
+							"linked_widgets": [
+								{
+									"node": "buffer_4",
+									"widget": "f32"
+								},
+								{
+									"node": "buffer_5",
+									"widget": "f32"
+								},
+								{
+									"node": "buffer_2",
+									"widget": "f32"
+								}
+							],
+							"name": "param3",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -928.666625976562,
+						"y": -188.392852783203
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0.0,
+							"longdesc": "The input image",
+							"name": "input",
+							"shortdesc": "Input",
+							"type": "rgba"
+						},
+						{
+							"group_size": 0.0,
+							"longdesc": "A map that controls the strength of the blur filter",
+							"name": "amount",
+							"shortdesc": "Strength map",
+							"type": "f"
+						}
+					],
+					"seed": 53476.0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 304.547607421875,
+						"y": -137.392852783203
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0.0,
+							"longdesc": "Shows the generated blurred image",
+							"name": "port0",
+							"shortdesc": "Output",
+							"type": "rgba"
+						}
+					],
+					"seed": 77778.0,
+					"seed_locked": true,
+					"type": "ios"
+				},
+				{
+					"name": "gaussian_blur_x",
+					"node_position": {
+						"x": -385.993408203125,
+						"y": -334.28173828125
+					},
+					"parameters": {
+						"sigma": 0.0,
+						"size": 10.0
+					},
+					"seed": 5439.0,
+					"type": "gaussian_blur_x"
+				},
+				{
+					"name": "gaussian_blur_y",
+					"node_position": {
+						"x": -384.993408203125,
+						"y": 10.71826171875
+					},
+					"parameters": {
+						"sigma": 0.0,
+						"size": 10.0
+					},
+					"seed": 12279.0,
+					"seed_locked": true,
+					"type": "gaussian_blur_y"
+				},
+				{
+					"name": "buffer_4",
+					"node_position": {
+						"x": -385.804931640625,
+						"y": -484.769348144531
+					},
+					"parameters": {
+						"f32": false,
+						"filter": false,
+						"mipmap": false,
+						"size": 10.0
+					},
+					"seed_int": 0,
+					"type": "buffer",
+					"version": 2
+				},
+				{
+					"name": "buffer_5",
+					"node_position": {
+						"x": -388.304931640625,
+						"y": -151.269348144531
+					},
+					"parameters": {
+						"f32": false,
+						"filter": false,
+						"mipmap": false,
+						"size": 10.0
+					},
+					"seed_int": 0,
+					"type": "buffer",
+					"version": 2
+				},
+				{
+					"name": "buffer_2",
+					"node_position": {
+						"x": 50.695068359375,
+						"y": -162.269348144531
+					},
+					"parameters": {
+						"f32": false,
+						"filter": false,
+						"mipmap": false,
+						"size": 10.0
+					},
+					"seed_int": 0,
+					"type": "buffer",
+					"version": 2
+				}
+			],
+			"parameters": {
+				"param0": 10.0,
+				"param1": 0.0,
+				"param2": 0.0,
+				"param3": false
+			},
+			"seed_int": 0,
+			"shortdesc": "Gaussian blur",
+			"type": "graph"
+		},
+		{
+			"name": "fbm3_3",
+			"node_position": {
+				"x": 678.094909667969,
+				"y": 837.25244140625
+			},
+			"parameters": {
+				"folds": 0.0,
+				"iterations": 13.0,
+				"noise": 1.0,
+				"offset": 0.07,
+				"persistence": 0.98,
+				"scale_x": 72.0,
+				"scale_y": 73.0
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "float value_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat p00 = rand(mod(o, size));\n\tfloat p01 = rand(mod(o + vec2(0.0, 1.0), size));\n\tfloat p10 = rand(mod(o + vec2(1.0, 0.0), size));\n\tfloat p11 = rand(mod(o + vec2(1.0, 1.0), size));\n\tp00 = sin(p00 * 6.28318530718 + offset * 6.28318530718) / 2.0 + 0.5;\n\tp01 = sin(p01 * 6.28318530718 + offset * 6.28318530718) / 2.0 + 0.5;\n\tp10 = sin(p10 * 6.28318530718 + offset * 6.28318530718) / 2.0 + 0.5;\n\tp11 = sin(p11 * 6.28318530718 + offset * 6.28318530718) / 2.0 + 0.5;\n\tvec2 t =  f * f * f * (f * (f * 6.0 - 15.0) + 10.0);\n\treturn mix(mix(p00, p10, t.x), mix(p01, p11, t.x), t.y);\n}\n\nfloat fbm_2d_value(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = value_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat perlin_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat a00 = rand(mod(o, size)) * 6.28318530718 + offset * 6.28318530718;\n\tfloat a01 = rand(mod(o + vec2(0.0, 1.0), size)) * 6.28318530718 + offset * 6.28318530718;\n\tfloat a10 = rand(mod(o + vec2(1.0, 0.0), size)) * 6.28318530718 + offset * 6.28318530718;\n\tfloat a11 = rand(mod(o + vec2(1.0, 1.0), size)) * 6.28318530718 + offset * 6.28318530718;\n\tvec2 v00 = vec2(cos(a00), sin(a00));\n\tvec2 v01 = vec2(cos(a01), sin(a01));\n\tvec2 v10 = vec2(cos(a10), sin(a10));\n\tvec2 v11 = vec2(cos(a11), sin(a11));\n\tfloat p00 = dot(v00, f);\n\tfloat p01 = dot(v01, f - vec2(0.0, 1.0));\n\tfloat p10 = dot(v10, f - vec2(1.0, 0.0));\n\tfloat p11 = dot(v11, f - vec2(1.0, 1.0));\n\tvec2 t =  f * f * f * (f * (f * 6.0 - 15.0) + 10.0);\n\treturn 0.5 + mix(mix(p00, p10, t.x), mix(p01, p11, t.x), t.y);\n}\n\nfloat fbm_2d_perlin(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = perlin_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat perlinabs_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\treturn abs(2.0*perlin_noise_2d(coord, size, offset, seed)-1.0);\n}\n\nfloat fbm_2d_perlinabs(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = perlinabs_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat fbm_2d_mod289(float x) {\n\treturn x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nfloat fbm_2d_permute(float x) {\n\treturn fbm_2d_mod289(((x * 34.0) + 1.0) * x);\n}\n\nvec2 fbm_2d_rgrad2(vec2 p, float rot, float seed) {\n\tfloat u = fbm_2d_permute(fbm_2d_permute(p.x) + p.y) * 0.0243902439 + rot; // Rotate by shift\n\tu = fract(u+seed) * 6.28318530718; // 2*pi\n\treturn vec2(cos(u), sin(u));\n}\n\nfloat simplex_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tcoord *= 2.0; // needed for it to tile\n\tcoord += rand2(vec2(seed, 1.0-seed)) + size;\n\tsize *= 2.0; // needed for it to tile\n\tcoord.y += 0.001;\n\tvec2 uv = vec2(coord.x + coord.y*0.5, coord.y);\n\tvec2 i0 = floor(uv);\n\tvec2 f0 = fract(uv);\n\tvec2 i1 = (f0.x > f0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);\n\tvec2 p0 = vec2(i0.x - i0.y * 0.5, i0.y);\n\tvec2 p1 = vec2(p0.x + i1.x - i1.y * 0.5, p0.y + i1.y);\n\tvec2 p2 = vec2(p0.x + 0.5, p0.y + 1.0);\n\ti1 = i0 + i1;\n\tvec2 i2 = i0 + vec2(1.0, 1.0);\n\tvec2 d0 = coord - p0;\n\tvec2 d1 = coord - p1;\n\tvec2 d2 = coord - p2;\n\tvec3 xw = mod(vec3(p0.x, p1.x, p2.x), size.x);\n\tvec3 yw = mod(vec3(p0.y, p1.y, p2.y), size.y);\n\tvec3 iuw = xw + 0.5 * yw;\n\tvec3 ivw = yw;\n\tvec2 g0 = fbm_2d_rgrad2(vec2(iuw.x, ivw.x), offset, seed);\n\tvec2 g1 = fbm_2d_rgrad2(vec2(iuw.y, ivw.y), offset, seed);\n\tvec2 g2 = fbm_2d_rgrad2(vec2(iuw.z, ivw.z), offset, seed);\n\tvec3 w = vec3(dot(g0, d0), dot(g1, d1), dot(g2, d2));\n\tvec3 t = 0.8 - vec3(dot(d0, d0), dot(d1, d1), dot(d2, d2));\n\tt = max(t, vec3(0.0));\n\tvec3 t2 = t * t;\n\tvec3 t4 = t2 * t2;\n\tfloat n = dot(t4, w);\n\treturn 0.5 + 5.5 * n;\n}\n\nfloat fbm_2d_simplex(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = simplex_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat cellular_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 neighbor = vec2(float(x),float(y));\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tnode =  0.5 + 0.25 * sin(offset * 6.28318530718 + 6.28318530718 * node);\n\t\t\tvec2 diff = neighbor + node - f;\n\t\t\tfloat dist = length(diff);\n\t\t\tmin_dist = min(min_dist, dist);\n\t\t}\n\t}\n\treturn min_dist;\n}\n\nfloat fbm_2d_cellular(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = cellular_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat cellular2_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist1 = 2.0;\n\tfloat min_dist2 = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 neighbor = vec2(float(x),float(y));\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tnode = 0.5 + 0.25 * sin(offset * 6.28318530718 + 6.28318530718*node);\n\t\t\tvec2 diff = neighbor + node - f;\n\t\t\tfloat dist = length(diff);\n\t\t\tif (min_dist1 > dist) {\n\t\t\t\tmin_dist2 = min_dist1;\n\t\t\t\tmin_dist1 = dist;\n\t\t\t} else if (min_dist2 > dist) {\n\t\t\t\tmin_dist2 = dist;\n\t\t\t}\n\t\t}\n\t}\n\treturn min_dist2-min_dist1;\n}\n\nfloat fbm_2d_cellular2(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = cellular2_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat cellular3_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 neighbor = vec2(float(x),float(y));\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tnode = 0.5 + 0.25 * sin(offset * 6.28318530718 + 6.28318530718*node);\n\t\t\tvec2 diff = neighbor + node - f;\n\t\t\tfloat dist = abs((diff).x) + abs((diff).y);\n\t\t\tmin_dist = min(min_dist, dist);\n\t\t}\n\t}\n\treturn min_dist;\n}\n\nfloat fbm_2d_cellular3(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = cellular3_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat cellular4_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist1 = 2.0;\n\tfloat min_dist2 = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 neighbor = vec2(float(x),float(y));\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tnode = 0.5 + 0.25 * sin(offset * 6.28318530718 + 6.28318530718*node);\n\t\t\tvec2 diff = neighbor + node - f;\n\t\t\tfloat dist = abs((diff).x) + abs((diff).y);\n\t\t\tif (min_dist1 > dist) {\n\t\t\t\tmin_dist2 = min_dist1;\n\t\t\t\tmin_dist1 = dist;\n\t\t\t} else if (min_dist2 > dist) {\n\t\t\t\tmin_dist2 = dist;\n\t\t\t}\n\t\t}\n\t}\n\treturn min_dist2-min_dist1;\n}\n\nfloat fbm_2d_cellular4(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = cellular4_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat cellular5_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 neighbor = vec2(float(x),float(y));\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tnode = 0.5 + 0.5 * sin(offset * 6.28318530718 + 6.28318530718*node);\n\t\t\tvec2 diff = neighbor + node - f;\n\t\t\tfloat dist = max(abs((diff).x), abs((diff).y));\n\t\t\tmin_dist = min(min_dist, dist);\n\t\t}\n\t}\n\treturn min_dist;\n}\n\nfloat fbm_2d_cellular5(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = cellular5_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\nfloat cellular6_noise_2d(vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(seed, 1.0-seed))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist1 = 2.0;\n\tfloat min_dist2 = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 neighbor = vec2(float(x),float(y));\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tnode = 0.5 + 0.25 * sin(offset * 6.28318530718 + 6.28318530718*node);\n\t\t\tvec2 diff = neighbor + node - f;\n\t\t\tfloat dist = max(abs((diff).x), abs((diff).y));\n\t\t\tif (min_dist1 > dist) {\n\t\t\t\tmin_dist2 = min_dist1;\n\t\t\t\tmin_dist1 = dist;\n\t\t\t} else if (min_dist2 > dist) {\n\t\t\t\tmin_dist2 = dist;\n\t\t\t}\n\t\t}\n\t}\n\treturn min_dist2-min_dist1;\n}\n\nfloat fbm_2d_cellular6(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = cellular6_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n\n// MIT License Inigo Quilez - https://www.shadertoy.com/view/Xd23Dh\nfloat voronoise_noise_2d( vec2 coord, vec2 size, float offset, float seed) {\n\tvec2 i = floor(coord) + rand2(vec2(seed, 1.0-seed)) + size;\n\tvec2 f = fract(coord);\n\t\n\tvec2 a = vec2(0.0);\n\t\n\tfor( int y=-2; y<=2; y++ ) {\n\t\tfor( int x=-2; x<=2; x++ ) {\n\t\t\tvec2  g = vec2( float(x), float(y) );\n\t\t\tvec3  o = rand3( mod(i + g, size) + vec2(seed) );\n\t\t\to.xy += 0.25 * sin(offset * 6.28318530718 + 6.28318530718*o.xy);\n\t\t\tvec2  d = g - f + o.xy;\n\t\t\tfloat w = pow( 1.0-smoothstep(0.0, 1.414, length(d)), 1.0 );\n\t\t\ta += vec2(o.z*w,w);\n\t\t}\n\t}\n\t\n\treturn a.x/a.y;\n}\n\nfloat fbm_2d_voronoise(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = voronoise_noise_2d(coord*size, size, offset, seed+float(i));\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n",
+				"inputs": [
+					{
+						"default": "$offset",
+						"label": "7:",
+						"longdesc": "An optional input to drive the offset",
+						"name": "offset_in",
+						"shortdesc": "Offset Input",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"longdesc": "Generates a noise made of several octaves of a simple noise",
+				"name": "FBM Noise",
+				"outputs": [
+					{
+						"f": "fbm_2d_$noise($(uv), vec2($(scale_x), $(scale_y)), int($(folds)), int($(iterations)), $(persistence), $offset_in($uv), $(seed))",
+						"longdesc": "Shows a grayscale image of the generated noise",
+						"shortdesc": "Output",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 2.0,
+						"label": "Noise",
+						"longdesc": "The simple noise type",
+						"name": "noise",
+						"shortdesc": "Noise type",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Value",
+								"value": "value"
+							},
+							{
+								"name": "Perlin",
+								"value": "perlin"
+							},
+							{
+								"name": "Simplex",
+								"value": "simplex"
+							},
+							{
+								"name": "Cellular",
+								"value": "cellular"
+							},
+							{
+								"name": "Cellular 2",
+								"value": "cellular2"
+							},
+							{
+								"name": "Cellular 3",
+								"value": "cellular3"
+							},
+							{
+								"name": "Cellular 4",
+								"value": "cellular4"
+							},
+							{
+								"name": "Cellular 5",
+								"value": "cellular5"
+							},
+							{
+								"name": "Cellular 6",
+								"value": "cellular6"
+							},
+							{
+								"name": "Voronoise",
+								"value": "voronoise"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 4.0,
+						"label": "Scale X",
+						"longdesc": "The scale of the first octave along the X axis",
+						"max": 32.0,
+						"min": 1.0,
+						"name": "scale_x",
+						"shortdesc": "Scale.x",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 4.0,
+						"label": "Scale Y",
+						"longdesc": "The scale of the first octave along the Y axis",
+						"max": 32.0,
+						"min": 1.0,
+						"name": "scale_y",
+						"shortdesc": "Scale.y",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.0,
+						"label": "Folds",
+						"longdesc": "The number of times the basic noise is folded",
+						"max": 5.0,
+						"min": 0.0,
+						"name": "folds",
+						"shortdesc": "Folds",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 3.0,
+						"label": "Iterations",
+						"longdesc": "The number of noise octaves",
+						"max": 10.0,
+						"min": 1.0,
+						"name": "iterations",
+						"shortdesc": "Octaves",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Persistence",
+						"longdesc": "The persistence between two consecutive octaves",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "persistence",
+						"shortdesc": "Persistence",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.0,
+						"label": "Offset",
+						"longdesc": "Offsets the points of the noise, can be used to animate the noise with \"$time\"",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "offset",
+						"shortdesc": "Offset",
+						"step": 0.01,
+						"type": "float"
+					}
+				],
+				"shortdesc": "Fractional Brownian Motion Noise"
+			},
+			"type": "shader"
+		},
+		{
+			"generic_size": 1,
+			"name": "blend2_2",
+			"node_position": {
+				"x": 892.312744140625,
+				"y": 744.1142578125
+			},
+			"parameters": {
+				"amount1": 0.75,
+				"blend_type1": 2.0
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "vec4 $(name_uv)_b = $b($uv);\nvec4 $(name_uv)_l;\nfloat $(name_uv)_a;\n#for\n$(name_uv)_l = $l#($uv);\n$(name_uv)_a = $amount#*$a#($uv);\n$(name_uv)_b = vec4(blend_$blend_type#($uv, $(name_uv)_l.rgb, $(name_uv)_b.rgb, $(name_uv)_a*$(name_uv)_l.a), min(1.0, $(name_uv)_b.a+$(name_uv)_a*$(name_uv)_l.a));\n#end\n",
+				"global": "float blend_linear_light_f(float c1, float c2) {\n\treturn (c1 + 2.0 * c2) - 1.0;\n}\n\nvec3 blend_linear_light(vec2 uv, vec3 c1, vec3 c2, float opacity) {\nreturn opacity*vec3(blend_linear_light_f(c1.x, c2.x), blend_linear_light_f(c1.y, c2.y), blend_linear_light_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nfloat blend_vivid_light_f(float c1, float c2) {\n\treturn (c1 < 0.5) ? 1.0 - (1.0 - c2) / (2.0 * c1) : c2 / (2.0 * (1.0 - c1));\n}\n\nvec3 blend_vivid_light(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_vivid_light_f(c1.x, c2.x), blend_vivid_light_f(c1.y, c2.y), blend_vivid_light_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nfloat blend_pin_light_f( float c1, float c2) {\n\treturn (2.0 * c1 - 1.0 > c2) ? 2.0 * c1 - 1.0 : ((c1 < 0.5 * c2) ? 2.0 * c1 : c2);\n}\n\nvec3 blend_pin_light(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_pin_light_f(c1.x, c2.x), blend_pin_light_f(c1.y, c2.y), blend_pin_light_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nfloat blend_hard_mix_f(float c1, float c2) {\n\treturn floor(c1 + c2);\n}\n\nvec3 blend_hard_mix(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\t\treturn opacity*vec3(blend_hard_mix_f(c1.x, c2.x), blend_hard_mix_f(c1.y, c2.y), blend_hard_mix_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nfloat blend_exclusion_f(float c1, float c2) {\n\treturn c1 + c2 - 2.0 * c1 * c2;\n}\n\nvec3 blend_exclusion(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_exclusion_f(c1.x, c2.x), blend_exclusion_f(c1.y, c2.y), blend_exclusion_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nvec3 blend_hue(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\tvec3 outcol = c2;\n\n\tvec3 hsv, hsv2, tmp;\n\thsv2 = rgb_to_hsv(c1);\n\n\tif (hsv2.y != 0.0) {\n\t\thsv = rgb_to_hsv(outcol);\n\t\thsv.x = hsv2.x;\n\t\ttmp = hsv_to_rgb(hsv);\n\t\toutcol = mix(outcol, tmp, opacity);\n\t}\n\treturn outcol;\n}\n\nvec3 blend_saturation(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\tfloat facm = 1.0 - opacity;\n\n\tvec3 outcol = c2;\n\tvec3 hsv, hsv2;\n\n\thsv = rgb_to_hsv(outcol);\n\n\tif (hsv.y != 0.0) {\n\t\thsv2 = rgb_to_hsv(c1);\n\n\t\thsv.y = facm * hsv.y + opacity * hsv2.y;\n\t\toutcol = hsv_to_rgb(hsv);\n\t}\n\treturn outcol;\n}\n\nvec3 blend_color(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\tfloat facm = 1.0 - opacity;\n\n\tvec3 outcol = c2;\n\n\tvec3 hsv, hsv2, tmp;\n\thsv2 = rgb_to_hsv(c1);\n\n\tif (hsv2.y != 0.0) {\n\t\thsv = rgb_to_hsv(outcol);\n\t\thsv.x = hsv2.x;\n\t\thsv.y = hsv2.y;\n\t\ttmp = hsv_to_rgb(hsv);\n\n\t\toutcol = mix(outcol, tmp, opacity);\n\t}\n\treturn outcol;\n}\n\nvec3 blend_value(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\tfloat facm = 1.0 - opacity;\n\n\tvec3 hsv, hsv2;\n\thsv = rgb_to_hsv(c2);\n\thsv2 = rgb_to_hsv(c1);\n\n\thsv.z = facm * hsv.z + opacity * hsv2.z;\n\treturn hsv_to_rgb(hsv);\n}",
+				"includes": [
+					"blend",
+					"adjust_hsv"
+				],
+				"inputs": [
+					{
+						"default": "vec4($uv.x, 1.0, 1.0, 1.0)",
+						"label": "Background",
+						"longdesc": "The background input",
+						"name": "b",
+						"shortdesc": "Background",
+						"type": "rgba"
+					},
+					{
+						"default": "vec4(1.0, $uv.y, 1.0, 1.0)",
+						"label": "Layer#",
+						"longdesc": "A layer input",
+						"name": "l#",
+						"shortdesc": "Layer#",
+						"type": "rgba"
+					},
+					{
+						"default": "1.0",
+						"label": "Opacity#",
+						"longdesc": "An optional opacity mask",
+						"name": "a#",
+						"shortdesc": "Mask#",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"longdesc": "Blends its input, using an optional mask",
+				"name": "Blend",
+				"outputs": [
+					{
+						"longdesc": "Shows the result of the blend operation",
+						"rgba": "$(name_uv)_b",
+						"shortdesc": "Output",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"default": 0.0,
+						"label": "2:",
+						"longdesc": "The algorithm used to blend the inputs",
+						"name": "blend_type#",
+						"shortdesc": "Blend mode",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Normal",
+								"value": "normal"
+							},
+							{
+								"name": "Dissolve",
+								"value": "dissolve"
+							},
+							{
+								"name": "Multiply",
+								"value": "multiply"
+							},
+							{
+								"name": "Screen",
+								"value": "screen"
+							},
+							{
+								"name": "Overlay",
+								"value": "overlay"
+							},
+							{
+								"name": "Hard Light",
+								"value": "hard_light"
+							},
+							{
+								"name": "Soft Light",
+								"value": "soft_light"
+							},
+							{
+								"name": "Burn",
+								"value": "burn"
+							},
+							{
+								"name": "Dodge",
+								"value": "dodge"
+							},
+							{
+								"name": "Lighten",
+								"value": "lighten"
+							},
+							{
+								"name": "Darken",
+								"value": "darken"
+							},
+							{
+								"name": "Difference",
+								"value": "difference"
+							},
+							{
+								"name": "Additive",
+								"value": "additive"
+							},
+							{
+								"name": "AddSub",
+								"value": "addsub"
+							},
+							{
+								"name": "Linear Light",
+								"value": "linear_light"
+							},
+							{
+								"name": "Vivid Light",
+								"value": "vivid_light"
+							},
+							{
+								"name": "Pin Light",
+								"value": "pin_light"
+							},
+							{
+								"name": "Hard Mix",
+								"value": "hard_mix"
+							},
+							{
+								"name": "Exclusion",
+								"value": "exclusion"
+							},
+							{
+								"name": "Hue",
+								"value": "hue"
+							},
+							{
+								"name": "Saturation",
+								"value": "saturation"
+							},
+							{
+								"name": "Color",
+								"value": "color"
+							},
+							{
+								"name": "Value",
+								"value": "value"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "3:",
+						"longdesc": "The opacity of the blend operation",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "amount#",
+						"shortdesc": "Opacity",
+						"step": 0.01,
+						"type": "float"
+					}
+				],
+				"shortdesc": "Blend"
+			},
+			"type": "shader"
+		},
+		{
+			"name": "edge_detect",
+			"node_position": {
+				"x": 123.81014251709,
+				"y": 1196.70617675781
+			},
+			"parameters": {
+				"size": 10.0,
+				"threshold": 0.0,
+				"width": 2.0
+			},
+			"seed_int": 0,
+			"type": "edge_detect"
+		},
+		{
+			"name": "edge_detect_2",
+			"node_position": {
+				"x": 376.953186035156,
+				"y": 1098.97570800781
+			},
+			"parameters": {
+				"size": 10.0,
+				"threshold": 0.0,
+				"width": 6.0
+			},
+			"seed_int": 0,
+			"type": "edge_detect"
+		},
+		{
+			"name": "tiler",
+			"node_position": {
+				"x": 64.7597045898438,
+				"y": 1509.27490234375
+			},
+			"parameters": {
+				"fixed_offset": 0.0,
+				"inputs": 0.0,
+				"offset": 0.0,
+				"overlap": 2.0,
+				"rotate": 0.0,
+				"scale": 0.0,
+				"scale_x": 0.25,
+				"scale_y": 0.32,
+				"tx": 8.0,
+				"ty": 8.0,
+				"value": 0.0,
+				"variations": false
+			},
+			"seed_int": 0,
+			"type": "tiler"
+		},
+		{
+			"name": "gaussian_blur_2",
+			"node_position": {
+				"x": 838.152770996094,
+				"y": 1091.42517089844
+			},
+			"parameters": {
+				"param0": 10.0,
+				"param1": 2.1,
+				"param2": 0.0,
+				"param3": false
+			},
+			"seed_int": 0,
+			"type": "gaussian_blur"
+		},
+		{
+			"name": "colorize_3",
+			"node_position": {
+				"x": 1159.60375976562,
+				"y": 1131.82531738281
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 0.029754638671875,
+							"g": 0.15234375,
+							"pos": 0.356532046669408,
+							"r": 0.0637539625167847
+						},
+						{
+							"a": 1.0,
+							"b": 0.352806091308594,
+							"g": 0.505511224269867,
+							"pos": 1.0,
+							"r": 0.51171875
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "gaussian_blur_3",
+			"node_position": {
+				"x": 708.271484375,
+				"y": 1465.75170898438
+			},
+			"parameters": {
+				"param0": 10.0,
+				"param1": 4.5,
+				"param2": 0.0,
+				"param3": false
+			},
+			"seed_int": 0,
+			"type": "gaussian_blur"
+		},
+		{
+			"name": "edge_detect_3",
+			"node_position": {
+				"x": 937.5,
+				"y": 1482.49475097656
+			},
+			"parameters": {
+				"size": 10.0,
+				"threshold": 0.32,
+				"width": 1.0
+			},
+			"seed_int": 0,
+			"type": "edge_detect"
+		},
+		{
+			"name": "colorize_4",
+			"node_position": {
+				"x": 1215.08728027344,
+				"y": 1390.75183105469
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 0.0,
+							"b": 0.129411771893501,
+							"g": 0.129411771893501,
+							"pos": 0.256140993352522,
+							"r": 0.23137255012989
+						},
+						{
+							"a": 1.0,
+							"b": 0.314426422119141,
+							"g": 0.341796875,
+							"pos": 1.0,
+							"r": 0.322979688644409
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"generic_size": 1,
+			"name": "blend2_3",
+			"node_position": {
+				"x": 1358.76123046875,
+				"y": 1106.69909667969
+			},
+			"parameters": {
+				"amount1": 0.5,
+				"blend_type1": 0.0
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"generic_size": 1,
+			"name": "shear",
+			"node_position": {
+				"x": 407.751892089844,
+				"y": 1596.1328125
+			},
+			"parameters": {
+				"amount": 0.5,
+				"center": 0.0,
+				"direction": 1.0
+			},
+			"seed_int": 0,
+			"type": "shear"
+		},
+		{
+			"name": "colorize_2",
+			"node_position": {
+				"x": 907.438720703125,
+				"y": 1015.29010009766
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 0.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.0,
+							"r": 0.0
+						},
+						{
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 1.0,
+							"r": 0.0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"generic_size": 1,
+			"name": "blend2",
+			"node_position": {
+				"x": 1119.486328125,
+				"y": 838.886779785156
+			},
+			"parameters": {
+				"amount1": 0.44,
+				"blend_type1": 0.0
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"name": "colorize_5",
+			"node_position": {
+				"x": 952.226196289062,
+				"y": 902.793334960938
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.0,
+							"r": 0.0
+						},
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 1.0,
+							"r": 1.0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "uniform",
+			"node_position": {
+				"x": 1441.24829101562,
+				"y": 640.90869140625
+			},
+			"parameters": {
+				"color": {
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
+					"type": "Color"
+				}
+			},
+			"seed_int": 0,
+			"type": "uniform"
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}
