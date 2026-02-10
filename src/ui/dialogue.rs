@@ -1,12 +1,11 @@
 use bevy::{
-    camera::{primitives::Aabb, visibility::RenderLayers},
-    camera::RenderTarget,
+    camera::{RenderTarget, primitives::Aabb, visibility::RenderLayers},
     input::mouse::MouseMotion,
+    picking::hover::HoverMap,
     prelude::*,
     render::render_resource::TextureFormat,
     text::{Justify, LineBreak, TextLayout},
     ui::{FocusPolicy, widget::ViewportNode},
-    window::PrimaryWindow,
 };
 
 use super::{
@@ -40,6 +39,9 @@ struct DialogueSession {
     slot_anim_timer: f32,
     slot_anim_dir: f32,
     preview_viewport: Option<Entity>,
+    preview_label: Entity,
+    preview_card_root: Entity,
+    active_preview: Option<super::components::UiDialoguePreview>,
     preview_pivot: Option<Entity>,
     preview_world_root: Option<Entity>,
     preview_model_root: Option<Entity>,
@@ -58,6 +60,11 @@ pub(super) struct DialogueGlyphFx {
 #[derive(Component, Debug, Clone, Copy)]
 pub(super) struct DialogueArrowButton {
     dir: i32,
+}
+
+#[derive(Component, Debug, Clone, Copy)]
+pub(super) struct DialogueQuickActionButton {
+    option_index: usize,
 }
 
 #[derive(Component)]
@@ -97,7 +104,7 @@ pub(super) fn apply_dialogue_commands(
                     req.clone(),
                     settings.dialogue_speed,
                 );
-                reset_text(&mut commands, &mut session, &children);
+                reset_text(&mut commands, &mut session, &fonts, &children);
                 state.active = true;
                 runtime.session = Some(session);
             }
@@ -128,8 +135,7 @@ pub(super) fn advance_dialogue_with_mouse(
     mouse: Res<ButtonInput<MouseButton>>,
     dialogue_state: Res<UiDialogueState>,
     runtime: Res<UiDialogueRuntime>,
-    windows: Query<&Window, With<PrimaryWindow>>,
-    viewports: Query<(&ComputedNode, &UiGlobalTransform), With<DialoguePreviewViewport>>,
+    hover_map: Res<HoverMap>,
     mut commands: Commands,
 ) {
     if !dialogue_state.active || !mouse.just_pressed(MouseButton::Left) {
@@ -139,7 +145,7 @@ pub(super) fn advance_dialogue_with_mouse(
     let Some(session) = runtime.session.as_ref() else {
         return;
     };
-    if is_cursor_over_preview(session, &windows, &viewports) {
+    if is_cursor_over_preview(session, &hover_map) {
         return;
     }
 
@@ -154,8 +160,7 @@ pub(super) fn rotate_dialogue_preview(
     time: Res<Time>,
     mouse: Res<ButtonInput<MouseButton>>,
     mut mouse_motion: MessageReader<MouseMotion>,
-    windows: Query<&Window, With<PrimaryWindow>>,
-    viewports: Query<(&ComputedNode, &UiGlobalTransform), With<DialoguePreviewViewport>>,
+    hover_map: Res<HoverMap>,
     mut runtime: ResMut<UiDialogueRuntime>,
     mut pivots: Query<&mut Transform, With<DialoguePreviewPivot>>,
 ) {
@@ -174,7 +179,7 @@ pub(super) fn rotate_dialogue_preview(
         drag_delta += event.delta;
     }
 
-    let hovered = is_cursor_over_preview(session, &windows, &viewports);
+    let hovered = is_cursor_over_preview(session, &hover_map);
     if session.preview_dragging && mouse.pressed(MouseButton::Left) {
         if drag_delta.length_squared() > f32::EPSILON {
             pivot_transform.rotate_y(-drag_delta.x * 0.012);
@@ -257,8 +262,8 @@ pub(super) fn sync_and_frame_dialogue_preview(
     if let Some(camera) = session.preview_camera {
         if let Ok(mut camera_transform) = transforms.get_mut(camera) {
             let eye = Vec3::new(radius * 0.35, radius * 0.75 + 0.12, radius * 3.00 + 0.55);
-            *camera_transform =
-                Transform::from_translation(eye).looking_at(Vec3::new(0.0, radius * 0.20, 0.0), Vec3::Y);
+            *camera_transform = Transform::from_translation(eye)
+                .looking_at(Vec3::new(0.0, radius * 0.20, 0.0), Vec3::Y);
         }
     }
 
@@ -347,6 +352,88 @@ pub(super) fn handle_dialogue_arrow_buttons(
     }
 }
 
+pub(super) fn handle_dialogue_quick_action_buttons(
+    mut interactions: Query<
+        (
+            &Interaction,
+            &DialogueQuickActionButton,
+            &mut BackgroundColor,
+            &mut BorderColor,
+        ),
+        Changed<Interaction>,
+    >,
+    runtime: Res<UiDialogueRuntime>,
+    mut commands: Commands,
+) {
+    let Some(session) = runtime.session.as_ref() else {
+        return;
+    };
+
+    for (interaction, action, mut bg, mut border) in &mut interactions {
+        match *interaction {
+            Interaction::Pressed => {
+                *bg = BackgroundColor(theme::BUTTON_BG);
+                *border = theme::border(false);
+                if session.revealed >= session.text_chars.len()
+                    && action.option_index < session.options.len()
+                {
+                    commands.write_message(RatCommand::Choose(action.option_index));
+                }
+            }
+            Interaction::Hovered => {
+                *bg = BackgroundColor(theme::BUTTON_HOVER);
+                *border = theme::border(true);
+            }
+            Interaction::None => {
+                *bg = BackgroundColor(theme::BUTTON_BG);
+                *border = theme::border(true);
+            }
+        }
+    }
+}
+
+pub(super) fn sync_picker_preview_from_selection(
+    mut commands: Commands,
+    fonts: Res<UiFonts>,
+    assets: Res<AssetServer>,
+    mut images: ResMut<Assets<Image>>,
+    children: Query<&Children>,
+    mut runtime: ResMut<UiDialogueRuntime>,
+) {
+    let Some(session) = runtime.session.as_mut() else {
+        return;
+    };
+
+    if !session
+        .options
+        .iter()
+        .any(|option| option.preview.is_some())
+    {
+        return;
+    }
+
+    let Some(option) = session.options.get(session.selected_option) else {
+        return;
+    };
+    let Some(preview) = option.preview.clone() else {
+        return;
+    };
+
+    if session.active_preview.as_ref() == Some(&preview) {
+        return;
+    }
+
+    apply_preview_to_right_panel(
+        &mut commands,
+        session,
+        &fonts,
+        &assets,
+        &mut images,
+        &children,
+        preview,
+    );
+}
+
 pub(super) fn update_typewriter_dialogue(
     time: Res<Time>,
     mut commands: Commands,
@@ -431,6 +518,8 @@ fn spawn_dialogue(
     req: UiDialogueRequest,
     dialogue_speed: f32,
 ) -> DialogueSession {
+    let has_quick_actions = has_quick_actions(&req.options);
+    let line_height = if has_quick_actions { 96.0 } else { 118.0 };
     let preview_scene = req
         .preview
         .as_ref()
@@ -459,6 +548,9 @@ fn spawn_dialogue(
     let mut prompt_text = Entity::PLACEHOLDER;
     let mut line_row = Entity::PLACEHOLDER;
     let mut slot_text = Entity::PLACEHOLDER;
+    let mut quick_actions_row = Entity::PLACEHOLDER;
+    let mut preview_label = Entity::PLACEHOLDER;
+    let mut preview_card_root = Entity::PLACEHOLDER;
     let mut preview_viewport = None;
 
     commands.entity(root).with_children(|overlay| {
@@ -497,9 +589,9 @@ fn spawn_dialogue(
                             .spawn((
                                 Node {
                                     width: Val::Percent(100.0),
-                                    height: Val::Px(118.0),
-                                    min_height: Val::Px(118.0),
-                                    max_height: Val::Px(118.0),
+                                    height: Val::Px(line_height),
+                                    min_height: Val::Px(line_height),
+                                    max_height: Val::Px(line_height),
                                     flex_wrap: FlexWrap::Wrap,
                                     align_content: AlignContent::FlexStart,
                                     overflow: Overflow::clip_y(),
@@ -560,6 +652,26 @@ fn spawn_dialogue(
                             spawn_arrow_button(selector, fonts, 1, ">");
                         });
 
+                        quick_actions_row = left
+                            .spawn((
+                                Node {
+                                    width: Val::Percent(100.0),
+                                    height: Val::Px(32.0),
+                                    min_height: Val::Px(32.0),
+                                    max_height: Val::Px(32.0),
+                                    column_gap: Val::Px(6.0),
+                                    align_items: AlignItems::Center,
+                                    display: if has_quick_actions {
+                                        Display::Flex
+                                    } else {
+                                        Display::None
+                                    },
+                                    ..default()
+                                },
+                                BackgroundColor(Color::NONE),
+                            ))
+                            .id();
+
                         left.spawn((
                             Node {
                                 width: Val::Percent(100.0),
@@ -573,6 +685,7 @@ fn spawn_dialogue(
                                     Val::Px(0.0),
                                 ),
                                 align_items: AlignItems::Center,
+                                overflow: Overflow::clip(),
                                 ..default()
                             },
                             theme::border(true),
@@ -583,7 +696,7 @@ fn spawn_dialogue(
                                     Text::new("press e or click to skip"),
                                     TextFont {
                                         font: fonts.body.clone(),
-                                        font_size: 24.0,
+                                        font_size: 18.0,
                                         ..default()
                                     },
                                     TextColor(Color::srgb(0.72, 0.72, 0.76)),
@@ -614,148 +727,67 @@ fn spawn_dialogue(
                             .as_ref()
                             .map(|preview| preview.title.clone())
                             .unwrap_or_else(|| req.speaker.clone());
-                        right.spawn((
-                            Text::new(label),
-                            TextFont {
-                                font: fonts.pixel.clone(),
-                                font_size: 12.0,
-                                ..default()
-                            },
-                            TextColor(theme::TEXT_LIGHT),
-                            TextLayout::new(Justify::Center, LineBreak::NoWrap),
-                        ));
+                        preview_label = right
+                            .spawn((
+                                Text::new(label),
+                                TextFont {
+                                    font: fonts.pixel.clone(),
+                                    font_size: 12.0,
+                                    ..default()
+                                },
+                                TextColor(theme::TEXT_LIGHT),
+                                TextLayout::new(Justify::Center, LineBreak::NoWrap),
+                            ))
+                            .id();
 
-                        right.spawn((
-                            Node {
-                                width: Val::Percent(100.0),
-                                flex_grow: 1.0,
-                                min_height: Val::Px(0.0),
-                                border: UiRect::all(Val::Px(2.0)),
-                                padding: UiRect::all(Val::Px(6.0)),
-                                flex_direction: FlexDirection::Column,
-                                row_gap: Val::Px(6.0),
-                                overflow: Overflow::clip_y(),
-                                ..default()
-                            },
-                            BackgroundColor(Color::srgb(0.05, 0.06, 0.08)),
-                            theme::border(false),
-                        ))
-                        .with_children(|card| {
-                            if let Some(preview) = req.preview.as_ref() {
-                                if let Some(preview_scene) = preview_scene.as_ref() {
-                                    preview_viewport = Some(
-                                        card.spawn((
-                                            DialoguePreviewViewport,
-                                            Node {
-                                                width: Val::Percent(100.0),
-                                                height: Val::Px(112.0),
-                                                min_height: Val::Px(112.0),
-                                                max_height: Val::Px(112.0),
-                                                border: UiRect::all(Val::Px(2.0)),
-                                                ..default()
-                                            },
-                                            ViewportNode::new(preview_scene.camera),
-                                            BackgroundColor(Color::srgb(0.03, 0.04, 0.06)),
-                                            theme::border(false),
-                                        ))
-                                        .id(),
+                        preview_card_root = right
+                            .spawn((
+                                Node {
+                                    width: Val::Percent(100.0),
+                                    flex_grow: 1.0,
+                                    min_height: Val::Px(0.0),
+                                    border: UiRect::all(Val::Px(2.0)),
+                                    padding: UiRect::all(Val::Px(6.0)),
+                                    flex_direction: FlexDirection::Column,
+                                    row_gap: Val::Px(6.0),
+                                    overflow: Overflow::clip_y(),
+                                    ..default()
+                                },
+                                BackgroundColor(Color::srgb(0.05, 0.06, 0.08)),
+                                theme::border(false),
+                            ))
+                            .with_children(|card| {
+                                if let Some(preview) = req.preview.as_ref() {
+                                    spawn_preview_card_contents(
+                                        card,
+                                        fonts,
+                                        assets,
+                                        preview,
+                                        preview_scene.as_ref(),
+                                        &mut preview_viewport,
                                     );
-                                } else if preview.image_path.is_some() {
-                                    card.spawn((
-                                        Node {
-                                            width: Val::Percent(100.0),
-                                            height: Val::Px(112.0),
-                                            min_height: Val::Px(112.0),
-                                            max_height: Val::Px(112.0),
-                                            border: UiRect::all(Val::Px(2.0)),
-                                            ..default()
-                                        },
-                                        ImageNode::new(
-                                            assets.load(
-                                                preview
-                                                    .image_path
-                                                    .clone()
-                                                    .unwrap_or_else(|| req.portrait_path.clone()),
-                                            ),
-                                        ),
-                                        BackgroundColor(Color::srgb(0.03, 0.04, 0.06)),
-                                        theme::border(false),
-                                    ));
                                 } else {
                                     card.spawn((
                                         Node {
                                             width: Val::Percent(100.0),
-                                            height: Val::Px(112.0),
-                                            min_height: Val::Px(112.0),
-                                            max_height: Val::Px(112.0),
+                                            flex_grow: 1.0,
                                             border: UiRect::all(Val::Px(2.0)),
-                                            justify_content: JustifyContent::Center,
-                                            align_items: AlignItems::Center,
                                             ..default()
                                         },
+                                        ImageNode::new(assets.load(req.portrait_path.clone())),
                                         BackgroundColor(Color::srgb(0.03, 0.04, 0.06)),
                                         theme::border(false),
-                                    ))
-                                    .with_children(|empty| {
-                                        empty.spawn((
-                                            Text::new("no preview"),
-                                            TextFont {
-                                                font: fonts.pixel.clone(),
-                                                font_size: 10.0,
-                                                ..default()
-                                            },
-                                            TextColor(Color::srgb(0.60, 0.62, 0.68)),
-                                        ));
-                                    });
-                                }
-
-                                card.spawn((
-                                    Node {
-                                        width: Val::Percent(100.0),
-                                        flex_grow: 1.0,
-                                        min_height: Val::Px(0.0),
-                                        border: UiRect::all(Val::Px(2.0)),
-                                        padding: UiRect::all(Val::Px(5.0)),
-                                        overflow: Overflow::scroll_y(),
-                                        ..default()
-                                    },
-                                    ScrollPosition(Vec2::ZERO),
-                                    BackgroundColor(Color::srgb(0.09, 0.10, 0.13)),
-                                    theme::border(false),
-                                ))
-                                .with_children(|desc| {
-                                    desc.spawn((
-                                        Node {
-                                            width: Val::Percent(100.0),
-                                            ..default()
-                                        },
-                                        Text::new(preview.description.clone()),
-                                        TextFont {
-                                            font: fonts.body.clone(),
-                                            font_size: 19.0,
-                                            ..default()
-                                        },
-                                        TextColor(theme::TEXT_LIGHT),
-                                        TextLayout::new(Justify::Left, LineBreak::WordBoundary),
                                     ));
-                                });
-                            } else {
-                                card.spawn((
-                                    Node {
-                                        width: Val::Percent(100.0),
-                                        flex_grow: 1.0,
-                                        border: UiRect::all(Val::Px(2.0)),
-                                        ..default()
-                                    },
-                                    ImageNode::new(assets.load(req.portrait_path.clone())),
-                                    BackgroundColor(Color::srgb(0.03, 0.04, 0.06)),
-                                    theme::border(false),
-                                ));
-                            }
-                        });
+                                }
+                            })
+                            .id();
                     });
             });
     });
+
+    commands
+        .entity(quick_actions_row)
+        .with_children(|row| spawn_quick_action_buttons(row, fonts, &req.options));
 
     let char_count = req.text.chars().count().max(1) as f32;
     let speed = dialogue_speed.clamp(0.5, 2.0);
@@ -776,6 +808,9 @@ fn spawn_dialogue(
         slot_anim_timer: 0.0,
         slot_anim_dir: 0.0,
         preview_viewport,
+        preview_label,
+        preview_card_root,
+        active_preview: req.preview,
         preview_pivot: preview_scene.as_ref().map(|scene| scene.pivot),
         preview_world_root: preview_scene.as_ref().map(|scene| scene.root),
         preview_model_root: preview_scene.as_ref().map(|scene| scene.model_root),
@@ -833,12 +868,12 @@ fn spawn_preview_world(
             .with_children(|pivot_parent| {
                 model_root = pivot_parent
                     .spawn((
-                    Name::new("Dialogue Preview Model"),
-                    SceneRoot(model_handle),
-                    Transform::from_scale(Vec3::splat(1.0)),
-                    RenderLayers::layer(PREVIEW_RENDER_LAYER),
-                    DialoguePreviewLayerTagged,
-                ))
+                        Name::new("Dialogue Preview Model"),
+                        SceneRoot(model_handle),
+                        Transform::from_scale(Vec3::splat(1.0)),
+                        RenderLayers::layer(PREVIEW_RENDER_LAYER),
+                        DialoguePreviewLayerTagged,
+                    ))
                     .id();
             })
             .id();
@@ -860,9 +895,13 @@ fn spawn_preview_world(
             .spawn((
                 Name::new("Dialogue Preview Camera"),
                 Camera3d::default(),
+                Projection::Perspective(PerspectiveProjection {
+                    near: 0.12,
+                    far: 80.0,
+                    ..default()
+                }),
+                Msaa::Off, // msaa off because its apparently bad?
                 Camera {
-                    // Keep world-order so our camera compatibility shim won't force
-                    // alpha-blend/no-clear output, which causes ghosting artifacts.
                     order: 0,
                     clear_color: ClearColorConfig::Custom(Color::srgb(0.02, 0.025, 0.03)),
                     ..default()
@@ -914,7 +953,167 @@ fn spawn_arrow_button(parent: &mut ChildSpawnerCommands, fonts: &UiFonts, dir: i
         });
 }
 
-fn reset_text(commands: &mut Commands, session: &mut DialogueSession, children: &Query<&Children>) {
+fn spawn_preview_card_contents(
+    card: &mut ChildSpawnerCommands,
+    fonts: &UiFonts,
+    assets: &AssetServer,
+    preview: &super::components::UiDialoguePreview,
+    preview_scene: Option<&PreviewSceneEntities>,
+    preview_viewport: &mut Option<Entity>,
+) {
+    if let Some(preview_scene) = preview_scene {
+        *preview_viewport = Some(
+            card.spawn((
+                DialoguePreviewViewport,
+                Interaction::default(),
+                Node {
+                    width: Val::Percent(100.0),
+                    height: Val::Px(112.0),
+                    min_height: Val::Px(112.0),
+                    max_height: Val::Px(112.0),
+                    border: UiRect::all(Val::Px(2.0)),
+                    ..default()
+                },
+                ViewportNode::new(preview_scene.camera),
+                BackgroundColor(Color::srgb(0.03, 0.04, 0.06)),
+                theme::border(false),
+            ))
+            .id(),
+        );
+    } else if let Some(image_path) = preview.image_path.as_ref() {
+        card.spawn((
+            Node {
+                width: Val::Percent(100.0),
+                height: Val::Px(112.0),
+                min_height: Val::Px(112.0),
+                max_height: Val::Px(112.0),
+                border: UiRect::all(Val::Px(2.0)),
+                ..default()
+            },
+            ImageNode::new(assets.load(image_path.clone())),
+            BackgroundColor(Color::srgb(0.03, 0.04, 0.06)),
+            theme::border(false),
+        ));
+    } else {
+        card.spawn((
+            Node {
+                width: Val::Percent(100.0),
+                height: Val::Px(112.0),
+                min_height: Val::Px(112.0),
+                max_height: Val::Px(112.0),
+                border: UiRect::all(Val::Px(2.0)),
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+                ..default()
+            },
+            BackgroundColor(Color::srgb(0.03, 0.04, 0.06)),
+            theme::border(false),
+        ))
+        .with_children(|empty| {
+            empty.spawn((
+                Text::new("no preview"),
+                TextFont {
+                    font: fonts.pixel.clone(),
+                    font_size: 10.0,
+                    ..default()
+                },
+                TextColor(Color::srgb(0.60, 0.62, 0.68)),
+            ));
+        });
+    }
+
+    card.spawn((
+        Node {
+            width: Val::Percent(100.0),
+            flex_grow: 1.0,
+            min_height: Val::Px(0.0),
+            border: UiRect::all(Val::Px(2.0)),
+            padding: UiRect::all(Val::Px(5.0)),
+            overflow: Overflow::scroll_y(),
+            ..default()
+        },
+        ScrollPosition(Vec2::ZERO),
+        BackgroundColor(Color::srgb(0.09, 0.10, 0.13)),
+        theme::border(false),
+    ))
+    .with_children(|desc| {
+        desc.spawn((
+            Node {
+                width: Val::Percent(100.0),
+                ..default()
+            },
+            Text::new(preview.description.clone()),
+            TextFont {
+                font: fonts.body.clone(),
+                font_size: 19.0,
+                ..default()
+            },
+            TextColor(theme::TEXT_LIGHT),
+            TextLayout::new(Justify::Left, LineBreak::WordBoundary),
+        ));
+    });
+}
+
+fn spawn_quick_action_buttons(
+    row: &mut ChildSpawnerCommands,
+    fonts: &UiFonts,
+    options: &[UiDialogueOption],
+) {
+    for (idx, option) in options.iter().enumerate() {
+        let Some(label) = quick_action_label(&option.text) else {
+            continue;
+        };
+        row.spawn((
+            Button,
+            DialogueQuickActionButton { option_index: idx },
+            Node {
+                height: Val::Px(28.0),
+                border: UiRect::all(Val::Px(2.0)),
+                padding: UiRect::horizontal(Val::Px(8.0)),
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+                ..default()
+            },
+            BackgroundColor(theme::BUTTON_BG),
+            theme::border(true),
+        ))
+        .with_children(|button| {
+            button.spawn((
+                Text::new(label),
+                TextFont {
+                    font: fonts.pixel.clone(),
+                    font_size: 10.0,
+                    ..default()
+                },
+                TextColor(theme::TEXT_DARK),
+            ));
+        });
+    }
+}
+
+fn quick_action_label(text: &str) -> Option<&'static str> {
+    let normalized = text.trim().to_ascii_lowercase();
+    if normalized.contains("show item") {
+        Some("show item")
+    } else if normalized.contains("leave") || normalized.contains("go.") {
+        Some("leave")
+    } else {
+        None
+    }
+}
+
+fn has_quick_actions(options: &[UiDialogueOption]) -> bool {
+    options
+        .iter()
+        .any(|option| quick_action_label(&option.text).is_some())
+}
+
+fn reset_text(
+    commands: &mut Commands,
+    session: &mut DialogueSession,
+    _fonts: &UiFonts,
+    children: &Query<&Children>,
+) {
     clear_row(commands, session.line_row, children);
     session.revealed = 0;
     session.reveal_timer = 0.0;
@@ -964,25 +1163,89 @@ fn refresh_slot_text(commands: &mut Commands, session: &DialogueSession) {
 }
 
 fn refresh_prompt(commands: &mut Commands, session: &DialogueSession) {
+    let has_quick = has_quick_actions(&session.options);
     if session.revealed < session.text_chars.len() {
-        update_prompt(
-            commands,
-            session.prompt_text,
-            "press e, enter, or click to skip",
-        );
+        update_prompt(commands, session.prompt_text, "e/enter/click: skip");
     } else if session.options.is_empty() {
+        update_prompt(commands, session.prompt_text, "e/enter/click: continue");
+    } else if session.options.len() == 1 {
+        if has_quick {
+            update_prompt(
+                commands,
+                session.prompt_text,
+                "enter: choose | click: quick action",
+            );
+        } else {
+            update_prompt(commands, session.prompt_text, "e/enter/click: continue");
+        }
+    } else if has_quick {
         update_prompt(
             commands,
             session.prompt_text,
-            "press e, enter, or click to continue",
+            "a/d or arrows: switch | enter: choose | click: quick action",
         );
     } else {
         update_prompt(
             commands,
             session.prompt_text,
-            "a/d or arrows to switch, enter to choose",
+            "a/d or arrows: switch | enter: choose",
         );
     }
+}
+
+fn apply_preview_to_right_panel(
+    commands: &mut Commands,
+    session: &mut DialogueSession,
+    fonts: &UiFonts,
+    assets: &AssetServer,
+    images: &mut Assets<Image>,
+    children: &Query<&Children>,
+    preview: super::components::UiDialoguePreview,
+) {
+    commands
+        .entity(session.preview_label)
+        .insert(Text::new(preview.title.clone()));
+
+    if let Ok(card_children) = children.get(session.preview_card_root) {
+        for child in card_children.iter() {
+            despawn_tree(commands, child, children);
+        }
+    }
+
+    if let Some(root) = session.preview_world_root.take() {
+        despawn_tree(commands, root, children);
+    }
+
+    session.preview_viewport = None;
+    session.preview_pivot = None;
+    session.preview_model_root = None;
+    session.preview_camera = None;
+    session.preview_framed = false;
+    session.preview_dragging = false;
+
+    let preview_scene = preview
+        .model_path
+        .as_deref()
+        .and_then(|path| spawn_preview_world(commands, assets, images, path));
+
+    commands
+        .entity(session.preview_card_root)
+        .with_children(|card| {
+            spawn_preview_card_contents(
+                card,
+                fonts,
+                assets,
+                &preview,
+                preview_scene.as_ref(),
+                &mut session.preview_viewport,
+            );
+        });
+
+    session.preview_pivot = preview_scene.as_ref().map(|scene| scene.pivot);
+    session.preview_world_root = preview_scene.as_ref().map(|scene| scene.root);
+    session.preview_model_root = preview_scene.as_ref().map(|scene| scene.model_root);
+    session.preview_camera = preview_scene.as_ref().map(|scene| scene.camera);
+    session.active_preview = Some(preview);
 }
 
 fn spawn_char(commands: &mut Commands, row: Entity, ch: char, fonts: &UiFonts) {
@@ -1055,26 +1318,11 @@ fn any_pressed(keys: &ButtonInput<KeyCode>, options: &[KeyCode]) -> bool {
     options.iter().any(|key| keys.just_pressed(*key))
 }
 
-fn is_cursor_over_preview(
-    session: &DialogueSession,
-    windows: &Query<&Window, With<PrimaryWindow>>,
-    viewports: &Query<(&ComputedNode, &UiGlobalTransform), With<DialoguePreviewViewport>>,
-) -> bool {
+fn is_cursor_over_preview(session: &DialogueSession, hover_map: &HoverMap) -> bool {
     let Some(viewport) = session.preview_viewport else {
         return false;
     };
-    let Ok(window) = windows.single() else {
-        return false;
-    };
-    let Some(cursor) = window.cursor_position() else {
-        return false;
-    };
-    let Ok((node, transform)) = viewports.get(viewport) else {
-        return false;
-    };
-    let (_, _, translation) = transform.to_scale_angle_translation();
-    let half = node.size() * 0.5;
-    let min = translation - half;
-    let max = translation + half;
-    cursor.x >= min.x && cursor.x <= max.x && cursor.y >= min.y && cursor.y <= max.y
+    hover_map
+        .values()
+        .any(|pointer_map| pointer_map.contains_key(&viewport))
 }
