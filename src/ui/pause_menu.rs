@@ -253,7 +253,9 @@ pub(super) fn spawn_pause_menu(commands: &mut Commands, fonts: &UiFonts, owner: 
                                                     top: Val::Px(2.0),
                                                     ..default()
                                                 },
-                                                Text::new("there should be a super useful tip here"),
+                                                Text::new(
+                                                    "there should be a super useful tip here",
+                                                ),
                                                 TextFont {
                                                     font: fonts.body.clone(),
                                                     font_size: 24.0,
@@ -261,7 +263,9 @@ pub(super) fn spawn_pause_menu(commands: &mut Commands, fonts: &UiFonts, owner: 
                                                 },
                                                 TextColor(theme::CRT_GREEN),
                                                 TextLayout::new(Justify::Left, LineBreak::NoWrap),
-                                                UiTransform::from_translation(Val2::px(1280.0, 0.0)),
+                                                UiTransform::from_translation(Val2::px(
+                                                    1280.0, 0.0,
+                                                )),
                                             ));
                                         });
                                 });
