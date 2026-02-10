@@ -108,9 +108,10 @@ pub enum UiMenuAction {
 #[derive(Debug, Clone)]
 pub struct UiDialogueOption {
     pub text: String,
+    pub preview: Option<UiDialoguePreview>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct UiDialoguePreview {
     pub title: String,
     pub subtitle: String,
