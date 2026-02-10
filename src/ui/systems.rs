@@ -310,10 +310,9 @@ pub(super) fn emulate_button_interaction_for_offscreen_ui(
     };
 
     let has_visible_ui = !ui_visible.is_empty();
-    let cursor = window
-        .physical_cursor_position()
-        .or_else(|| window.cursor_position());
+    let cursor = window.cursor_position();
     let pressed = mouse.pressed(MouseButton::Left);
+    let just_released = mouse.just_released(MouseButton::Left);
 
     for (node, transform, mut interaction, inherited_visibility, disabled) in &mut interactables {
         if !has_visible_ui
@@ -332,8 +331,10 @@ pub(super) fn emulate_button_interaction_for_offscreen_ui(
         let contains = node.contains_point(*transform, cursor_position);
 
         let next = if contains {
-            if pressed {
+            if just_released {
                 Interaction::Pressed
+            } else if pressed {
+                Interaction::Hovered
             } else {
                 Interaction::Hovered
             }
@@ -499,12 +500,25 @@ pub(super) fn handle_pause_shortcut(
 pub(super) fn send_scroll_events(
     mut mouse_wheel_events: MessageReader<MouseWheel>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
+    windows: Query<&Window, With<PrimaryWindow>>,
     mut commands: Commands,
-    interactions: Query<(Entity, &Interaction)>,
-    scrollables: Query<(&Node, &InheritedVisibility, Option<&GlobalZIndex>), With<ScrollPosition>>,
-    parents: Query<&ChildOf>,
+    scrollables: Query<
+        (
+            Entity,
+            &Node,
+            &ComputedNode,
+            &UiGlobalTransform,
+            &InheritedVisibility,
+            Option<&GlobalZIndex>,
+        ),
+        With<ScrollPosition>,
+    >,
 ) {
     const SCROLL_LINE: f32 = 24.0;
+    let Ok(window) = windows.single() else {
+        return;
+    };
+    let cursor = window.cursor_position();
 
     for event in mouse_wheel_events.read() {
         let mut delta = -Vec2::new(event.x, event.y);
@@ -515,64 +529,48 @@ pub(super) fn send_scroll_events(
             std::mem::swap(&mut delta.x, &mut delta.y);
         }
 
-        let Some(entity) = pick_active_scroll_owner(&interactions, &scrollables, &parents) else {
+        let Some(entity) = pick_scroll_owner_at_cursor(cursor, &scrollables) else {
             continue;
         };
         commands.trigger(UiScrollEvent { entity, delta });
     }
 }
 
-fn pick_active_scroll_owner(
-    interactions: &Query<(Entity, &Interaction)>,
-    scrollables: &Query<(&Node, &InheritedVisibility, Option<&GlobalZIndex>), With<ScrollPosition>>,
-    parents: &Query<&ChildOf>,
+fn pick_scroll_owner_at_cursor(
+    cursor: Option<Vec2>,
+    scrollables: &Query<
+        (
+            Entity,
+            &Node,
+            &ComputedNode,
+            &UiGlobalTransform,
+            &InheritedVisibility,
+            Option<&GlobalZIndex>,
+        ),
+        With<ScrollPosition>,
+    >,
 ) -> Option<Entity> {
-    let mut best: Option<(i32, usize, Entity)> = None;
+    let cursor = cursor?;
+    let mut best: Option<(i32, f32, Entity)> = None;
 
-    for (entity, interaction) in interactions.iter() {
-        if *interaction == Interaction::None {
+    for (entity, node, computed, transform, visibility, z) in scrollables.iter() {
+        if !visibility.get()
+            || computed.size() == Vec2::ZERO
+            || (node.overflow.x != OverflowAxis::Scroll && node.overflow.y != OverflowAxis::Scroll)
+            || !computed.contains_point(*transform, cursor)
+        {
             continue;
         }
-        let Some((scroll_owner, depth, z)) = find_scroll_owner(entity, scrollables, parents) else {
-            continue;
-        };
 
+        let area = computed.size().x * computed.size().y;
+        let z = z.map_or(0, |it| it.0);
         match best {
-            Some((best_z, best_depth, _)) if z < best_z || (z == best_z && depth >= best_depth) => {
-            }
-            _ => {
-                best = Some((z, depth, scroll_owner));
-            }
-        };
+            Some((best_z, best_area, _)) if z < best_z || (z == best_z && area >= best_area) => {}
+            _ => best = Some((z, area, entity)),
+        }
     }
 
     best.map(|(_, _, entity)| entity)
-}
-
-fn find_scroll_owner(
-    from: Entity,
-    scrollables: &Query<(&Node, &InheritedVisibility, Option<&GlobalZIndex>), With<ScrollPosition>>,
-    parents: &Query<&ChildOf>,
-) -> Option<(Entity, usize, i32)> {
-    let mut depth = 0usize;
-    let mut cursor = Some(from);
-
-    while let Some(entity) = cursor {
-        if let Ok((node, visibility, z)) = scrollables.get(entity)
-            && visibility.get()
-            && (node.overflow.x == OverflowAxis::Scroll || node.overflow.y == OverflowAxis::Scroll)
-        {
-            return Some((entity, depth, z.map_or(0, |it| it.0)));
-        }
-
-        cursor = parents.get(entity).ok().map(|parent| parent.parent());
-        depth += 1;
-        if depth > 48 {
-            break;
-        }
-    }
-
-    None
 }
 
 pub(super) fn on_ui_scroll(
