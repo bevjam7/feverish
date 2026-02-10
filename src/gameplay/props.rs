@@ -10,8 +10,7 @@ use bevy_trenchbroom::prelude::*;
 
 use crate::{
     Usable,
-    gameplay::{PhysLayer, PlayerRoot, inventory::InventoryItem, link_hierarchal_colliders},
-    input::Use,
+    gameplay::{PhysLayer, link_hierarchal_colliders},
 };
 
 #[base_class(base(Transform, Visibility), model({path: model}))]

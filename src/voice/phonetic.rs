@@ -1,4 +1,4 @@
-use rand::Rng;
+use rand::RngExt;
 
 /// primary language selection.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

@@ -1,5 +1,8 @@
-use avian3d::prelude::{ColliderConstructorHierarchy, CollisionLayers, RayHits};
-use bevy::prelude::*;
+use avian3d::prelude::{CollisionLayers, RayHits};
+use bevy::{
+    prelude::*,
+    window::{CursorGrabMode, CursorOptions},
+};
 use bevy_enhanced_input::prelude::*;
 
 use crate::{
@@ -14,8 +17,13 @@ impl Plugin for InputPlugin {
     fn build(&self, app: &mut App) {
         app.add_input_context::<PlayerInput>()
             .add_observer(apply_use)
+            // .add_systems(OnEnter(GameState::Main), lock_cursor)
             .add_systems(Update, sync_player_input_lock);
     }
+}
+
+fn lock_cursor(mut cursor_options: Single<&mut CursorOptions>) {
+    cursor_options.grab_mode = CursorGrabMode::Locked;
 }
 
 pub(crate) fn controller_bundle() -> impl Bundle {

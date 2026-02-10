@@ -1,6 +1,6 @@
 use std::{f32::consts::PI, str::FromStr};
 
-use rand::Rng;
+use rand::{Rng, RngExt};
 
 use super::phonetic::{ConsonantClass, Language, Phoneme, PhonemeType};
 

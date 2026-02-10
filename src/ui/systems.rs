@@ -450,7 +450,7 @@ pub(super) fn send_scroll_events(
     hover_map: Res<HoverMap>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
     mut commands: Commands,
-    mut query: Query<(
+    _query: Query<(
         &mut ScrollPosition,
         &Node,
         &ComputedNode,

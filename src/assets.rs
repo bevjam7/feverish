@@ -17,6 +17,7 @@ impl Plugin for AssetsPlugin {
     }
 }
 
+#[allow(dead_code)]
 #[derive(AssetCollection, Resource)]
 pub struct GameAssets {
     #[asset(key = "levels.hallway")]

@@ -2,7 +2,6 @@ use avian3d::prelude::{ColliderConstructor, CollisionLayers, RigidBody};
 use bevy::{
     asset::AssetPath,
     ecs::{lifecycle::HookContext, world::DeferredWorld},
-    platform::collections::HashMap,
     prelude::*,
     scene::SceneInstanceReady,
 };

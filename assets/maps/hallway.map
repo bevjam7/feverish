@@ -178,8 +178,8 @@
 // entity 9
 {
 "classname" "item"
-"origin" "884 738 -56"
-"model" "models/rat_toy/rattoy.glb"
+"origin" "876 698 -64"
+"model" "models/rat_toy/rat_toy.gltf"
 "name" "rat toy"
 "subtitle" "rat wooden toy"
 "description" "a weird rat toy. you can read the word 'Jan' carved in the side"

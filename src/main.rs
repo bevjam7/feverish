@@ -90,7 +90,7 @@ impl Plugin for AppPlugin {
                 .build(),
                 TrenchBroomPhysicsPlugin::new(bevy_trenchbroom_avian::AvianPhysicsBackend),
             ),
-            avian3d::debug_render::PhysicsDebugPlugin,
+            // avian3d::debug_render::PhysicsDebugPlugin,
             bevy_enhanced_input::EnhancedInputPlugin,
             bevy_ahoy::AhoyPlugins::default(),
         ));
@@ -132,7 +132,10 @@ impl Plugin for AppPlugin {
     }
 }
 
-fn spawn_default_main_menu(mut commands: Commands, drivers: Query<(Entity, &Name, Has<ui::MainMenuUi>)>) {
+fn spawn_default_main_menu(
+    mut commands: Commands,
+    drivers: Query<(Entity, &Name, Has<ui::MainMenuUi>)>,
+) {
     for (entity, name, has_main_menu) in &drivers {
         if name.as_str() != "Main Menu Driver" {
             continue;
