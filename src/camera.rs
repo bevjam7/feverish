@@ -39,7 +39,8 @@ fn spawn_ui_camera(mut commands: Commands) {
         Camera2d,
         IsDefaultUiCamera,
         Camera {
-            order: CameraOrder::Ui.into(),
+            // keep UI above the PSX presentation camera, this was driving me crazy lol
+            order: isize::from(CameraOrder::Ui) + 1,
             ..default()
         },
     ));
