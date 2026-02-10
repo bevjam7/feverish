@@ -13,11 +13,11 @@ var<uniform> ui_tint: vec4<f32>;
 @group(#{MATERIAL_BIND_GROUP}) @binding(3)
 var<uniform> ui_params_a: vec4<f32>; // x: pixel_size, y: quant_steps, z: dither_strength, w: melt_strength
 @group(#{MATERIAL_BIND_GROUP}) @binding(4)
-var<uniform> ui_params_b: vec4<f32>; // x: autonomous chance, y: speed, z: reserved, w: mix
+var<uniform> ui_params_b: vec4<f32>; // x: autonomous chance, y: speed, z: monitor_on, w: mix
 @group(#{MATERIAL_BIND_GROUP}) @binding(5)
 var<uniform> ui_viewport: vec4<f32>;
 @group(#{MATERIAL_BIND_GROUP}) @binding(6)
-var<uniform> ui_cursor: vec4<f32>; // x/y normalized, z visible
+var<uniform> ui_cursor: vec4<f32>; // x/y normalized, z visible, w cursor_distortion_on
 
 fn hash12(p: vec2<f32>) -> f32 {
     let h = dot(p, vec2<f32>(127.1, 311.7));
@@ -102,15 +102,23 @@ fn autonomous_blob(uv: vec2<f32>, time: f32, slot: f32, chance: f32) -> f32 {
 @fragment
 fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
     let uv = in.uv;
-    let uv_fold = crt_fold_uv(uv, ui_viewport);
-    // Cursor keeps hallucination/fusion effects, but bypasses CRT monitor shaping.
-    let cursor_monitor_bypass =
-        ui_cursor.z * 0.42 * (1.0 - smoothstep(0.012, 0.042, distance(uv, ui_cursor.xy)));
-    let uv_monitor = mix(uv_fold, uv, cursor_monitor_bypass);
+    let monitor_on = select(0.0, 1.0, ui_params_b.z > 0.5);
+    let cursor_distortion_on = select(0.0, 1.0, ui_cursor.w > 0.5);
 
-    var fold_mask = crt_edge_fold_amount(uv, ui_viewport) * (1.0 - cursor_monitor_bypass);
+    let uv_fold = crt_fold_uv(uv, ui_viewport);
+    // Cursor locally relaxes monitor distortion (hallucinations stay active).
+    let cursor_monitor_bypass =
+        monitor_on
+            * cursor_distortion_on
+            * ui_cursor.z
+            * 0.24
+            * (1.0 - smoothstep(0.010, 0.034, distance(uv, ui_cursor.xy)));
+    let monitor_mix = monitor_on * (1.0 - cursor_monitor_bypass);
+    let uv_monitor = mix(uv, uv_fold, monitor_mix);
+
+    var fold_mask = crt_edge_fold_amount(uv, ui_viewport) * monitor_mix;
     let screen_mask_raw = crt_corner_mask(uv, ui_viewport);
-    let screen_mask = mix(screen_mask_raw, 1.0, cursor_monitor_bypass);
+    let screen_mask = mix(1.0, screen_mask_raw, monitor_mix);
 
     let base = textureSample(ui_tex, ui_sampler, uv_monitor);
     if base.a <= 0.001 || screen_mask <= 0.001 {
@@ -177,7 +185,7 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
     rgb = clamp(rgb, vec3<f32>(0.0), vec3<f32>(1.0));
 
     let scan = scanline_mask(grid_px.y, t);
-    rgb *= mix(1.0, scan, effect_mix * 0.65 * (1.0 - cursor_monitor_bypass));
+    rgb *= mix(1.0, scan, effect_mix * 0.65 * monitor_mix);
 
     rgb = mix(rgb, rgb * ui_tint.rgb, ui_tint.a * effect_mix);
     let out_rgb = mix(base.rgb, rgb, effect_mix);
