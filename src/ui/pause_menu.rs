@@ -199,8 +199,7 @@ pub(super) fn spawn_pause_menu(commands: &mut Commands, fonts: &UiFonts, owner: 
                                         ))
                                         .with_children(|lines| {
                                             for line in [
-                                                "are you doing well?",
-                                                "you should.",
+                                                "keep up the good work!",
                                                 "",
                                                 "resume to continue",
                                                 "main menu to reset run",
