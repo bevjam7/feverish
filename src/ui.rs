@@ -22,11 +22,12 @@ use systems::{
     animate_dither_pixels, animate_main_menu_ticker, apply_discovery_commands,
     cleanup_removed_main_menu, cleanup_removed_pause_menu, cleanup_ui_cursor,
     ensure_gallery_selection_exists, handle_button_interactions, handle_menu_actions,
-    handle_pause_shortcut, handle_scroll, load_fonts, rebuild_gallery_lists,
-    refresh_button_highlights, refresh_confirm_dialogs, refresh_gallery_details, refresh_main_menu_content,
-    refresh_main_menu_panels, refresh_pause_menu_panels, refresh_settings_values, reset_ticker_on_scale_change,
-    restore_native_cursor_on_exit, spawn_main_menu_on_added, spawn_pause_menu_on_added,
-    update_ui_cursor, update_ui_scale,
+    handle_pause_shortcut, load_fonts, on_ui_scroll, rebuild_gallery_lists,
+    refresh_button_highlights, refresh_confirm_dialogs, refresh_gallery_details,
+    refresh_main_menu_content, refresh_main_menu_panels, refresh_pause_menu_panels,
+    refresh_settings_values, reset_ticker_on_scale_change, restore_native_cursor_on_exit,
+    send_scroll_events, spawn_main_menu_on_added, spawn_pause_menu_on_added, update_ui_cursor,
+    update_ui_scale,
 };
 
 pub struct UiPlugin;
@@ -40,6 +41,7 @@ impl Plugin for UiPlugin {
             .add_message::<UiMenuAction>()
             .add_message::<UiDialogueCommand>()
             .add_message::<UiDiscoveryCommand>()
+            .add_observer(on_ui_scroll)
             .add_systems(Startup, load_fonts)
             .add_systems(
                 Update,
@@ -62,7 +64,7 @@ impl Plugin for UiPlugin {
                     refresh_button_highlights,
                 ),
             )
-            .add_systems(Update, handle_scroll)
+            .add_systems(Update, send_scroll_events)
             .add_systems(
                 Update,
                 (
@@ -76,11 +78,13 @@ impl Plugin for UiPlugin {
                     restore_native_cursor_on_exit,
                     dialogue::apply_dialogue_commands,
                     dialogue::update_typewriter_dialogue,
+                    dialogue::sync_picker_preview_from_selection,
                     dialogue::sync_and_frame_dialogue_preview,
                     dialogue::rotate_dialogue_preview,
                     dialogue::advance_dialogue_with_mouse,
                     dialogue::handle_dialogue_shortcuts,
                     dialogue::handle_dialogue_arrow_buttons,
+                    dialogue::handle_dialogue_quick_action_buttons,
                     dialogue::animate_option_slot_transition,
                     dialogue::animate_dialogue_glyphs,
                 ),
