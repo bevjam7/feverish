@@ -9,7 +9,7 @@ use bevy_seedling::{
 };
 use bevy_trenchbroom::prelude::*;
 
-use crate::audio::mixer::WorldSfxPool;
+use crate::{AssetServerExt, audio::mixer::WorldSfxPool};
 
 #[point_class(
     group("sound"),
@@ -20,12 +20,12 @@ use crate::audio::mixer::WorldSfxPool;
 #[derive(Clone)]
 #[component(on_add=Self::on_add_hook)]
 pub struct SoundPoint {
-    volume: f32,
+    pub(crate) volume: f32,
     #[class(default = "audio/sound.ogg", must_set)]
-    sample: String,
-    repeat: bool,
-    play_immediately: bool,
-    repeat_count: Option<usize>,
+    pub(crate) sample: String,
+    pub(crate) repeat: bool,
+    pub(crate) play_immediately: bool,
+    pub(crate) repeat_count: Option<usize>,
 }
 
 impl Default for SoundPoint {
@@ -47,25 +47,14 @@ impl SoundPoint {
         }
         let point = world.get::<Self>(hook.entity).unwrap();
         let assets = world.resource::<AssetServer>();
-
-        // let samples = world.resource::<Assets<AudioSample>>();
-
-        // let (sample_id, _) = samples
-        // .iter()
-        // .find(|(x, _)| assets.get_path(*x).unwrap() ==
-        // AssetPath::from(point.sample.clone())) .expect(&format!("Could not
-        // load sample {}", point.sample)); let sample =
-        // assets.get_id_handle(sample_id).unwrap();
-
-        // so i kind of had to edit this becaaaause the last version would crash after
-        // not finsing AudioSample in assets
-        let sample: Handle<AudioSample> = assets.load(AssetPath::from(point.sample.clone()));
+        let sample = assets
+            .get_path_handle::<AudioSample>(point.sample.clone())
+            .unwrap();
 
         let volume = point.volume;
         let mut sampler =
             SamplePlayer::new(sample).with_volume(bevy_seedling::prelude::Volume::Linear(volume));
-        // TODO: make this work lol
-        if point.play_immediately {}
+
         if point.repeat {
             sampler.repeat_mode = match point.repeat_count {
                 Some(count) => bevy_seedling::prelude::RepeatMode::RepeatMultiple {
@@ -75,8 +64,14 @@ impl SoundPoint {
             };
         }
 
+        let playback_settings = match point.play_immediately {
+            false => PlaybackSettings::default().paused(),
+            true => PlaybackSettings::default(),
+        };
+
         world.commands().entity(hook.entity).insert((
             sampler,
+            playback_settings,
             bevy_seedling::sample_effects![HrtfNode::default()],
             WorldSfxPool,
         ));

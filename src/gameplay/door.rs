@@ -2,10 +2,12 @@ use bevy::{
     ecs::{lifecycle::HookContext, world::DeferredWorld},
     prelude::*,
 };
+use bevy_seedling::{prelude::HrtfNode, sample::SamplePlayer};
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-    Usable,
+    AssetServerExt, Usable,
+    audio::mixer::WorldSfxPool,
     gameplay::{EmitHook, HookCounter},
     input::Use,
     ratspinner::RatHookTriggered,
@@ -13,15 +15,30 @@ use crate::{
 
 /// Base door class from which other types of doors inherit
 #[base_class(base(EmitHook))]
-#[derive(Component, Clone, Copy, Default, Reflect)]
+#[derive(Component, Clone, Reflect)]
 #[require(Usable)]
 pub struct DoorBase {
     open: bool,
     locked: bool,
+    sound_locked: String,
+    sound_open: String,
+    sound_close: String,
+}
+
+impl Default for DoorBase {
+    fn default() -> Self {
+        Self {
+            open: false,
+            locked: false,
+            sound_locked: "audio/door_locked.ogg".into(),
+            sound_open: "audio/door_open.ogg".into(),
+            sound_close: "audio/door_close.ogg".into(),
+        }
+    }
 }
 
 #[base_class(base(DoorBase))]
-#[derive(Component, Clone, Copy)]
+#[derive(Component, Clone)]
 #[component(immutable, on_add=Self::on_add_hook)]
 pub struct DoorRotatingBase {
     open_degrees: f32,
@@ -82,6 +99,7 @@ impl DoorRotatingBase {
 
     fn on_use_door(
         event: On<Use>,
+        assets: Res<AssetServer>,
         mut door: Query<(
             Entity,
             &mut DoorBase,
@@ -109,6 +127,7 @@ impl DoorRotatingBase {
             signal_counter.0 += 1;
         }
 
+        let mut sample_to_play = None;
         match door.open {
             // If the door is already open, it can be closed without further checks
             true => {
@@ -117,11 +136,14 @@ impl DoorRotatingBase {
                     door_rotating.animation_seconds,
                     door.open,
                 ));
+                sample_to_play = Some(door.sound_close.clone());
             }
             // If the door is closed, check if it is locked.
             false => match door.locked {
                 // Do nothing if the door is locked
-                true => (),
+                true => {
+                    sample_to_play = Some(door.sound_locked.clone());
+                }
                 // Open the door if unlocked
                 false => {
                     door.open = true;
@@ -129,8 +151,18 @@ impl DoorRotatingBase {
                         door_rotating.animation_seconds,
                         door.open,
                     ));
+                    sample_to_play = Some(door.sound_open.clone());
                 }
             },
+        }
+
+        if let Some(sample) = sample_to_play {
+            cmd.entity(door_entity).with_child((
+                SamplePlayer::new(assets.get_path_handle(sample).unwrap())
+                    .with_volume(bevy_seedling::prelude::Volume::Linear(0.5)),
+                bevy_seedling::sample_effects![HrtfNode::default()],
+                WorldSfxPool,
+            ));
         }
     }
 }

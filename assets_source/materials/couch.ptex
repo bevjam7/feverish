@@ -1,0 +1,235 @@
+{
+	"connections": [
+		{
+			"from": "image",
+			"from_port": 0,
+			"to": "normal_map2",
+			"to_port": 0
+		},
+		{
+			"from": "image",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "normal_blend",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2_2",
+			"from_port": 0,
+			"to": "normal_blend",
+			"to_port": 1
+		},
+		{
+			"from": "normal_blend",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "invert",
+			"to_port": 0
+		},
+		{
+			"from": "invert",
+			"from_port": 0,
+			"to": "normal_map2_2",
+			"to_port": 0
+		},
+		{
+			"from": "image",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "normal_blend",
+			"from_port": 0,
+			"to": "normal_map_convert_2",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map_convert_2",
+			"from_port": 0,
+			"to": "export",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "@Node@8061",
+	"node_position": {
+		"x": 0.0,
+		"y": 0.0
+	},
+	"nodes": [
+		{
+			"export_paths": {
+
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 0.0,
+				"y": 0.0
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
+					"type": "Color"
+				},
+				"ao": 1.0,
+				"depth_scale": 0.5,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 0.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 9,
+				"sss": 1.0
+			},
+			"seed_int": 0,
+			"type": "material"
+		},
+		{
+			"name": "image",
+			"node_position": {
+				"x": -459.775695800781,
+				"y": 2.92074608802795
+			},
+			"parameters": {
+				"clamp": false,
+				"fix_ar": false,
+				"image": "/Users/doomy/Code/feverish/assets_source/models/couch.png"
+			},
+			"seed_int": 0,
+			"type": "image"
+		},
+		{
+			"name": "normal_map2",
+			"node_position": {
+				"x": -265.936492919922,
+				"y": 259.870422363281
+			},
+			"parameters": {
+				"buffer": 1.0,
+				"param2": 0.0,
+				"size": 8,
+				"strength": 0.19
+			},
+			"seed_int": 0,
+			"type": "normal_map2"
+		},
+		{
+			"name": "normal_map2_2",
+			"node_position": {
+				"x": -210.010101318359,
+				"y": 480.376708984375
+			},
+			"parameters": {
+				"buffer": 1.0,
+				"param2": 0.0,
+				"size": 8,
+				"strength": 1.0
+			},
+			"seed_int": 0,
+			"type": "normal_map2"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -209.587875366211,
+				"y": 98.3377151489258
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.275714699548619,
+							"r": 0.0
+						},
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.409302485808161,
+							"r": 1.0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"generic_size": 1,
+			"name": "normal_blend",
+			"node_position": {
+				"x": 126.797546386719,
+				"y": 459.768951416016
+			},
+			"parameters": {
+				"amount1": 0.25
+			},
+			"seed_int": 0,
+			"type": "normal_blend2"
+		},
+		{
+			"name": "invert",
+			"node_position": {
+				"x": -401.362121582031,
+				"y": 477.998107910156
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "invert"
+		},
+		{
+			"name": "export",
+			"node_position": {
+				"x": 281.637878417969,
+				"y": 152.998107910156
+			},
+			"parameters": {
+				"format": 0,
+				"size": 8,
+				"suffix": "normal"
+			},
+			"seed_int": 0,
+			"type": "export"
+		},
+		{
+			"name": "normal_map_convert_2",
+			"node_position": {
+				"x": 438.637878417969,
+				"y": 457.998107910156
+			},
+			"parameters": {
+				"op": 0.0
+			},
+			"seed_int": 0,
+			"type": "normal_map_convert"
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

@@ -6,11 +6,13 @@ use bevy::{
     prelude::*,
     scene::SceneInstanceReady,
 };
+use bevy_seedling::sample::SamplePlayer;
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
     Usable,
-    gameplay::{PhysLayer, link_hierarchal_colliders},
+    gameplay::{PhysLayer, link_hierarchal_colliders, sound::SoundPoint},
+    input::Use,
 };
 
 #[base_class(base(Transform, Visibility), model({path: model}))]
@@ -142,6 +144,34 @@ impl Prop {
                 layers,
             ))
             .observe(link_hierarchal_colliders);
+    }
+}
+
+#[point_class(base(Transform, Visibility, Prop), model({path: model}))]
+#[derive(Default)]
+#[require(Usable)]
+#[component(on_add=Self::on_add_hook)]
+pub(crate) struct Phone;
+
+impl Phone {
+    fn on_add_hook(mut world: DeferredWorld, hook: HookContext) {
+        if world.is_scene_world() {
+            return;
+        }
+        world.commands().entity(hook.entity).observe(Self::on_use);
+    }
+
+    fn on_use(
+        trigger: On<Use>,
+        mut cmd: Commands,
+        children: Query<&Children>,
+        audio: Query<(), With<SamplePlayer>>,
+    ) {
+        for child in children.get(trigger.0).unwrap().iter() {
+            if audio.contains(child) {
+                cmd.entity(child).despawn();
+            }
+        }
     }
 }
 

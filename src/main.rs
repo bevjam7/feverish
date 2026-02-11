@@ -17,15 +17,15 @@ mod voice;
 
 use avian3d::prelude::{CollisionLayers, LayerMask};
 use bevy::{
-    asset::AssetMetaCheck,
-    ecs::{lifecycle::HookContext, world::DeferredWorld},
+    asset::{AssetMetaCheck, AssetPath},
+    ecs::{lifecycle::HookContext, system::SystemParam, world::DeferredWorld},
     gltf::{GltfPlugin, convert_coordinates::GltfConvertCoordinates},
     image::ImagePlugin,
     prelude::*,
 };
 use bevy_trenchbroom::{config::DefaultFaceAttributes, prelude::*};
 
-use crate::gameplay::PhysLayer;
+use crate::{assets::GameAssets, gameplay::PhysLayer};
 
 fn main() -> AppExit {
     App::new().add_plugins(AppPlugin).run()
@@ -129,7 +129,7 @@ impl Plugin for AppPlugin {
             // we might kill ratspinner
             ratspinner::RatSpinnerPlugin,
         ))
-        .add_systems(OnEnter(AppState::Game), spawn_default_main_menu);
+        .add_systems(OnEnter(AppState::Main), spawn_default_main_menu);
     }
 }
 
@@ -168,12 +168,12 @@ enum AppSystems {
 enum AppState {
     #[default]
     Load,
-    Game,
+    Main,
 }
 
 /// The in-game state
 #[derive(SubStates, Copy, Clone, Eq, PartialEq, Hash, Debug, Default)]
-#[source(AppState = AppState::Game)]
+#[source(AppState = AppState::Main)]
 enum GameState {
     #[default]
     Main,
@@ -183,7 +183,7 @@ enum GameState {
 /// The in-game state
 #[derive(SubStates, Copy, Clone, Eq, PartialEq, Hash, Debug, Default)]
 #[source(GameState = GameState::Main)]
-enum Phase {
+pub(crate) enum Phase {
     /// Free explore before entering the game area
     #[default]
     Explore,
@@ -218,5 +218,33 @@ impl Usable {
                 [PhysLayer::Default, PhysLayer::Usable],
                 LayerMask::NONE,
             ));
+    }
+}
+
+pub(crate) trait AssetServerExt {
+    fn get_path_handle<'a, T>(
+        &self,
+        path: impl Into<AssetPath<'a>>,
+    ) -> Result<Handle<T>, BevyError>
+    where
+        T: Asset;
+}
+
+impl AssetServerExt for AssetServer {
+    fn get_path_handle<'a, T>(&self, path: impl Into<AssetPath<'a>>) -> Result<Handle<T>, BevyError>
+    where
+        T: Asset,
+    {
+        let path = path.into();
+        self.get_path_id(&path)
+            .and_then(|id| self.get_id_handle::<T>(id.typed::<T>()))
+            .ok_or(
+                format!(
+                    "Could not find asset with path {}. Did you remember to add it to \
+                     `default.assets.ron`?",
+                    path.to_string()
+                )
+                .into(),
+            )
     }
 }

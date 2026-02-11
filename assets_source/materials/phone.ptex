@@ -1,0 +1,296 @@
+{
+	"connections": [
+		{
+			"from": "image",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "image",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "wavelet_noise2",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 0
+		},
+		{
+			"from": "wavelet_noise2",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 1
+		},
+		{
+			"from": "wavelet_noise2",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 2
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 3
+		},
+		{
+			"from": "combine",
+			"from_port": 0,
+			"to": "normal_map2_2",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "normal_blend",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2_2",
+			"from_port": 0,
+			"to": "normal_blend",
+			"to_port": 1
+		},
+		{
+			"from": "normal_blend",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "image",
+			"from_port": 0,
+			"to": "invert",
+			"to_port": 0
+		},
+		{
+			"from": "invert",
+			"from_port": 0,
+			"to": "normal_map2",
+			"to_port": 0
+		},
+		{
+			"from": "normal_blend",
+			"from_port": 0,
+			"to": "normal_map_convert_2",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map_convert_2",
+			"from_port": 0,
+			"to": "export",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "@Node@2539",
+	"node_position": {
+		"x": 0.0,
+		"y": 0.0
+	},
+	"nodes": [
+		{
+			"export_paths": {
+
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 406.0,
+				"y": -26.7900009155273
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
+					"type": "Color"
+				},
+				"ao": 1.0,
+				"depth_scale": 0.5,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 0.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 11,
+				"sss": 1.0
+			},
+			"seed_int": 0,
+			"type": "material"
+		},
+		{
+			"name": "image",
+			"node_position": {
+				"x": -402.500030517578,
+				"y": -86.7900009155273
+			},
+			"parameters": {
+				"clamp": false,
+				"fix_ar": false,
+				"image": "/Users/doomy/Code/feverish/assets/models/phone/phone.png"
+			},
+			"seed_int": 0,
+			"type": "image"
+		},
+		{
+			"name": "wavelet_noise2",
+			"node_position": {
+				"x": -518.5,
+				"y": 338.210021972656
+			},
+			"parameters": {
+				"frequency": 2.0,
+				"iterations": 1.0,
+				"offset": 0.64,
+				"persistence": 0.94,
+				"scale_x": 64.0,
+				"scale_y": 110.0,
+				"type": 0.0
+			},
+			"seed_int": 169917496,
+			"type": "wavelet_noise2"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -274.5,
+				"y": 185.209991455078
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 0,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0,
+							"r": 1.0
+						},
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.432241908396947,
+							"r": 1.0
+						},
+						{
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.432261908396947,
+							"r": 0.0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "combine",
+			"node_position": {
+				"x": -224.5,
+				"y": 320.209991455078
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "combine"
+		},
+		{
+			"name": "normal_map2",
+			"node_position": {
+				"x": -0.5,
+				"y": 90.2100067138672
+			},
+			"parameters": {
+				"buffer": 1.0,
+				"param2": 0.0,
+				"size": 10.0,
+				"strength": 1.0
+			},
+			"seed_int": 0,
+			"type": "normal_map2"
+		},
+		{
+			"name": "normal_map2_2",
+			"node_position": {
+				"x": -69.5,
+				"y": 329.210021972656
+			},
+			"parameters": {
+				"buffer": 1.0,
+				"param2": 0.0,
+				"size": 8,
+				"strength": 1.0
+			},
+			"seed_int": 0,
+			"type": "normal_map2"
+		},
+		{
+			"generic_size": 1,
+			"name": "normal_blend",
+			"node_position": {
+				"x": 139.5,
+				"y": 221.210006713867
+			},
+			"parameters": {
+				"amount1": 0.07
+			},
+			"seed_int": 0,
+			"type": "normal_blend2"
+		},
+		{
+			"name": "invert",
+			"node_position": {
+				"x": -167.5,
+				"y": 36.2100028991699
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "invert"
+		},
+		{
+			"name": "export",
+			"node_position": {
+				"x": 442.5,
+				"y": 336.210021972656
+			},
+			"parameters": {
+				"format": 0,
+				"size": 8,
+				"suffix": "normal"
+			},
+			"seed_int": 0,
+			"type": "export"
+		},
+		{
+			"name": "normal_map_convert_2",
+			"node_position": {
+				"x": 150.494979858398,
+				"y": 478.464996337891
+			},
+			"parameters": {
+				"op": 0.0
+			},
+			"seed_int": 0,
+			"type": "normal_map_convert"
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

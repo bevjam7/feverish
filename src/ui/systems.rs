@@ -23,7 +23,7 @@ use super::{
     pause_menu::spawn_pause_menu,
     theme,
 };
-use crate::{AppState, GameState, Paused, settings::GameSettings};
+use crate::{AppState, GameState, Paused, assets::GameAssets, settings::GameSettings};
 
 #[derive(Resource)]
 pub(super) struct UiFonts {
@@ -129,14 +129,14 @@ impl UiDiscoveryDb {
     }
 }
 
-pub(super) fn load_fonts(mut commands: Commands, assets: Res<AssetServer>) {
+pub(super) fn populate_ui_fonts_and_cursor(mut commands: Commands, assets: Res<GameAssets>) {
     commands.insert_resource(UiFonts {
-        pixel: assets.load("fonts/PressStart2P-Regular.ttf"),
-        body: assets.load("fonts/VT323-Regular.ttf"),
+        pixel: assets.font_pixel.clone(),
+        body: assets.font_body.clone(),
     });
     commands.insert_resource(UiCursorIcons {
-        pointing: assets.load("icons/cursor.png"),
-        closed: assets.load("icons/cursor-closed.png"),
+        pointing: assets.image_cursor.clone(),
+        closed: assets.image_cursor_closed.clone(),
     });
 }
 
@@ -384,9 +384,9 @@ pub(super) fn handle_menu_actions(
                 next_paused.set(Paused(false));
                 let app_is_game = current_app_state
                     .as_ref()
-                    .is_some_and(|state| *state.get() == AppState::Game);
+                    .is_some_and(|state| *state.get() == AppState::Main);
                 if !app_is_game {
-                    next_app.set(AppState::Game);
+                    next_app.set(AppState::Main);
                 }
                 if let Some(next_game) = &mut next_game {
                     next_game.set(GameState::Prepare);

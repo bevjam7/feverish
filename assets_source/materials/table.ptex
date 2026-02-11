@@ -1,0 +1,259 @@
+{
+	"connections": [
+		{
+			"from": "image",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "image",
+			"from_port": 0,
+			"to": "invert",
+			"to_port": 0
+		},
+		{
+			"from": "invert",
+			"from_port": 0,
+			"to": "normal_map2",
+			"to_port": 0
+		},
+		{
+			"from": "image",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "fbm3",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 0
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 1
+		},
+		{
+			"from": "blend2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 2
+		},
+		{
+			"from": "blend2",
+			"from_port": 0,
+			"to": "export",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "normal_map_convert_2",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map_convert_2",
+			"from_port": 0,
+			"to": "export_2",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "@Node@546",
+	"node_position": {
+		"x": 0.0,
+		"y": 0.0
+	},
+	"nodes": [
+		{
+			"export_paths": {
+
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 160.0,
+				"y": 85.0
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
+					"type": "Color"
+				},
+				"ao": 1.0,
+				"depth_scale": 0.5,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 0.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 11,
+				"sss": 1.0
+			},
+			"seed_int": 0,
+			"type": "material"
+		},
+		{
+			"name": "image",
+			"node_position": {
+				"x": -467.5,
+				"y": 28.0
+			},
+			"parameters": {
+				"clamp": false,
+				"fix_ar": false,
+				"image": "/Users/doomy/Code/feverish/assets/models/table/table.png"
+			},
+			"seed_int": 0,
+			"type": "image"
+		},
+		{
+			"name": "normal_map2",
+			"node_position": {
+				"x": -120.5,
+				"y": 314.0
+			},
+			"parameters": {
+				"buffer": 1.0,
+				"param2": 0.0,
+				"size": 8,
+				"strength": 0.31
+			},
+			"seed_int": 0,
+			"type": "normal_map2"
+		},
+		{
+			"name": "invert",
+			"node_position": {
+				"x": -290.5,
+				"y": 296.0
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "invert"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -184.5,
+				"y": 159.0
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 0.6484375,
+							"g": 0.6484375,
+							"pos": 0.0,
+							"r": 0.6484375
+						},
+						{
+							"a": 1.0,
+							"b": 0.267578125,
+							"g": 0.267578125,
+							"pos": 0.114763944203617,
+							"r": 0.267578125
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "fbm3",
+			"node_position": {
+				"x": -234.400024414062,
+				"y": -111.25
+			},
+			"parameters": {
+				"folds": 0.0,
+				"iterations": 7.0,
+				"noise": 0.0,
+				"offset": 0.0,
+				"persistence": 0.56,
+				"scale_x": 32.0,
+				"scale_y": 32.0
+			},
+			"seed_int": 0,
+			"type": "fbm3"
+		},
+		{
+			"generic_size": 1,
+			"name": "blend2",
+			"node_position": {
+				"x": -3.4000244140625,
+				"y": -81.25
+			},
+			"parameters": {
+				"amount1": 0.82,
+				"blend_type1": 0.0
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"name": "export",
+			"node_position": {
+				"x": 372.599975585938,
+				"y": -87.25
+			},
+			"parameters": {
+				"format": 0,
+				"size": 8,
+				"suffix": "roughness"
+			},
+			"seed_int": 0,
+			"type": "export"
+		},
+		{
+			"name": "export_2",
+			"node_position": {
+				"x": 374.599975585938,
+				"y": 414.75
+			},
+			"parameters": {
+				"format": 0,
+				"size": 8,
+				"suffix": "normal"
+			},
+			"seed_int": 0,
+			"type": "export"
+		},
+		{
+			"name": "normal_map_convert_2",
+			"node_position": {
+				"x": 112.599975585938,
+				"y": 460.75
+			},
+			"parameters": {
+				"op": 0.0
+			},
+			"seed_int": 0,
+			"type": "normal_map_convert"
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

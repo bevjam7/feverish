@@ -10,7 +10,7 @@ impl Plugin for AssetsPlugin {
     fn build(&self, app: &mut App) {
         app.add_loading_state(
             LoadingState::new(AppState::Load)
-                .continue_to_state(AppState::Game)
+                .continue_to_state(AppState::Main)
                 .with_dynamic_assets_file::<StandardDynamicAssetCollection>("default.assets.ron")
                 .load_collection::<GameAssets>(),
         );
@@ -30,4 +30,12 @@ pub struct GameAssets {
     pub audio: Vec<Handle<AudioSample>>,
     #[asset(key = "ratspinner.scripts", collection(typed))]
     pub rat_scripts: Vec<Handle<RatScriptAsset>>,
+    #[asset(key = "font.pixel")]
+    pub font_pixel: Handle<Font>,
+    #[asset(key = "font.body")]
+    pub font_body: Handle<Font>,
+    #[asset(key = "image.cursor")]
+    pub image_cursor: Handle<Image>,
+    #[asset(key = "image.cursor-closed")]
+    pub image_cursor_closed: Handle<Image>,
 }

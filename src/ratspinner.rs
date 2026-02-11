@@ -51,7 +51,7 @@ impl Plugin for RatSpinnerPlugin {
             .add_message::<RatCommand>()
             .add_message::<RatHookTriggered>()
             .add_systems(
-                OnEnter(AppState::Game),
+                OnEnter(AppState::Main),
                 (
                     runtime::load_scripts_from_assets,
                     runtime::seed_builtin_script.after(runtime::load_scripts_from_assets),

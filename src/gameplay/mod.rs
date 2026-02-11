@@ -4,6 +4,8 @@ mod npc;
 mod props;
 mod sound;
 
+use std::time::Duration;
+
 use avian3d::prelude::*;
 use bevy::{
     asset::AssetPath,
@@ -11,11 +13,18 @@ use bevy::{
     prelude::*,
 };
 use bevy_ahoy::prelude::*;
-use bevy_seedling::spatial::SpatialListener3D;
+use bevy_seedling::{
+    prelude::HrtfNode,
+    sample::{AudioSample, SamplePlayer},
+    spatial::SpatialListener3D,
+};
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-    AppSystems, GameState, Phase, Usable,
+    AppSystems, AssetServerExt, GameState, Phase, Usable,
+    assets::GameAssets,
+    audio::mixer::WorldSfxPool,
+    gameplay::props::Phone,
     input::{Use, UseRaycaster},
     map::LevelToPrepare,
     ratspinner::RatHookTriggered,
@@ -32,6 +41,7 @@ impl Plugin for GameplayPlugin {
                 door::rotate_doors,
                 handle_debug_elimination,
                 handle_world_messages,
+                handle_game_phases,
             )
                 .in_set(AppSystems::Update),
         );
@@ -240,5 +250,42 @@ fn handle_world_messages(mut hooks: MessageReader<RatHookTriggered>, mut cmd: Co
         if event.hook == "game.start" {
             cmd.set_state(Phase::Main);
         }
+    }
+}
+
+fn handle_game_phases(
+    phones: Query<Entity, With<Phone>>,
+    mut timer: Local<Timer>,
+    mut state_changes: MessageReader<StateTransitionEvent<Phase>>,
+    time: Res<Time>,
+    current_phase: If<Res<State<Phase>>>,
+    mut cmd: Commands,
+    assets: Res<AssetServer>,
+) {
+    timer.tick(time.delta());
+    for change in state_changes.read() {
+        if let Some(Phase::Main) = change.entered {
+            *timer = Timer::new(Duration::from_secs(4), TimerMode::Once);
+        }
+    }
+
+    match ***current_phase {
+        Phase::Explore => (),
+        Phase::Main =>
+            if timer.just_finished() {
+                let sample: Handle<AudioSample> =
+                    assets.get_path_handle("audio/phone.ogg").unwrap();
+                for entity in phones {
+                    cmd.entity(entity).with_child((
+                        SamplePlayer::new(sample.clone())
+                            .looping()
+                            .with_volume(bevy_seedling::prelude::Volume::Linear(0.5)),
+                        bevy_seedling::sample_effects![HrtfNode::default()],
+                        WorldSfxPool,
+                    ));
+                }
+            },
+        Phase::Win => (),
+        Phase::Lose => (),
     }
 }
