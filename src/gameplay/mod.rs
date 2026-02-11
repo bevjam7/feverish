@@ -1,14 +1,14 @@
 mod door;
+mod focus_fx;
 mod inventory;
 mod npc;
 mod props;
 mod sound;
 
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 
 use avian3d::prelude::*;
 use bevy::{
-    asset::AssetPath,
     ecs::{lifecycle::HookContext, world::DeferredWorld},
     prelude::*,
 };
@@ -26,7 +26,8 @@ use crate::{
     audio::mixer::WorldSfxPool,
     gameplay::props::Phone,
     input::{Use, UseRaycaster},
-    map::LevelToPrepare,
+    map::{LevelToPrepare, PendingLevelTransition},
+    psx::{PsxCamera, PsxConfig},
     ratspinner::RatHookTriggered,
 };
 
@@ -34,11 +35,15 @@ pub(crate) struct GameplayPlugin;
 
 impl Plugin for GameplayPlugin {
     fn build(&self, app: &mut App) {
+        app.init_resource::<DoorScenePreloads>();
         app.add_systems(
             Update,
             (
+                preload_door_target_levels,
                 handle_added_spawn_point_camera,
+                (sound::detect_footstep_surface, sound::handle_footsteps).chain(),
                 door::rotate_doors,
+                focus_fx::handle_focus_effect,
                 handle_debug_elimination,
                 handle_world_messages,
                 handle_game_phases,
@@ -47,6 +52,9 @@ impl Plugin for GameplayPlugin {
         );
     }
 }
+
+#[derive(Resource, Default)]
+struct DoorScenePreloads(HashMap<String, Handle<Scene>>);
 
 /// Marks an entity as owned by the player. Note that this does *not* refer to a
 /// specific entity, but should instead be combined with other queries.
@@ -95,10 +103,10 @@ impl DoorPortal {
 
     fn on_use(
         trigger: On<Use>,
-        mut cmd: Commands,
         targets: Query<&Target>,
         doors: Query<&Self>,
-        mut next_level: ResMut<LevelToPrepare>,
+        mut pending_transition: ResMut<PendingLevelTransition>,
+        mut preloads: ResMut<DoorScenePreloads>,
         assets: Res<AssetServer>,
     ) {
         let door_portal = doors.get(trigger.0).unwrap();
@@ -113,15 +121,32 @@ impl DoorPortal {
             .0
             .clone();
 
-        let handle = assets
-            .get_handle(AssetPath::parse(&format!("maps/{target_level}.map#Scene")))
-            .expect(&format!("maps/{target_level}.map#Scene not found."));
+        let handle = preloads
+            .0
+            .entry(target_level.clone())
+            .or_insert_with(|| assets.load(format!("maps/{target_level}.map#Scene")))
+            .clone();
 
-        // Set desired level
-        next_level.level = Some(handle);
-        next_level.portal_target = Some(target_name);
-        // Transition states
-        cmd.set_state(GameState::Prepare);
+        // Queue transition and let map plugin switch states once dependencies are
+        // ready.
+        pending_transition.level = Some(handle);
+        pending_transition.portal_target = Some(target_name);
+    }
+}
+
+fn preload_door_target_levels(
+    mut preloads: ResMut<DoorScenePreloads>,
+    doors: Query<&DoorPortal, Added<DoorPortal>>,
+    assets: Res<AssetServer>,
+) {
+    for door in &doors {
+        let Some(level) = &door.level else {
+            continue;
+        };
+        preloads
+            .0
+            .entry(level.clone())
+            .or_insert_with(|| assets.load(format!("maps/{level}.map#Scene")));
     }
 }
 
@@ -134,6 +159,7 @@ fn handle_added_spawn_point_camera(
     added: Query<(Entity, &GlobalTransform), Added<SpawnPoint>>,
     level_to_prepare: Res<LevelToPrepare>,
     door_targets: Query<(&Targetable, &GlobalTransform), With<DoorPortalTarget>>,
+    assets: Res<AssetServer>,
 ) {
     const MAX_INTERACTION_DISTANCE: f32 = 3.0;
 
@@ -166,6 +192,7 @@ fn handle_added_spawn_point_camera(
                 target_transform,
                 Player,
                 PlayerRoot,
+                sound::default_footstep_player(assets.as_ref()),
             ))
             .id();
 
@@ -173,6 +200,8 @@ fn handle_added_spawn_point_camera(
         let camera_entity = cmd
             .spawn((
                 crate::camera::player_camera_bundle(),
+                PsxCamera,
+                PsxConfig::default(),
                 CharacterControllerCameraOf::new(player_root),
                 Player,
             ))

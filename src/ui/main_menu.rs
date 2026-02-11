@@ -348,10 +348,14 @@ pub(super) fn spawn_main_menu(commands: &mut Commands, fonts: &UiFonts, owner: E
                                                     Node {
                                                         width: Val::Percent(100.0),
                                                         flex_grow: 1.0,
+                                                        min_height: Val::Px(0.0),
                                                         border: UiRect::all(Val::Px(2.0)),
                                                         padding: UiRect::all(Val::Px(8.0)),
+                                                        overflow: Overflow::scroll_y(),
                                                         ..default()
                                                     },
+                                                    ScrollPosition(Vec2::ZERO),
+                                                    Interaction::default(),
                                                     BackgroundColor(Color::srgb(0.02, 0.03, 0.04)),
                                                     theme::border(false),
                                                 ))

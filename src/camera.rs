@@ -1,14 +1,14 @@
 use bevy::{
     camera::CameraOutputMode,
     core_pipeline::tonemapping::Tonemapping,
-    post_process::auto_exposure::AutoExposure,
     prelude::*,
     render::{
         alpha::AlphaMode,
         render_resource::{BlendState, Face},
-        view::Hdr,
     },
 };
+#[cfg(not(target_arch = "wasm32"))]
+use bevy::{post_process::auto_exposure::AutoExposure, render::view::Hdr};
 
 pub(crate) struct CameraPlugin;
 
@@ -39,12 +39,14 @@ fn spawn_ui_camera(mut commands: Commands) {
         Camera2d,
         IsDefaultUiCamera,
         Camera {
-            order: CameraOrder::Ui.into(),
+            // keep UI above the PSX presentation camera, this was driving me crazy lol
+            order: isize::from(CameraOrder::Ui) + 1,
             ..default()
         },
     ));
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 pub(crate) fn player_camera_bundle() -> impl Bundle {
     (
         Name::new("3D Camera"),
@@ -67,6 +69,25 @@ pub(crate) fn player_camera_bundle() -> impl Bundle {
         AutoExposure::default(),
         Tonemapping::TonyMcMapface,
         Hdr,
+    )
+}
+
+#[cfg(target_arch = "wasm32")]
+pub(crate) fn player_camera_bundle() -> impl Bundle {
+    (
+        Name::new("3D Camera"),
+        Camera {
+            order: CameraOrder::World.into(),
+            ..default()
+        },
+        Camera3d::default(),
+        Projection::Perspective(PerspectiveProjection {
+            near: 0.2,
+            far: 600.0,
+            ..default()
+        }),
+        Msaa::Off,
+        Tonemapping::None,
     )
 }
 

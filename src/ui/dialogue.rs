@@ -68,6 +68,9 @@ pub(super) struct DialogueQuickActionButton {
 }
 
 #[derive(Component)]
+pub(super) struct DialogueConfirmButton;
+
+#[derive(Component)]
 pub(super) struct DialogueOptionSlot;
 
 #[derive(Component)]
@@ -392,6 +395,41 @@ pub(super) fn handle_dialogue_quick_action_buttons(
     }
 }
 
+pub(super) fn handle_dialogue_confirm_button(
+    mut interactions: Query<
+        (&Interaction, &mut BackgroundColor, &mut BorderColor),
+        (Changed<Interaction>, With<DialogueConfirmButton>),
+    >,
+    runtime: Res<UiDialogueRuntime>,
+    mut commands: Commands,
+) {
+    let Some(session) = runtime.session.as_ref() else {
+        return;
+    };
+
+    for (interaction, mut bg, mut border) in &mut interactions {
+        match *interaction {
+            Interaction::Pressed => {
+                *bg = BackgroundColor(theme::BUTTON_BG);
+                *border = theme::border(false);
+                if session.revealed >= session.text_chars.len()
+                    && session.selected_option < session.options.len()
+                {
+                    commands.write_message(RatCommand::Choose(session.selected_option));
+                }
+            }
+            Interaction::Hovered => {
+                *bg = BackgroundColor(theme::BUTTON_HOVER);
+                *border = theme::border(true);
+            }
+            Interaction::None => {
+                *bg = BackgroundColor(Color::srgb(0.08, 0.10, 0.13));
+                *border = theme::border(true);
+            }
+        }
+    }
+}
+
 pub(super) fn sync_picker_preview_from_selection(
     mut commands: Commands,
     fonts: Res<UiFonts>,
@@ -621,6 +659,8 @@ fn spawn_dialogue(
 
                             selector
                                 .spawn((
+                                    Button,
+                                    DialogueConfirmButton,
                                     Node {
                                         flex_grow: 1.0,
                                         height: Val::Percent(100.0),

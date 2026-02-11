@@ -3,14 +3,12 @@ use bevy::{prelude::*, text::TextLayout, ui::FocusPolicy};
 use super::{
     components::{
         ButtonAction, MainMenuPage, MainMenuTicker, MenuButton, MenuConfirmState, MenuKind,
-        MenuOwner, MenuRoot, PauseMenuPage, PauseMenuSettingsPanel, PauseMenuState,
-        PauseMenuStatusPanel, SettingsValueText,
+        MenuOwner, MenuRoot, PauseMenuPage, PauseMenuState, PauseMenuStatusPanel,
     },
     confirm_popup::spawn_confirm_popup,
     systems::UiFonts,
     theme,
 };
-use crate::settings::SettingKey;
 
 pub(super) fn spawn_pause_menu(commands: &mut Commands, fonts: &UiFonts, owner: Entity) -> Entity {
     let root = commands
@@ -126,13 +124,6 @@ pub(super) fn spawn_pause_menu(commands: &mut Commands, fonts: &UiFonts, owner: 
                                 owner,
                                 "STATUS",
                                 ButtonAction::SelectPage(MainMenuPage::Home),
-                            );
-                            spawn_pause_button(
-                                menu,
-                                fonts,
-                                owner,
-                                "SETTINGS",
-                                ButtonAction::SelectPage(MainMenuPage::Settings),
                             );
                             spawn_pause_button(
                                 menu,
@@ -268,56 +259,6 @@ pub(super) fn spawn_pause_menu(commands: &mut Commands, fonts: &UiFonts, owner: 
                                             ));
                                         });
                                 });
-
-                            panel
-                                .spawn((
-                                    PauseMenuSettingsPanel { owner },
-                                    Node {
-                                        width: Val::Percent(100.0),
-                                        flex_grow: 1.0,
-                                        border: UiRect::all(Val::Px(2.0)),
-                                        padding: UiRect::all(Val::Px(6.0)),
-                                        overflow: Overflow::clip_y(),
-                                        flex_direction: FlexDirection::Column,
-                                        row_gap: Val::Px(6.0),
-                                        display: Display::None,
-                                        ..default()
-                                    },
-                                    BackgroundColor(Color::srgb(0.02, 0.03, 0.04)),
-                                    theme::border(false),
-                                ))
-                                .with_children(|settings| {
-                                    settings.spawn((
-                                        Text::new("SETTINGS"),
-                                        TextFont {
-                                            font: fonts.pixel.clone(),
-                                            font_size: 12.0,
-                                            ..default()
-                                        },
-                                        TextColor(theme::TEXT_LIGHT),
-                                    ));
-
-                                    settings
-                                        .spawn((
-                                            Node {
-                                                width: Val::Percent(100.0),
-                                                flex_grow: 1.0,
-                                                min_height: Val::Px(0.0),
-                                                flex_direction: FlexDirection::Column,
-                                                row_gap: Val::Px(6.0),
-                                                overflow: Overflow::scroll_y(),
-                                                padding: UiRect::right(Val::Px(4.0)),
-                                                ..default()
-                                            },
-                                            ScrollPosition(Vec2::ZERO),
-                                            Interaction::default(),
-                                        ))
-                                        .with_children(|list| {
-                                            for key in SettingKey::ALL {
-                                                spawn_pause_settings_row(list, fonts, owner, key);
-                                            }
-                                        });
-                                });
                         });
                     });
 
@@ -387,124 +328,6 @@ fn spawn_pause_button(
                 TextFont {
                     font: fonts.pixel.clone(),
                     font_size: 13.0,
-                    ..default()
-                },
-                TextColor(theme::TEXT_DARK),
-            ));
-        });
-}
-
-fn spawn_pause_settings_row(
-    parent: &mut ChildSpawnerCommands,
-    fonts: &UiFonts,
-    owner: Entity,
-    key: SettingKey,
-) {
-    parent
-        .spawn((
-            Node {
-                width: Val::Percent(100.0),
-                min_height: Val::Px(36.0),
-                border: UiRect::all(Val::Px(2.0)),
-                padding: UiRect::horizontal(Val::Px(6.0)),
-                align_items: AlignItems::Center,
-                column_gap: Val::Px(8.0),
-                ..default()
-            },
-            BackgroundColor(Color::srgb(0.08, 0.09, 0.11)),
-            theme::border(true),
-        ))
-        .with_children(|row| {
-            row.spawn(Node {
-                flex_grow: 1.0,
-                min_width: Val::Px(0.0),
-                ..default()
-            })
-            .with_children(|label| {
-                label.spawn((
-                    Text::new(key.label()),
-                    TextFont {
-                        font: fonts.pixel.clone(),
-                        font_size: 10.0,
-                        ..default()
-                    },
-                    TextColor(theme::TEXT_LIGHT),
-                ));
-            });
-
-            row.spawn(Node {
-                width: Val::Px(170.0),
-                min_width: Val::Px(170.0),
-                max_width: Val::Px(170.0),
-                justify_content: JustifyContent::SpaceBetween,
-                align_items: AlignItems::Center,
-                ..default()
-            })
-            .with_children(|controls| {
-                spawn_pause_settings_step_button(controls, fonts, owner, key, "-", -1);
-
-                controls
-                    .spawn(Node {
-                        width: Val::Px(82.0),
-                        min_width: Val::Px(82.0),
-                        max_width: Val::Px(82.0),
-                        justify_content: JustifyContent::Center,
-                        align_items: AlignItems::Center,
-                        ..default()
-                    })
-                    .with_children(|value_box| {
-                        value_box.spawn((
-                            SettingsValueText { owner, key },
-                            Text::new("--"),
-                            TextFont {
-                                font: fonts.body.clone(),
-                                font_size: 24.0,
-                                ..default()
-                            },
-                            TextColor(theme::CRT_GREEN),
-                        ));
-                    });
-
-                spawn_pause_settings_step_button(controls, fonts, owner, key, "+", 1);
-            });
-        });
-}
-
-fn spawn_pause_settings_step_button(
-    parent: &mut ChildSpawnerCommands,
-    fonts: &UiFonts,
-    owner: Entity,
-    key: SettingKey,
-    label: &str,
-    step: i32,
-) {
-    parent
-        .spawn((
-            Button,
-            MenuOwner(owner),
-            MenuButton {
-                action: ButtonAction::AdjustSetting(key, step),
-                raised: true,
-            },
-            Node {
-                width: Val::Px(30.0),
-                min_width: Val::Px(30.0),
-                max_width: Val::Px(30.0),
-                min_height: Val::Px(24.0),
-                border: UiRect::all(Val::Px(2.0)),
-                justify_content: JustifyContent::Center,
-                align_items: AlignItems::Center,
-                ..default()
-            },
-            BackgroundColor(theme::BUTTON_BG),
-            theme::border(true),
-        ))
-        .with_children(|button| {
-            button.spawn((
-                Text::new(label),
-                TextFont {
-                    font: fonts.pixel.clone(),
-                    font_size: 11.0,
                     ..default()
                 },
                 TextColor(theme::TEXT_DARK),

@@ -10,6 +10,7 @@ mod camera;
 mod gameplay;
 mod input;
 mod map;
+mod psx;
 mod ratspinner;
 mod settings;
 mod ui;
@@ -56,7 +57,7 @@ impl Plugin for AppPlugin {
                     .into(),
                     ..default()
                 })
-                .set(ImagePlugin::default_linear())
+                .set(ImagePlugin::default_nearest())
                 .set(GltfPlugin {
                     convert_coordinates: GltfConvertCoordinates {
                         rotate_scene_entity: true,
@@ -116,6 +117,7 @@ impl Plugin for AppPlugin {
         // Set up game plugins
         app.add_plugins((
             settings::SettingsPlugin,
+            psx::PsxPlugin,
             assets::AssetsPlugin,
             camera::CameraPlugin,
             map::MapPlugin,

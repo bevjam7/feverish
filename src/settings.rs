@@ -29,10 +29,13 @@ pub enum SettingKey {
     UiScaleMode,
     UiScale,
     CursorMotion,
+    UiFx,
+    UiMonitorDistortion,
+    UiCursorDistortion,
 }
 
 impl SettingKey {
-    pub const ALL: [Self; 9] = [
+    pub const ALL: [Self; 12] = [
         Self::MasterVolume,
         Self::MusicVolume,
         Self::UiSfxVolume,
@@ -42,6 +45,9 @@ impl SettingKey {
         Self::UiScaleMode,
         Self::UiScale,
         Self::CursorMotion,
+        Self::UiFx,
+        Self::UiMonitorDistortion,
+        Self::UiCursorDistortion,
     ];
 
     pub const fn label(self) -> &'static str {
@@ -55,6 +61,9 @@ impl SettingKey {
             Self::UiScaleMode => "ui scale mode",
             Self::UiScale => "manual ui scale",
             Self::CursorMotion => "cursor motion",
+            Self::UiFx => "ui shader",
+            Self::UiMonitorDistortion => "monitor distortion",
+            Self::UiCursorDistortion => "cursor distortion",
         }
     }
 }
@@ -71,6 +80,9 @@ pub struct GameSettings {
     pub ui_scale_auto: bool,
     pub manual_ui_scale: f32,
     pub cursor_motion: bool,
+    pub ui_fx: bool,
+    pub ui_monitor_distortion: bool,
+    pub ui_cursor_distortion: bool,
 }
 
 impl Default for GameSettings {
@@ -85,6 +97,9 @@ impl Default for GameSettings {
             ui_scale_auto: true,
             manual_ui_scale: 1.0,
             cursor_motion: true,
+            ui_fx: true,
+            ui_monitor_distortion: true,
+            ui_cursor_distortion: true,
         }
     }
 }
@@ -124,6 +139,15 @@ impl GameSettings {
             SettingKey::CursorMotion => {
                 self.cursor_motion = !self.cursor_motion;
             }
+            SettingKey::UiFx => {
+                self.ui_fx = !self.ui_fx;
+            }
+            SettingKey::UiMonitorDistortion => {
+                self.ui_monitor_distortion = !self.ui_monitor_distortion;
+            }
+            SettingKey::UiCursorDistortion => {
+                self.ui_cursor_distortion = !self.ui_cursor_distortion;
+            }
         }
     }
 
@@ -144,6 +168,24 @@ impl GameSettings {
             SettingKey::UiScale => format!("{:.0}%", self.manual_ui_scale * 100.0),
             SettingKey::CursorMotion =>
                 if self.cursor_motion {
+                    "on".to_string()
+                } else {
+                    "off".to_string()
+                },
+            SettingKey::UiFx =>
+                if self.ui_fx {
+                    "on".to_string()
+                } else {
+                    "off".to_string()
+                },
+            SettingKey::UiMonitorDistortion =>
+                if self.ui_monitor_distortion {
+                    "on".to_string()
+                } else {
+                    "off".to_string()
+                },
+            SettingKey::UiCursorDistortion =>
+                if self.ui_cursor_distortion {
                     "on".to_string()
                 } else {
                     "off".to_string()

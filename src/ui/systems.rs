@@ -2,9 +2,8 @@ use std::collections::HashMap;
 
 use bevy::{
     input::mouse::{MouseScrollUnit, MouseWheel},
-    picking::hover::HoverMap,
     prelude::*,
-    ui::{FocusPolicy, UiScale},
+    ui::{ComputedNode, FocusPolicy, UiScale, ui_transform::UiGlobalTransform},
     window::{CursorOptions, PrimaryWindow},
 };
 
@@ -231,8 +230,10 @@ pub(super) fn update_ui_cursor(
         node.display = Display::Flex;
         let ui_x = (pos.x / ui_scale.0).round();
         let ui_y = (pos.y / ui_scale.0).round();
-        node.left = Val::Px(ui_x);
-        node.top = Val::Px(ui_y);
+        // tried to clibrate hotspot so the icon finger tip aligns with the real pointer, maybe this shoulld work?
+        let offset = Vec2::new(0.0, 3.0);
+        node.left = Val::Px(ui_x + offset.x);
+        node.top = Val::Px(ui_y + offset.y);
 
         let delta = if let Some(prev) = *last_cursor_pos {
             pos - prev
@@ -291,6 +292,59 @@ pub(super) fn update_ui_cursor(
         let scale_bump = if click_pulse > 0.08 { 1.0 } else { 0.0 };
         transform.scale = Vec2::splat(2.0 + scale_bump);
         transform.rotation = Rot2::IDENTITY;
+    }
+}
+
+pub(super) fn emulate_button_interaction_for_offscreen_ui(
+    windows: Query<&Window, With<PrimaryWindow>>,
+    mouse: Res<ButtonInput<MouseButton>>,
+    ui_visible: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>, With<DialogueUiRoot>)>>,
+    mut interactables: Query<(
+        &ComputedNode,
+        &UiGlobalTransform,
+        &mut Interaction,
+        Option<&InheritedVisibility>,
+        Option<&DisabledButton>,
+    )>,
+) {
+    let Ok(window) = windows.single() else {
+        return;
+    };
+
+    let has_visible_ui = !ui_visible.is_empty();
+    let cursor = window.cursor_position();
+    let pressed = mouse.pressed(MouseButton::Left);
+    let just_released = mouse.just_released(MouseButton::Left);
+
+    for (node, transform, mut interaction, inherited_visibility, disabled) in &mut interactables {
+        if !has_visible_ui
+            || disabled.is_some()
+            || inherited_visibility.is_some_and(|visibility| !visibility.get())
+            || node.size() == Vec2::ZERO
+        {
+            interaction.set_if_neq(Interaction::None);
+            continue;
+        }
+
+        let Some(cursor_position) = cursor else {
+            interaction.set_if_neq(Interaction::None);
+            continue;
+        };
+        let contains = node.contains_point(*transform, cursor_position);
+
+        let next = if contains {
+            if just_released {
+                Interaction::Pressed
+            } else if pressed {
+                Interaction::Hovered
+            } else {
+                Interaction::Hovered
+            }
+        } else {
+            Interaction::None
+        };
+
+        interaction.set_if_neq(next);
     }
 }
 
@@ -447,17 +501,26 @@ pub(super) fn handle_pause_shortcut(
 
 pub(super) fn send_scroll_events(
     mut mouse_wheel_events: MessageReader<MouseWheel>,
-    hover_map: Res<HoverMap>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
+    windows: Query<&Window, With<PrimaryWindow>>,
     mut commands: Commands,
-    _query: Query<(
-        &mut ScrollPosition,
-        &Node,
-        &ComputedNode,
-        &InheritedVisibility,
-    )>,
+    scrollables: Query<
+        (
+            Entity,
+            &Node,
+            &ComputedNode,
+            &UiGlobalTransform,
+            &InheritedVisibility,
+            Option<&GlobalZIndex>,
+        ),
+        With<ScrollPosition>,
+    >,
 ) {
     const SCROLL_LINE: f32 = 24.0;
+    let Ok(window) = windows.single() else {
+        return;
+    };
+    let cursor = window.cursor_position();
 
     for event in mouse_wheel_events.read() {
         let mut delta = -Vec2::new(event.x, event.y);
@@ -468,12 +531,48 @@ pub(super) fn send_scroll_events(
             std::mem::swap(&mut delta.x, &mut delta.y);
         }
 
-        for pointer_map in hover_map.values() {
-            for entity in pointer_map.keys().copied() {
-                commands.trigger(UiScrollEvent { entity, delta });
-            }
+        let Some(entity) = pick_scroll_owner_at_cursor(cursor, &scrollables) else {
+            continue;
+        };
+        commands.trigger(UiScrollEvent { entity, delta });
+    }
+}
+
+fn pick_scroll_owner_at_cursor(
+    cursor: Option<Vec2>,
+    scrollables: &Query<
+        (
+            Entity,
+            &Node,
+            &ComputedNode,
+            &UiGlobalTransform,
+            &InheritedVisibility,
+            Option<&GlobalZIndex>,
+        ),
+        With<ScrollPosition>,
+    >,
+) -> Option<Entity> {
+    let cursor = cursor?;
+    let mut best: Option<(i32, f32, Entity)> = None;
+
+    for (entity, node, computed, transform, visibility, z) in scrollables.iter() {
+        if !visibility.get()
+            || computed.size() == Vec2::ZERO
+            || (node.overflow.x != OverflowAxis::Scroll && node.overflow.y != OverflowAxis::Scroll)
+            || !computed.contains_point(*transform, cursor)
+        {
+            continue;
+        }
+
+        let area = computed.size().x * computed.size().y;
+        let z = z.map_or(0, |it| it.0);
+        match best {
+            Some((best_z, best_area, _)) if z < best_z || (z == best_z && area >= best_area) => {}
+            _ => best = Some((z, area, entity)),
         }
     }
+
+    best.map(|(_, _, entity)| entity)
 }
 
 pub(super) fn on_ui_scroll(
