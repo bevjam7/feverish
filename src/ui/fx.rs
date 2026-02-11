@@ -1,5 +1,5 @@
 use bevy::{
-    camera::{CameraOutputMode, RenderTarget, visibility::RenderLayers},
+    camera::{RenderTarget, visibility::RenderLayers},
     image::ImageSampler,
     prelude::*,
     reflect::TypePath,
@@ -147,6 +147,7 @@ fn spawn_ui_fx_present_camera(mut commands: Commands) {
         Camera2d,
         Camera {
             order: 3,
+            clear_color: ClearColorConfig::None,
             ..default()
         },
         RenderLayers::layer(UI_FX_LAYER),
@@ -164,10 +165,6 @@ fn bind_default_ui_camera_to_fx_target(
 ) {
     for (entity, mut camera) in &mut q_ui_camera {
         camera.clear_color = ClearColorConfig::Custom(Color::NONE);
-        camera.output_mode = CameraOutputMode::Write {
-            blend_state: None,
-            clear_color: ClearColorConfig::Custom(Color::NONE),
-        };
         commands.entity(entity).insert((
             RenderTarget::Image(target.texture.clone().into()),
             UiFxBoundDefaultCamera,
@@ -242,6 +239,8 @@ fn update_ui_fx_material(
     time: Res<Time>,
     material_handle: Res<UiFxMaterialHandle>,
     mut materials: ResMut<Assets<UiMenuFxMaterial>>,
+    mut quad_visibility: Query<&mut Visibility, With<UiFxQuad>>,
+    mut present_cameras: Query<&mut Camera, With<UiFxPresentCamera>>,
 ) {
     let Ok(window) = windows.single() else {
         return;
@@ -255,6 +254,17 @@ fn update_ui_fx_material(
     material.viewport = Vec4::new(width, height, 1.0 / width, 1.0 / height);
 
     let menu_visible = !menus.is_empty();
+    for mut visibility in &mut quad_visibility {
+        *visibility = if menu_visible {
+            Visibility::Visible
+        } else {
+            Visibility::Hidden
+        };
+    }
+    for mut camera in &mut present_cameras {
+        camera.is_active = menu_visible;
+    }
+
     let shader_on = menu_visible && settings.ui_fx;
     material.params_b.w = if shader_on { 1.0 } else { 0.0 };
     material.params_b.z = if settings.ui_monitor_distortion {

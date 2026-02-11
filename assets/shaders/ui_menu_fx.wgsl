@@ -3,20 +3,20 @@
     mesh2d_view_bindings::globals,
 }
 
-@group(#{MATERIAL_BIND_GROUP}) @binding(0)
+@group(2) @binding(0)
 var ui_tex: texture_2d<f32>;
-@group(#{MATERIAL_BIND_GROUP}) @binding(1)
+@group(2) @binding(1)
 var ui_sampler: sampler;
 
-@group(#{MATERIAL_BIND_GROUP}) @binding(2)
+@group(2) @binding(2)
 var<uniform> ui_tint: vec4<f32>;
-@group(#{MATERIAL_BIND_GROUP}) @binding(3)
+@group(2) @binding(3)
 var<uniform> ui_params_a: vec4<f32>; // x: pixel_size, y: quant_steps, z: dither_strength, w: melt_strength
-@group(#{MATERIAL_BIND_GROUP}) @binding(4)
+@group(2) @binding(4)
 var<uniform> ui_params_b: vec4<f32>; // x: autonomous chance, y: speed, z: monitor_on, w: mix
-@group(#{MATERIAL_BIND_GROUP}) @binding(5)
+@group(2) @binding(5)
 var<uniform> ui_viewport: vec4<f32>;
-@group(#{MATERIAL_BIND_GROUP}) @binding(6)
+@group(2) @binding(6)
 var<uniform> ui_cursor: vec4<f32>; // x/y normalized, z visible, w cursor_distortion_on
 
 fn hash12(p: vec2<f32>) -> f32 {

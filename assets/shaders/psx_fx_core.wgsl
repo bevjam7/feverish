@@ -50,17 +50,12 @@ fn hash_noise(pix: vec2<f32>) -> f32 {
 }
 
 fn dither_value(pix: vec2<f32>, mode: u32) -> f32 {
-    switch (mode) {
-        case 3u: {
-            return ign(pix);
-        }
-        case 4u: {
-            return hash_noise(pix);
-        }
-        default: {
-            return bayer4(pix);
-        }
+    if mode == 3u {
+        return ign(pix);
+    } else if mode == 4u {
+        return hash_noise(pix);
     }
+    return bayer4(pix);
 }
 
 fn quantize_rgb(
@@ -75,7 +70,7 @@ fn quantize_rgb(
         return rgb;
     }
 
-    let levels = f32(max(steps_u, 2u) - 1u);
+    let levels = f32(max(steps_u, 2u)) - 1.0;
 
     var d = 0.0;
     if fx_enabled(flags, FX_DITHER) {
@@ -83,7 +78,7 @@ fn quantize_rgb(
     }
 
     // use unbiased quantization to avoid darkening from floor() bias
-    let rgb_q = round(rgb * levels + d) / levels;
+    let rgb_q = round(rgb * levels + d) / max(levels, 0.001);
     return saturate3(rgb_q);
 }
 

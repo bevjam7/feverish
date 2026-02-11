@@ -94,6 +94,7 @@ impl Plugin for UiPlugin {
                     dialogue::handle_dialogue_shortcuts,
                     dialogue::handle_dialogue_arrow_buttons,
                     dialogue::handle_dialogue_quick_action_buttons,
+                    dialogue::handle_dialogue_confirm_button,
                     dialogue::animate_option_slot_transition,
                     dialogue::animate_dialogue_glyphs,
                 ),
