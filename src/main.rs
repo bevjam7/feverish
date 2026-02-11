@@ -109,7 +109,8 @@ impl Plugin for AppPlugin {
         // Set up states
         app.init_state::<Paused>()
             .init_state::<AppState>()
-            .add_sub_state::<GameState>();
+            .add_sub_state::<GameState>()
+            .add_sub_state::<Phase>();
         app.configure_sets(Update, PausableSystems.run_if(in_state(Paused(false))));
 
         // Set up game plugins
@@ -177,6 +178,21 @@ enum GameState {
     #[default]
     Main,
     Prepare,
+}
+
+/// The in-game state
+#[derive(SubStates, Copy, Clone, Eq, PartialEq, Hash, Debug, Default)]
+#[source(GameState = GameState::Main)]
+enum Phase {
+    /// Free explore before entering the game area
+    #[default]
+    Explore,
+    /// Main game phase
+    Main,
+    /// Win state
+    Win,
+    /// Loss state
+    Lose,
 }
 
 /// A system set for systems that shouldn't run while the game is paused.

@@ -1002,6 +1002,7 @@
 "angles" "0 0 0"
 "model" "models/npc_a/npc_a.gltf"
 "idle_animation" "idle_lean"
+"suspect" "Human"
 }
 // entity 19
 {
@@ -1010,14 +1011,16 @@
 "angles" "0 -105 0"
 "model" "models/npc_a/npc_a.gltf"
 "idle_animation" "idle_a"
+"suspect" "Imposter"
 }
 // entity 20
 {
 "classname" "npc"
-"origin" "208 274.628 8"
+"origin" "208 274.628 0"
 "angles" "0 -45 0"
 "model" "models/npc_a/npc_a.gltf"
-"idle_animation" "cower"
+"idle_animation" "idle_a"
+"suspect" "Imposter"
 }
 // entity 21
 {
@@ -1079,6 +1082,7 @@
 "locked" "false"
 "angles" "0 0 0"
 "targetname" "s"
+"hook" "game.start"
 "_tb_group" "13"
 // brush 0
 {
@@ -1289,4 +1293,13 @@
 ( 328 160 52 ) ( 320 160 52 ) ( 320 160 44 ) origin [ 2 -4.445538227624654e-15 0 -16 ] [ 0 0 -24 0 ] 270 1 1
 ( 328 152 44 ) ( 328 152 52 ) ( 328 160 52 ) origin [ -4.358685459793903e-15 -2.000000000016242 0 -48 ] [ 0 0 -24 0 ] 270 1 1
 }
+}
+// entity 31
+{
+"classname" "npc"
+"origin" "344 366.628 0"
+"angles" "0 -45 0"
+"model" "models/npc_a/npc_a.gltf"
+"idle_animation" "idle_a"
+"suspect" "Imposter"
 }

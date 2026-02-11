@@ -15,9 +15,10 @@ use bevy_seedling::spatial::SpatialListener3D;
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-    AppSystems, GameState, Usable,
+    AppSystems, GameState, Phase, Usable,
     input::{Use, UseRaycaster},
     map::LevelToPrepare,
+    ratspinner::RatHookTriggered,
 };
 
 pub(crate) struct GameplayPlugin;
@@ -26,7 +27,13 @@ impl Plugin for GameplayPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (handle_added_spawn_point_camera, door::rotate_doors).in_set(AppSystems::Update),
+            (
+                handle_added_spawn_point_camera,
+                door::rotate_doors,
+                handle_debug_elimination,
+                handle_world_messages,
+            )
+                .in_set(AppSystems::Update),
         );
     }
 }
@@ -198,6 +205,40 @@ fn link_hierarchal_colliders(
         if colliders.contains(child) {
             cmd.entity(child)
                 .insert(ColliderHierarchyChildOf(trigger.entity));
+        }
+    }
+}
+
+#[base_class]
+#[derive(Default)]
+#[require(HookCounter)]
+pub(crate) struct EmitHook {
+    pub(crate) hook: Option<String>,
+    pub(crate) hook_repeat: bool,
+}
+
+#[derive(Component, Default, Reflect)]
+#[reflect(Component)]
+pub(crate) struct HookCounter(usize);
+
+fn handle_debug_elimination(mut hooks: MessageReader<RatHookTriggered>, mut cmd: Commands) {
+    for event in hooks.read() {
+        if event.hook == "debug.eliminate_target" {
+            if let Some(target) = event.target {
+                info!("eliminating npc: {:?}", target);
+                // TODO: death animation
+                cmd.entity(target).despawn();
+                // Entity has `Suspect` value in `Npc` component which can be
+                // queried for UI/gameplay updates
+            }
+        }
+    }
+}
+
+fn handle_world_messages(mut hooks: MessageReader<RatHookTriggered>, mut cmd: Commands) {
+    for event in hooks.read() {
+        if event.hook == "game.start" {
+            cmd.set_state(Phase::Main);
         }
     }
 }

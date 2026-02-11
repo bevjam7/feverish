@@ -20,6 +20,14 @@ pub(crate) struct Npc {
     model: String,
     #[class(default = "idle_a")]
     idle_animation: String,
+    /// Marks the NPC as one that must be eliminated or saved
+    suspect: Option<SuspectType>,
+}
+
+#[derive(Reflect, FgdType)]
+enum SuspectType {
+    Imposter,
+    Human,
 }
 
 impl Default for Npc {
@@ -27,6 +35,7 @@ impl Default for Npc {
         Self {
             model: Default::default(),
             idle_animation: "idle_a".into(),
+            suspect: None,
         }
     }
 }

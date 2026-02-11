@@ -4,10 +4,15 @@ use bevy::{
 };
 use bevy_trenchbroom::prelude::*;
 
-use crate::{Usable, input::Use};
+use crate::{
+    Usable,
+    gameplay::{EmitHook, HookCounter},
+    input::Use,
+    ratspinner::RatHookTriggered,
+};
 
 /// Base door class from which other types of doors inherit
-#[base_class]
+#[base_class(base(EmitHook))]
 #[derive(Component, Clone, Copy, Default, Reflect)]
 #[require(Usable)]
 pub struct DoorBase {
@@ -77,10 +82,33 @@ impl DoorRotatingBase {
 
     fn on_use_door(
         event: On<Use>,
-        mut door: Query<(Entity, &mut DoorBase, &DoorRotatingBase)>,
+        mut door: Query<(
+            Entity,
+            &mut DoorBase,
+            &DoorRotatingBase,
+            &EmitHook,
+            &mut HookCounter,
+        )>,
         mut cmd: Commands,
+        mut signal_messages: MessageWriter<RatHookTriggered>,
     ) {
-        let (door_entity, mut door, door_rotating) = door.get_mut(event.event_target()).unwrap();
+        let (door_entity, mut door, door_rotating, maybe_signal, mut signal_counter) =
+            door.get_mut(event.event_target()).unwrap();
+
+        // Send signals
+        if signal_counter.0 == 0 || maybe_signal.hook_repeat {
+            if let Some(ref signal) = maybe_signal.hook {
+                signal_messages.write(RatHookTriggered {
+                    hook: signal.clone(),
+                    script_id: Default::default(),
+                    node_id: Default::default(),
+                    option_id: None,
+                    target: None,
+                });
+            }
+            signal_counter.0 += 1;
+        }
+
         match door.open {
             // If the door is already open, it can be closed without further checks
             true => {
