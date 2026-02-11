@@ -1178,10 +1178,10 @@
 // entity 19
 {
 "classname" "npc"
-"origin" "799.38 368 0"
+"origin" "640.38 396 0"
 "angles" "0 -105 0"
 "model" "models/npc_a/npc_a.gltf"
-"idle_animation" "idle_a"
+"idle_animation" "sit"
 "suspect" "Imposter"
 }
 // entity 20
@@ -1190,7 +1190,7 @@
 "origin" "208 274.628 0"
 "angles" "0 -45 0"
 "model" "models/npc_a/npc_a.gltf"
-"idle_animation" "idle_a"
+"idle_animation" "cower"
 "suspect" "Imposter"
 }
 // entity 21
@@ -1451,9 +1451,8 @@
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "door"
-"_tb_id" "29"
-"_tb_linked_group_id" "{714b0b94-2be0-4eb7-802b-20ed4c0d0a95}"
-"_tb_transformation" "-4.286263797015736e-16 1 0 460 -1 -4.286263797015736e-16 0 180.00000000000003 0 0 1 0 0 0 0 1"
+"_tb_id" "30"
+"_tb_linked_group_id" "{48e5d671-7d39-4e98-bae0-154dcbd1dd1d}"
 // brush 0
 {
 ( 316 208 96 ) ( 316 204 96 ) ( 316 204 0 ) interior_door [ -3.2213814419493716e-16 -1.0000000000000002 0 164.36127 ] [ 0 0 -1 0 ] 180 0.22377978 0.39613423
@@ -1487,9 +1486,9 @@
 "classname" "func_door_rotating"
 "open" "false"
 "open_degrees" "100"
-"locked" "true"
+"locked" "false"
 "angles" "0 0 0"
-"_tb_group" "29"
+"_tb_group" "30"
 // brush 0
 {
 ( 322 204 96 ) ( 322 156 96 ) ( 322 156 0 ) interior_door [ -3.2213814419493716e-16 -1.0000000000000002 0 164.36157 ] [ 0 0 -1 0 ] 180 0.22377978 0.39613423

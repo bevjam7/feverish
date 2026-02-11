@@ -60,7 +60,7 @@ impl Npc {
         // heavily specific :( jam moment!
         let mut graph = AnimationGraph::new();
 
-        let clips = ["idle_a", "idle_lean", "walk", "cower"];
+        let clips = ["cower", "sit", "idle_a", "idle_lean", "walk"];
         let register_animation = |clip_name: &'static str| -> (&'static str, AnimationNodeIndex) {
             (
                 clip_name,
@@ -77,7 +77,13 @@ impl Npc {
                 ),
             )
         };
-        let animations = clips.into_iter().map(register_animation).collect();
+        let animations = clips
+            .into_iter()
+            // TODO: Breaks when we add more than 2 animations to root, so filtering to just the
+            // idle animation
+            .filter(|x| x == &npc.idle_animation)
+            .map(register_animation)
+            .collect();
         let graph_handle = {
             let mut graphs = world.resource_mut::<Assets<AnimationGraph>>();
             graphs.add(graph)
