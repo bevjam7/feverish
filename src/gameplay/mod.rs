@@ -33,6 +33,7 @@ impl Plugin for GameplayPlugin {
             (
                 preload_door_target_levels,
                 handle_added_spawn_point_camera,
+                (sound::detect_footstep_surface, sound::handle_footsteps).chain(),
                 door::rotate_doors,
                 focus_fx::handle_focus_effect,
             )
@@ -147,6 +148,7 @@ fn handle_added_spawn_point_camera(
     added: Query<(Entity, &GlobalTransform), Added<SpawnPoint>>,
     level_to_prepare: Res<LevelToPrepare>,
     door_targets: Query<(&Targetable, &GlobalTransform), With<DoorPortalTarget>>,
+    assets: Res<AssetServer>,
 ) {
     const MAX_INTERACTION_DISTANCE: f32 = 3.0;
 
@@ -179,6 +181,7 @@ fn handle_added_spawn_point_camera(
                 target_transform,
                 Player,
                 PlayerRoot,
+                sound::default_footstep_player(assets.as_ref()),
             ))
             .id();
 
