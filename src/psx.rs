@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use bevy::{
     asset::uuid::Uuid,
     camera::{RenderTarget, visibility::RenderLayers},
@@ -23,7 +21,8 @@ const FX_SNAP: u32 = 1;
 const FX_DITHER: u32 = 2;
 const FX_QUANTIZE: u32 = 4;
 const FX_AFFINE: u32 = 8;
-const SHADER_PSX_EXT: &str = "shaders/psx_extended.wgsl";
+pub(crate) const FX_FOCUSED: u32 = 16;
+const SHADER_PSX_FOCUS_EXT: &str = "shaders/psx_focus_extended.wgsl";
 const PSX_POINTER_UUID: u128 = 0x4a3e_0b7a_8b9a_4a61_9a37_ba2a_41b2_2dd1;
 
 #[derive(Component, Debug, Clone, Copy)]
@@ -37,6 +36,7 @@ pub(crate) struct PsxConfig {
     pub dither_strength: f32,
     pub dither_scale: f32,
     pub dither_mode: PsxDitherMode,
+    pub saturation: f32,
 }
 
 impl Default for PsxConfig {
@@ -51,6 +51,7 @@ impl Default for PsxConfig {
             dither_strength: 0.18,
             dither_scale: 1.8,
             dither_mode: PsxDitherMode::Bayer4,
+            saturation: 1.0,
         }
     }
 }
@@ -83,36 +84,43 @@ struct PsxLowResCanvas;
 #[derive(Component, Default)]
 struct PsxSceneTagged;
 
-#[derive(Resource, Default)]
-struct PsxMaterialCache(HashMap<Handle<StandardMaterial>, Handle<PsxPbrMaterial>>);
-
 #[derive(Component)]
 struct PsxConverted;
 
 #[derive(Component)]
 struct PsxPickingPointer;
 
-type PsxPbrMaterial = ExtendedMaterial<StandardMaterial, PsxExt>;
+pub(crate) type PsxPbrMaterial = ExtendedMaterial<StandardMaterial, PsxExt>;
 
 #[derive(Asset, AsBindGroup, Reflect, Debug, Clone, Default)]
-struct PsxExt {
+pub(crate) struct PsxExt {
     #[uniform(100)]
     resolution: Vec2,
     #[uniform(100)]
     quantize_steps: u32,
     #[uniform(100)]
-    flags: u32,
+    pub(crate) flags: u32,
     #[uniform(100)]
     dither_strength: f32,
     #[uniform(100)]
     dither_scale: f32,
     #[uniform(100)]
     dither_mode: u32,
+    #[uniform(100)]
+    saturation: f32,
+}
+
+pub(crate) fn set_material_focused(material: &mut PsxPbrMaterial, focused: bool) {
+    if focused {
+        material.extension.flags |= FX_FOCUSED;
+    } else {
+        material.extension.flags &= !FX_FOCUSED;
+    }
 }
 
 impl MaterialExtension for PsxExt {
     fn fragment_shader() -> ShaderRef {
-        SHADER_PSX_EXT.into()
+        SHADER_PSX_FOCUS_EXT.into()
     }
 }
 
@@ -120,8 +128,7 @@ pub(crate) struct PsxPlugin;
 
 impl Plugin for PsxPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<PsxMaterialCache>()
-            .add_plugins(MaterialPlugin::<PsxPbrMaterial>::default())
+        app.add_plugins(MaterialPlugin::<PsxPbrMaterial>::default())
             .add_systems(PreStartup, setup_render_target)
             .add_systems(
                 Startup,
@@ -166,6 +173,7 @@ fn make_ext(cfg: PsxConfig) -> PsxExt {
         dither_strength: cfg.dither_strength.max(0.0),
         dither_scale: cfg.dither_scale.max(0.25),
         dither_mode: cfg.dither_mode as u32,
+        saturation: cfg.saturation.clamp(0.0, 1.0),
     }
 }
 
@@ -238,7 +246,6 @@ fn swap_standard_to_extended(
     q: Query<(Entity, &MeshMaterial3d<StandardMaterial>), (With<Psxify>, Without<PsxConverted>)>,
     std_mats: Res<Assets<StandardMaterial>>,
     mut ext_assets: ResMut<Assets<PsxPbrMaterial>>,
-    mut cache: ResMut<PsxMaterialCache>,
     q_cam: Query<&PsxConfig, With<PsxCamera>>,
 ) {
     let cfg = q_cam.single().ok().copied().unwrap_or_default();
@@ -247,19 +254,12 @@ fn swap_standard_to_extended(
         let Some(std_mat) = std_mats.get(&std_handle) else {
             continue;
         };
-        if let Some(ext_handle) = cache.0.get(&std_handle).cloned() {
-            commands
-                .entity(entity)
-                .remove::<MeshMaterial3d<StandardMaterial>>()
-                .insert((MeshMaterial3d(ext_handle), PsxConverted));
-            continue;
-        }
-
+        // Keep per-entity extended materials so per-object focus flags do not leak
+        // to other meshes that share the same StandardMaterial.
         let ext_handle = ext_assets.add(PsxPbrMaterial {
             base: std_mat.clone(),
             extension: make_ext(cfg),
         });
-        cache.0.insert(std_handle, ext_handle.clone());
         commands
             .entity(entity)
             .remove::<MeshMaterial3d<StandardMaterial>>()
@@ -277,12 +277,13 @@ fn apply_psx_from_camera(
     let flags = flags_from(*cfg);
     let resolution = Vec2::new(cfg.resolution.x as f32, cfg.resolution.y as f32);
     for (_, mat) in materials.iter_mut() {
-        mat.extension.flags = flags;
+        mat.extension.flags = (mat.extension.flags & FX_FOCUSED) | flags;
         mat.extension.resolution = resolution;
         mat.extension.quantize_steps = cfg.quantize_steps.max(2);
         mat.extension.dither_strength = cfg.dither_strength.max(0.0);
         mat.extension.dither_scale = cfg.dither_scale.max(0.25);
         mat.extension.dither_mode = cfg.dither_mode as u32;
+        mat.extension.saturation = cfg.saturation.clamp(0.0, 1.0);
     }
 }
 

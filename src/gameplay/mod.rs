@@ -1,4 +1,5 @@
 mod door;
+mod focus_fx;
 mod inventory;
 mod npc;
 mod props;
@@ -33,6 +34,7 @@ impl Plugin for GameplayPlugin {
                 preload_door_target_levels,
                 handle_added_spawn_point_camera,
                 door::rotate_doors,
+                focus_fx::handle_focus_effect,
             )
                 .in_set(AppSystems::Update),
         );
