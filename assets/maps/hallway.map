@@ -1303,3 +1303,13 @@
 "idle_animation" "idle_a"
 "suspect" "Imposter"
 }
+// entity 32
+{
+"classname" "item"
+"origin" "516 428 0"
+"model" "models/cigarettes/cigarettes.gltf"
+"name" "cigarettes"
+"subtitle" "box of cigarettes"
+"description" "A pack of premium Bevy Golds"
+"angles" "0 -120 0"
+}
