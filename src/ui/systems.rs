@@ -455,7 +455,7 @@ pub(super) fn handle_menu_actions(
                 commands.entity(owner).insert(MainMenuUi);
                 next_paused.set(Paused(false));
             }
-            UiMenuAction::QuitGame(_) => {
+            UiMenuAction::QuitGame => {
                 exit.write(AppExit::Success);
             }
         }
@@ -838,7 +838,7 @@ pub(super) fn handle_button_interactions(
                                 actions.write(UiMenuAction::BackToMainMenu(owner.0));
                             }
                             Some(ConfirmAction::QuitGame) => {
-                                actions.write(UiMenuAction::QuitGame(owner.0));
+                                actions.write(UiMenuAction::QuitGame);
                             }
                             None => {}
                         }

@@ -21,7 +21,7 @@ use bevy_seedling::{
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-    AppSystems, AssetServerExt, GameState, Phase, Usable,
+    AppSystems, AssetServerExt, Phase, Usable,
     audio::mixer::WorldSfxPool,
     gameplay::props::Phone,
     input::{Use, UseRaycaster},
@@ -217,7 +217,7 @@ fn handle_added_spawn_point_camera(
                 Quat::IDENTITY,
                 Dir3::NEG_Z,
             )
-            .with_max_distance(3.0)
+            .with_max_distance(MAX_INTERACTION_DISTANCE)
             .with_query_filter(SpatialQueryFilter {
                 mask: [PhysLayer::Default, PhysLayer::Usable].into(),
                 ..Default::default()

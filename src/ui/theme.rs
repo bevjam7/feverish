@@ -15,7 +15,6 @@ pub(super) const BUTTON_DISABLED: Color = Color::srgb(0.57, 0.57, 0.54);
 pub(super) const BORDER_LIGHT: Color = Color::srgb(0.92, 0.92, 0.88);
 pub(super) const BORDER_DARK: Color = Color::srgb(0.18, 0.18, 0.18);
 pub(super) const CRT_GREEN: Color = Color::srgb(0.67, 0.44, 0.92);
-pub(super) const CRT_GREEN_DARK: Color = Color::srgb(0.23, 0.13, 0.35);
 pub(super) const ACCENT_PRIMARY: Color = Color::srgb(0.64, 0.43, 0.90);
 pub(super) const CURSOR_TINT: Color = Color::srgb(0.87, 0.73, 1.0);
 pub(super) const CURSOR_TINT_PRESSED: Color = Color::srgb(0.93, 0.82, 1.0);

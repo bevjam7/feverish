@@ -35,6 +35,7 @@ impl RatStart {
 }
 
 #[derive(Message, Debug, Clone)]
+#[allow(dead_code)]
 pub struct RatHookTriggered {
     pub hook: String,
     pub script_id: String,
@@ -103,6 +104,7 @@ pub struct RatOption {
 }
 
 impl RatScript {
+    #[allow(dead_code)]
     pub fn single(
         id: impl Into<String>,
         speaker: impl Into<String>,
@@ -203,6 +205,7 @@ impl RatNodeBuilder {
         self
     }
 
+    #[allow(dead_code)]
     pub fn voice(mut self, preset: VoicePreset) -> Self {
         self.voice = preset;
         self

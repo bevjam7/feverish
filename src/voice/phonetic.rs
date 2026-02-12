@@ -4,6 +4,7 @@ use rand::RngExt;
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Language {
     English,
+    #[allow(dead_code)]
     Portuguese,
 }
 
@@ -36,8 +37,11 @@ pub struct Phoneme {
     pub consonant: Option<ConsonantClass>, // consonants mainly
     pub duration: f32,                     // multiplier-ish
     pub stressed: bool,
+    #[allow(dead_code)]
     pub source_chars: [char; 2], // small & cheap (up to digraph)
-    pub source_len: u8,          // 1 or 2
+    #[allow(dead_code)]
+    pub source_len: u8, // 1 or 2
+    #[allow(dead_code)]
     pub source_index: usize,
     pub pitch_mod: f32,
 }
@@ -180,8 +184,7 @@ fn text_to_phonemes_english(text: &str) -> Vec<Phoneme> {
     let chars: Vec<char> = text.chars().collect();
     let mut i = 0usize;
     let mut word_index = 0usize;
-    let mut word_count = 1usize;
-    {
+    let word_count = {
         // rough word count
         let mut in_word = false;
         let mut c = 0;
@@ -195,8 +198,8 @@ fn text_to_phonemes_english(text: &str) -> Vec<Phoneme> {
                 in_word = false;
             }
         }
-        word_count = c.max(1);
-    }
+        c.max(1)
+    };
 
     while i < chars.len() {
         let ch = chars[i];
@@ -479,8 +482,7 @@ fn text_to_phonemes_portuguese(text: &str) -> Vec<Phoneme> {
     let is_question = text.trim_end().ends_with('?');
 
     // rough word count for prosody
-    let mut word_count = 1usize;
-    {
+    let word_count = {
         let mut in_word = false;
         let mut c = 0;
         for ch in &chars {
@@ -493,8 +495,8 @@ fn text_to_phonemes_portuguese(text: &str) -> Vec<Phoneme> {
                 in_word = false;
             }
         }
-        word_count = c.max(1);
-    }
+        c.max(1)
+    };
     let mut word_idx = 0usize;
 
     while i < chars.len() {

@@ -60,6 +60,7 @@ impl DiscoveryEntry {
         self
     }
 
+    #[allow(dead_code)]
     pub fn image_path(mut self, path: impl Into<String>) -> Self {
         self.image_path = Some(path.into());
         self
@@ -102,7 +103,7 @@ pub enum UiMenuAction {
     Continue(Entity),
     Resume(Entity),
     BackToMainMenu(Entity),
-    QuitGame(Entity),
+    QuitGame,
 }
 
 #[derive(Debug, Clone)]
@@ -213,10 +214,7 @@ pub(super) struct MainMenuLine {
 }
 
 #[derive(Component, Debug, Clone, Copy)]
-pub(super) struct MainMenuTab {
-    pub owner: Entity,
-    pub page: MainMenuPage,
-}
+pub(super) struct MainMenuTab;
 
 #[derive(Component, Debug, Clone, Copy)]
 pub(super) struct MainMenuTerminalPanel {

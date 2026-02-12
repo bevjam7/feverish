@@ -578,7 +578,7 @@ fn spawn_main_tab_button(
         .spawn((
             Button,
             MenuOwner(owner),
-            MainMenuTab { owner, page },
+            MainMenuTab,
             MenuButton {
                 action: ButtonAction::SelectPage(page),
                 raised: true,

@@ -69,7 +69,9 @@ pub(crate) struct PsxWorldRoot;
 #[repr(u32)]
 pub(crate) enum PsxDitherMode {
     Bayer4 = 0,
+    #[allow(dead_code)]
     Ign = 3,
+    #[allow(dead_code)]
     Hash = 4,
 }
 

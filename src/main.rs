@@ -192,8 +192,10 @@ pub(crate) enum Phase {
     /// Main game phase
     Main,
     /// Win state
+    #[allow(dead_code)]
     Win,
     /// Loss state
+    #[allow(dead_code)]
     Lose,
 }
 

@@ -61,6 +61,7 @@ impl Speak {
         self
     }
 
+    #[allow(dead_code)]
     pub fn params(mut self, params: VoiceParams) -> Self {
         self.params = params;
         self
@@ -71,6 +72,7 @@ impl Speak {
         self
     }
 
+    #[allow(dead_code)]
     pub fn language(mut self, lang: phonetic::Language) -> Self {
         self.params.language = lang;
         self
