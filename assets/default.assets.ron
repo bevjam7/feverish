@@ -26,8 +26,8 @@
     "ratspinner.scripts": Files(paths: ["ratspinner/npc.default.rat"]),
     "font.pixel": File(path: "fonts/PressStart2P-Regular.ttf"),
     "font.body": File(path: "fonts/VT323-Regular.ttf"),
-    "image.cursor": File(path: "icons/cursor.png"),
-    "image.cursor-closed": File(path: "icons/cursor-closed.png"),
+    "image.cursor": Image(path: "icons/cursor.png"),
+    "image.cursor-closed": Image(path: "icons/cursor-closed.png"),
     "items": Files(paths: [
         "items/rat_toy.item.meta",
         "items/cigarettes.item.meta"
