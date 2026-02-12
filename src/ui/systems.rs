@@ -230,10 +230,10 @@ pub(super) fn update_ui_cursor(
         node.display = Display::Flex;
         let ui_x = (pos.x / ui_scale.0).round();
         let ui_y = (pos.y / ui_scale.0).round();
-        // tried to clibrate hotspot so the icon finger tip aligns with the real pointer, maybe this shoulld work?
-        let offset = Vec2::new(0.0, 3.0);
-        node.left = Val::Px(ui_x + offset.x);
-        node.top = Val::Px(ui_y + offset.y);
+        // okay now this math makes sense, should be aligned
+        let hotspot = Vec2::new(0.0, 3.0);
+        node.left = Val::Px(ui_x - hotspot.x);
+        node.top = Val::Px(ui_y - hotspot.y);
 
         let delta = if let Some(prev) = *last_cursor_pos {
             pos - prev
