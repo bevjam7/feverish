@@ -210,13 +210,19 @@ fn handle_added_spawn_point_camera(
         cmd.entity(camera_entity).with_child((
             Player,
             UseRaycaster,
-            RayCaster::new(Vec3::ZERO, Dir3::NEG_Z)
-                .with_max_distance(MAX_INTERACTION_DISTANCE)
-                .with_query_filter(SpatialQueryFilter {
-                    mask: [PhysLayer::Default, PhysLayer::Usable].into(),
-                    ..Default::default()
-                })
-                .with_max_hits(1),
+            // changed raycaster to shapecaster to make the feeling of picking tiny items bettah
+            ShapeCaster::new(
+                Collider::capsule(0.15, 0.0),
+                Vec3::ZERO,
+                Quat::IDENTITY,
+                Dir3::NEG_Z,
+            )
+            .with_max_distance(3.0)
+            .with_query_filter(SpatialQueryFilter {
+                mask: [PhysLayer::Default, PhysLayer::Usable].into(),
+                ..Default::default()
+            })
+            .with_max_hits(1),
         ));
     }
 }

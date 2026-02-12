@@ -1,4 +1,4 @@
-use avian3d::prelude::{CollisionLayers, RayHits};
+use avian3d::prelude::{CollisionLayers, ShapeHits};
 use bevy::{
     prelude::*,
     window::{CursorGrabMode, CursorOptions},
@@ -100,7 +100,7 @@ fn apply_use(
     _action: On<Start<UseAction>>,
     mut cmd: Commands,
     caster: Single<Entity, (With<UseRaycaster>, With<Player>)>,
-    hits: Query<&RayHits>,
+    hits: Query<&ShapeHits>,
     layers: Query<&CollisionLayers>,
     dialogue_ui: Query<(), With<DialogueUiRoot>>,
     hierarchy: Query<&ColliderHierarchyChildOf>,
@@ -110,8 +110,10 @@ fn apply_use(
         return;
     }
 
-    let hits = hits.get(caster.entity()).unwrap();
-    if let Some(hit) = hits.first() {
+    let Ok(hits) = hits.get(caster.entity()) else {
+        return;
+    };
+    if let Some(hit) = hits.iter().next() {
         let target = match hierarchy.get(hit.entity).ok() {
             Some(ColliderHierarchyChildOf(entity)) => *entity,
             None => hit.entity,
@@ -119,7 +121,9 @@ fn apply_use(
 
         // check if the layer is usable. we also collide with walls to prevent using
         // things through the environment
-        let layer = layers.get(target).unwrap();
+        let Ok(layer) = layers.get(target) else {
+            return;
+        };
         if layer.memberships.has_all(PhysLayer::Usable) {
             cmd.entity(target).trigger(Use);
         }

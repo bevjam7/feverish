@@ -1,4 +1,4 @@
-use avian3d::prelude::{CollisionLayers, RayHits};
+use avian3d::prelude::{CollisionLayers, ShapeHits};
 use bevy::prelude::*;
 
 use crate::{
@@ -17,7 +17,7 @@ pub(super) struct FocusFxState {
 
 pub(super) fn handle_focus_effect(
     mut q_config: Query<&mut PsxConfig, With<PsxCamera>>,
-    q_hits: Query<&RayHits, (With<UseRaycaster>, With<Player>)>,
+    q_hits: Query<&ShapeHits, (With<UseRaycaster>, With<Player>)>,
     q_layers: Query<&CollisionLayers>,
     q_hierarchy: Query<&ColliderHierarchyChildOf>,
     q_children: Query<&Children>,
@@ -77,12 +77,14 @@ pub(super) fn handle_focus_effect(
 }
 
 fn focused_usable_entity(
-    q_hits: &Query<&RayHits, (With<UseRaycaster>, With<Player>)>,
+    q_hits: &Query<&ShapeHits, (With<UseRaycaster>, With<Player>)>,
     q_hierarchy: &Query<&ColliderHierarchyChildOf>,
     q_layers: &Query<&CollisionLayers>,
 ) -> Option<Entity> {
-    let hits = q_hits.single().ok()?;
-    let first = hits.first()?;
+    let Ok(hits) = q_hits.single() else {
+        return None;
+    };
+    let first = hits.iter().next()?;
     let target = q_hierarchy
         .get(first.entity)
         .ok()
