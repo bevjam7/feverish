@@ -15,8 +15,8 @@ use bevy::{
 };
 
 const PSX_CANVAS_LAYER: usize = 30;
-const INTERNAL_WIDTH: u32 = 640;
-const INTERNAL_HEIGHT: u32 = 360;
+const INTERNAL_WIDTH: u32 = 960;
+const INTERNAL_HEIGHT: u32 = 540;
 const FX_SNAP: u32 = 1;
 const FX_DITHER: u32 = 2;
 const FX_QUANTIZE: u32 = 4;
