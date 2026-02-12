@@ -11,7 +11,7 @@ use bevy_trenchbroom::prelude::*;
 
 use crate::{
     Usable,
-    gameplay::{PhysLayer, link_hierarchal_colliders, sound::SoundPoint},
+    gameplay::{PhysLayer, link_hierarchal_colliders},
     input::Use,
 };
 

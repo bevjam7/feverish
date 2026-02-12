@@ -1,5 +1,4 @@
 use bevy::{
-    asset::AssetPath,
     ecs::{lifecycle::HookContext, world::DeferredWorld},
     prelude::*,
 };

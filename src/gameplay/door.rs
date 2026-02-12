@@ -127,7 +127,7 @@ impl DoorRotatingBase {
             signal_counter.0 += 1;
         }
 
-        let mut sample_to_play = None;
+        let sample_to_play: Option<_>;
         match door.open {
             // If the door is already open, it can be closed without further checks
             true => {

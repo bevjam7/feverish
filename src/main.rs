@@ -18,14 +18,14 @@ mod voice;
 use avian3d::prelude::{CollisionLayers, LayerMask};
 use bevy::{
     asset::{AssetMetaCheck, AssetPath},
-    ecs::{lifecycle::HookContext, system::SystemParam, world::DeferredWorld},
+    ecs::{lifecycle::HookContext, world::DeferredWorld},
     gltf::{GltfPlugin, convert_coordinates::GltfConvertCoordinates},
     image::ImagePlugin,
     prelude::*,
 };
 use bevy_trenchbroom::{config::DefaultFaceAttributes, prelude::*};
 
-use crate::{assets::GameAssets, gameplay::PhysLayer};
+use crate::gameplay::PhysLayer;
 
 fn main() -> AppExit {
     App::new().add_plugins(AppPlugin).run()

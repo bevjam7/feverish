@@ -6,7 +6,8 @@ use bevy::{
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-    Usable,
+    AssetServerExt, Usable,
+    assets::ItemMeta,
     gameplay::{
         PlayerRoot,
         props::{Model, Prop},
@@ -37,7 +38,21 @@ impl InventoryItem {
             .despawn_children();
 
         let model = world.get::<Model>(hook.entity).unwrap().clone();
-        let item = world.get::<Item>(hook.entity).unwrap().clone();
+        let Item { metadata } = world.get::<Item>(hook.entity).unwrap().clone();
+        let assets = world.resource::<AssetServer>();
+        let metadata_handle = assets
+            // Attempt to get the item path automatically if not set
+            .get_path_handle(metadata.unwrap_or_else(|| {
+                let name = std::path::Path::new(&model.model)
+                    .file_prefix()
+                    .and_then(|stem| stem.to_str())
+                    .unwrap();
+
+                format!("items/{}.item.meta", name)
+            }))
+            .unwrap();
+        let metadatas = world.resource::<Assets<ItemMeta>>();
+        let metadata = metadatas.get(&metadata_handle).unwrap().clone();
         let mut discovery_db = world.resource_mut::<UiDiscoveryDb>();
 
         let into_id = |input: &String| {
@@ -55,9 +70,9 @@ impl InventoryItem {
 
         discovery_db.upsert(
             crate::ui::DiscoveryKind::Item,
-            DiscoveryEntry::new(into_id(&item.name), item.name.clone())
-                .subtitle(item.subtitle.unwrap_or(item.name))
-                .description(item.description)
+            DiscoveryEntry::new(into_id(&metadata.name), metadata.name.clone())
+                .subtitle(metadata.subtitle)
+                .description(metadata.description)
                 .model_path(format!("{}#Scene0", model.model))
                 .seen(true),
         );
@@ -69,9 +84,9 @@ impl InventoryItem {
 #[require(Usable)]
 #[component(on_add=Self::on_add_hook)]
 pub(crate) struct Item {
-    pub(crate) name: String,
-    pub(crate) subtitle: Option<String>,
-    pub(crate) description: String,
+    /// Defaults to the specified GLTF name if not provided
+    #[class(default = "items/name.item.meta")]
+    pub(crate) metadata: Option<String>,
 }
 
 impl Item {
