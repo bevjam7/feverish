@@ -14,6 +14,7 @@
         "models/couch/couch.gltf",
         "models/table/table.gltf",
         "models/phone/phone.gltf",
+        "models/photograph/photograph.gltf",
     ]),
     "audio": Files(paths: [
         "audio/radio_static.ogg",
@@ -29,7 +30,15 @@
     "image.cursor": Image(path: "icons/cursor.png"),
     "image.cursor-closed": Image(path: "icons/cursor-closed.png"),
     "items": Files(paths: [
+        "items/apartment_key.item.meta",
+        "items/cd.item.meta",
+        "items/certification.item.meta",
+        "items/cigarettes.item.meta",
+        "items/diorama.item.meta",
+        "items/necklace.item.meta",
+        "items/noise_complaint.item.meta",
+        "items/photograph.item.meta",
         "items/rat_toy.item.meta",
-        "items/cigarettes.item.meta"
+        "items/strange_books.item.meta",
     ]),
 })

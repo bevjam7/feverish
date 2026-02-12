@@ -1504,3 +1504,17 @@
 ( 328 152 44 ) ( 328 152 52 ) ( 328 160 52 ) origin [ -7.144327650106121e-16 -2.0000000000162426 0 82 ] [ 0 0 -24 80 ] 90 1 1
 }
 }
+// entity 37
+{
+"classname" "prop"
+"origin" "521 295 0"
+"model" "models/table/table.gltf"
+"angles" "0 -90 0"
+}
+// entity 38
+{
+"classname" "item"
+"origin" "520 296 24"
+"model" "models/photograph/photograph.gltf"
+"angles" "0 -120 0"
+}

@@ -8,4 +8,7 @@
     ui_scale_auto: false,
     manual_ui_scale: 1.05,
     cursor_motion: true,
+    ui_fx: true,
+    ui_monitor_distortion: true,
+    ui_cursor_distortion: true,
 )

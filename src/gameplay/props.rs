@@ -10,7 +10,7 @@ use bevy_seedling::sample::SamplePlayer;
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-    Usable,
+    AssetServerExt, Usable,
     gameplay::{PhysLayer, link_hierarchal_colliders},
     input::Use,
 };
@@ -31,8 +31,9 @@ impl Model {
         let model = world.get::<Self>(hook.entity).unwrap().clone();
         let asset_path = AssetPath::from(&model.model);
         let assets = world.resource::<AssetServer>();
-        let scene_asset_path = AssetPath::from(asset_path.to_string() + "#Scene0");
-        let scene_handle = assets.get_handle(scene_asset_path).unwrap();
+        let scene_handle = assets
+            .get_path_handle(asset_path.to_string() + "#Scene0")
+            .unwrap();
         let gltfs = world.resource::<Assets<Gltf>>();
         let gltf_handle = assets.get_handle(asset_path).unwrap();
         let gltf = gltfs.get(&gltf_handle).unwrap();

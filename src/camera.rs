@@ -62,8 +62,8 @@ pub(crate) fn player_camera_bundle() -> impl Bundle {
         }),
         (
             Msaa::Off,
-            bevy::anti_alias::taa::TemporalAntiAliasing::default(),
-            bevy::light::ShadowFilteringMethod::Temporal,
+            // bevy::anti_alias::taa::TemporalAntiAliasing::default(),
+            // bevy::light::ShadowFilteringMethod::Temporal,
             bevy::core_pipeline::prepass::DeferredPrepass,
         ),
         AutoExposure::default(),
