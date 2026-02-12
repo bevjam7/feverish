@@ -22,7 +22,6 @@ use bevy_trenchbroom::prelude::*;
 
 use crate::{
     AppSystems, AssetServerExt, GameState, Phase, Usable,
-    assets::GameAssets,
     audio::mixer::WorldSfxPool,
     gameplay::props::Phone,
     input::{Use, UseRaycaster},

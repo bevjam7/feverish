@@ -1,6 +1,5 @@
 use avian3d::prelude::{LinearVelocity, SpatialQuery, SpatialQueryFilter};
 use bevy::{
-    asset::{AssetPath, AssetServer},
     ecs::{lifecycle::HookContext, world::DeferredWorld},
     pbr::StandardMaterial,
     prelude::*,

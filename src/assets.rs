@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
+use bevy_common_assets::ron::RonAssetPlugin;
 use bevy_seedling::prelude::AudioSample;
+use serde::{Deserialize, Serialize};
 
 use crate::{AppState, ratspinner::RatScriptAsset};
 
@@ -13,7 +15,8 @@ impl Plugin for AssetsPlugin {
                 .continue_to_state(AppState::Main)
                 .with_dynamic_assets_file::<StandardDynamicAssetCollection>("default.assets.ron")
                 .load_collection::<GameAssets>(),
-        );
+        )
+        .add_plugins(RonAssetPlugin::<ItemMeta>::new(&["item.meta"]));
     }
 }
 
@@ -28,6 +31,8 @@ pub struct GameAssets {
     pub models: Vec<Handle<Gltf>>,
     #[asset(key = "audio", collection(typed))]
     pub audio: Vec<Handle<AudioSample>>,
+    #[asset(key = "items", collection(typed))]
+    pub items: Vec<Handle<ItemMeta>>,
     #[asset(key = "ratspinner.scripts", collection(typed))]
     pub rat_scripts: Vec<Handle<RatScriptAsset>>,
     #[asset(key = "font.pixel")]
@@ -38,4 +43,11 @@ pub struct GameAssets {
     pub image_cursor: Handle<Image>,
     #[asset(key = "image.cursor-closed")]
     pub image_cursor_closed: Handle<Image>,
+}
+
+#[derive(Asset, Reflect, Clone, Serialize, Deserialize)]
+pub(crate) struct ItemMeta {
+    pub(crate) name: String,
+    pub(crate) subtitle: String,
+    pub(crate) description: String,
 }
