@@ -631,6 +631,7 @@ fn choose_option(
         let items = discovery_db.entries(DiscoveryKind::Item);
         if index < items.len() {
             let item = &items[index];
+            let specific_response_id = format!("response_{}", item.id);
             hooks.write(RatHookTriggered {
                 hook: "dialogue.show_item".to_string(),
                 script_id: active_snapshot.script_id.clone(),
@@ -638,6 +639,25 @@ fn choose_option(
                 option_id: Some(item.id.clone()),
                 target: active_snapshot.target,
             });
+
+            if script.nodes.contains_key(&specific_response_id) {
+                if let Some(active_mut) = runtime.active.as_mut() {
+                    active_mut.node_id = specific_response_id;
+                    active_mut.overlay = DialogueOverlay::None;
+                }
+                show_current_node(
+                    commands,
+                    hooks,
+                    ui_commands,
+                    library,
+                    runtime,
+                    state,
+                    discovery_db,
+                    true,
+                );
+                return;
+            }
+
             if let Some(active_mut) = runtime.active.as_mut() {
                 active_mut.overlay = DialogueOverlay::ItemResponse;
             }
