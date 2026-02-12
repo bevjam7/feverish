@@ -273,6 +273,9 @@ pub(super) fn handle_footsteps(
             continue;
         }
 
+        let move_dir = Vec3::new(velocity.x, 0.0, velocity.z).normalize_or_zero();
+        let foot_pos = transform.translation() + (move_dir * 0.4);
+
         footstep_player.distance_overflow += speed * dt;
         let stride_length = stride_length_for_speed(speed, cfg, controller, &footstep_player);
 
@@ -291,7 +294,7 @@ pub(super) fn handle_footsteps(
                 footstep_player.base_volume * surface_volume_scale(footstep_player.active_surface);
             commands.spawn((
                 Name::new("footstep_sfx"),
-                Transform::from_translation(transform.translation()),
+                Transform::from_translation(foot_pos),
                 SamplePlayer::new(sample.clone()).with_volume(Volume::Linear(volume)),
                 PlaybackSettings::default().with_speed(pitch).despawn(),
                 WorldSfxPool,
