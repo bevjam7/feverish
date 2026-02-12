@@ -1,5 +1,6 @@
 (
+    id: "strange_books",
     name: "Strange books",
     subtitle: "A hefty pile of books",
-    description: "Thick volumes ranging from medical journals to old leatherbound hardcovers about geological divination, dream projection, and topics you've never heard of before.",
+    description: "Thick volumes ranging from medical journals to old leatherbound hardcovers about geological divination and dream projection.",
 )

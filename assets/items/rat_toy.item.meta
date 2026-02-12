@@ -1,5 +1,6 @@
 (
+    id: "rat_toy",
     name: "rat toy",
     subtitle: "simple wooden rat toy",
-    description: "a weird rat toy. you can read the word 'Jan' carved in the side",
+    description: "A weird rat toy. The word 'Jan' is carved into the side.",
 )

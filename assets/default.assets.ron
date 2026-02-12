@@ -15,6 +15,8 @@
         "models/table/table.gltf",
         "models/phone/phone.gltf",
         "models/photograph/photograph.gltf",
+        "models/key/key.gltf",
+        "models/strange_books/strange_books.gltf",
     ]),
     "audio": Files(paths: [
         "audio/radio_static.ogg",

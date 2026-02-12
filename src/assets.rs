@@ -47,6 +47,7 @@ pub struct GameAssets {
 
 #[derive(Asset, Reflect, Clone, Serialize, Deserialize)]
 pub(crate) struct ItemMeta {
+    pub(crate) id: String,
     pub(crate) name: String,
     pub(crate) subtitle: String,
     pub(crate) description: String,

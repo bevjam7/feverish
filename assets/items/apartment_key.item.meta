@@ -1,5 +1,6 @@
 (
-    name: "Key",
+    id: "apartment_key",
+    name: "Apartment key",
     subtitle: "Apartment 359",
-    description: "The notches are worn down from repeated insertion",
+    description: "Can open apartment 359. The notches are worn down from repeated insertion.",
 )

@@ -55,22 +55,9 @@ impl InventoryItem {
         let metadata = metadatas.get(&metadata_handle).unwrap().clone();
         let mut discovery_db = world.resource_mut::<UiDiscoveryDb>();
 
-        let into_id = |input: &String| {
-            input
-                .trim()
-                .to_lowercase()
-                .chars()
-                .filter_map(|c| match (c.is_ascii_alphanumeric(), c.is_whitespace()) {
-                    (true, _) => Some(c),
-                    (_, true) => Some('-'),
-                    _ => None,
-                })
-                .collect::<String>()
-        };
-
         discovery_db.upsert(
             crate::ui::DiscoveryKind::Item,
-            DiscoveryEntry::new(into_id(&metadata.name), metadata.name.clone())
+            DiscoveryEntry::new(&metadata.id, metadata.name.clone())
                 .subtitle(metadata.subtitle)
                 .description(metadata.description)
                 .model_path(format!("{}#Scene0", model.model))

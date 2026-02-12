@@ -1,4 +1,5 @@
 (
+    id: "cigarettes",
     name: "Cigarettes",
     subtitle: "Premium Bevy Golds",
     description: "An enticing bouquet of untouched cigarettes",

@@ -1,0 +1,6 @@
+(
+    id: "office_key",
+    name: "Office key",
+    subtitle: "Basement office key",
+    description: "Can open the basement office door. Emits a scent of tarnished copper.",
+)

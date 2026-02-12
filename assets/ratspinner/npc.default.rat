@@ -23,3 +23,8 @@ speaker: mr. d.
 portrait: models/npc_a/npc_a.png
 text: its doom time
 -> greeting
+
+[response_rat_toy]
+speaker: mr. d.
+text: ew, a dirty rat... wait, is that mine?
+portrait: models/npc_a/npc_a.png

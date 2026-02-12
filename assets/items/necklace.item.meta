@@ -1,5 +1,6 @@
 (
-    name: "necklace",
-    subtitle: "diamond studded",
-    description: "the name 'Catherine' is engraved in nearly hidden letters",
+    id: "necklace",
+    name: "Necklace",
+    subtitle: "Expensive looking",
+    description: "The name 'Catherine' is engraved in nearly hidden letters on the back.",
 )

@@ -1,4 +1,5 @@
 (
+    id: "noise_complaint",
     name: "Angry letter",
     subtitle: "A noise complaint",
     description: "Full of colorful language. The author proudly signed with his name and neighboring apartment number '350'.",
