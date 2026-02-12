@@ -13,7 +13,7 @@ use super::{
     systems::UiFonts,
     theme,
 };
-use crate::{AssetServerExt, ratspinner::RatCommand, settings::GameSettings};
+use crate::{ratspinner::RatCommand, settings::GameSettings};
 
 #[derive(Resource, Default)]
 pub(super) struct UiDialogueState {
@@ -814,11 +814,9 @@ fn spawn_dialogue(
                                             border: UiRect::all(Val::Px(2.0)),
                                             ..default()
                                         },
-                                        ImageNode::new(
-                                            assets
-                                                .get_path_handle(req.portrait_path.clone())
-                                                .unwrap(),
-                                        ),
+                                        ImageNode::new(assets.load::<Image>(
+                                            req.portrait_path.clone(),
+                                        )),
                                         BackgroundColor(Color::srgb(0.03, 0.04, 0.06)),
                                         theme::border(false),
                                     ));
@@ -888,7 +886,7 @@ fn spawn_preview_world(
         None,
     ));
 
-    let model_handle: Handle<Scene> = assets.get_path_handle(model_path.to_string()).unwrap();
+    let model_handle: Handle<Scene> = assets.load(model_path.to_string());
     let root = commands
         .spawn((
             Name::new("Dialogue Preview Root"),
@@ -1034,7 +1032,7 @@ fn spawn_preview_card_contents(
                 border: UiRect::all(Val::Px(2.0)),
                 ..default()
             },
-            ImageNode::new(assets.get_path_handle(image_path.clone()).unwrap()),
+            ImageNode::new(assets.load::<Image>(image_path.clone())),
             BackgroundColor(Color::srgb(0.03, 0.04, 0.06)),
             theme::border(false),
         ));
