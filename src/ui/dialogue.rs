@@ -1,11 +1,12 @@
 use bevy::{
     camera::{RenderTarget, primitives::Aabb, visibility::RenderLayers},
-    input::mouse::MouseMotion,
+    input::mouse::{MouseMotion, MouseWheel},
     picking::hover::HoverMap,
     prelude::*,
     render::render_resource::TextureFormat,
     text::{Justify, LineBreak, TextLayout},
     ui::{FocusPolicy, widget::ViewportNode},
+    window::PrimaryWindow,
 };
 
 use super::{
@@ -163,9 +164,21 @@ pub(super) fn rotate_dialogue_preview(
     time: Res<Time>,
     mouse: Res<ButtonInput<MouseButton>>,
     mut mouse_motion: MessageReader<MouseMotion>,
+    mut mouse_wheel: MessageReader<MouseWheel>,
+    windows: Query<&Window, With<PrimaryWindow>>,
     hover_map: Res<HoverMap>,
     mut runtime: ResMut<UiDialogueRuntime>,
     mut pivots: Query<&mut Transform, With<DialoguePreviewPivot>>,
+    mut preview_cameras: Query<
+        (&GlobalTransform, &Projection, &mut Transform),
+        Without<DialoguePreviewPivot>,
+    >,
+    preview_nodes: Query<
+        (&Node, &ComputedNode, &UiGlobalTransform, &InheritedVisibility),
+        With<DialoguePreviewViewport>,
+    >,
+    children: Query<&Children>,
+    aabbs: Query<(&Aabb, &GlobalTransform)>,
 ) {
     let Some(session) = runtime.session.as_mut() else {
         return;
@@ -181,8 +194,24 @@ pub(super) fn rotate_dialogue_preview(
     for event in mouse_motion.read() {
         drag_delta += event.delta;
     }
+    let wheel_delta: f32 = mouse_wheel.read().map(|event| event.y).sum();
 
-    let hovered = is_cursor_over_preview(session, &hover_map);
+    let cursor_pos = windows.single().ok().and_then(|window| window.cursor_position());
+    let hovered = cursor_pos.is_some_and(|cursor| {
+        cursor_inside_preview(session, cursor, &preview_nodes)
+    }) || is_cursor_over_preview(session, &hover_map);
+    if hovered && wheel_delta.abs() > f32::EPSILON {
+        if let Some(cursor_pos) = cursor_pos {
+            apply_preview_zoom(
+                session,
+                wheel_delta,
+                cursor_pos,
+                &preview_nodes,
+                &mut preview_cameras,
+            );
+        }
+    }
+
     if session.preview_dragging && mouse.pressed(MouseButton::Left) {
         if drag_delta.length_squared() > f32::EPSILON {
             pivot_transform.rotate_y(-drag_delta.x * 0.012);
@@ -191,8 +220,21 @@ pub(super) fn rotate_dialogue_preview(
         return;
     }
 
-    if hovered && mouse.pressed(MouseButton::Left) {
-        session.preview_dragging = true;
+    if hovered && mouse.just_pressed(MouseButton::Left) {
+        session.preview_dragging = cursor_pos.is_some_and(|cursor| {
+            preview_model_hit_test(
+                session,
+                cursor,
+                &preview_nodes,
+                &mut preview_cameras,
+                &children,
+                &aabbs,
+            )
+        });
+        if !session.preview_dragging {
+            return;
+        }
+
         if drag_delta.length_squared() > f32::EPSILON {
             pivot_transform.rotate_y(-drag_delta.x * 0.012);
             pivot_transform.rotate_local_x(-drag_delta.y * 0.010);
@@ -1367,4 +1409,214 @@ fn is_cursor_over_preview(session: &DialogueSession, hover_map: &HoverMap) -> bo
     hover_map
         .values()
         .any(|pointer_map| pointer_map.contains_key(&viewport))
+}
+
+fn apply_preview_zoom(
+    session: &DialogueSession,
+    wheel_delta: f32,
+    cursor_pos: Vec2,
+    preview_nodes: &Query<
+        (&Node, &ComputedNode, &UiGlobalTransform, &InheritedVisibility),
+        With<DialoguePreviewViewport>,
+    >,
+    preview_cameras: &mut Query<
+        (&GlobalTransform, &Projection, &mut Transform),
+        Without<DialoguePreviewPivot>,
+    >,
+) {
+    let Some((_, _, camera_entity)) =
+        preview_cursor_ray(session, cursor_pos, preview_nodes, preview_cameras)
+    else {
+        return;
+    };
+
+    let Ok((_, _, mut camera_transform)) = preview_cameras.get_mut(camera_entity) else {
+        return;
+    };
+
+    let focus = Vec3::ZERO;
+    let current = camera_transform.translation - focus;
+    let mut distance = current.length().max(0.05);
+    let orbit_dir = current.normalize_or_zero();
+    if orbit_dir.length_squared() <= f32::EPSILON {
+        return;
+    }
+    let zoom_speed = (0.35 + distance * 0.28).clamp(0.2, 4.0);
+    distance = (distance - wheel_delta * zoom_speed).clamp(0.06, 40.0);
+    camera_transform.translation = focus + orbit_dir * distance;
+    camera_transform.look_at(focus, Vec3::Y);
+}
+
+fn preview_model_hit_test(
+    session: &DialogueSession,
+    cursor_pos: Vec2,
+    preview_nodes: &Query<
+        (&Node, &ComputedNode, &UiGlobalTransform, &InheritedVisibility),
+        With<DialoguePreviewViewport>,
+    >,
+    preview_cameras: &mut Query<
+        (&GlobalTransform, &Projection, &mut Transform),
+        Without<DialoguePreviewPivot>,
+    >,
+    children: &Query<&Children>,
+    aabbs: &Query<(&Aabb, &GlobalTransform)>,
+) -> bool {
+    let Some((ray_origin, ray_dir, _)) =
+        preview_cursor_ray(session, cursor_pos, preview_nodes, preview_cameras)
+    else {
+        return false;
+    };
+    let Some(model_root) = session.preview_model_root else {
+        return false;
+    };
+    let Some((min, max)) = compute_preview_world_bounds(model_root, children, aabbs) else {
+        // if we can raycast from inside the preview viewport, still allow drag start
+        // this keeps tiny/thin meshes usable without pixel-perfect clicking on geometry
+        return true;
+    };
+
+    let base_extent = (max - min).max_element().max(0.12);
+    let padding = base_extent * 0.9;
+    let expanded_min = min - Vec3::splat(padding);
+    let expanded_max = max + Vec3::splat(padding);
+    let _mesh_hit = ray_hits_aabb(ray_origin, ray_dir, expanded_min, expanded_max);
+
+    // keep drag start permissive for tiny meshes: ray in viewport is enough
+    true
+}
+
+fn preview_cursor_ray(
+    session: &DialogueSession,
+    cursor_pos: Vec2,
+    preview_nodes: &Query<
+        (&Node, &ComputedNode, &UiGlobalTransform, &InheritedVisibility),
+        With<DialoguePreviewViewport>,
+    >,
+    preview_cameras: &mut Query<
+        (&GlobalTransform, &Projection, &mut Transform),
+        Without<DialoguePreviewPivot>,
+    >,
+) -> Option<(Vec3, Vec3, Entity)> {
+    let (local_x, local_y, size) = preview_local_uv(session, cursor_pos, preview_nodes)?;
+
+    let camera_entity = session.preview_camera?;
+    let (camera_global, projection, _) = preview_cameras.get(camera_entity).ok()?;
+    let Projection::Perspective(perspective) = projection else {
+        return None;
+    };
+
+    let ndc_x = local_x * 2.0 - 1.0;
+    let ndc_y = 1.0 - local_y * 2.0;
+    let aspect = (size.x / size.y).max(0.001);
+    let tan_half_fov = (perspective.fov * 0.5).tan().max(0.001);
+    let dir_camera =
+        Vec3::new(ndc_x * aspect * tan_half_fov, ndc_y * tan_half_fov, -1.0).normalize_or_zero();
+    if dir_camera.length_squared() <= f32::EPSILON {
+        return None;
+    }
+
+    let ray_dir = camera_global.rotation() * dir_camera;
+    let ray_origin = camera_global.translation();
+    Some((ray_origin, ray_dir, camera_entity))
+}
+
+fn preview_local_uv(
+    session: &DialogueSession,
+    cursor_pos: Vec2,
+    preview_nodes: &Query<
+        (&Node, &ComputedNode, &UiGlobalTransform, &InheritedVisibility),
+        With<DialoguePreviewViewport>,
+    >,
+) -> Option<(f32, f32, Vec2)> {
+    let viewport_entity = session.preview_viewport?;
+    let (_, computed, ui_transform, visible) = preview_nodes.get(viewport_entity).ok()?;
+    if !visible.get() {
+        return None;
+    }
+
+    let size = computed.size();
+    if size.x <= 1.0 || size.y <= 1.0 {
+        return None;
+    }
+
+    let normalized = computed.normalize_point(*ui_transform, cursor_pos)?;
+    if normalized.x < -0.5
+        || normalized.x > 0.5
+        || normalized.y < -0.5
+        || normalized.y > 0.5
+    {
+        return None;
+    }
+
+    Some((normalized.x + 0.5, normalized.y + 0.5, size))
+}
+
+fn cursor_inside_preview(
+    session: &DialogueSession,
+    cursor_pos: Vec2,
+    preview_nodes: &Query<
+        (&Node, &ComputedNode, &UiGlobalTransform, &InheritedVisibility),
+        With<DialoguePreviewViewport>,
+    >,
+) -> bool {
+    preview_local_uv(session, cursor_pos, preview_nodes).is_some()
+}
+
+fn compute_preview_world_bounds(
+    model_root: Entity,
+    children: &Query<&Children>,
+    aabbs: &Query<(&Aabb, &GlobalTransform)>,
+) -> Option<(Vec3, Vec3)> {
+    let mut min = Vec3::splat(f32::INFINITY);
+    let mut max = Vec3::splat(f32::NEG_INFINITY);
+    let mut found = false;
+
+    for entity in std::iter::once(model_root).chain(children.iter_descendants(model_root)) {
+        let Ok((aabb, global)) = aabbs.get(entity) else {
+            continue;
+        };
+        let max_scale = global.compute_transform().scale.max_element().max(0.001);
+        let center = global.translation() + Vec3::from(aabb.center);
+        let radius = aabb.half_extents.max_element() * max_scale;
+        let extent = Vec3::splat(radius);
+        min = min.min(center - extent);
+        max = max.max(center + extent);
+        found = true;
+    }
+
+    found.then_some((min, max))
+}
+
+fn ray_hits_aabb(origin: Vec3, dir: Vec3, min: Vec3, max: Vec3) -> bool {
+    let mut tmin = 0.0_f32;
+    let mut tmax = f32::INFINITY;
+
+    for axis in 0..3 {
+        let o = origin[axis];
+        let d = dir[axis];
+        let lo = min[axis];
+        let hi = max[axis];
+
+        if d.abs() < 1e-6 {
+            if o < lo || o > hi {
+                return false;
+            }
+            continue;
+        }
+
+        let inv_d = 1.0 / d;
+        let mut t1 = (lo - o) * inv_d;
+        let mut t2 = (hi - o) * inv_d;
+        if t1 > t2 {
+            std::mem::swap(&mut t1, &mut t2);
+        }
+
+        tmin = tmin.max(t1);
+        tmax = tmax.min(t2);
+        if tmin > tmax {
+            return false;
+        }
+    }
+
+    tmax >= 0.0
 }
