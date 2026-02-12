@@ -34,6 +34,16 @@ fn main() -> AppExit {
 
 pub struct AppPlugin;
 
+#[cfg(feature = "native")]
+fn native_seedling_plugin() -> bevy_seedling::SeedlingPlugin<bevy_seedling::prelude::CpalBackend> {
+    let mut plugin = bevy_seedling::SeedlingPlugin::default();
+    // give alsa more breathing room so underruns chill out
+    plugin.stream_config.output.desired_block_frames = Some(4096);
+    plugin.stream_config.output.desired_sample_rate = None;
+    plugin.stream_config.output.fallback = false;
+    plugin
+}
+
 impl Plugin for AppPlugin {
     fn build(&self, app: &mut App) {
         // Add Bevy plugins.
@@ -70,7 +80,7 @@ impl Plugin for AppPlugin {
         // Add 3rd party plugins
         app.add_plugins((
             #[cfg(feature = "native")]
-            bevy_seedling::SeedlingPlugin::default(),
+            native_seedling_plugin(),
             #[cfg(feature = "web")]
             bevy_seedling::SeedlingPlugin::new_web_audio(),
             avian3d::PhysicsPlugins::default(),

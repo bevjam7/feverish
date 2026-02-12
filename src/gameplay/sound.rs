@@ -280,7 +280,7 @@ pub(super) fn handle_footsteps(
         let stride_length = stride_length_for_speed(speed, cfg, controller, &footstep_player);
 
         let mut emitted_this_frame = 0_u8;
-        while footstep_player.distance_overflow >= stride_length && emitted_this_frame < 2 {
+        while footstep_player.distance_overflow >= stride_length && emitted_this_frame < 1 {
             footstep_player.distance_overflow -= stride_length;
 
             let samples = footstep_player.samples_for_surface(footstep_player.active_surface);
@@ -299,12 +299,6 @@ pub(super) fn handle_footsteps(
                 PlaybackSettings::default().with_speed(pitch).despawn(),
                 WorldSfxPool,
             ));
-            info!(
-                "footstep step surface={} material={} speed={:.2}",
-                surface_name(footstep_player.active_surface),
-                footstep_player.active_material_name,
-                speed
-            );
             emitted_this_frame += 1;
         }
     }
@@ -522,10 +516,5 @@ fn log_footstep_material_change(player: Entity, footstep_player: &mut FootstepPl
         return;
     }
     footstep_player.last_logged_material_name = footstep_player.active_material_name.clone();
-    info!(
-        "footstep debug player={:?} surface={} material={}",
-        player,
-        surface_name(footstep_player.active_surface),
-        footstep_player.active_material_name
-    );
+    let _ = player;
 }

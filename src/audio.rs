@@ -5,10 +5,22 @@ use crate::settings::GameSettings;
 
 pub(crate) struct AudioPlugin;
 
+#[cfg(feature = "native")]
+#[derive(Resource, Debug, Default)]
+struct AudioRestartMitigation {
+    last_restart_secs: Option<f64>,
+    burst_count: u8,
+    next_adjustment_after_secs: f64,
+}
+
 impl Plugin for AudioPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, set_up_mixer)
             .add_systems(Update, apply_mixer_settings);
+
+        #[cfg(feature = "native")]
+        app.init_resource::<AudioRestartMitigation>()
+            .add_observer(adapt_stream_config_on_restart_burst);
     }
 }
 
@@ -23,11 +35,7 @@ fn set_up_mixer(mut cmd: Commands) {
         .connect(mixer::UiSfxBus);
     cmd.spawn((
         SamplerPool(mixer::WorldSfxPool),
-        sample_effects![(
-            SpatialBasicNode::default(),
-            HrtfNode::default(),
-            SpatialScale(Vec3::splat(1.0))
-        )],
+        sample_effects![(SpatialBasicNode::default(), SpatialScale(Vec3::splat(1.0)))],
     ))
     .connect(mixer::WorldSfxBus);
 }
@@ -56,7 +64,55 @@ fn apply_mixer_settings(
     }
 }
 
-// mixer channels that can be controlled in settings.
+#[cfg(feature = "native")]
+fn adapt_stream_config_on_restart_burst(
+    trigger: On<bevy_seedling::context::StreamRestartEvent>,
+    time: Res<Time>,
+    mut mitigation: ResMut<AudioRestartMitigation>,
+    mut stream: ResMut<bevy_seedling::context::AudioStreamConfig>,
+) {
+    let now = time.elapsed_secs_f64();
+    let previous = mitigation.last_restart_secs.replace(now);
+
+    mitigation.burst_count = match previous {
+        Some(last) if (now - last) <= 1.0 => mitigation.burst_count.saturating_add(1),
+        _ => 1,
+    };
+
+    if mitigation.burst_count < 3 || now < mitigation.next_adjustment_after_secs {
+        return;
+    }
+
+    let current = stream.0.output.desired_block_frames.unwrap_or(1024);
+    let next = if current < 2048 {
+        2048
+    } else if current < 4096 {
+        4096
+    } else {
+        current
+    };
+
+    if next == current {
+        return;
+    }
+
+    stream.0.output.desired_block_frames = Some(next);
+    stream.0.output.desired_sample_rate = None;
+    stream.0.output.device_id = None;
+    stream.0.output.fallback = false;
+    mitigation.next_adjustment_after_secs = now + 10.0;
+
+    warn!(
+        "audio restart burst detected ({} restarts in <=1s): increasing output buffer from {} to {} frames ({} -> {}).",
+        mitigation.burst_count,
+        current,
+        next,
+        trigger.previous_rate.get(),
+        trigger.current_rate.get()
+    );
+}
+
+// mixer channels we tweak from settings
 
 pub(crate) mod mixer {
     use bevy_seedling::prelude::*;
