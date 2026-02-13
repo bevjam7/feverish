@@ -131,7 +131,7 @@ fn update_use_caster(
     hits: Query<&RayHits>,
     hierarchy: Query<&ColliderHierarchyChildOf>,
 ) {
-    const USE_RADIUS: f32 = 0.4;
+    const USE_RADIUS: f32 = 0.6;
 
     // Get either the hit, or the endpoint of the raycaster
 

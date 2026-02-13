@@ -17,6 +17,10 @@
         "models/photograph/photograph.gltf",
         "models/key/key.gltf",
         "models/strange_books/strange_books.gltf",
+        "models/jewelry/jewelry.gltf",
+        "models/noise_complaint/noise_complaint.gltf",
+        "models/diorama/diorama.gltf",
+        "models/cd/cd.gltf",
     ]),
     "audio": Files(paths: [
         "audio/radio_static.ogg",
@@ -31,6 +35,7 @@
         "ratspinner/npc.human.rat",
         "ratspinner/npc.dunce.rat",
         "ratspinner/npc.lover.rat",
+        "ratspinner/npc.strange.rat",
     ]),
     "font.pixel": File(path: "fonts/PressStart2P-Regular.ttf"),
     "font.body": File(path: "fonts/VT323-Regular.ttf"),
