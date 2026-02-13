@@ -23,10 +23,7 @@ impl Plugin for SkyPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(MaterialPlugin::<PsxSkyMaterial>::default())
             .add_systems(Startup, spawn_sky_dome)
-            .add_systems(
-                Update,
-                follow_camera_translation.in_set(AppSystems::Update),
-            );
+            .add_systems(Update, follow_camera_translation.in_set(AppSystems::Update));
     }
 }
 

@@ -96,6 +96,14 @@ pub(super) struct DialogueTextScrollHint;
 
 const PREVIEW_RENDER_LAYER: usize = 19;
 const DIALOGUE_SCROLL_HINT_THRESHOLD: usize = 95;
+const DIALOGUE_SLOT_FONT_MAX: f32 = 27.0;
+const DIALOGUE_SLOT_FONT_MIN: f32 = 17.0;
+const DIALOGUE_SLOT_HARD_LIMIT: usize = 132;
+const DIALOGUE_SLOT_MAX_LINES: usize = 2;
+const DIALOGUE_SLOT_ESTIMATED_WIDTH: f32 = 610.0;
+const DIALOGUE_SLOT_CHAR_WIDTH_FACTOR: f32 = 0.56;
+const DIALOGUE_SLOT_CONTENT_HEIGHT: f32 = 44.0;
+const DIALOGUE_SLOT_LINE_HEIGHT_FACTOR: f32 = 1.22;
 
 pub(super) fn apply_dialogue_commands(
     mut commands: Commands,
@@ -355,6 +363,7 @@ pub(super) fn handle_dialogue_shortcuts(
     mut runtime: ResMut<UiDialogueRuntime>,
     dialogue_state: Res<UiDialogueState>,
     mut commands: Commands,
+    fonts: Res<UiFonts>,
 ) {
     if !dialogue_state.active {
         return;
@@ -368,6 +377,12 @@ pub(super) fn handle_dialogue_shortcuts(
     let Some(session) = runtime.session.as_mut() else {
         return;
     };
+
+    if session.mode == UiDialogueMode::Inventory
+        && apply_inventory_hotkeys(&keys, &mut commands, session, &fonts)
+    {
+        return;
+    }
 
     if session.revealed < session.text_chars.len() {
         if any_pressed(&keys, &[KeyCode::KeyE, KeyCode::Enter, KeyCode::Space]) {
@@ -383,24 +398,11 @@ pub(super) fn handle_dialogue_shortcuts(
         return;
     }
 
-    if session.mode == UiDialogueMode::Inventory {
-        if keys.just_pressed(KeyCode::KeyQ) {
-            drop_selected_inventory_item(&mut commands, session);
-            return;
-        }
-        if keys.just_pressed(KeyCode::KeyR) {
-            move_selected_inventory_item(&mut commands, session, -1);
-        }
-        if keys.just_pressed(KeyCode::KeyF) {
-            move_selected_inventory_item(&mut commands, session, 1);
-        }
-    }
-
     if any_pressed(&keys, &[KeyCode::ArrowLeft, KeyCode::KeyA]) {
-        cycle_option(&mut commands, session, -1);
+        cycle_option(&mut commands, session, -1, &fonts);
     }
     if any_pressed(&keys, &[KeyCode::ArrowRight, KeyCode::KeyD]) {
-        cycle_option(&mut commands, session, 1);
+        cycle_option(&mut commands, session, 1, &fonts);
     }
     if any_pressed(&keys, &[KeyCode::KeyE, KeyCode::Enter, KeyCode::Space]) {
         if session.mode == UiDialogueMode::Inventory {
@@ -415,6 +417,18 @@ pub(super) fn handle_dialogue_shortcuts(
     }
 }
 
+fn apply_inventory_hotkeys(
+    keys: &ButtonInput<KeyCode>,
+    commands: &mut Commands,
+    session: &mut DialogueSession,
+    fonts: &UiFonts,
+) -> bool {
+    if keys.just_pressed(KeyCode::KeyQ) || keys.just_pressed(KeyCode::Delete) {
+        return drop_selected_inventory_item(commands, session, fonts);
+    }
+    false
+}
+
 pub(super) fn handle_dialogue_arrow_buttons(
     mut interactions: Query<
         (
@@ -427,6 +441,7 @@ pub(super) fn handle_dialogue_arrow_buttons(
     >,
     mut runtime: ResMut<UiDialogueRuntime>,
     mut commands: Commands,
+    fonts: Res<UiFonts>,
 ) {
     let Some(session) = runtime.session.as_mut() else {
         return;
@@ -438,7 +453,7 @@ pub(super) fn handle_dialogue_arrow_buttons(
                 *bg = BackgroundColor(theme::BUTTON_BG);
                 *border = theme::border(false);
                 if session.revealed >= session.text_chars.len() && !session.options.is_empty() {
-                    cycle_option(&mut commands, session, arrow.dir);
+                    cycle_option(&mut commands, session, arrow.dir, &fonts);
                 }
             }
             Interaction::Hovered => {
@@ -682,7 +697,7 @@ fn spawn_dialogue(
     dialogue_speed: f32,
 ) -> DialogueSession {
     let has_quick_actions = has_quick_actions(&req.options);
-    let line_height = if has_quick_actions { 96.0 } else { 118.0 };
+    let line_height = if has_quick_actions { 88.0 } else { 118.0 };
     let preview_scene = req
         .preview
         .as_ref()
@@ -720,11 +735,12 @@ fn spawn_dialogue(
     commands.entity(root).with_children(|overlay| {
         overlay
             .spawn((
+                Name::new("Dialogue Frame"),
                 Node {
-                    width: Val::Px(920.0),
-                    height: Val::Px(260.0),
-                    min_height: Val::Px(260.0),
-                    max_height: Val::Px(260.0),
+                    width: Val::Px(940.0),
+                    height: Val::Px(272.0),
+                    min_height: Val::Px(272.0),
+                    max_height: Val::Px(272.0),
                     border: UiRect::all(Val::Px(3.0)),
                     padding: UiRect::all(Val::Px(10.0)),
                     column_gap: Val::Px(10.0),
@@ -736,13 +752,15 @@ fn spawn_dialogue(
             .with_children(|frame| {
                 frame
                     .spawn((
+                        Name::new("Dialogue Text Panel"),
                         Node {
                             flex_grow: 1.0,
                             min_width: Val::Px(0.0),
                             border: UiRect::all(Val::Px(2.0)),
                             padding: UiRect::all(Val::Px(10.0)),
                             flex_direction: FlexDirection::Column,
-                            row_gap: Val::Px(6.0),
+                            row_gap: Val::Px(4.0),
+                            overflow: Overflow::clip(),
                             ..default()
                         },
                         BackgroundColor(Color::srgb(0.05, 0.06, 0.08)),
@@ -781,7 +799,7 @@ fn spawn_dialogue(
                                 TextLayout::new(Justify::Right, LineBreak::NoWrap),
                                 Node {
                                     width: Val::Percent(100.0),
-                                    min_height: Val::Px(14.0),
+                                    min_height: Val::Px(13.0),
                                     ..default()
                                 },
                             ))
@@ -790,9 +808,9 @@ fn spawn_dialogue(
                         left.spawn((
                             Node {
                                 width: Val::Percent(100.0),
-                                height: Val::Px(44.0),
-                                min_height: Val::Px(44.0),
-                                max_height: Val::Px(44.0),
+                                height: Val::Px(48.0),
+                                min_height: Val::Px(48.0),
+                                max_height: Val::Px(48.0),
                                 border: UiRect::all(Val::Px(2.0)),
                                 padding: UiRect::horizontal(Val::Px(6.0)),
                                 column_gap: Val::Px(6.0),
@@ -813,8 +831,10 @@ fn spawn_dialogue(
                                         flex_grow: 1.0,
                                         height: Val::Percent(100.0),
                                         border: UiRect::all(Val::Px(2.0)),
+                                        padding: UiRect::horizontal(Val::Px(6.0)),
                                         justify_content: JustifyContent::Center,
                                         align_items: AlignItems::Center,
+                                        overflow: Overflow::clip(),
                                         ..default()
                                     },
                                     BackgroundColor(Color::srgb(0.08, 0.10, 0.13)),
@@ -824,14 +844,22 @@ fn spawn_dialogue(
                                     slot_text = slot
                                         .spawn((
                                             DialogueOptionSlot,
+                                            Node {
+                                                width: Val::Percent(100.0),
+                                                max_width: Val::Percent(100.0),
+                                                ..default()
+                                            },
                                             Text::new("no choices"),
                                             TextFont {
                                                 font: fonts.body.clone(),
-                                                font_size: 26.0,
+                                                font_size: DIALOGUE_SLOT_FONT_MAX,
                                                 ..default()
                                             },
                                             TextColor(theme::TEXT_LIGHT),
-                                            TextLayout::new(Justify::Center, LineBreak::NoWrap),
+                                            TextLayout::new(
+                                                Justify::Center,
+                                                LineBreak::WordBoundary,
+                                            ),
                                             UiTransform::IDENTITY,
                                         ))
                                         .id();
@@ -844,9 +872,9 @@ fn spawn_dialogue(
                             .spawn((
                                 Node {
                                     width: Val::Percent(100.0),
-                                    height: Val::Px(32.0),
-                                    min_height: Val::Px(32.0),
-                                    max_height: Val::Px(32.0),
+                                    height: Val::Px(30.0),
+                                    min_height: Val::Px(30.0),
+                                    max_height: Val::Px(30.0),
                                     column_gap: Val::Px(6.0),
                                     align_items: AlignItems::Center,
                                     display: if has_quick_actions {
@@ -863,9 +891,9 @@ fn spawn_dialogue(
                         left.spawn((
                             Node {
                                 width: Val::Percent(100.0),
-                                height: Val::Px(30.0),
-                                min_height: Val::Px(30.0),
-                                max_height: Val::Px(30.0),
+                                height: Val::Px(38.0),
+                                min_height: Val::Px(38.0),
+                                max_height: Val::Px(38.0),
                                 border: UiRect::new(
                                     Val::Px(0.0),
                                     Val::Px(0.0),
@@ -873,7 +901,12 @@ fn spawn_dialogue(
                                     Val::Px(0.0),
                                 ),
                                 align_items: AlignItems::Center,
-                                overflow: Overflow::clip(),
+                                padding: UiRect::new(
+                                    Val::Px(2.0),
+                                    Val::Px(2.0),
+                                    Val::Px(0.0),
+                                    Val::Px(2.0),
+                                ),
                                 ..default()
                             },
                             theme::border(true),
@@ -884,10 +917,10 @@ fn spawn_dialogue(
                                     Text::new("press e or click to skip"),
                                     TextFont {
                                         font: fonts.body.clone(),
-                                        font_size: 18.0,
+                                        font_size: 16.0,
                                         ..default()
                                     },
-                                    TextColor(Color::srgb(0.72, 0.72, 0.76)),
+                                    TextColor(Color::srgb(0.84, 0.84, 0.88)),
                                     TextLayout::new(Justify::Left, LineBreak::NoWrap),
                                 ))
                                 .id();
@@ -896,12 +929,13 @@ fn spawn_dialogue(
 
                 frame
                     .spawn((
+                        Name::new("Dialogue Preview Panel"),
                         Node {
-                            width: Val::Px(228.0),
-                            min_width: Val::Px(228.0),
-                            max_width: Val::Px(228.0),
+                            width: Val::Px(236.0),
+                            min_width: Val::Px(236.0),
+                            max_width: Val::Px(236.0),
                             border: UiRect::all(Val::Px(2.0)),
-                            padding: UiRect::all(Val::Px(6.0)),
+                            padding: UiRect::all(Val::Px(7.0)),
                             flex_direction: FlexDirection::Column,
                             row_gap: Val::Px(6.0),
                             ..default()
@@ -917,10 +951,11 @@ fn spawn_dialogue(
                             .unwrap_or_else(|| req.speaker.clone());
                         preview_label = right
                             .spawn((
+                                Name::new("Dialogue Preview Label"),
                                 Text::new(label),
                                 TextFont {
                                     font: fonts.pixel.clone(),
-                                    font_size: 12.0,
+                                    font_size: 13.0,
                                     ..default()
                                 },
                                 TextColor(theme::TEXT_LIGHT),
@@ -930,6 +965,7 @@ fn spawn_dialogue(
 
                         preview_card_root = right
                             .spawn((
+                                Name::new("Dialogue Preview Card Root"),
                                 Node {
                                     width: Val::Percent(100.0),
                                     flex_grow: 1.0,
@@ -1137,7 +1173,7 @@ fn spawn_arrow_button(parent: &mut ChildSpawnerCommands, fonts: &UiFonts, dir: i
                 Text::new(label),
                 TextFont {
                     font: fonts.pixel.clone(),
-                    font_size: 13.0,
+                    font_size: 14.0,
                     ..default()
                 },
                 TextColor(theme::TEXT_DARK),
@@ -1156,13 +1192,14 @@ fn spawn_preview_card_contents(
     if let Some(preview_scene) = preview_scene {
         *preview_viewport = Some(
             card.spawn((
+                Name::new("Dialogue Preview Viewport"),
                 DialoguePreviewViewport,
                 Interaction::default(),
                 Node {
                     width: Val::Percent(100.0),
-                    height: Val::Px(112.0),
-                    min_height: Val::Px(112.0),
-                    max_height: Val::Px(112.0),
+                    height: Val::Px(116.0),
+                    min_height: Val::Px(116.0),
+                    max_height: Val::Px(116.0),
                     border: UiRect::all(Val::Px(2.0)),
                     ..default()
                 },
@@ -1174,11 +1211,12 @@ fn spawn_preview_card_contents(
         );
     } else if let Some(image_path) = preview.image_path.as_ref() {
         card.spawn((
+            Name::new("Dialogue Preview Image"),
             Node {
                 width: Val::Percent(100.0),
-                height: Val::Px(112.0),
-                min_height: Val::Px(112.0),
-                max_height: Val::Px(112.0),
+                height: Val::Px(116.0),
+                min_height: Val::Px(116.0),
+                max_height: Val::Px(116.0),
                 border: UiRect::all(Val::Px(2.0)),
                 ..default()
             },
@@ -1188,11 +1226,12 @@ fn spawn_preview_card_contents(
         ));
     } else {
         card.spawn((
+            Name::new("Dialogue Preview Placeholder"),
             Node {
                 width: Val::Percent(100.0),
-                height: Val::Px(112.0),
-                min_height: Val::Px(112.0),
-                max_height: Val::Px(112.0),
+                height: Val::Px(116.0),
+                min_height: Val::Px(116.0),
+                max_height: Val::Px(116.0),
                 border: UiRect::all(Val::Px(2.0)),
                 justify_content: JustifyContent::Center,
                 align_items: AlignItems::Center,
@@ -1206,7 +1245,7 @@ fn spawn_preview_card_contents(
                 Text::new("no preview"),
                 TextFont {
                     font: fonts.pixel.clone(),
-                    font_size: 10.0,
+                    font_size: 11.0,
                     ..default()
                 },
                 TextColor(Color::srgb(0.60, 0.62, 0.68)),
@@ -1215,6 +1254,7 @@ fn spawn_preview_card_contents(
     }
 
     card.spawn((
+        Name::new("Dialogue Preview Description Scroll"),
         Node {
             width: Val::Percent(100.0),
             flex_grow: 1.0,
@@ -1230,19 +1270,34 @@ fn spawn_preview_card_contents(
     ))
     .with_children(|desc| {
         desc.spawn((
+            Name::new("Dialogue Preview Description Wrap"),
             Node {
                 width: Val::Percent(100.0),
+                max_width: Val::Percent(100.0),
+                min_height: Val::Px(1.0),
+                flex_direction: FlexDirection::Column,
+                align_items: AlignItems::Stretch,
+                flex_shrink: 0.0,
                 ..default()
             },
-            Text::new(preview.description.clone()),
-            TextFont {
-                font: fonts.body.clone(),
-                font_size: 19.0,
-                ..default()
-            },
-            TextColor(theme::TEXT_LIGHT),
-            TextLayout::new(Justify::Left, LineBreak::WordBoundary),
-        ));
+        ))
+        .with_children(|wrap| {
+            wrap.spawn((
+                Name::new("Dialogue Preview Description"),
+                Node {
+                    width: Val::Percent(100.0),
+                    ..default()
+                },
+                Text::new(preview.description.clone()),
+                TextFont {
+                    font: fonts.body.clone(),
+                    font_size: 20.0,
+                    ..default()
+                },
+                TextColor(theme::TEXT_LIGHT),
+                TextLayout::new(Justify::Left, LineBreak::WordBoundary),
+            ));
+        });
     });
 }
 
@@ -1274,7 +1329,7 @@ fn spawn_quick_action_buttons(
                 Text::new(label),
                 TextFont {
                     font: fonts.pixel.clone(),
-                    font_size: 10.0,
+                    font_size: 11.0,
                     ..default()
                 },
                 TextColor(theme::TEXT_DARK),
@@ -1303,7 +1358,7 @@ fn has_quick_actions(options: &[UiDialogueOption]) -> bool {
 fn reset_text(
     commands: &mut Commands,
     session: &mut DialogueSession,
-    _fonts: &UiFonts,
+    fonts: &UiFonts,
     children: &Query<&Children>,
 ) {
     clear_row(commands, session.line_row, children);
@@ -1313,7 +1368,7 @@ fn reset_text(
     session.revealed = 0;
     session.reveal_timer = 0.0;
     session.selected_option = 0;
-    refresh_slot_text(commands, session);
+    refresh_slot_text(commands, session, fonts);
     refresh_prompt(commands, session);
 }
 
@@ -1333,7 +1388,7 @@ fn reveal_all_chars(
     session.revealed = session.text_chars.len();
 }
 
-fn cycle_option(commands: &mut Commands, session: &mut DialogueSession, dir: i32) {
+fn cycle_option(commands: &mut Commands, session: &mut DialogueSession, dir: i32, fonts: &UiFonts) {
     if session.options.len() < 2 {
         return;
     }
@@ -1342,12 +1397,12 @@ fn cycle_option(commands: &mut Commands, session: &mut DialogueSession, dir: i32
     session.selected_option = ((idx + dir).rem_euclid(len)) as usize;
     session.slot_anim_timer = 0.16;
     session.slot_anim_dir = dir.signum() as f32;
-    refresh_slot_text(commands, session);
+    refresh_slot_text(commands, session, fonts);
     refresh_prompt(commands, session);
 }
 
-fn refresh_slot_text(commands: &mut Commands, session: &DialogueSession) {
-    let text = if let Some(option) = session.options.get(session.selected_option) {
+fn refresh_slot_text(commands: &mut Commands, session: &DialogueSession, fonts: &UiFonts) {
+    let base = if let Some(option) = session.options.get(session.selected_option) {
         let seen_suffix = if session.mode == UiDialogueMode::Inventory && option.seen {
             " [shown]"
         } else {
@@ -1363,7 +1418,149 @@ fn refresh_slot_text(commands: &mut Commands, session: &DialogueSession) {
     } else {
         "no choices".to_string()
     };
-    commands.entity(session.slot_text).insert(Text::new(text));
+    let fitted_font = slot_font_size(&base);
+    let displayed = slot_label_with_ellipsis(&base, fitted_font);
+    commands
+        .entity(session.slot_text)
+        .insert(Text::new(displayed));
+    commands.entity(session.slot_text).insert(TextFont {
+        font: fonts.body.clone(),
+        font_size: fitted_font,
+        ..default()
+    });
+}
+
+fn slot_font_size(label: &str) -> f32 {
+    let mut size = DIALOGUE_SLOT_FONT_MAX;
+    while size > DIALOGUE_SLOT_FONT_MIN && !slot_text_fits(label, size) {
+        size -= 1.0;
+    }
+    size.clamp(DIALOGUE_SLOT_FONT_MIN, DIALOGUE_SLOT_FONT_MAX)
+}
+
+fn slot_label_with_ellipsis(label: &str, font_size: f32) -> String {
+    let clamped: String = label.chars().take(DIALOGUE_SLOT_HARD_LIMIT).collect();
+    if clamped.chars().count() == label.chars().count() && slot_text_fits(&clamped, font_size) {
+        return clamped;
+    }
+
+    let mut truncated = String::new();
+    for ch in clamped.chars() {
+        truncated.push(ch);
+        if !slot_text_fits(&truncated, font_size) {
+            truncated.pop();
+            break;
+        }
+    }
+
+    if truncated.trim().is_empty() {
+        return "…".to_string();
+    }
+
+    if let Some((idx, _)) = truncated
+        .char_indices()
+        .rev()
+        .find(|(_, ch)| ch.is_whitespace())
+    {
+        let word_boundary = truncated[..idx].trim_end();
+        if !word_boundary.is_empty() {
+            truncated = word_boundary.to_string();
+        }
+    } else {
+        truncated = truncated.trim_end().to_string();
+    }
+
+    if truncated.is_empty() {
+        return "…".to_string();
+    }
+
+    while !truncated.is_empty() {
+        let candidate = format!("{truncated}…");
+        if slot_text_fits(&candidate, font_size) {
+            return candidate;
+        }
+        truncated.pop();
+        truncated = truncated.trim_end().to_string();
+    }
+
+    if slot_text_fits("…", font_size) {
+        "…".to_string()
+    } else {
+        label.to_string()
+    }
+}
+
+fn slot_text_fits(label: &str, font_size: f32) -> bool {
+    let line_capacity = slot_line_capacity(font_size);
+    let wrapped_lines = estimated_wrapped_lines(label, line_capacity);
+    if wrapped_lines > DIALOGUE_SLOT_MAX_LINES {
+        return false;
+    }
+
+    let required_height =
+        (wrapped_lines as f32 * font_size * DIALOGUE_SLOT_LINE_HEIGHT_FACTOR).ceil();
+    required_height <= DIALOGUE_SLOT_CONTENT_HEIGHT
+}
+
+fn slot_line_capacity(font_size: f32) -> usize {
+    ((DIALOGUE_SLOT_ESTIMATED_WIDTH / (font_size * DIALOGUE_SLOT_CHAR_WIDTH_FACTOR))
+        .floor()
+        .max(8.0)) as usize
+}
+
+fn estimated_wrapped_lines(label: &str, line_capacity: usize) -> usize {
+    let capacity = line_capacity.max(1);
+    let mut total_lines = 0usize;
+
+    for paragraph in label.split('\n') {
+        let trimmed = paragraph.trim();
+        if trimmed.is_empty() {
+            total_lines += 1;
+            continue;
+        }
+
+        let mut paragraph_lines = 1usize;
+        let mut line_len = 0usize;
+
+        for word in trimmed.split_whitespace() {
+            let word_len = word.chars().count().max(1);
+
+            if line_len == 0 {
+                if word_len <= capacity {
+                    line_len = word_len;
+                } else {
+                    let chunks = word_len.div_ceil(capacity);
+                    paragraph_lines += chunks.saturating_sub(1);
+                    line_len = word_len % capacity;
+                    if line_len == 0 {
+                        line_len = capacity;
+                    }
+                }
+                continue;
+            }
+
+            if line_len + 1 + word_len <= capacity {
+                line_len += 1 + word_len;
+                continue;
+            }
+
+            paragraph_lines += 1;
+            if word_len <= capacity {
+                line_len = word_len;
+            } else {
+                let chunks = word_len.div_ceil(capacity);
+                paragraph_lines += chunks.saturating_sub(1);
+                line_len = word_len % capacity;
+                if line_len == 0 {
+                    line_len = capacity;
+                }
+            }
+        }
+
+        total_lines += paragraph_lines;
+    }
+
+    total_lines.max(1)
 }
 
 fn refresh_prompt(commands: &mut Commands, session: &DialogueSession) {
@@ -1371,7 +1568,7 @@ fn refresh_prompt(commands: &mut Commands, session: &DialogueSession) {
         update_prompt(
             commands,
             session.prompt_text,
-            "a/d: browse | enter: show | q: drop | r/f: reorder",
+            "a/d: browse | enter: show | q: drop",
         );
         return;
     }
@@ -1462,7 +1659,7 @@ fn apply_preview_to_right_panel(
 }
 
 fn spawn_char(commands: &mut Commands, row: Entity, ch: char, fonts: &UiFonts) {
-    const DIALOGUE_BODY_FONT_SIZE: f32 = 31.0;
+    const DIALOGUE_BODY_FONT_SIZE: f32 = 34.0;
 
     commands.entity(row).with_children(|line| {
         if ch == '\n' {
@@ -1527,7 +1724,9 @@ fn despawn_tree(commands: &mut Commands, root: Entity, children_query: &Query<&C
         }
     }
     commands.queue(move |world: &mut World| {
-        let _ = world.despawn(root);
+        if world.entities().contains(root) {
+            let _ = world.despawn(root);
+        }
     });
 }
 
@@ -1578,48 +1777,60 @@ fn selected_item_option_index(session: &DialogueSession) -> Option<usize> {
         .and_then(|option| option.item_id.as_ref().map(|_| session.selected_option))
 }
 
-fn drop_selected_inventory_item(commands: &mut Commands, session: &DialogueSession) {
+fn drop_selected_inventory_item(
+    commands: &mut Commands,
+    session: &mut DialogueSession,
+    fonts: &UiFonts,
+) -> bool {
     let Some(option) = session.options.get(session.selected_option) else {
-        return;
+        return false;
     };
     let Some(item_id) = option.item_id.as_ref() else {
-        return;
+        return false;
     };
+    let item_id = item_id.clone();
+
     commands.write_message(UiDiscoveryCommand::DropItem {
         id: item_id.clone(),
     });
-    commands.write_message(UiDialogueCommand::OpenInventory);
-}
+    let Some(removed_index) = session
+        .options
+        .iter()
+        .position(|entry| entry.item_id.as_ref() == Some(&item_id))
+    else {
+        return true;
+    };
+    session.options.remove(removed_index);
 
-fn move_selected_inventory_item(commands: &mut Commands, session: &DialogueSession, dir: i32) {
-    let Some(option) = session.options.get(session.selected_option) else {
-        return;
-    };
-    let Some(item_id) = option.item_id.as_ref() else {
-        return;
-    };
+    if session
+        .options
+        .last()
+        .is_none_or(|option| option.item_id.is_some())
+    {
+        session.options.push(UiDialogueOption {
+            text: "back".to_string(),
+            preview: None,
+            item_id: None,
+            seen: false,
+        });
+    }
 
     let item_count = session
         .options
         .iter()
-        .filter(|option| option.item_id.is_some())
+        .filter(|entry| entry.item_id.is_some())
         .count();
-    if item_count < 2 {
-        return;
-    }
+    session.selected_option = if item_count == 0 {
+        session.options.len().saturating_sub(1)
+    } else {
+        session.selected_option.min(item_count.saturating_sub(1))
+    };
 
-    let current = session.selected_option.min(item_count - 1);
-    let max_index = item_count.saturating_sub(1) as i32;
-    let target = (current as i32 + dir).clamp(0, max_index) as usize;
-    if target == current {
-        return;
-    }
-
-    commands.write_message(UiDiscoveryCommand::MoveItem {
-        id: item_id.clone(),
-        to_index: target,
-    });
+    refresh_slot_text(commands, session, fonts);
+    refresh_prompt(commands, session);
+    session.active_preview = None;
     commands.write_message(UiDialogueCommand::OpenInventory);
+    true
 }
 
 fn is_cursor_over_preview(session: &DialogueSession, hover_map: &HoverMap) -> bool {

@@ -1,11 +1,13 @@
 use bevy::{
     camera::CameraOutputMode,
     core_pipeline::tonemapping::Tonemapping,
+    pbr::{DistanceFog, FogFalloff},
     prelude::*,
-    render::alpha::AlphaMode,
-    render::render_resource::{BlendState, Face},
+    render::{
+        alpha::AlphaMode,
+        render_resource::{BlendState, Face},
+    },
 };
-use bevy::pbr::{DistanceFog, FogFalloff};
 #[cfg(not(target_arch = "wasm32"))]
 use bevy::{post_process::auto_exposure::AutoExposure, render::view::Hdr};
 

@@ -687,6 +687,7 @@ fn spawn_inventory_preview_world(
         .spawn((
             Name::new("Inventory Preview Root"),
             Transform::default(),
+            Visibility::Inherited,
             RenderLayers::layer(INVENTORY_PREVIEW_RENDER_LAYER),
             InventoryPreviewLayerTagged,
         ))
@@ -700,6 +701,7 @@ fn spawn_inventory_preview_world(
                 Name::new("Inventory Preview Pivot"),
                 InventoryPreviewPivot,
                 Transform::default(),
+                Visibility::Inherited,
                 RenderLayers::layer(INVENTORY_PREVIEW_RENDER_LAYER),
                 InventoryPreviewLayerTagged,
             ))
@@ -709,6 +711,7 @@ fn spawn_inventory_preview_world(
                         Name::new("Inventory Preview Model"),
                         SceneRoot(model_handle),
                         Transform::from_scale(Vec3::splat(1.0)),
+                        Visibility::Inherited,
                         RenderLayers::layer(INVENTORY_PREVIEW_RENDER_LAYER),
                         InventoryPreviewLayerTagged,
                     ))
@@ -1019,6 +1022,7 @@ fn open_inventory(
                         });
 
                         body.spawn((
+                            Name::new("Inventory Detail Panel"),
                             Node {
                                 flex_grow: 1.0,
                                 min_width: Val::Px(0.0),
@@ -1057,6 +1061,7 @@ fn open_inventory(
                                     if !model_path.trim().is_empty() {
                                         if let Some(ref scene) = preview_scene {
                                             detail.spawn((
+                                                Name::new("Inventory Preview Viewport"),
                                                 InventoryPreviewViewport,
                                                 Interaction::default(),
                                                 Node {
@@ -1077,6 +1082,7 @@ fn open_inventory(
 
                                 detail
                                     .spawn((
+                                        Name::new("Inventory Description Scroll"),
                                         Node {
                                             width: Val::Percent(100.0),
                                             flex_grow: 1.0,
@@ -1092,6 +1098,11 @@ fn open_inventory(
                                     ))
                                     .with_children(|desc| {
                                         desc.spawn((
+                                            Name::new("Inventory Description Text"),
+                                            Node {
+                                                width: Val::Percent(100.0),
+                                                ..default()
+                                            },
                                             Text::new(item.description.clone()),
                                             TextFont {
                                                 font: fonts.body.clone(),

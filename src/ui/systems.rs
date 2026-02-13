@@ -1,8 +1,10 @@
 use std::collections::HashMap;
 
 use bevy::{
+    image::ImageSampler,
     input::mouse::{MouseScrollUnit, MouseWheel},
     prelude::*,
+    text::FontAtlasSet,
     ui::{ComputedNode, FocusPolicy, UiScale, ui_transform::UiGlobalTransform},
     window::{CursorOptions, PrimaryWindow},
 };
@@ -246,6 +248,23 @@ pub(super) fn update_ui_scale(
     };
     if (ui_scale.0 - next_scale).abs() > 0.001 {
         ui_scale.0 = next_scale;
+    }
+}
+
+pub(super) fn force_linear_font_atlas_sampling(
+    font_atlas_set: Option<Res<FontAtlasSet>>,
+    mut images: ResMut<Assets<Image>>,
+) {
+    let Some(font_atlas_set) = font_atlas_set else {
+        return;
+    };
+
+    for atlases in font_atlas_set.values() {
+        for atlas in atlases {
+            if let Some(image) = images.get_mut(&atlas.texture) {
+                image.sampler = ImageSampler::linear();
+            }
+        }
     }
 }
 

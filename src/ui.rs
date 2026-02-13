@@ -26,12 +26,13 @@ use systems::{
     animate_dither_pixels, animate_main_menu_ticker, apply_discovery_commands,
     cleanup_removed_main_menu, cleanup_removed_pause_menu, cleanup_ui_cursor,
     emulate_button_interaction_for_offscreen_ui, ensure_gallery_selection_exists,
-    handle_button_interactions, handle_menu_actions, handle_pause_shortcut, on_ui_scroll,
-    populate_ui_fonts_and_cursor, rebuild_gallery_lists, refresh_button_highlights,
-    refresh_confirm_dialogs, refresh_gallery_details, refresh_main_menu_content,
-    refresh_main_menu_panels, refresh_pause_menu_panels, refresh_settings_values,
-    reset_ticker_on_scale_change, restore_native_cursor_on_exit, send_scroll_events,
-    spawn_main_menu_on_added, spawn_pause_menu_on_added, update_ui_cursor, update_ui_scale,
+    force_linear_font_atlas_sampling, handle_button_interactions, handle_menu_actions,
+    handle_pause_shortcut, on_ui_scroll, populate_ui_fonts_and_cursor, rebuild_gallery_lists,
+    refresh_button_highlights, refresh_confirm_dialogs, refresh_gallery_details,
+    refresh_main_menu_content, refresh_main_menu_panels, refresh_pause_menu_panels,
+    refresh_settings_values, reset_ticker_on_scale_change, restore_native_cursor_on_exit,
+    send_scroll_events, spawn_main_menu_on_added, spawn_pause_menu_on_added, update_ui_cursor,
+    update_ui_scale,
 };
 
 use crate::AppState;
@@ -87,6 +88,7 @@ impl Plugin for UiPlugin {
                 (
                     refresh_confirm_dialogs,
                     animate_dither_pixels,
+                    force_linear_font_atlas_sampling,
                     update_ui_scale,
                     reset_ticker_on_scale_change,
                     animate_main_menu_ticker,
