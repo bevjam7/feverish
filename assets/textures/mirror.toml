@@ -1,0 +1,8 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "mirror.png"
+normal_map_texture = "mirror_normal.png"
+metallic_roughness_texture = "mirror_mr.png"
+alpha_mode = "Add"
+metallic = 1.0
+perceptual_roughness = 1.0
