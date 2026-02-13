@@ -1,6 +1,6 @@
 (
     id: "necklace",
-    name: "Necklace",
-    subtitle: "Expensive looking",
-    description: "The name 'Catherine' is engraved in nearly hidden letters on the back.",
+    name: "Jewelry",
+    subtitle: "Expensive looking necklace",
+    description: "A letter in the box says 'To Catherine, my forbidden flame' in cursive handwriting.",
 )

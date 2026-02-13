@@ -1,0 +1,136 @@
+// script: npc.human
+// entry: greeting
+
+[greeting]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: ...
+hook: npc.default.greeting
+> Who are you? -> identity [id: ask_identity] [hook: npc.default.option.identity]
+> Why are there so many of you? -> place [id: ask_place] [hook: npc.default.option.place]
+> I want to show you something by the window. (eliminate) [id: eliminate] [hook: debug.eliminate_target]
+
+[identity]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: I'm Marcus.
+-> greeting
+
+[place]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: Huh? I'm the only one here.
+-> greeting
+
+// APARTMENT KEY
+
+[response_apartment_key]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: I've never seen that key before in my life, I swear.
+
+// CD
+
+[response_cd]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: Nothing on here that I'd listen to. The track list is complete shit.
+
+// CIGARETTES
+
+[response_cigarettes]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: Are those mine? I thought I got rid of them. Trying to cut back, you know?
+
+// DIORAMA
+
+[response_diorama]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: I know it's cool, but can you try and not pick up everything you see in my house?
+> What is it? -> ask_diorama [id: ask_diorama]
+
+[ask_diorama]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: A scale model for a commercial project I lead. It's very fragile, if I didn't mention that already.
+portrait: models/npc_a/npc_a.png
+
+// NECKLACE
+
+[response_necklace]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: That's not mine. I've never seen it before.
+> Who is Catherine? -> ask_catherine [id: ask_catherine]
+
+[ask_catherine]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: Never heard of her. Can we just talk about something else already?
+
+// NOISE COMPLAINT
+
+[response_noise_complaint]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: I need to move into a single family home, or this geezer needs to hurry up and die. Whichever comes first.
+> What happened? -> ask_noise_complaint [id: ask_noise_complaint]
+
+[ask_noise_complaint]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: What's there to say? Old people go to sleep at 5 P.M. and have an aneurysm every time they hear two people arguing.
+
+// OFFICE KEY
+
+[response_office_key]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: That leads downstairs to my office. She also has some stuff strewn about, watch your step.
+
+// PHOTOGRAPH
+
+[response_photograph]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: We look so good together, right?
+> Who is that? -> ask_photograph [id: ask_photograph]
+> Leave [id: leave] [hook: npc.default.option.leave]
+
+[ask_photograph]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: Sorry, she's already taken. That's my wife.
+
+// RAT TOY
+
+[response_rat_toy]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: That smells like mold.
+
+// STRANGE BOOKS
+
+[response_strange_books]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: Just some research I've been doing.

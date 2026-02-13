@@ -1,0 +1,103 @@
+// script: npc.dunce
+// entry: greeting
+
+[greeting]
+speaker: Panicking Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: GET AWAY FROM ME!
+hook: npc.default.greeting
+> Calm down. Who are you? -> identity [id: ask_identity] [hook: npc.default.option.identity]
+> I want to show you something by the window. (eliminate) [id: eliminate] [hook: debug.eliminate_target]
+> i should go. [id: leave] [hook: npc.default.option.leave]
+
+[identity]
+speaker: Panicking Marcus
+portrait: models/npc_a/npc_a.png
+text: I'M MARCUS. GET AWAY FROM ME!
+-> greeting
+
+// APARTMENT KEY
+
+[response_apartment_key]
+speaker: Panicking Marcus
+text: May I PLEEEEEASE TASTE that?
+portrait: models/npc_a/npc_a.png
+
+// CD
+
+[response_cd]
+speaker: Panicking Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: That marker smells INCREDIBLY scrumptious. It FEELS like her music.
+
+// CIGARETTES
+
+[response_cigarettes]
+speaker: Panicking Marcus
+text: THAT SMELLS SO BAD! I'M GOING TO BE SICK TO MY STOMACH.
+portrait: models/npc_a/npc_a.png
+
+// DIORAMA
+
+[response_diorama]
+speaker: Panicking Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: HOW DID THEY SHRINK IT DOWN SO SMALL!?
+
+// NECKLACE
+
+[response_necklace]
+speaker: Panicking Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: I BOUGHT THAT FOR CATHERINE!
+> Who is that? -> ask_catherine_b [id: ask_catherine_b]
+
+[ask_catherine_b]
+speaker: Panicking Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: SHE'S HOT.
+
+// NOISE COMPLAINT
+
+[response_noise_complaint]
+speaker: Panicking Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: WHO CARES! THIS GUY SUCKS!
+
+// OFFICE KEY
+
+[response_office_key]
+speaker: Panicking Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: HE SAYS I'M NOT ALLOWED TO GO DOWN THERE.
+
+// PHOTOGRAPH
+
+[response_photograph]
+speaker: Panicking Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: THIS FEELS SLIMY AND SMELLS LIKE DUST. IT'S BORING. IT'S SO BORING.
+
+// RAT TOY
+
+[response_rat_toy]
+speaker: Panicking Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: SMELLS LIKE SOMETHING DELICIOUS! CAN I HAVE A BITE?
+
+// STRANGE BOOKS
+
+[response_strange_books]
+speaker: Panicking Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: THAT'S WHY I'M HERE!

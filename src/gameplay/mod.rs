@@ -22,19 +22,26 @@ use bevy_trenchbroom::prelude::*;
 
 use crate::{
     AppSystems, AssetServerExt, Phase, Usable,
+    assets::ItemMeta,
     audio::mixer::WorldSfxPool,
-    gameplay::props::Phone,
+    gameplay::{
+        door::DoorBase,
+        npc::{Npc, SuspectType},
+        props::Phone,
+    },
     input::{Use, UseRaycaster},
     map::{LevelToPrepare, PendingLevelTransition},
     psx::{PsxCamera, PsxConfig},
     ratspinner::RatHookTriggered,
+    ui::{DiscoveryEntry, UiDiscoveryDb},
 };
 
 pub(crate) struct GameplayPlugin;
 
 impl Plugin for GameplayPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<DoorScenePreloads>();
+        app.init_resource::<DoorScenePreloads>()
+            .init_resource::<EliminationCount>();
         app.add_systems(
             Update,
             (
@@ -261,19 +268,109 @@ pub(crate) struct EmitHook {
     pub(crate) hook_repeat: bool,
 }
 
+/// Main progress tracker of the game.
+#[derive(Resource, Reflect, Default)]
+pub(crate) struct EliminationCount(usize);
+
 #[derive(Component, Default, Reflect)]
 #[reflect(Component)]
 pub(crate) struct HookCounter(usize);
 
-fn handle_debug_elimination(mut hooks: MessageReader<RatHookTriggered>, mut cmd: Commands) {
+fn handle_debug_elimination(
+    mut hooks: MessageReader<RatHookTriggered>,
+    mut cmd: Commands,
+    mut count: ResMut<EliminationCount>,
+    mut discovery_db: ResMut<UiDiscoveryDb>,
+    assets: Res<AssetServer>,
+    items: Res<Assets<ItemMeta>>,
+    npcs: Query<&Npc>,
+    mut targetable_doors: Query<(Entity, &Targetable, &mut DoorBase)>,
+) {
     for event in hooks.read() {
         if event.hook == "debug.eliminate_target" {
+            let office_key_meta = assets
+                .get_path_handle("items/office_key.item.meta")
+                .ok()
+                .and_then(|handle| items.get(&handle))
+                .unwrap();
+            let apartment_key_meta = assets
+                .get_path_handle("items/apartment_key.item.meta")
+                .ok()
+                .and_then(|handle| items.get(&handle))
+                .unwrap();
             if let Some(target) = event.target {
                 info!("eliminating npc: {:?}", target);
                 // TODO: death animation
                 cmd.entity(target).despawn();
                 // Entity has `Suspect` value in `Npc` component which can be
                 // queried for UI/gameplay updates
+
+                // Give the player a key (or play win/lose state), based on how many kills have
+                // progressed
+                count.0 += 1;
+
+                match count.0 {
+                    1 => {
+                        // Give the office key
+                        discovery_db.upsert(
+                            crate::ui::DiscoveryKind::Item,
+                            DiscoveryEntry::new(&office_key_meta.id, office_key_meta.name.clone())
+                                .subtitle(office_key_meta.subtitle.clone())
+                                .description(office_key_meta.description.clone())
+                                .model_path("items/key/key.gltf#Scene0")
+                                .seen(true),
+                        );
+
+                        // Unlock the office door
+                        targetable_doors
+                            .iter_mut()
+                            .find(|(_, door_name, _)| {
+                                door_name.targetname.0.as_str() == "office_door"
+                            })
+                            .unwrap()
+                            .2
+                            .locked = false;
+                    }
+                    2 => {
+                        // Give the apartment key
+                        discovery_db.upsert(
+                            crate::ui::DiscoveryKind::Item,
+                            DiscoveryEntry::new(
+                                &apartment_key_meta.id,
+                                apartment_key_meta.name.clone(),
+                            )
+                            .subtitle(apartment_key_meta.subtitle.clone())
+                            .description(apartment_key_meta.description.clone())
+                            .model_path("items/key/key.gltf#Scene0")
+                            .seen(true),
+                        );
+
+                        // Unlock the apartment door
+                        targetable_doors
+                            .iter_mut()
+                            .find(|(_, door_name, _)| {
+                                door_name.targetname.0.as_str() == "apartment_door"
+                            })
+                            .unwrap()
+                            .2
+                            .locked = false;
+                    }
+                    3 => {
+                        // Play the game win/lose scenario
+                        if npcs
+                            .iter()
+                            .filter(|npc| npc.suspect.is_some())
+                            .any(|suspect| matches!(suspect.suspect, Some(SuspectType::Imposter)))
+                        {
+                            // lose
+                            dbg!("you guessed incorrectly :(");
+                        } else {
+                            // win
+                            dbg!("you guessed correctly! you win!");
+                        }
+                    }
+                    _ => {}
+                }
             }
         }
     }

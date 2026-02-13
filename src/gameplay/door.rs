@@ -14,15 +14,15 @@ use crate::{
 };
 
 /// Base door class from which other types of doors inherit
-#[base_class(base(EmitHook))]
+#[base_class(base(EmitHook, Targetable))]
 #[derive(Component, Clone, Reflect)]
 #[require(Usable)]
 pub struct DoorBase {
-    open: bool,
-    locked: bool,
-    sound_locked: String,
-    sound_open: String,
-    sound_close: String,
+    pub(crate) open: bool,
+    pub(crate) locked: bool,
+    pub(crate) sound_locked: String,
+    pub(crate) sound_open: String,
+    pub(crate) sound_close: String,
 }
 
 impl Default for DoorBase {

@@ -17,15 +17,16 @@ use crate::{
 #[component(on_add=Self::on_add_hook)]
 pub(crate) struct Npc {
     #[class(default = "models/npc_a/npc_a.gltf", must_set)]
-    model: String,
+    pub(crate) model: String,
     #[class(default = "idle_a")]
-    idle_animation: String,
+    pub(crate) idle_animation: String,
     /// Marks the NPC as one that must be eliminated or saved
-    suspect: Option<SuspectType>,
+    pub(crate) suspect: Option<SuspectType>,
+    pub(crate) script_id: Option<String>,
 }
 
 #[derive(Reflect, FgdType)]
-enum SuspectType {
+pub(crate) enum SuspectType {
     Imposter,
     Human,
 }
@@ -36,6 +37,7 @@ impl Default for Npc {
             model: Default::default(),
             idle_animation: "idle_a".into(),
             suspect: None,
+            script_id: Some("npc.default".into()),
         }
     }
 }
@@ -103,7 +105,6 @@ impl Npc {
                     animations,
                     graph_handle,
                 },
-                NpcDialogueProfile::default(),
                 layers,
             ))
             .with_children(|cmd| {
@@ -149,24 +150,13 @@ fn idle_on_spawn(
     }
 }
 
-#[derive(Component, Clone)]
-struct NpcDialogueProfile {
-    script_id: String,
-}
-
-impl Default for NpcDialogueProfile {
-    fn default() -> Self {
-        Self {
-            script_id: "npc.default".to_string(),
-        }
-    }
-}
-
-fn npc_on_use(trigger: On<Use>, mut commands: Commands, npcs: Query<&NpcDialogueProfile>) {
-    let Ok(dialogue) = npcs.get(trigger.0) else {
+fn npc_on_use(trigger: On<Use>, mut cmd: Commands, npcs: Query<&Npc>) {
+    let Ok(npc) = npcs.get(trigger.0) else {
         return;
     };
-    commands.write_message(RatCommand::Start(
-        RatStart::new(dialogue.script_id.clone()).target(trigger.0),
-    ));
+    if let Some(ref script_id) = npc.script_id {
+        cmd.write_message(RatCommand::Start(
+            RatStart::new(script_id.clone()).target(trigger.0),
+        ));
+    }
 }

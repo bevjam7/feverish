@@ -9,7 +9,7 @@ text: hey there! i'm mr d.
 hook: npc.default.greeting
 > who are you? -> identity [id: ask_identity] [hook: npc.default.option.identity]
 > what happened here? -> place [id: ask_place] [hook: npc.default.option.place]
-> eliminate [id: eliminate] [hook: debug.eliminate_target]
+> I want to show you something by the window. (eliminate) [id: eliminate] [hook: debug.eliminate_target]
 > i should go. [id: leave] [hook: npc.default.option.leave]
 
 [identity]
