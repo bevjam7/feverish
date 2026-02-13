@@ -10,8 +10,11 @@ use bevy::{
 };
 
 use super::{
-    components::{DialogueUiRoot, UiDialogueCommand, UiDialogueOption, UiDialogueRequest},
-    systems::UiFonts,
+    components::{
+        DialogueUiRoot, UiDialogueCommand, UiDialogueMode, UiDialogueOption, UiDialoguePreview,
+        UiDialogueRequest, UiDiscoveryCommand,
+    },
+    systems::{UiDiscoveryDb, UiFonts},
     theme,
 };
 use crate::{ratspinner::RatCommand, settings::GameSettings};
@@ -27,6 +30,7 @@ pub(super) struct UiDialogueRuntime {
 }
 
 struct DialogueSession {
+    mode: UiDialogueMode,
     root: Entity,
     prompt_text: Entity,
     line_row: Entity,
@@ -94,10 +98,25 @@ pub(super) fn apply_dialogue_commands(
     assets: Res<AssetServer>,
     mut images: ResMut<Assets<Image>>,
     settings: Res<GameSettings>,
+    discovery_db: Res<UiDiscoveryDb>,
     children: Query<&Children>,
 ) {
     for msg in msgs.read() {
         match msg {
+            UiDialogueCommand::OpenInventory => {
+                close_session(&mut commands, &mut runtime, &mut state, &children);
+                let mut session = spawn_dialogue(
+                    &mut commands,
+                    &fonts,
+                    &assets,
+                    &mut images,
+                    inventory_request_from_db(&discovery_db),
+                    settings.dialogue_speed,
+                );
+                reset_text(&mut commands, &mut session, &fonts, &children);
+                state.active = true;
+                runtime.session = Some(session);
+            }
             UiDialogueCommand::Start(req) => {
                 close_session(&mut commands, &mut runtime, &mut state, &children);
                 let mut session = spawn_dialogue(
@@ -174,7 +193,12 @@ pub(super) fn rotate_dialogue_preview(
         Without<DialoguePreviewPivot>,
     >,
     preview_nodes: Query<
-        (&Node, &ComputedNode, &UiGlobalTransform, &InheritedVisibility),
+        (
+            &Node,
+            &ComputedNode,
+            &UiGlobalTransform,
+            &InheritedVisibility,
+        ),
         With<DialoguePreviewViewport>,
     >,
     children: Query<&Children>,
@@ -196,10 +220,13 @@ pub(super) fn rotate_dialogue_preview(
     }
     let wheel_delta: f32 = mouse_wheel.read().map(|event| event.y).sum();
 
-    let cursor_pos = windows.single().ok().and_then(|window| window.cursor_position());
-    let hovered = cursor_pos.is_some_and(|cursor| {
-        cursor_inside_preview(session, cursor, &preview_nodes)
-    }) || is_cursor_over_preview(session, &hover_map);
+    let cursor_pos = windows
+        .single()
+        .ok()
+        .and_then(|window| window.cursor_position());
+    let hovered = cursor_pos
+        .is_some_and(|cursor| cursor_inside_preview(session, cursor, &preview_nodes))
+        || is_cursor_over_preview(session, &hover_map);
     if hovered && wheel_delta.abs() > f32::EPSILON {
         if let Some(cursor_pos) = cursor_pos {
             apply_preview_zoom(
@@ -348,6 +375,19 @@ pub(super) fn handle_dialogue_shortcuts(
         return;
     }
 
+    if session.mode == UiDialogueMode::Inventory {
+        if keys.just_pressed(KeyCode::KeyQ) {
+            drop_selected_inventory_item(&mut commands, session);
+            return;
+        }
+        if keys.just_pressed(KeyCode::KeyR) {
+            move_selected_inventory_item(&mut commands, session, -1);
+        }
+        if keys.just_pressed(KeyCode::KeyF) {
+            move_selected_inventory_item(&mut commands, session, 1);
+        }
+    }
+
     if any_pressed(&keys, &[KeyCode::ArrowLeft, KeyCode::KeyA]) {
         cycle_option(&mut commands, session, -1);
     }
@@ -355,7 +395,15 @@ pub(super) fn handle_dialogue_shortcuts(
         cycle_option(&mut commands, session, 1);
     }
     if any_pressed(&keys, &[KeyCode::KeyE, KeyCode::Enter, KeyCode::Space]) {
-        commands.write_message(RatCommand::Choose(session.selected_option));
+        if session.mode == UiDialogueMode::Inventory {
+            if let Some(item_idx) = selected_item_option_index(session) {
+                commands.write_message(RatCommand::Choose(item_idx));
+            } else {
+                commands.write_message(RatCommand::Choose(session.selected_option));
+            }
+        } else {
+            commands.write_message(RatCommand::Choose(session.selected_option));
+        }
     }
 }
 
@@ -856,9 +904,9 @@ fn spawn_dialogue(
                                             border: UiRect::all(Val::Px(2.0)),
                                             ..default()
                                         },
-                                        ImageNode::new(assets.load::<Image>(
-                                            req.portrait_path.clone(),
-                                        )),
+                                        ImageNode::new(
+                                            assets.load::<Image>(req.portrait_path.clone()),
+                                        ),
                                         BackgroundColor(Color::srgb(0.03, 0.04, 0.06)),
                                         theme::border(false),
                                     ));
@@ -879,6 +927,7 @@ fn spawn_dialogue(
         (req.reveal_duration_secs.max(0.10) / char_count / speed).clamp(0.008, 0.070);
 
     DialogueSession {
+        mode: req.mode,
         root,
         prompt_text,
         line_row,
@@ -1234,11 +1283,17 @@ fn cycle_option(commands: &mut Commands, session: &mut DialogueSession, dir: i32
 
 fn refresh_slot_text(commands: &mut Commands, session: &DialogueSession) {
     let text = if let Some(option) = session.options.get(session.selected_option) {
+        let seen_suffix = if session.mode == UiDialogueMode::Inventory && option.seen {
+            " [shown]"
+        } else {
+            ""
+        };
         format!(
-            "{} / {}  {}",
+            "{} / {}  {}{}",
             session.selected_option + 1,
             session.options.len(),
-            option.text
+            option.text,
+            seen_suffix
         )
     } else {
         "no choices".to_string()
@@ -1247,6 +1302,15 @@ fn refresh_slot_text(commands: &mut Commands, session: &DialogueSession) {
 }
 
 fn refresh_prompt(commands: &mut Commands, session: &DialogueSession) {
+    if session.mode == UiDialogueMode::Inventory {
+        update_prompt(
+            commands,
+            session.prompt_text,
+            "a/d: browse | enter: show | q: drop | r/f: reorder",
+        );
+        return;
+    }
+
     let has_quick = has_quick_actions(&session.options);
     if session.revealed < session.text_chars.len() {
         update_prompt(commands, session.prompt_text, "e/enter/click: skip");
@@ -1395,11 +1459,100 @@ fn despawn_tree(commands: &mut Commands, root: Entity, children_query: &Query<&C
             despawn_tree(commands, child, children_query);
         }
     }
-    commands.entity(root).despawn();
+    commands.queue(move |world: &mut World| {
+        let _ = world.despawn(root);
+    });
 }
 
 fn any_pressed(keys: &ButtonInput<KeyCode>, options: &[KeyCode]) -> bool {
     options.iter().any(|key| keys.just_pressed(*key))
+}
+
+fn inventory_request_from_db(discovery_db: &UiDiscoveryDb) -> UiDialogueRequest {
+    let mut options: Vec<UiDialogueOption> = discovery_db
+        .entries(super::components::DiscoveryKind::Item)
+        .iter()
+        .map(|entry| UiDialogueOption {
+            text: entry.title.clone(),
+            preview: Some(UiDialoguePreview {
+                title: entry.title.clone(),
+                subtitle: entry.subtitle.clone(),
+                description: entry.description.clone(),
+                image_path: entry.image_path.clone(),
+                model_path: entry.model_path.clone(),
+            }),
+            item_id: Some(entry.id.clone()),
+            seen: entry.seen,
+        })
+        .collect();
+    options.push(UiDialogueOption {
+        text: "back".to_string(),
+        preview: None,
+        item_id: None,
+        seen: false,
+    });
+    let preview = options.first().and_then(|option| option.preview.clone());
+
+    UiDialogueRequest {
+        mode: UiDialogueMode::Inventory,
+        speaker: "inventory".to_string(),
+        text: "pick an item to show".to_string(),
+        portrait_path: "models/npc_a/npc_a.png".to_string(),
+        preview,
+        options,
+        reveal_duration_secs: 0.0,
+    }
+}
+
+fn selected_item_option_index(session: &DialogueSession) -> Option<usize> {
+    session
+        .options
+        .get(session.selected_option)
+        .and_then(|option| option.item_id.as_ref().map(|_| session.selected_option))
+}
+
+fn drop_selected_inventory_item(commands: &mut Commands, session: &DialogueSession) {
+    let Some(option) = session.options.get(session.selected_option) else {
+        return;
+    };
+    let Some(item_id) = option.item_id.as_ref() else {
+        return;
+    };
+    commands.write_message(UiDiscoveryCommand::DropItem {
+        id: item_id.clone(),
+    });
+    commands.write_message(UiDialogueCommand::OpenInventory);
+}
+
+fn move_selected_inventory_item(commands: &mut Commands, session: &DialogueSession, dir: i32) {
+    let Some(option) = session.options.get(session.selected_option) else {
+        return;
+    };
+    let Some(item_id) = option.item_id.as_ref() else {
+        return;
+    };
+
+    let item_count = session
+        .options
+        .iter()
+        .filter(|option| option.item_id.is_some())
+        .count();
+    if item_count < 2 {
+        return;
+    }
+
+    let current = session.selected_option.min(item_count - 1);
+    let max_index = item_count.saturating_sub(1) as i32;
+    let target = (current as i32 + dir).clamp(0, max_index) as usize;
+    if target == current {
+        return;
+    }
+
+    commands.write_message(UiDiscoveryCommand::MoveItem {
+        id: item_id.clone(),
+        to_index: target,
+    });
+    commands.write_message(UiDialogueCommand::OpenInventory);
 }
 
 fn is_cursor_over_preview(session: &DialogueSession, hover_map: &HoverMap) -> bool {
@@ -1416,7 +1569,12 @@ fn apply_preview_zoom(
     wheel_delta: f32,
     cursor_pos: Vec2,
     preview_nodes: &Query<
-        (&Node, &ComputedNode, &UiGlobalTransform, &InheritedVisibility),
+        (
+            &Node,
+            &ComputedNode,
+            &UiGlobalTransform,
+            &InheritedVisibility,
+        ),
         With<DialoguePreviewViewport>,
     >,
     preview_cameras: &mut Query<
@@ -1451,7 +1609,12 @@ fn preview_model_hit_test(
     session: &DialogueSession,
     cursor_pos: Vec2,
     preview_nodes: &Query<
-        (&Node, &ComputedNode, &UiGlobalTransform, &InheritedVisibility),
+        (
+            &Node,
+            &ComputedNode,
+            &UiGlobalTransform,
+            &InheritedVisibility,
+        ),
         With<DialoguePreviewViewport>,
     >,
     preview_cameras: &mut Query<
@@ -1489,7 +1652,12 @@ fn preview_cursor_ray(
     session: &DialogueSession,
     cursor_pos: Vec2,
     preview_nodes: &Query<
-        (&Node, &ComputedNode, &UiGlobalTransform, &InheritedVisibility),
+        (
+            &Node,
+            &ComputedNode,
+            &UiGlobalTransform,
+            &InheritedVisibility,
+        ),
         With<DialoguePreviewViewport>,
     >,
     preview_cameras: &mut Query<
@@ -1524,7 +1692,12 @@ fn preview_local_uv(
     session: &DialogueSession,
     cursor_pos: Vec2,
     preview_nodes: &Query<
-        (&Node, &ComputedNode, &UiGlobalTransform, &InheritedVisibility),
+        (
+            &Node,
+            &ComputedNode,
+            &UiGlobalTransform,
+            &InheritedVisibility,
+        ),
         With<DialoguePreviewViewport>,
     >,
 ) -> Option<(f32, f32, Vec2)> {
@@ -1540,11 +1713,7 @@ fn preview_local_uv(
     }
 
     let normalized = computed.normalize_point(*ui_transform, cursor_pos)?;
-    if normalized.x < -0.5
-        || normalized.x > 0.5
-        || normalized.y < -0.5
-        || normalized.y > 0.5
-    {
+    if normalized.x < -0.5 || normalized.x > 0.5 || normalized.y < -0.5 || normalized.y > 0.5 {
         return None;
     }
 
@@ -1555,7 +1724,12 @@ fn cursor_inside_preview(
     session: &DialogueSession,
     cursor_pos: Vec2,
     preview_nodes: &Query<
-        (&Node, &ComputedNode, &UiGlobalTransform, &InheritedVisibility),
+        (
+            &Node,
+            &ComputedNode,
+            &UiGlobalTransform,
+            &InheritedVisibility,
+        ),
         With<DialoguePreviewViewport>,
     >,
 ) -> bool {

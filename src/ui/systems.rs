@@ -10,13 +10,14 @@ use bevy::{
 use super::{
     components::{
         ButtonAction, ConfirmAction, ConfirmDialogMessage, ConfirmDialogRoot, DialogueUiRoot,
-        DisabledButton, DiscoveryEntry, DiscoveryKind, DitherPixel, GalleryDetailDescription,
-        GalleryDetailStatus, GalleryDetailSubtitle, GalleryDetailTitle, GalleryListCache,
-        GalleryListRoot, MainMenuGalleryPanel, MainMenuHeading, MainMenuLine, MainMenuPage,
+        DisabledButton, DiscoveryEntry, DiscoveryInteraction, DiscoveryInteractionRecord,
+        DiscoveryKind, DitherPixel, GalleryDetailDescription, GalleryDetailStatus,
+        GalleryDetailSubtitle, GalleryDetailTitle, GalleryListCache, GalleryListRoot,
+        InventoryUiRoot, MainMenuGalleryPanel, MainMenuHeading, MainMenuLine, MainMenuPage,
         MainMenuSettingsPanel, MainMenuState, MainMenuTerminalPanel, MainMenuTicker, MainMenuUi,
         MenuButton, MenuConfirmState, MenuOwner, PauseMenuPage, PauseMenuSettingsPanel,
-        PauseMenuState, PauseMenuStatusPanel, PauseMenuUi, SettingsValueText, UiCursorSprite,
-        UiDiscoveryCommand, UiMenuAction,
+        PauseMenuState, PauseMenuStatusPanel, PauseMenuUi, SettingsValueText, SpawnDroppedItem,
+        UiCursorSprite, UiDiscoveryCommand, UiDiscoveryDbSnapshot, UiMenuAction,
     },
     main_menu::spawn_main_menu,
     pause_menu::spawn_pause_menu,
@@ -46,7 +47,9 @@ pub(super) struct UiRegistry {
 pub struct UiDiscoveryDb {
     items: Vec<DiscoveryEntry>,
     npcs: Vec<DiscoveryEntry>,
+    interactions: Vec<DiscoveryInteractionRecord>,
     revision: u64,
+    next_interaction_sequence: u64,
 }
 
 #[derive(EntityEvent, Debug)]
@@ -66,7 +69,9 @@ impl Default for UiDiscoveryDb {
                     .description("what day is today? Doomsday?")
                     .seen(true),
             ],
+            interactions: vec![],
             revision: 1,
+            next_interaction_sequence: 1,
         }
     }
 }
@@ -74,8 +79,12 @@ impl Default for UiDiscoveryDb {
 impl UiDiscoveryDb {
     pub fn upsert(&mut self, kind: DiscoveryKind, entry: DiscoveryEntry) {
         let entries = self.entries_mut(kind);
-        if let Some(existing) = entries.iter_mut().find(|it| it.id == entry.id) {
-            *existing = entry;
+        if let Some(existing_idx) = entries.iter().position(|it| it.id == entry.id) {
+            entries.remove(existing_idx);
+        }
+        if kind == DiscoveryKind::Item {
+            // keep item inventory naturally sorted by recency (most recent first)
+            entries.insert(0, entry);
         } else {
             entries.push(entry);
         }
@@ -104,8 +113,44 @@ impl UiDiscoveryDb {
         false
     }
 
+    pub fn move_item(&mut self, id: &str, to_index: usize) -> bool {
+        let Some(current_idx) = self.items.iter().position(|it| it.id == id) else {
+            return false;
+        };
+        if self.items.is_empty() {
+            return false;
+        }
+        let to_index = to_index.min(self.items.len() - 1);
+        if current_idx == to_index {
+            return true;
+        }
+
+        let entry = self.items.remove(current_idx);
+        self.items.insert(to_index, entry);
+        self.revision = self.revision.wrapping_add(1);
+        true
+    }
+
+    pub fn drop_item(&mut self, id: &str) -> Option<DiscoveryEntry> {
+        let entries = self.entries_mut(DiscoveryKind::Item);
+        let idx = entries.iter().position(|it| it.id == id)?;
+        let entry = entries.remove(idx);
+        self.revision = self.revision.wrapping_add(1);
+        Some(entry)
+    }
+
     pub fn clear_kind(&mut self, kind: DiscoveryKind) {
         self.entries_mut(kind).clear();
+        self.revision = self.revision.wrapping_add(1);
+    }
+
+    pub fn record_interaction(&mut self, interaction: DiscoveryInteraction) {
+        let sequence = self.next_interaction_sequence;
+        self.next_interaction_sequence = self.next_interaction_sequence.wrapping_add(1);
+        self.interactions.push(DiscoveryInteractionRecord {
+            sequence,
+            interaction,
+        });
         self.revision = self.revision.wrapping_add(1);
     }
 
@@ -116,8 +161,49 @@ impl UiDiscoveryDb {
         }
     }
 
+    pub fn interactions(&self) -> &[DiscoveryInteractionRecord] {
+        &self.interactions
+    }
+
+    pub fn was_item_shared_with_speaker(
+        &self,
+        item_id: &str,
+        script_id: &str,
+        speaker: &str,
+    ) -> bool {
+        self.interactions.iter().any(|record| {
+            record.interaction.kind == DiscoveryKind::Item
+                && record.interaction.id == item_id
+                && record.interaction.action
+                    == super::components::DiscoveryInteractionAction::Shared
+                && record.interaction.script_id.as_deref() == Some(script_id)
+                && matches!(
+                    &record.interaction.actor,
+                    super::components::DiscoveryInteractionActor::Speaker(name) if name == speaker
+                )
+        })
+    }
+
     pub fn revision(&self) -> u64 {
         self.revision
+    }
+
+    pub fn snapshot(&self) -> UiDiscoveryDbSnapshot {
+        UiDiscoveryDbSnapshot {
+            items: self.items.clone(),
+            npcs: self.npcs.clone(),
+            interactions: self.interactions.clone(),
+            revision: self.revision,
+            next_interaction_sequence: self.next_interaction_sequence,
+        }
+    }
+
+    pub fn replace_all(&mut self, snapshot: UiDiscoveryDbSnapshot) {
+        self.items = snapshot.items;
+        self.npcs = snapshot.npcs;
+        self.interactions = snapshot.interactions;
+        self.revision = snapshot.revision;
+        self.next_interaction_sequence = snapshot.next_interaction_sequence.max(1);
     }
 
     fn entries_mut(&mut self, kind: DiscoveryKind) -> &mut Vec<DiscoveryEntry> {
@@ -165,7 +251,15 @@ pub(super) fn update_ui_scale(
 
 pub(super) fn update_ui_cursor(
     mut commands: Commands,
-    ui_visible: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>, With<DialogueUiRoot>)>>,
+    ui_visible: Query<
+        (),
+        Or<(
+            With<MainMenuUi>,
+            With<PauseMenuUi>,
+            With<DialogueUiRoot>,
+            With<InventoryUiRoot>,
+        )>,
+    >,
     cursors: Res<UiCursorIcons>,
     mouse: Res<ButtonInput<MouseButton>>,
     time: Res<Time>,
@@ -298,7 +392,15 @@ pub(super) fn update_ui_cursor(
 pub(super) fn emulate_button_interaction_for_offscreen_ui(
     windows: Query<&Window, With<PrimaryWindow>>,
     mouse: Res<ButtonInput<MouseButton>>,
-    ui_visible: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>, With<DialogueUiRoot>)>>,
+    ui_visible: Query<
+        (),
+        Or<(
+            With<MainMenuUi>,
+            With<PauseMenuUi>,
+            With<DialogueUiRoot>,
+            With<InventoryUiRoot>,
+        )>,
+    >,
     mut interactables: Query<(
         &ComputedNode,
         &UiGlobalTransform,
@@ -398,7 +500,15 @@ pub(super) fn reset_ticker_on_scale_change(
 
 pub(super) fn cleanup_ui_cursor(
     mut commands: Commands,
-    ui_visible: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>, With<DialogueUiRoot>)>>,
+    ui_visible: Query<
+        (),
+        Or<(
+            With<MainMenuUi>,
+            With<PauseMenuUi>,
+            With<DialogueUiRoot>,
+            With<InventoryUiRoot>,
+        )>,
+    >,
     cursor_sprite: Query<Entity, With<UiCursorSprite>>,
 ) {
     if !ui_visible.is_empty() {
@@ -410,7 +520,15 @@ pub(super) fn cleanup_ui_cursor(
 }
 
 pub(super) fn restore_native_cursor_on_exit(
-    ui_visible: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>, With<DialogueUiRoot>)>>,
+    ui_visible: Query<
+        (),
+        Or<(
+            With<MainMenuUi>,
+            With<PauseMenuUi>,
+            With<DialogueUiRoot>,
+            With<InventoryUiRoot>,
+        )>,
+    >,
     mut windows: Query<&mut CursorOptions, With<PrimaryWindow>>,
 ) {
     if !ui_visible.is_empty() {
@@ -654,6 +772,7 @@ pub(super) fn refresh_confirm_dialogs(
 pub(super) fn apply_discovery_commands(
     mut commands_in: MessageReader<UiDiscoveryCommand>,
     mut db: ResMut<UiDiscoveryDb>,
+    mut commands: Commands,
 ) {
     for cmd in commands_in.read() {
         match cmd {
@@ -664,7 +783,22 @@ pub(super) fn apply_discovery_commands(
             UiDiscoveryCommand::SetSeen { kind, id, seen } => {
                 db.set_seen(*kind, id, *seen);
             }
+            UiDiscoveryCommand::MoveItem { id, to_index } => {
+                db.move_item(id, *to_index);
+            }
+            UiDiscoveryCommand::DropItem { id } =>
+                if let Some(entry) = db.drop_item(id) {
+                    if let Some(model_path) = entry.model_path {
+                        commands.write_message(SpawnDroppedItem {
+                            id: entry.id,
+                            model_path,
+                        });
+                    }
+                },
             UiDiscoveryCommand::ClearKind { kind } => db.clear_kind(*kind),
+            UiDiscoveryCommand::RecordInteraction { interaction } =>
+                db.record_interaction(interaction.clone()),
+            UiDiscoveryCommand::ReplaceAll { snapshot } => db.replace_all(snapshot.clone()),
         }
     }
 }

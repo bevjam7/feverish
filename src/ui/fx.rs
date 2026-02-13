@@ -10,7 +10,7 @@ use bevy::{
     window::PrimaryWindow,
 };
 
-use super::{DialogueUiRoot, MainMenuUi, PauseMenuUi};
+use super::{DialogueUiRoot, InventoryUiRoot, MainMenuUi, PauseMenuUi};
 use crate::settings::GameSettings;
 
 const UI_FX_SHADER: &str = "shaders/ui_menu_fx.wgsl";
@@ -234,7 +234,15 @@ fn fit_ui_fx_quad_to_window(
 
 fn update_ui_fx_material(
     windows: Query<&Window, With<PrimaryWindow>>,
-    menus: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>, With<DialogueUiRoot>)>>,
+    menus: Query<
+        (),
+        Or<(
+            With<MainMenuUi>,
+            With<PauseMenuUi>,
+            With<DialogueUiRoot>,
+            With<InventoryUiRoot>,
+        )>,
+    >,
     settings: Res<GameSettings>,
     time: Res<Time>,
     material_handle: Res<UiFxMaterialHandle>,

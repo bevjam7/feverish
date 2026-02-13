@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use serde::{Deserialize, Serialize};
 
 use crate::settings::SettingKey;
 
@@ -20,13 +21,15 @@ pub(super) struct PauseMenuState {
     pub page: PauseMenuPage,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Reflect)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Reflect, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum DiscoveryKind {
     Item,
     Npc,
 }
 
-#[derive(Debug, Clone, Reflect)]
+#[derive(Debug, Clone, Reflect, Serialize, Deserialize)]
+#[serde(default)]
 pub struct DiscoveryEntry {
     pub id: String,
     pub title: String,
@@ -77,6 +80,135 @@ impl DiscoveryEntry {
     }
 }
 
+impl Default for DiscoveryEntry {
+    fn default() -> Self {
+        Self::new("", "")
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Reflect, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DiscoveryInteractionAction {
+    Collected,
+    Inspected,
+    Shared,
+    StatusChanged,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Reflect, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DiscoveryInteractionActor {
+    Player,
+    Speaker(String),
+    System,
+}
+
+#[derive(Debug, Clone, Reflect, Serialize, Deserialize)]
+#[serde(default)]
+pub struct DiscoveryInteraction {
+    pub kind: DiscoveryKind,
+    pub id: String,
+    pub action: DiscoveryInteractionAction,
+    pub actor: DiscoveryInteractionActor,
+    pub script_id: Option<String>,
+    pub node_id: Option<String>,
+    pub option_id: Option<String>,
+    pub note: Option<String>,
+}
+
+impl Default for DiscoveryInteraction {
+    fn default() -> Self {
+        Self {
+            kind: DiscoveryKind::Item,
+            id: String::new(),
+            action: DiscoveryInteractionAction::StatusChanged,
+            actor: DiscoveryInteractionActor::System,
+            script_id: None,
+            node_id: None,
+            option_id: None,
+            note: None,
+        }
+    }
+}
+
+impl DiscoveryInteraction {
+    pub fn new(
+        kind: DiscoveryKind,
+        id: impl Into<String>,
+        action: DiscoveryInteractionAction,
+        actor: DiscoveryInteractionActor,
+    ) -> Self {
+        Self {
+            kind,
+            id: id.into(),
+            action,
+            actor,
+            script_id: None,
+            node_id: None,
+            option_id: None,
+            note: None,
+        }
+    }
+
+    pub fn script(mut self, script_id: impl Into<String>) -> Self {
+        self.script_id = Some(script_id.into());
+        self
+    }
+
+    pub fn node(mut self, node_id: impl Into<String>) -> Self {
+        self.node_id = Some(node_id.into());
+        self
+    }
+
+    pub fn option(mut self, option_id: impl Into<String>) -> Self {
+        self.option_id = Some(option_id.into());
+        self
+    }
+
+    pub fn note(mut self, note: impl Into<String>) -> Self {
+        self.note = Some(note.into());
+        self
+    }
+}
+
+#[derive(Debug, Clone, Reflect, Serialize, Deserialize)]
+#[serde(default)]
+pub struct DiscoveryInteractionRecord {
+    pub sequence: u64,
+    pub interaction: DiscoveryInteraction,
+}
+
+impl Default for DiscoveryInteractionRecord {
+    fn default() -> Self {
+        Self {
+            sequence: 0,
+            interaction: DiscoveryInteraction::default(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Reflect, Serialize, Deserialize)]
+#[serde(default)]
+pub struct UiDiscoveryDbSnapshot {
+    pub items: Vec<DiscoveryEntry>,
+    pub npcs: Vec<DiscoveryEntry>,
+    pub interactions: Vec<DiscoveryInteractionRecord>,
+    pub revision: u64,
+    pub next_interaction_sequence: u64,
+}
+
+impl Default for UiDiscoveryDbSnapshot {
+    fn default() -> Self {
+        Self {
+            items: Vec::new(),
+            npcs: Vec::new(),
+            interactions: Vec::new(),
+            revision: 1,
+            next_interaction_sequence: 1,
+        }
+    }
+}
+
 #[derive(Message, Debug, Clone)]
 pub enum UiDiscoveryCommand {
     Upsert {
@@ -92,9 +224,28 @@ pub enum UiDiscoveryCommand {
         id: String,
         seen: bool,
     },
+    MoveItem {
+        id: String,
+        to_index: usize,
+    },
+    DropItem {
+        id: String,
+    },
     ClearKind {
         kind: DiscoveryKind,
     },
+    RecordInteraction {
+        interaction: DiscoveryInteraction,
+    },
+    ReplaceAll {
+        snapshot: UiDiscoveryDbSnapshot,
+    },
+}
+
+#[derive(Message, Debug, Clone)]
+pub struct SpawnDroppedItem {
+    pub id: String,
+    pub model_path: String,
 }
 
 #[derive(Message, Debug, Clone, Copy)]
@@ -110,6 +261,8 @@ pub enum UiMenuAction {
 pub struct UiDialogueOption {
     pub text: String,
     pub preview: Option<UiDialoguePreview>,
+    pub item_id: Option<String>,
+    pub seen: bool,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -123,6 +276,7 @@ pub struct UiDialoguePreview {
 
 #[derive(Debug, Clone)]
 pub struct UiDialogueRequest {
+    pub mode: UiDialogueMode,
     pub speaker: String,
     pub text: String,
     pub portrait_path: String,
@@ -131,8 +285,15 @@ pub struct UiDialogueRequest {
     pub reveal_duration_secs: f32,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum UiDialogueMode {
+    Standard,
+    Inventory,
+}
+
 #[derive(Message, Debug, Clone)]
 pub enum UiDialogueCommand {
+    OpenInventory,
     Start(UiDialogueRequest),
     Advance,
     Close,
@@ -314,3 +475,6 @@ pub(super) struct UiCursorSprite;
 
 #[derive(Component, Debug, Clone, Copy)]
 pub struct DialogueUiRoot;
+
+#[derive(Component, Debug, Clone, Copy)]
+pub struct InventoryUiRoot;

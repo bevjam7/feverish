@@ -5,6 +5,7 @@ pub(super) mod confirm_popup;
 pub(super) mod dialogue;
 pub mod discovery_api;
 pub(super) mod fx;
+pub(super) mod inventory;
 pub(super) mod main_menu;
 pub(super) mod pause_menu;
 pub(super) mod systems;
@@ -13,8 +14,10 @@ pub(super) mod theme;
 use bevy::prelude::*;
 #[allow(unused_imports)]
 pub use components::{
-    DialogueUiRoot, DiscoveryEntry, DiscoveryKind, MainMenuUi, PauseMenuUi, UiDialogueCommand,
-    UiDialogueOption, UiDialoguePreview, UiDialogueRequest, UiDiscoveryCommand, UiMenuAction,
+    DialogueUiRoot, DiscoveryEntry, DiscoveryInteraction, DiscoveryInteractionAction,
+    DiscoveryInteractionActor, DiscoveryInteractionRecord, DiscoveryKind, InventoryUiRoot,
+    MainMenuUi, PauseMenuUi, SpawnDroppedItem, UiDialogueCommand, UiDialogueMode, UiDialogueOption,
+    UiDialoguePreview, UiDialogueRequest, UiDiscoveryCommand, UiDiscoveryDbSnapshot, UiMenuAction,
 };
 #[allow(unused_imports)]
 pub use discovery_api::DiscoveryCommandsExt;
@@ -41,9 +44,11 @@ impl Plugin for UiPlugin {
             .init_resource::<UiDiscoveryDb>()
             .init_resource::<dialogue::UiDialogueRuntime>()
             .init_resource::<dialogue::UiDialogueState>()
+            .init_resource::<inventory::UiInventoryRuntime>()
             .add_plugins(fx::UiMenuFxPlugin)
             .add_message::<UiMenuAction>()
             .add_message::<UiDialogueCommand>()
+            .add_message::<inventory::UiInventoryCommand>()
             .add_message::<UiDiscoveryCommand>()
             .add_observer(on_ui_scroll)
             .add_systems(OnExit(AppState::Load), populate_ui_fonts_and_cursor)
@@ -89,17 +94,31 @@ impl Plugin for UiPlugin {
                     cleanup_ui_cursor,
                     restore_native_cursor_on_exit,
                     dialogue::apply_dialogue_commands,
-                    dialogue::update_typewriter_dialogue,
-                    dialogue::sync_picker_preview_from_selection,
-                    dialogue::sync_and_frame_dialogue_preview,
-                    dialogue::rotate_dialogue_preview,
-                    dialogue::advance_dialogue_with_mouse,
-                    dialogue::handle_dialogue_shortcuts,
-                    dialogue::handle_dialogue_arrow_buttons,
-                    dialogue::handle_dialogue_quick_action_buttons,
-                    dialogue::handle_dialogue_confirm_button,
-                    dialogue::animate_option_slot_transition,
-                    dialogue::animate_dialogue_glyphs,
+                    inventory::apply_inventory_commands,
+                    (
+                        dialogue::update_typewriter_dialogue,
+                        dialogue::sync_picker_preview_from_selection,
+                        dialogue::sync_and_frame_dialogue_preview,
+                        dialogue::rotate_dialogue_preview,
+                        dialogue::advance_dialogue_with_mouse,
+                        dialogue::handle_dialogue_shortcuts,
+                        dialogue::handle_dialogue_arrow_buttons,
+                        dialogue::handle_dialogue_quick_action_buttons,
+                        dialogue::handle_dialogue_confirm_button,
+                        dialogue::animate_option_slot_transition,
+                        dialogue::animate_dialogue_glyphs,
+                    ),
+                    inventory::handle_inventory_tab_shortcut,
+                    inventory::handle_inventory_shortcuts,
+                    inventory::handle_inventory_item_interactions,
+                    inventory::refresh_inventory_on_db_change,
+                    inventory::close_inventory_when_blocked,
+                    (
+                        inventory::sync_inventory_preview_from_selection,
+                        inventory::sync_and_frame_inventory_preview,
+                        inventory::rotate_inventory_preview,
+                        inventory::handle_inventory_preview_zoom,
+                    ),
                 )
                     .run_if(in_state(AppState::Main)),
             );
