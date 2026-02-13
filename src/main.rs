@@ -234,31 +234,3 @@ impl Usable {
             ));
     }
 }
-
-pub(crate) trait AssetServerExt {
-    fn get_path_handle<'a, T>(
-        &self,
-        path: impl Into<AssetPath<'a>>,
-    ) -> Result<Handle<T>, BevyError>
-    where
-        T: Asset;
-}
-
-impl AssetServerExt for AssetServer {
-    fn get_path_handle<'a, T>(&self, path: impl Into<AssetPath<'a>>) -> Result<Handle<T>, BevyError>
-    where
-        T: Asset,
-    {
-        let path = path.into();
-        self.get_path_id(&path)
-            .and_then(|id| self.get_id_handle::<T>(id.typed::<T>()))
-            .ok_or(
-                format!(
-                    "Could not find asset with path {}. Did you remember to add it to \
-                     `default.assets.ron`?",
-                    path.to_string()
-                )
-                .into(),
-            )
-    }
-}

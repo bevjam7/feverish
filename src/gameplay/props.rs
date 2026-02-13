@@ -10,7 +10,7 @@ use bevy_seedling::sample::SamplePlayer;
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-    AssetServerExt, Usable,
+    Usable,
     gameplay::{PhysLayer, link_hierarchal_colliders},
     input::Use,
 };
@@ -39,9 +39,9 @@ impl Model {
             asset_string + "#Scene0"
         };
 
-        let scene_handle = match assets.get_path_handle(scene_path) {
-            Ok(handle) => handle,
-            Err(_) => {
+        let scene_handle = match assets.get_handle(scene_path) {
+            Some(handle) => handle,
+            None => {
                 return;
             }
         };

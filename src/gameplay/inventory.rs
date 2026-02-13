@@ -6,7 +6,7 @@ use bevy::{
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-    AssetServerExt, Usable,
+    Usable,
     assets::ItemMeta,
     gameplay::{
         PlayerRoot,
@@ -45,7 +45,7 @@ impl InventoryItem {
         let assets = world.resource::<AssetServer>();
         let metadata_handle = assets
             // Attempt to get the item path automatically if not set
-            .get_path_handle(metadata.unwrap_or_else(|| {
+            .get_handle(metadata.unwrap_or_else(|| {
                 let name = std::path::Path::new(&model.model)
                     .file_prefix()
                     .and_then(|stem| stem.to_str())

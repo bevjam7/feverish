@@ -21,7 +21,7 @@ use bevy_seedling::{
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-    AppSystems, AssetServerExt, Phase, Usable,
+    AppSystems, Phase, Usable,
     assets::ItemMeta,
     audio::mixer::WorldSfxPool,
     gameplay::{
@@ -286,13 +286,11 @@ fn handle_debug_elimination(
     for event in hooks.read() {
         if event.hook == "debug.eliminate_target" {
             let office_key_meta = assets
-                .get_path_handle("items/office_key.item.meta")
-                .ok()
+                .get_handle("items/office_key.item.meta")
                 .and_then(|handle| items.get(&handle))
                 .unwrap();
             let apartment_key_meta = assets
-                .get_path_handle("items/apartment_key.item.meta")
-                .ok()
+                .get_handle("items/apartment_key.item.meta")
                 .and_then(|handle| items.get(&handle))
                 .unwrap();
             if let Some(target) = event.target {
@@ -405,8 +403,7 @@ fn handle_game_phases(
         Phase::Explore => (),
         Phase::Main =>
             if timer.just_finished() {
-                let sample: Handle<AudioSample> =
-                    assets.get_path_handle("audio/phone.ogg").unwrap();
+                let sample: Handle<AudioSample> = assets.get_handle("audio/phone.ogg").unwrap();
                 for entity in phones {
                     cmd.entity(entity).with_child((
                         SamplePlayer::new(sample.clone())
@@ -438,11 +435,11 @@ fn spawn_dropped_item(
             .split_once('#')
             .map_or(item.model_path.as_str(), |(path, _)| path);
 
-        let scene_handle = match assets.get_path_handle(item.model_path.clone()) {
-            Ok(handle) => handle,
-            Err(_) => match assets.get_path_handle(format!("{base_model_path}#Scene0")) {
-                Ok(handle) => handle,
-                Err(_) => {
+        let scene_handle = match assets.get_handle(item.model_path.clone()) {
+            Some(handle) => handle,
+            None => match assets.get_handle(format!("{base_model_path}#Scene0")) {
+                Some(handle) => handle,
+                None => {
                     continue;
                 }
             },
