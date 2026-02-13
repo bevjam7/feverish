@@ -3,6 +3,7 @@ mod focus_fx;
 mod inventory;
 mod npc;
 mod props;
+mod sky;
 mod sound;
 
 use std::{collections::HashMap, time::Duration};
@@ -40,7 +41,8 @@ pub(crate) struct GameplayPlugin;
 
 impl Plugin for GameplayPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<DoorScenePreloads>()
+        app.add_plugins(sky::SkyPlugin)
+            .init_resource::<DoorScenePreloads>()
             .init_resource::<EliminationCount>()
             .add_message::<SpawnDroppedItem>()
             .add_systems(

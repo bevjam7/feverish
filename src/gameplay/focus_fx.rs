@@ -1,4 +1,4 @@
-use avian3d::prelude::{CollisionLayers, ShapeHits};
+use avian3d::prelude::CollisionLayers;
 use bevy::prelude::*;
 
 use crate::{

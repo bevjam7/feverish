@@ -2,48 +2,23 @@ use bevy::{
     camera::CameraOutputMode,
     core_pipeline::tonemapping::Tonemapping,
     prelude::*,
-    render::{
-        alpha::AlphaMode,
-        render_resource::{BlendState, Face},
-    },
+    render::alpha::AlphaMode,
+    render::render_resource::{BlendState, Face},
 };
+use bevy::pbr::{DistanceFog, FogFalloff};
 #[cfg(not(target_arch = "wasm32"))]
 use bevy::{post_process::auto_exposure::AutoExposure, render::view::Hdr};
 
-pub(crate) struct CameraPlugin;
-
-impl Plugin for CameraPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_systems(Startup, spawn_ui_camera)
-            .add_systems(Update, force_opaque_material_depth)
-            .add_observer(make_hdr_compatible);
-    }
-}
-
-/// The order of camera drawing, where the last in the list is the last drawn
-/// (and on top).
-enum CameraOrder {
-    World,
-    Ui,
-}
-
-impl From<CameraOrder> for isize {
-    fn from(order: CameraOrder) -> Self {
-        order as isize
-    }
-}
-
-fn spawn_ui_camera(mut commands: Commands) {
-    commands.spawn((
-        Name::new("UI Camera"),
-        Camera2d,
-        IsDefaultUiCamera,
-        Camera {
-            // keep UI above the PSX presentation camera, this was driving me crazy lol
-            order: isize::from(CameraOrder::Ui) + 1,
-            ..default()
+fn default_outdoor_fog() -> DistanceFog {
+    DistanceFog {
+        color: Color::srgba(0.09, 0.13, 0.18, 0.90),
+        directional_light_color: Color::NONE,
+        directional_light_exponent: 32.0,
+        falloff: FogFalloff::Linear {
+            start: 16.0,
+            end: 110.0,
         },
-    ));
+    }
 }
 
 #[cfg(not(target_arch = "wasm32"))]
@@ -68,6 +43,7 @@ pub(crate) fn player_camera_bundle() -> impl Bundle {
             // bevy::light::ShadowFilteringMethod::Temporal,
             bevy::core_pipeline::prepass::DeferredPrepass,
         ),
+        default_outdoor_fog(),
         AutoExposure::default(),
         Tonemapping::TonyMcMapface,
         Hdr,
@@ -91,8 +67,45 @@ pub(crate) fn player_camera_bundle() -> impl Bundle {
             ..default()
         }),
         Msaa::Off,
+        default_outdoor_fog(),
         Tonemapping::None,
     )
+}
+
+pub(crate) struct CameraPlugin;
+
+impl Plugin for CameraPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Startup, spawn_ui_camera)
+            .add_systems(Update, force_opaque_material_depth)
+            .add_observer(make_hdr_compatible);
+    }
+}
+
+/// the order of camera drawing, where the last in the list is the last drawn
+/// (and on top)
+enum CameraOrder {
+    World,
+    Ui,
+}
+
+impl From<CameraOrder> for isize {
+    fn from(order: CameraOrder) -> Self {
+        order as isize
+    }
+}
+
+fn spawn_ui_camera(mut commands: Commands) {
+    commands.spawn((
+        Name::new("UI Camera"),
+        Camera2d,
+        IsDefaultUiCamera,
+        Camera {
+            // keep UI above the PSX presentation camera, this was driving me crazy lol
+            order: isize::from(CameraOrder::Ui) + 1,
+            ..default()
+        },
+    ));
 }
 
 fn force_opaque_material_depth(mut materials: ResMut<Assets<StandardMaterial>>) {
