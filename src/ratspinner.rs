@@ -33,8 +33,8 @@ use bevy::prelude::*;
 pub use runtime::RatDialogueState;
 #[allow(unused_imports)]
 pub use types::{
-    RatCommand, RatCommandsExt, RatHookTriggered, RatNodeBuilder, RatOptionBuilder, RatScript,
-    RatScriptAsset, RatScriptBuilder, RatStart,
+    RatCommand, RatCommandsExt, RatDialoguePresentation, RatHookTriggered, RatNodeBuilder,
+    RatOptionBuilder, RatScript, RatScriptAsset, RatScriptBuilder, RatStart,
 };
 
 use crate::AppState;

@@ -18,6 +18,13 @@ pub enum RatCommand {
 pub struct RatStart {
     pub script_id: String,
     pub target: Option<Entity>,
+    pub presentation: RatDialoguePresentation,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RatDialoguePresentation {
+    Ui,
+    Headless,
 }
 
 impl RatStart {
@@ -25,11 +32,17 @@ impl RatStart {
         Self {
             script_id: script_id.into(),
             target: None,
+            presentation: RatDialoguePresentation::Ui,
         }
     }
 
     pub fn target(mut self, entity: Entity) -> Self {
         self.target = Some(entity);
+        self
+    }
+
+    pub fn headless(mut self) -> Self {
+        self.presentation = RatDialoguePresentation::Headless;
         self
     }
 }

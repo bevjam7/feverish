@@ -103,7 +103,8 @@ fn adapt_stream_config_on_restart_burst(
     mitigation.next_adjustment_after_secs = now + 10.0;
 
     warn!(
-        "audio restart burst detected ({} restarts in <=1s): increasing output buffer from {} to {} frames ({} -> {}).",
+        "audio restart burst detected ({} restarts in <=1s): increasing output buffer from {} to \
+         {} frames ({} -> {}).",
         mitigation.burst_count,
         current,
         next,

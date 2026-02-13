@@ -7,14 +7,15 @@ use bevy::{
 };
 
 use super::types::{
-    RatCommand, RatHookTriggered, RatNode, RatNodeBuilder, RatOption, RatOptionBuilder, RatScript,
-    RatScriptAsset, RatScriptBuilder, RatScriptRon, RatStart,
+    RatCommand, RatDialoguePresentation, RatHookTriggered, RatNode, RatNodeBuilder, RatOption,
+    RatOptionBuilder, RatScript, RatScriptAsset, RatScriptBuilder, RatScriptRon, RatStart,
 };
 use crate::{
     assets::GameAssets,
     ui::{
-        DiscoveryKind, UiDialogueCommand, UiDialogueOption, UiDialoguePreview, UiDialogueRequest,
-        UiDiscoveryDb,
+        DiscoveryInteraction, DiscoveryInteractionAction, DiscoveryInteractionActor, DiscoveryKind,
+        UiDialogueCommand, UiDialogueMode, UiDialogueOption, UiDialoguePreview, UiDialogueRequest,
+        UiDiscoveryCommand, UiDiscoveryDb,
     },
     voice::{Speak, StopVoice, VoicePreset, estimate_speech_duration_secs},
 };
@@ -130,6 +131,7 @@ struct ActiveDialogue {
     script_id: String,
     node_id: String,
     target: Option<Entity>,
+    presentation: RatDialoguePresentation,
     overlay: DialogueOverlay,
 }
 
@@ -460,6 +462,7 @@ pub(super) fn handle_rat_commands(
     mut messages: MessageReader<RatCommand>,
     mut hooks: MessageWriter<RatHookTriggered>,
     mut ui_commands: MessageWriter<UiDialogueCommand>,
+    mut discovery_commands: MessageWriter<UiDiscoveryCommand>,
     mut runtime: ResMut<RatRuntime>,
     mut state: ResMut<RatDialogueState>,
     mut library: ResMut<RatLibrary>,
@@ -475,6 +478,7 @@ pub(super) fn handle_rat_commands(
                     &mut commands,
                     &mut hooks,
                     &mut ui_commands,
+                    &mut discovery_commands,
                     &library,
                     &mut runtime,
                     &mut state,
@@ -487,6 +491,7 @@ pub(super) fn handle_rat_commands(
                     &mut commands,
                     &mut hooks,
                     &mut ui_commands,
+                    &mut discovery_commands,
                     &library,
                     &mut runtime,
                     &mut state,
@@ -498,6 +503,7 @@ pub(super) fn handle_rat_commands(
                     &mut commands,
                     &mut hooks,
                     &mut ui_commands,
+                    &mut discovery_commands,
                     &library,
                     &mut runtime,
                     &mut state,
@@ -506,9 +512,12 @@ pub(super) fn handle_rat_commands(
                 );
             }
             RatCommand::Close => {
+                let headless = is_headless(runtime.active.as_ref());
                 runtime.active = None;
                 state.active = false;
-                ui_commands.write(UiDialogueCommand::Close);
+                if !headless {
+                    ui_commands.write(UiDialogueCommand::Close);
+                }
                 commands.write_message(StopVoice);
             }
         }
@@ -519,6 +528,7 @@ fn start_dialogue(
     commands: &mut Commands,
     hooks: &mut MessageWriter<RatHookTriggered>,
     ui_commands: &mut MessageWriter<UiDialogueCommand>,
+    discovery_commands: &mut MessageWriter<UiDiscoveryCommand>,
     library: &RatLibrary,
     runtime: &mut RatRuntime,
     state: &mut RatDialogueState,
@@ -534,7 +544,19 @@ fn start_dialogue(
         script_id: start.script_id,
         node_id: script.entry.clone(),
         target: start.target,
+        presentation: start.presentation,
         overlay: DialogueOverlay::None,
+    });
+    discovery_commands.write(UiDiscoveryCommand::RecordInteraction {
+        interaction: DiscoveryInteraction::new(
+            DiscoveryKind::Npc,
+            script.id.clone(),
+            DiscoveryInteractionAction::Inspected,
+            DiscoveryInteractionActor::Player,
+        )
+        .script(script.id.clone())
+        .node(script.entry.clone())
+        .note("dialogue.start"),
     });
     state.active = true;
 
@@ -542,6 +564,7 @@ fn start_dialogue(
         commands,
         hooks,
         ui_commands,
+        discovery_commands,
         library,
         runtime,
         state,
@@ -554,6 +577,7 @@ fn advance_dialogue(
     commands: &mut Commands,
     hooks: &mut MessageWriter<RatHookTriggered>,
     ui_commands: &mut MessageWriter<UiDialogueCommand>,
+    discovery_commands: &mut MessageWriter<UiDiscoveryCommand>,
     library: &RatLibrary,
     runtime: &mut RatRuntime,
     state: &mut RatDialogueState,
@@ -576,6 +600,7 @@ fn advance_dialogue(
             commands,
             hooks,
             ui_commands,
+            discovery_commands,
             library,
             runtime,
             state,
@@ -594,6 +619,7 @@ fn advance_dialogue(
             commands,
             hooks,
             ui_commands,
+            discovery_commands,
             library,
             runtime,
             state,
@@ -609,6 +635,7 @@ fn choose_option(
     commands: &mut Commands,
     hooks: &mut MessageWriter<RatHookTriggered>,
     ui_commands: &mut MessageWriter<UiDialogueCommand>,
+    discovery_commands: &mut MessageWriter<UiDiscoveryCommand>,
     library: &RatLibrary,
     runtime: &mut RatRuntime,
     state: &mut RatDialogueState,
@@ -649,6 +676,7 @@ fn choose_option(
                     commands,
                     hooks,
                     ui_commands,
+                    discovery_commands,
                     library,
                     runtime,
                     state,
@@ -661,13 +689,38 @@ fn choose_option(
             if let Some(active_mut) = runtime.active.as_mut() {
                 active_mut.overlay = DialogueOverlay::ItemResponse;
             }
-            let line = show_item_response(ui_commands, node, item);
-            commands.write_message(StopVoice);
-            let mut speak_msg = Speak::new(line).voice(node.voice);
-            if let Some(target) = active_snapshot.target {
-                speak_msg = speak_msg.target(target);
+            discovery_commands.write(UiDiscoveryCommand::SetSeen {
+                kind: DiscoveryKind::Item,
+                id: item.id.clone(),
+                seen: true,
+            });
+            let already_shared = discovery_db.was_item_shared_with_speaker(
+                &item.id,
+                &active_snapshot.script_id,
+                &node.speaker,
+            );
+            discovery_commands.write(UiDiscoveryCommand::RecordInteraction {
+                interaction: DiscoveryInteraction::new(
+                    DiscoveryKind::Item,
+                    item.id.clone(),
+                    DiscoveryInteractionAction::Shared,
+                    DiscoveryInteractionActor::Speaker(node.speaker.clone()),
+                )
+                .script(active_snapshot.script_id.clone())
+                .node(active_snapshot.node_id.clone())
+                .option(item.id.clone())
+                .note("dialogue.show_item"),
+            });
+            let headless = is_headless(Some(&active_snapshot));
+            let line = show_item_response(ui_commands, node, item, already_shared, headless);
+            if !headless {
+                commands.write_message(StopVoice);
+                let mut speak_msg = Speak::new(line).voice(node.voice);
+                if let Some(target) = active_snapshot.target {
+                    speak_msg = speak_msg.target(target);
+                }
+                commands.write_message(speak_msg);
             }
-            commands.write_message(speak_msg);
             return;
         }
         if let Some(active_mut) = runtime.active.as_mut() {
@@ -677,6 +730,7 @@ fn choose_option(
             commands,
             hooks,
             ui_commands,
+            discovery_commands,
             library,
             runtime,
             state,
@@ -694,6 +748,7 @@ fn choose_option(
             commands,
             hooks,
             ui_commands,
+            discovery_commands,
             library,
             runtime,
             state,
@@ -705,11 +760,19 @@ fn choose_option(
 
     let inventory_idx = node.options.len();
     if !discovery_db.entries(DiscoveryKind::Item).is_empty() && index == inventory_idx {
-        open_inventory_picker(ui_commands, discovery_db);
+        open_inventory_picker(
+            ui_commands,
+            discovery_db,
+            &active_snapshot.script_id,
+            &node.speaker,
+            is_headless(Some(&active_snapshot)),
+        );
         if let Some(active_mut) = runtime.active.as_mut() {
             active_mut.overlay = DialogueOverlay::InventoryPicker;
         }
-        commands.write_message(StopVoice);
+        if !is_headless(Some(&active_snapshot)) {
+            commands.write_message(StopVoice);
+        }
         return;
     }
 
@@ -718,6 +781,7 @@ fn choose_option(
             commands,
             hooks,
             ui_commands,
+            discovery_commands,
             library,
             runtime,
             state,
@@ -755,6 +819,7 @@ fn choose_option(
             commands,
             hooks,
             ui_commands,
+            discovery_commands,
             library,
             runtime,
             state,
@@ -770,6 +835,7 @@ fn show_current_node(
     commands: &mut Commands,
     hooks: &mut MessageWriter<RatHookTriggered>,
     ui_commands: &mut MessageWriter<UiDialogueCommand>,
+    _discovery_commands: &mut MessageWriter<UiDiscoveryCommand>,
     library: &RatLibrary,
     runtime: &mut RatRuntime,
     state: &mut RatDialogueState,
@@ -799,20 +865,23 @@ fn show_current_node(
         });
     }
 
-    ui_commands.write(UiDialogueCommand::Start(UiDialogueRequest {
-        speaker: node.speaker.clone(),
-        text: node.text.clone(),
-        portrait_path: node.portrait_path.clone(),
-        preview: None,
-        options: dialogue_options_for_node(node, discovery_db),
-        reveal_duration_secs: if speak {
-            estimate_speech_duration_secs(&node.text, node.voice)
-        } else {
-            0.0
-        },
-    }));
+    if !is_headless(Some(&active)) {
+        ui_commands.write(UiDialogueCommand::Start(UiDialogueRequest {
+            mode: UiDialogueMode::Standard,
+            speaker: node.speaker.clone(),
+            text: node.text.clone(),
+            portrait_path: node.portrait_path.clone(),
+            preview: None,
+            options: dialogue_options_for_node(node, discovery_db),
+            reveal_duration_secs: if speak {
+                estimate_speech_duration_secs(&node.text, node.voice)
+            } else {
+                0.0
+            },
+        }));
+    }
 
-    if speak {
+    if speak && !is_headless(Some(&active)) {
         commands.write_message(StopVoice);
         let mut speak_msg = Speak::new(node.text.clone()).voice(node.voice);
         if let Some(target) = active.target {
@@ -832,6 +901,8 @@ fn dialogue_options_for_node(
         .map(|option| UiDialogueOption {
             text: option.text.clone(),
             preview: None,
+            item_id: None,
+            seen: false,
         })
         .collect();
 
@@ -839,6 +910,8 @@ fn dialogue_options_for_node(
         options.push(UiDialogueOption {
             text: "show item...".to_string(),
             preview: None,
+            item_id: None,
+            seen: false,
         });
     }
     options
@@ -847,7 +920,13 @@ fn dialogue_options_for_node(
 fn open_inventory_picker(
     ui_commands: &mut MessageWriter<UiDialogueCommand>,
     discovery_db: &UiDiscoveryDb,
+    script_id: &str,
+    speaker: &str,
+    headless: bool,
 ) {
+    if headless {
+        return;
+    }
     let mut options: Vec<UiDialogueOption> = discovery_db
         .entries(DiscoveryKind::Item)
         .iter()
@@ -860,16 +939,21 @@ fn open_inventory_picker(
                 image_path: entry.image_path.clone(),
                 model_path: entry.model_path.clone(),
             }),
+            item_id: Some(entry.id.clone()),
+            seen: discovery_db.was_item_shared_with_speaker(&entry.id, script_id, speaker),
         })
         .collect();
     options.push(UiDialogueOption {
         text: "back".to_string(),
         preview: None,
+        item_id: None,
+        seen: false,
     });
 
     let initial_preview = options.first().and_then(|option| option.preview.clone());
 
     ui_commands.write(UiDialogueCommand::Start(UiDialogueRequest {
+        mode: UiDialogueMode::Inventory,
         speaker: "inventory".to_string(),
         text: "pick an item to show".to_string(),
         portrait_path: "models/npc_a/npc_a.png".to_string(),
@@ -883,33 +967,40 @@ fn show_item_response(
     ui_commands: &mut MessageWriter<UiDialogueCommand>,
     node: &RatNode,
     item: &crate::ui::DiscoveryEntry,
+    already_shared: bool,
+    headless: bool,
 ) -> String {
     let line = format!(
         "hmm... {}. {}",
         item.title,
-        if item.seen {
+        if already_shared {
             "i remember this"
         } else {
             "what is this?"
         }
     );
-    ui_commands.write(UiDialogueCommand::Start(UiDialogueRequest {
-        speaker: node.speaker.clone(),
-        text: line.clone(),
-        portrait_path: node.portrait_path.clone(),
-        preview: Some(UiDialoguePreview {
-            title: item.title.clone(),
-            subtitle: item.subtitle.clone(),
-            description: item.description.clone(),
-            image_path: item.image_path.clone(),
-            model_path: item.model_path.clone(),
-        }),
-        options: vec![UiDialogueOption {
-            text: "back".to_string(),
-            preview: None,
-        }],
-        reveal_duration_secs: estimate_speech_duration_secs(&line, node.voice),
-    }));
+    if !headless {
+        ui_commands.write(UiDialogueCommand::Start(UiDialogueRequest {
+            mode: UiDialogueMode::Standard,
+            speaker: node.speaker.clone(),
+            text: line.clone(),
+            portrait_path: node.portrait_path.clone(),
+            preview: Some(UiDialoguePreview {
+                title: item.title.clone(),
+                subtitle: item.subtitle.clone(),
+                description: item.description.clone(),
+                image_path: item.image_path.clone(),
+                model_path: item.model_path.clone(),
+            }),
+            options: vec![UiDialogueOption {
+                text: "back".to_string(),
+                preview: None,
+                item_id: None,
+                seen: false,
+            }],
+            reveal_duration_secs: estimate_speech_duration_secs(&line, node.voice),
+        }));
+    }
     line
 }
 
@@ -919,8 +1010,15 @@ fn close_dialogue(
     state: &mut RatDialogueState,
     ui_commands: &mut MessageWriter<UiDialogueCommand>,
 ) {
+    let headless = is_headless(runtime.active.as_ref());
     runtime.active = None;
     state.active = false;
-    ui_commands.write(UiDialogueCommand::Close);
-    commands.write_message(StopVoice);
+    if !headless {
+        ui_commands.write(UiDialogueCommand::Close);
+        commands.write_message(StopVoice);
+    }
+}
+
+fn is_headless(active: Option<&ActiveDialogue>) -> bool {
+    active.is_some_and(|dialogue| dialogue.presentation == RatDialoguePresentation::Headless)
 }
