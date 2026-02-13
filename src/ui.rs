@@ -102,6 +102,7 @@ impl Plugin for UiPlugin {
                         dialogue::rotate_dialogue_preview,
                         dialogue::advance_dialogue_with_mouse,
                         dialogue::handle_dialogue_shortcuts,
+                        dialogue::update_dialogue_text_scroll_hint,
                         dialogue::handle_dialogue_arrow_buttons,
                         dialogue::handle_dialogue_quick_action_buttons,
                         dialogue::handle_dialogue_confirm_button,

@@ -53,6 +53,7 @@ struct DialogueSession {
     preview_camera: Option<Entity>,
     preview_framed: bool,
     preview_dragging: bool,
+    scroll_hint: Entity,
 }
 
 #[derive(Component)]
@@ -87,7 +88,14 @@ pub(super) struct DialoguePreviewPivot;
 #[derive(Component)]
 pub(super) struct DialoguePreviewLayerTagged;
 
+#[derive(Component)]
+pub(super) struct DialogueTextScrollArea;
+
+#[derive(Component)]
+pub(super) struct DialogueTextScrollHint;
+
 const PREVIEW_RENDER_LAYER: usize = 19;
+const DIALOGUE_SCROLL_HINT_THRESHOLD: usize = 95;
 
 pub(super) fn apply_dialogue_commands(
     mut commands: Commands,
@@ -613,6 +621,33 @@ pub(super) fn animate_dialogue_glyphs(
     }
 }
 
+pub(super) fn update_dialogue_text_scroll_hint(
+    runtime: Res<UiDialogueRuntime>,
+    mut hints: Query<&mut Text, With<DialogueTextScrollHint>>,
+    scroll_areas: Query<&ScrollPosition, With<DialogueTextScrollArea>>,
+) {
+    let Some(session) = runtime.session.as_ref() else {
+        return;
+    };
+    let Ok(mut hint_text) = hints.get_mut(session.scroll_hint) else {
+        return;
+    };
+    let Ok(scroll) = scroll_areas.get(session.line_row) else {
+        return;
+    };
+
+    if session.text_chars.len() <= DIALOGUE_SCROLL_HINT_THRESHOLD {
+        hint_text.0.clear();
+        return;
+    }
+
+    hint_text.0 = if scroll.y > 1.0 {
+        "↑↓".to_string()
+    } else {
+        "↓".to_string()
+    };
+}
+
 pub(super) fn animate_option_slot_transition(
     time: Res<Time>,
     mut runtime: ResMut<UiDialogueRuntime>,
@@ -677,6 +712,7 @@ fn spawn_dialogue(
     let mut line_row = Entity::PLACEHOLDER;
     let mut slot_text = Entity::PLACEHOLDER;
     let mut quick_actions_row = Entity::PLACEHOLDER;
+    let mut scroll_hint = Entity::PLACEHOLDER;
     let mut preview_label = Entity::PLACEHOLDER;
     let mut preview_card_root = Entity::PLACEHOLDER;
     let mut preview_viewport = None;
@@ -722,10 +758,32 @@ fn spawn_dialogue(
                                     max_height: Val::Px(line_height),
                                     flex_wrap: FlexWrap::Wrap,
                                     align_content: AlignContent::FlexStart,
-                                    overflow: Overflow::clip_y(),
+                                    overflow: Overflow::scroll_y(),
+                                    padding: UiRect::right(Val::Px(8.0)),
                                     ..default()
                                 },
+                                DialogueTextScrollArea,
+                                ScrollPosition(Vec2::ZERO),
                                 BackgroundColor(Color::NONE),
+                            ))
+                            .id();
+
+                        scroll_hint = left
+                            .spawn((
+                                DialogueTextScrollHint,
+                                Text::new(""),
+                                TextFont {
+                                    font: fonts.body.clone(),
+                                    font_size: 13.0,
+                                    ..default()
+                                },
+                                TextColor(Color::srgba(0.82, 0.82, 0.88, 0.75)),
+                                TextLayout::new(Justify::Right, LineBreak::NoWrap),
+                                Node {
+                                    width: Val::Percent(100.0),
+                                    min_height: Val::Px(14.0),
+                                    ..default()
+                                },
                             ))
                             .id();
 
@@ -950,6 +1008,7 @@ fn spawn_dialogue(
         preview_camera: preview_scene.as_ref().map(|scene| scene.camera),
         preview_framed: false,
         preview_dragging: false,
+        scroll_hint,
     }
 }
 
@@ -1248,6 +1307,9 @@ fn reset_text(
     children: &Query<&Children>,
 ) {
     clear_row(commands, session.line_row, children);
+    commands
+        .entity(session.line_row)
+        .insert(ScrollPosition(Vec2::ZERO));
     session.revealed = 0;
     session.reveal_timer = 0.0;
     session.selected_option = 0;
@@ -1262,6 +1324,9 @@ fn reveal_all_chars(
     children: &Query<&Children>,
 ) {
     clear_row(commands, session.line_row, children);
+    commands
+        .entity(session.line_row)
+        .insert(ScrollPosition(Vec2::ZERO));
     for ch in &session.text_chars {
         spawn_char(commands, session.line_row, *ch, fonts);
     }
@@ -1397,6 +1462,8 @@ fn apply_preview_to_right_panel(
 }
 
 fn spawn_char(commands: &mut Commands, row: Entity, ch: char, fonts: &UiFonts) {
+    const DIALOGUE_BODY_FONT_SIZE: f32 = 31.0;
+
     commands.entity(row).with_children(|line| {
         if ch == '\n' {
             line.spawn(Node {
@@ -1412,7 +1479,7 @@ fn spawn_char(commands: &mut Commands, row: Entity, ch: char, fonts: &UiFonts) {
             Text::new(ch.to_string()),
             TextFont {
                 font: fonts.body.clone(),
-                font_size: 33.0,
+                font_size: DIALOGUE_BODY_FONT_SIZE,
                 ..default()
             },
             TextColor(theme::TEXT_LIGHT),
