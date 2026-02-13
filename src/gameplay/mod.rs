@@ -33,7 +33,7 @@ use crate::{
     map::{LevelToPrepare, PendingLevelTransition},
     psx::{PsxCamera, PsxConfig},
     ratspinner::RatHookTriggered,
-    ui::{DiscoveryEntry, UiDiscoveryDb},
+    ui::{DiscoveryEntry, SpawnDroppedItem, UiDiscoveryDb},
 };
 
 pub(crate) struct GameplayPlugin;
@@ -41,21 +41,23 @@ pub(crate) struct GameplayPlugin;
 impl Plugin for GameplayPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<DoorScenePreloads>()
-            .init_resource::<EliminationCount>();
-        app.add_systems(
-            Update,
-            (
-                preload_door_target_levels,
-                handle_added_spawn_point_camera,
-                (sound::detect_footstep_surface, sound::handle_footsteps).chain(),
-                door::rotate_doors,
-                focus_fx::handle_focus_effect,
-                handle_debug_elimination,
-                handle_world_messages,
-                handle_game_phases,
-            )
-                .in_set(AppSystems::Update),
-        );
+            .init_resource::<EliminationCount>()
+            .add_message::<SpawnDroppedItem>()
+            .add_systems(
+                Update,
+                (
+                    preload_door_target_levels,
+                    handle_added_spawn_point_camera,
+                    (sound::detect_footstep_surface, sound::handle_footsteps).chain(),
+                    door::rotate_doors,
+                    focus_fx::handle_focus_effect,
+                    handle_debug_elimination,
+                    handle_world_messages,
+                    handle_game_phases,
+                    spawn_dropped_item,
+                )
+                    .in_set(AppSystems::Update),
+            );
     }
 }
 
@@ -413,5 +415,54 @@ fn handle_game_phases(
             },
         Phase::Win => (),
         Phase::Lose => (),
+    }
+}
+
+fn spawn_dropped_item(
+    mut dropped_items: MessageReader<SpawnDroppedItem>,
+    mut cmd: Commands,
+    player: Query<&GlobalTransform, With<PlayerRoot>>,
+    assets: Res<AssetServer>,
+) {
+    let Ok(player_transform) = player.single() else {
+        return;
+    };
+
+    for item in dropped_items.read() {
+        let base_model_path = item
+            .model_path
+            .split_once('#')
+            .map_or(item.model_path.as_str(), |(path, _)| path);
+
+        let scene_handle = match assets.get_path_handle(item.model_path.clone()) {
+            Ok(handle) => handle,
+            Err(_) => match assets.get_path_handle(format!("{base_model_path}#Scene0")) {
+                Ok(handle) => handle,
+                Err(_) => {
+                    continue;
+                }
+            },
+        };
+
+        let player_pos = player_transform.translation();
+        let forward = player_transform.forward();
+        let spawn_pos = player_pos + forward * 1.5;
+
+        cmd.spawn((
+            Transform::from_translation(spawn_pos),
+            GlobalTransform::from_translation(spawn_pos),
+            crate::gameplay::props::Model {
+                model: base_model_path.to_string(),
+                animation: None,
+            },
+            crate::gameplay::props::Prop::new(true),
+            crate::gameplay::inventory::Item::default(),
+            Usable,
+            SceneRoot(scene_handle),
+            CollisionLayers::new(
+                [PhysLayer::Default, PhysLayer::Prop, PhysLayer::Usable],
+                PhysLayer::all_bits(),
+            ),
+        ));
     }
 }

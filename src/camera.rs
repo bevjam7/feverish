@@ -56,8 +56,10 @@ pub(crate) fn player_camera_bundle() -> impl Bundle {
         },
         Camera3d::default(),
         Projection::Perspective(PerspectiveProjection {
+            fov: 1.309, // ~75 degrees
             near: 0.2,
             far: 600.0,
+            aspect_ratio: 16.0 / 9.0,
             ..default()
         }),
         (
@@ -82,8 +84,10 @@ pub(crate) fn player_camera_bundle() -> impl Bundle {
         },
         Camera3d::default(),
         Projection::Perspective(PerspectiveProjection {
+            fov: 1.309, // ~75 degrees
             near: 0.2,
             far: 600.0,
+            aspect_ratio: 16.0 / 9.0,
             ..default()
         }),
         Msaa::Off,

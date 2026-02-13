@@ -13,7 +13,10 @@ use crate::{
         props::{Model, Prop},
     },
     input::Use,
-    ui::{DiscoveryEntry, UiDiscoveryDb},
+    ui::{
+        DiscoveryEntry, DiscoveryInteraction, DiscoveryInteractionAction,
+        DiscoveryInteractionActor, DiscoveryKind, UiDiscoveryCommand,
+    },
 };
 
 #[derive(Component, Default, Reflect)]
@@ -53,16 +56,25 @@ impl InventoryItem {
             .unwrap();
         let metadatas = world.resource::<Assets<ItemMeta>>();
         let metadata = metadatas.get(&metadata_handle).unwrap().clone();
-        let mut discovery_db = world.resource_mut::<UiDiscoveryDb>();
-
-        discovery_db.upsert(
-            crate::ui::DiscoveryKind::Item,
-            DiscoveryEntry::new(&metadata.id, metadata.name.clone())
+        world.commands().write_message(UiDiscoveryCommand::Upsert {
+            kind: DiscoveryKind::Item,
+            entry: DiscoveryEntry::new(&metadata.id, metadata.name.clone())
                 .subtitle(metadata.subtitle)
                 .description(metadata.description)
                 .model_path(format!("{}#Scene0", model.model))
-                .seen(true),
-        );
+                .seen(false),
+        });
+        world
+            .commands()
+            .write_message(UiDiscoveryCommand::RecordInteraction {
+                interaction: DiscoveryInteraction::new(
+                    DiscoveryKind::Item,
+                    metadata.id,
+                    DiscoveryInteractionAction::Collected,
+                    DiscoveryInteractionActor::Player,
+                )
+                .note("inventory.pickup"),
+            });
     }
 }
 

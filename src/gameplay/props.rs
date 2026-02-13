@@ -31,12 +31,32 @@ impl Model {
         let model = world.get::<Self>(hook.entity).unwrap().clone();
         let asset_path = AssetPath::from(&model.model);
         let assets = world.resource::<AssetServer>();
-        let scene_handle = assets
-            .get_path_handle(asset_path.to_string() + "#Scene0")
-            .unwrap();
+
+        let asset_string = asset_path.to_string();
+        let scene_path = if asset_string.contains("#Scene") {
+            asset_string
+        } else {
+            asset_string + "#Scene0"
+        };
+
+        let scene_handle = match assets.get_path_handle(scene_path) {
+            Ok(handle) => handle,
+            Err(_) => {
+                return;
+            }
+        };
+
         let gltfs = world.resource::<Assets<Gltf>>();
-        let gltf_handle = assets.get_handle(asset_path).unwrap();
-        let gltf = gltfs.get(&gltf_handle).unwrap();
+        let gltf_handle = match assets.get_handle(asset_path) {
+            Some(handle) => handle,
+            None => {
+                return;
+            }
+        };
+
+        let Some(gltf) = gltfs.get(&gltf_handle) else {
+            return;
+        };
 
         if let Some(animation_name) = model.animation {
             let ref animations = gltf.named_animations;
@@ -118,6 +138,10 @@ pub(crate) struct Prop {
 }
 
 impl Prop {
+    pub fn new(dynamic: bool) -> Self {
+        Self { dynamic }
+    }
+
     fn on_add_hook(mut world: DeferredWorld, hook: HookContext) {
         if world.is_scene_world() {
             return;

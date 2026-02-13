@@ -11,7 +11,7 @@ use crate::{
     GameState,
     gameplay::{ColliderHierarchyChildOf, PhysLayer, Player},
     ratspinner::RatDialogueState,
-    ui::{DialogueUiRoot, MainMenuUi, PauseMenuUi, UiDialogueCommand},
+    ui::{DialogueUiRoot, InventoryUiRoot, MainMenuUi, PauseMenuUi, UiDialogueCommand},
 };
 
 pub(crate) struct InputPlugin;
@@ -170,7 +170,15 @@ fn update_use_caster(
 
 fn sync_player_input_state(
     dialogue: Res<RatDialogueState>,
-    ui_lock: Query<(), Or<(With<MainMenuUi>, With<PauseMenuUi>, With<DialogueUiRoot>)>>,
+    ui_lock: Query<
+        (),
+        Or<(
+            With<MainMenuUi>,
+            With<PauseMenuUi>,
+            With<DialogueUiRoot>,
+            With<InventoryUiRoot>,
+        )>,
+    >,
     state: Res<State<PlayerInputState>>,
     mut next_state: ResMut<NextState<PlayerInputState>>,
 ) {
