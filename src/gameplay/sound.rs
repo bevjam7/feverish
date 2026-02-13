@@ -13,7 +13,6 @@ use bevy_trenchbroom::prelude::*;
 use rand::RngExt;
 
 use crate::{
-    AssetServerExt,
     audio::mixer::WorldSfxPool,
     gameplay::{ColliderHierarchyChildOf, PlayerRoot},
     psx::PsxPbrMaterial,
@@ -56,7 +55,7 @@ impl SoundPoint {
         let point = world.get::<Self>(hook.entity).unwrap();
         let assets = world.resource::<AssetServer>();
         let sample = assets
-            .get_path_handle::<AudioSample>(point.sample.clone())
+            .get_handle::<AudioSample>(point.sample.clone())
             .unwrap();
 
         let volume = point.volume;

@@ -86,7 +86,7 @@ text: Never heard of her. Can we just talk about something else already?
 speaker: Leaning Marcus
 portrait: models/npc_a/npc_a.png
 voice: neutral_npc
-text: I need to move into a single family home, or this geezer needs to hurry up and die. Whichever comes first.
+text: I need to move into a single family home, or this geezer needs to hurry up and die.
 > What happened? -> ask_noise_complaint [id: ask_noise_complaint]
 
 [ask_noise_complaint]
@@ -101,7 +101,7 @@ text: What's there to say? Old people go to sleep at 5 P.M. and have an aneurysm
 speaker: Leaning Marcus
 portrait: models/npc_a/npc_a.png
 voice: neutral_npc
-text: That leads downstairs to my office. She also has some stuff strewn about, watch your step.
+text: That leads downstairs to my office.
 
 // PHOTOGRAPH
 
@@ -133,4 +133,10 @@ text: That smells like mold.
 speaker: Leaning Marcus
 portrait: models/npc_a/npc_a.png
 voice: neutral_npc
-text: Just some research I've been doing.
+text: I wish Jane would stop mixing up her periodicals with my stuff.
+
+[ask_strange_books]
+speaker: Leaning Marcus
+portrait: models/npc_a/npc_a.png
+voice: neutral_npc
+text: She's mostly into medical stuff. I don't really get the hype.
