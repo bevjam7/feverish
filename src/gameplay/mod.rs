@@ -167,7 +167,7 @@ fn handle_added_spawn_point_camera(
     door_targets: Query<(&Targetable, &GlobalTransform), With<DoorPortalTarget>>,
     assets: Res<AssetServer>,
 ) {
-    const MAX_INTERACTION_DISTANCE: f32 = 3.0;
+    const MAX_INTERACTION_DISTANCE: f32 = 4.5;
 
     if added.count() > 1 {
         error!("Multiple spawn points detected.");
@@ -217,19 +217,14 @@ fn handle_added_spawn_point_camera(
         cmd.entity(camera_entity).with_child((
             Player,
             UseRaycaster,
-            // changed raycaster to shapecaster to make the feeling of picking tiny items bettah
-            ShapeCaster::new(
-                Collider::capsule(0.15, 0.0),
-                Vec3::ZERO,
-                Quat::IDENTITY,
-                Dir3::NEG_Z,
-            )
-            .with_max_distance(MAX_INTERACTION_DISTANCE)
-            .with_query_filter(SpatialQueryFilter {
-                mask: [PhysLayer::Default, PhysLayer::Usable].into(),
-                ..Default::default()
-            })
-            .with_max_hits(1),
+            Transform::default(),
+            RayCaster::new(Vec3::ZERO, Dir3::NEG_Z)
+                .with_max_distance(MAX_INTERACTION_DISTANCE)
+                .with_query_filter(SpatialQueryFilter {
+                    mask: [PhysLayer::Default, PhysLayer::Usable].into(),
+                    ..Default::default()
+                })
+                .with_max_hits(1),
         ));
     }
 }

@@ -1,4 +1,6 @@
-use avian3d::prelude::{CollisionLayers, ShapeHits};
+use avian3d::prelude::{
+    Collider, CollisionLayers, LayerMask, RayCaster, RayHits, ShapeHits, SpatialQueryFilter,
+};
 use bevy::{
     prelude::*,
     window::{CursorGrabMode, CursorOptions},
@@ -21,7 +23,7 @@ impl Plugin for InputPlugin {
             .add_observer(apply_use)
             .add_systems(
                 Update,
-                sync_player_input_state.run_if(in_state(GameState::Main)),
+                (sync_player_input_state, update_use_caster).run_if(in_state(GameState::Main)),
             )
             .add_systems(OnEnter(PlayerInputState::Active), activate_player_input)
             .add_systems(OnEnter(PlayerInputState::Locked), lock_player_input);
@@ -94,40 +96,76 @@ pub struct UseAction;
 pub struct Use(pub Entity);
 
 #[derive(Component)]
+#[require(IsHovering)]
 pub struct UseRaycaster;
+
+/// Tells us if we're hovering an item in the world
+#[derive(Component, Default)]
+pub struct IsHovering(pub(crate) Vec<Entity>);
 
 fn apply_use(
     _action: On<Start<UseAction>>,
     mut cmd: Commands,
-    caster: Single<Entity, (With<UseRaycaster>, With<Player>)>,
-    hits: Query<&ShapeHits>,
-    layers: Query<&CollisionLayers>,
+    caster: Single<
+        (Entity, &RayCaster, &GlobalTransform, &mut IsHovering),
+        (With<UseRaycaster>, With<Player>),
+    >,
     dialogue_ui: Query<(), With<DialogueUiRoot>>,
-    hierarchy: Query<&ColliderHierarchyChildOf>,
 ) {
     if !dialogue_ui.is_empty() {
         cmd.write_message(UiDialogueCommand::Advance);
         return;
     }
 
-    let Ok(hits) = hits.get(caster.entity()) else {
-        return;
-    };
-    if let Some(hit) = hits.iter().next() {
-        let target = match hierarchy.get(hit.entity).ok() {
-            Some(ColliderHierarchyChildOf(entity)) => *entity,
-            None => hit.entity,
-        };
-
-        // check if the layer is usable. we also collide with walls to prevent using
-        // things through the environment
-        let Ok(layer) = layers.get(target) else {
-            return;
-        };
-        if layer.memberships.has_all(PhysLayer::Usable) {
-            cmd.entity(target).trigger(Use);
-        }
+    if let Some(hit) = caster.3.0.iter().next() {
+        cmd.entity(*hit).trigger(Use);
     }
+}
+
+fn update_use_caster(
+    mut caster: Single<
+        (Entity, &RayCaster, &GlobalTransform, &mut IsHovering),
+        (With<UseRaycaster>, With<Player>),
+    >,
+    spatial: avian3d::spatial_query::SpatialQuery,
+    hits: Query<&RayHits>,
+    hierarchy: Query<&ColliderHierarchyChildOf>,
+) {
+    const USE_RADIUS: f32 = 0.4;
+
+    // Get either the hit, or the endpoint of the raycaster
+
+    let endpoint = match hits.get(caster.0) {
+        Ok(hits) =>
+            (caster.2.forward()
+                * hits
+                    .get(0)
+                    .map(|x| x.distance)
+                    .unwrap_or(caster.1.max_distance))
+                + caster.2.translation(),
+        Err(_) => (caster.2.forward() * caster.1.max_distance) + caster.2.translation(),
+    };
+
+    // Do another sphere cast at the endpoint
+    let intersections = spatial.shape_intersections(
+        &Collider::sphere(USE_RADIUS),
+        endpoint,
+        Quat::default(),
+        &SpatialQueryFilter {
+            mask: [PhysLayer::Usable].into(),
+            excluded_entities: [].into(),
+        },
+    );
+
+    // Find collider roots, if applicable
+    caster.3.0 = intersections
+        .iter()
+        .map(|intersection| match hierarchy.get(*intersection).ok() {
+            Some(ColliderHierarchyChildOf(entity)) => entity,
+            None => intersection,
+        })
+        .copied()
+        .collect();
 }
 
 fn sync_player_input_state(

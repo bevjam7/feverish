@@ -3,7 +3,7 @@ use bevy::prelude::*;
 
 use crate::{
     gameplay::{ColliderHierarchyChildOf, PhysLayer, Player},
-    input::UseRaycaster,
+    input::{IsHovering, UseRaycaster},
     psx::{PsxCamera, PsxConfig, PsxPbrMaterial, set_material_focused},
 };
 
@@ -17,7 +17,7 @@ pub(super) struct FocusFxState {
 
 pub(super) fn handle_focus_effect(
     mut q_config: Query<&mut PsxConfig, With<PsxCamera>>,
-    q_hits: Query<&ShapeHits, (With<UseRaycaster>, With<Player>)>,
+    q_hits: Query<&IsHovering, (With<UseRaycaster>, With<Player>)>,
     q_layers: Query<&CollisionLayers>,
     q_hierarchy: Query<&ColliderHierarchyChildOf>,
     q_children: Query<&Children>,
@@ -77,21 +77,18 @@ pub(super) fn handle_focus_effect(
 }
 
 fn focused_usable_entity(
-    q_hits: &Query<&ShapeHits, (With<UseRaycaster>, With<Player>)>,
+    q_hits: &Query<&IsHovering, (With<UseRaycaster>, With<Player>)>,
     q_hierarchy: &Query<&ColliderHierarchyChildOf>,
     q_layers: &Query<&CollisionLayers>,
 ) -> Option<Entity> {
     let Ok(hits) = q_hits.single() else {
         return None;
     };
-    let first = hits.iter().next()?;
-    let target = q_hierarchy
-        .get(first.entity)
-        .ok()
-        .map_or(first.entity, |h| h.0);
-    let layer = q_layers.get(target).ok()?;
+    let first = hits.0.iter().next()?;
+    let target = q_hierarchy.get(*first).ok().map_or(first, |h| &h.0);
+    let layer = q_layers.get(*target).ok()?;
     if layer.memberships.has_all(PhysLayer::Usable) {
-        Some(target)
+        Some(*target)
     } else {
         None
     }
