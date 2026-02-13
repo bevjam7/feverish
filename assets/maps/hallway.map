@@ -1810,39 +1810,39 @@
 // entity 41
 {
 "classname" "item"
-"origin" "484 364 0"
-"model" "models/strange_books/strange_books.gltf"
-"angles" "0 -120 0"
+"origin" "728 128 56"
+"model" "models/noise_complaint/noise_complaint.gltf"
+"angles" "0 -90 -7"
+"metadata" "items/noise_complaint.item.meta"
 }
 // entity 42
 {
 "classname" "item"
-"origin" "840 264 8"
+"origin" "884 632 -152"
 "model" "models/strange_books/strange_books.gltf"
 "angles" "0 -120 0"
-"metadata" "items/cd.item.meta"
 }
 // entity 43
 {
 "classname" "item"
-"origin" "840 232 8"
-"model" "models/strange_books/strange_books.gltf"
+"origin" "984 608 -152"
+"model" "models/diorama/diorama.gltf"
 "angles" "0 -120 0"
 "metadata" "items/diorama.item.meta"
 }
 // entity 44
 {
 "classname" "item"
-"origin" "872 232 8"
-"model" "models/strange_books/strange_books.gltf"
+"origin" "900 564 -152"
+"model" "models/cd/cd.gltf"
 "angles" "0 -120 0"
-"metadata" "items/necklace.item.meta"
+"metadata" "items/cd.item.meta"
 }
 // entity 45
 {
 "classname" "item"
-"origin" "872 200 8"
-"model" "models/strange_books/strange_books.gltf"
+"origin" "560 604 40"
+"model" "models/jewelry/jewelry.gltf"
 "angles" "0 -120 0"
-"metadata" "items/noise_complaint.item.meta"
+"metadata" "items/necklace.item.meta"
 }
