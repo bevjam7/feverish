@@ -30,6 +30,7 @@
         "ratspinner/npc.default.rat",
         "ratspinner/npc.human.rat",
         "ratspinner/npc.dunce.rat",
+        "ratspinner/npc.lover.rat",
     ]),
     "font.pixel": File(path: "fonts/PressStart2P-Regular.ttf"),
     "font.body": File(path: "fonts/VT323-Regular.ttf"),

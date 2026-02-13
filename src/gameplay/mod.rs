@@ -306,6 +306,10 @@ fn handle_debug_elimination(
                 // progressed
                 count.0 += 1;
 
+                const KEY_PATH: &str = "models/key/key.gltf#Scene0";
+                const OFFICE_DOOR_ID: &str = "office_door";
+                const APARTMENT_DOOR_ID: &str = "apartment_door";
+
                 match count.0 {
                     1 => {
                         // Give the office key
@@ -314,7 +318,7 @@ fn handle_debug_elimination(
                             DiscoveryEntry::new(&office_key_meta.id, office_key_meta.name.clone())
                                 .subtitle(office_key_meta.subtitle.clone())
                                 .description(office_key_meta.description.clone())
-                                .model_path("items/key/key.gltf#Scene0")
+                                .model_path(KEY_PATH)
                                 .seen(true),
                         );
 
@@ -322,7 +326,7 @@ fn handle_debug_elimination(
                         targetable_doors
                             .iter_mut()
                             .find(|(_, door_name, _)| {
-                                door_name.targetname.0.as_str() == "office_door"
+                                door_name.targetname.0.as_str() == OFFICE_DOOR_ID
                             })
                             .unwrap()
                             .2
@@ -338,7 +342,7 @@ fn handle_debug_elimination(
                             )
                             .subtitle(apartment_key_meta.subtitle.clone())
                             .description(apartment_key_meta.description.clone())
-                            .model_path("items/key/key.gltf#Scene0")
+                            .model_path(KEY_PATH)
                             .seen(true),
                         );
 
@@ -346,7 +350,7 @@ fn handle_debug_elimination(
                         targetable_doors
                             .iter_mut()
                             .find(|(_, door_name, _)| {
-                                door_name.targetname.0.as_str() == "apartment_door"
+                                door_name.targetname.0.as_str() == APARTMENT_DOOR_ID
                             })
                             .unwrap()
                             .2
