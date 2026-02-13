@@ -1,3 +1,5 @@
+use std::{iter, time::Duration};
+
 use avian3d::prelude::{ColliderConstructor, CollisionLayers, RigidBody};
 use bevy::{
     asset::AssetPath,
@@ -71,10 +73,7 @@ impl Npc {
                         .get(clip_name)
                         .expect(&format!("No animation named {clip_name}"))
                         .clone(),
-                    match clip_name == &npc.idle_animation {
-                        true => 1.0,
-                        false => 0.0,
-                    },
+                    1.0,
                     graph.root,
                 ),
             )
@@ -83,7 +82,7 @@ impl Npc {
             .into_iter()
             // TODO: Breaks when we add more than 2 animations to root, so filtering to just the
             // idle animation
-            .filter(|x| x == &npc.idle_animation)
+            // .filter(|x| x == &npc.idle_animation)
             .map(register_animation)
             .collect();
         let graph_handle = {
@@ -96,6 +95,10 @@ impl Npc {
             [PhysLayer::Npc, PhysLayer::Usable],
             [PhysLayer::Npc, PhysLayer::Default, PhysLayer::Usable],
         );
+        // animations
+        //     .get(npc.idle_animation.as_str())
+        //     .cloned()
+        //     .unwrap(),
         world
             .commands()
             .entity(hook.entity)
@@ -103,8 +106,9 @@ impl Npc {
                 SceneRoot(scene_handle.clone()),
                 AnimationControls {
                     animations,
-                    graph_handle,
+                    graph_handle: graph_handle.clone(),
                 },
+                AnimationGraphHandle(graph_handle),
                 layers,
             ))
             .with_children(|cmd| {
@@ -121,42 +125,41 @@ impl Npc {
                     ColliderHierarchyChildOf(cmd.target_entity()),
                 ));
             })
-            .observe(npc_on_use)
-            .observe(idle_on_spawn);
+            .observe(Self::on_use)
+            .observe(Self::idle_on_spawn);
     }
-}
 
-fn idle_on_spawn(
-    scene_ready: On<SceneInstanceReady>,
-    controls: Query<&AnimationControls>,
-    children: Query<&Children>,
-    mut animators: Query<&mut AnimationPlayer>,
-    mut cmd: Commands,
-) {
-    let controls = controls.get(scene_ready.entity).unwrap();
-    for child in children.iter_descendants(scene_ready.entity) {
-        if let Ok(mut animator) = animators.get_mut(child) {
-            // Tell the animation player to start the animation and keep
-            // repeating it.
-            for animation in controls.animations.iter() {
-                animator.play(animation.1.clone()).repeat();
+    fn idle_on_spawn(
+        scene_ready: On<SceneInstanceReady>,
+        mut cmd: Commands,
+        controls: Query<(&AnimationControls, &Npc)>,
+        children: Query<&Children>,
+        mut animators: Query<&mut AnimationPlayer>,
+    ) {
+        let (controls, npc) = controls.get(scene_ready.entity).unwrap();
+        let node = *controls
+            .animations
+            .get(npc.idle_animation.as_str())
+            .unwrap();
+        for child in
+            iter::once(scene_ready.entity).chain(children.iter_descendants(scene_ready.entity))
+        {
+            if let Ok(mut animator) = animators.get_mut(child) {
+                let mut transitions = AnimationTransitions::new();
+                transitions.play(&mut animator, node, Duration::ZERO);
+                cmd.entity(child).insert(transitions);
             }
-
-            // Add the animation graph. This only needs to be done once to
-            // connect the animation player to the mesh.
-            cmd.entity(child)
-                .insert(AnimationGraphHandle(controls.graph_handle.clone()));
         }
     }
-}
 
-fn npc_on_use(trigger: On<Use>, mut cmd: Commands, npcs: Query<&Npc>) {
-    let Ok(npc) = npcs.get(trigger.0) else {
-        return;
-    };
-    if let Some(ref script_id) = npc.script_id {
-        cmd.write_message(RatCommand::Start(
-            RatStart::new(script_id.clone()).target(trigger.0),
-        ));
+    fn on_use(trigger: On<Use>, mut cmd: Commands, npcs: Query<&Npc>) {
+        let Ok(npc) = npcs.get(trigger.0) else {
+            return;
+        };
+        if let Some(ref script_id) = npc.script_id {
+            cmd.write_message(RatCommand::Start(
+                RatStart::new(script_id.clone()).target(trigger.0),
+            ));
+        }
     }
 }
