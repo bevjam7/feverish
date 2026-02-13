@@ -218,3 +218,53 @@
 "model" "models/telephone_pole/telephone_pole.gltf"
 "angles" "0 180 0"
 }
+// entity 16
+{
+"classname" "npc"
+"origin" "424 40 8"
+"angles" "0 180 0"
+"model" "models/npc_a/npc_a.gltf"
+"idle_animation" "idle_lean"
+"suspect" "Human"
+"script_id" "npc.human"
+}
+// entity 17
+{
+"classname" "npc"
+"origin" "424 -24 8"
+"angles" "0 180 0"
+"model" "models/npc_a/npc_a.gltf"
+"idle_animation" "walk"
+"suspect" "Human"
+"script_id" "npc.human"
+}
+// entity 18
+{
+"classname" "npc"
+"origin" "424 8 8"
+"angles" "0 180 0"
+"model" "models/npc_a/npc_a.gltf"
+"idle_animation" "cower"
+"suspect" "Human"
+"script_id" "npc.human"
+}
+// entity 19
+{
+"classname" "npc"
+"origin" "424 72 8"
+"angles" "0 180 0"
+"model" "models/npc_a/npc_a.gltf"
+"idle_animation" "idle_a"
+"suspect" "Human"
+"script_id" "npc.human"
+}
+// entity 20
+{
+"classname" "npc"
+"origin" "424 104 8"
+"angles" "0 180 0"
+"model" "models/npc_a/npc_a.gltf"
+"idle_animation" "sit"
+"suspect" "Human"
+"script_id" "npc.human"
+}

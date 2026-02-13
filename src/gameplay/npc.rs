@@ -1,7 +1,10 @@
+use std::{iter, time::Duration};
+
 use avian3d::prelude::{ColliderConstructor, CollisionLayers, RigidBody};
 use bevy::{
     asset::AssetPath,
     ecs::{lifecycle::HookContext, world::DeferredWorld},
+    platform::collections::HashMap,
     prelude::*,
     scene::SceneInstanceReady,
 };
@@ -58,39 +61,6 @@ impl Npc {
 
         let ref animations = gltf.named_animations;
 
-        // Build the animation graph in a yucky gross way that isn't serialized and is
-        // heavily specific :( jam moment!
-        let mut graph = AnimationGraph::new();
-
-        let clips = ["cower", "sit", "idle_a", "idle_lean", "walk"];
-        let register_animation = |clip_name: &'static str| -> (&'static str, AnimationNodeIndex) {
-            (
-                clip_name,
-                graph.add_clip(
-                    animations
-                        .get(clip_name)
-                        .expect(&format!("No animation named {clip_name}"))
-                        .clone(),
-                    match clip_name == &npc.idle_animation.clone().unwrap_or_default() {
-                        true => 1.0,
-                        false => 0.0,
-                    },
-                    graph.root,
-                ),
-            )
-        };
-        let animations = clips
-            .into_iter()
-            // TODO: Breaks when we add more than 2 animations to root, so filtering to just the
-            // idle animation
-            .filter(|x| x == &npc.idle_animation.clone().unwrap_or_default())
-            .map(register_animation)
-            .collect();
-        let graph_handle = {
-            let mut graphs = world.resource_mut::<Assets<AnimationGraph>>();
-            graphs.add(graph)
-        };
-
         const HEIGHT: f32 = 1.8;
         let layers = CollisionLayers::new(
             [PhysLayer::Npc, PhysLayer::Usable],
@@ -99,14 +69,7 @@ impl Npc {
         world
             .commands()
             .entity(hook.entity)
-            .insert((
-                SceneRoot(scene_handle.clone()),
-                AnimationControls {
-                    animations,
-                    graph_handle,
-                },
-                layers,
-            ))
+            .insert(SceneRoot(scene_handle.clone()))
             .with_children(|cmd| {
                 // Spawn the NPC collider in the center, since the npc models origins are at the
                 // feet
@@ -121,42 +84,80 @@ impl Npc {
                     ColliderHierarchyChildOf(cmd.target_entity()),
                 ));
             })
-            .observe(npc_on_use)
-            .observe(idle_on_spawn);
+            .observe(Self::setup_animations)
+            .observe(Self::on_use);
     }
-}
 
-fn idle_on_spawn(
-    scene_ready: On<SceneInstanceReady>,
-    controls: Query<&AnimationControls>,
-    children: Query<&Children>,
-    mut animators: Query<&mut AnimationPlayer>,
-    mut cmd: Commands,
-) {
-    let controls = controls.get(scene_ready.entity).unwrap();
-    for child in children.iter_descendants(scene_ready.entity) {
-        if let Ok(mut animator) = animators.get_mut(child) {
-            // Tell the animation player to start the animation and keep
-            // repeating it.
-            for animation in controls.animations.iter() {
-                animator.play(animation.1.clone()).repeat();
+    pub(crate) fn setup_animations(
+        scene_ready: On<SceneInstanceReady>,
+        mut cmd: Commands,
+        npcs: Query<&Npc>,
+        assets: Res<AssetServer>,
+        mut animators: Query<&mut AnimationPlayer>,
+        mut graphs: ResMut<Assets<AnimationGraph>>,
+        gltfs: Res<Assets<Gltf>>,
+        children: Query<&Children>,
+    ) {
+        let npc = npcs.get(scene_ready.entity).unwrap();
+        let asset_path = AssetPath::from(&npc.model);
+        let gltf_handle = assets.get_handle(asset_path).unwrap();
+        let gltf = gltfs.get(&gltf_handle).unwrap();
+
+        let ref animations = gltf.named_animations;
+
+        // Build the animation graph in a yucky gross way that isn't serialized and is
+        // heavily specific :( jam moment!
+        let mut graph = AnimationGraph::new();
+
+        let clips: Vec<&'static str> = animations
+            .keys()
+            .map(|k| -> &'static str { Box::leak(k.clone()) })
+            .collect();
+        let register_animation = |clip_name: &'static str| -> (&'static str, AnimationNodeIndex) {
+            (
+                clip_name,
+                graph.add_clip(
+                    animations
+                        .get(clip_name)
+                        .expect(&format!("No animation named {clip_name}"))
+                        .clone(),
+                    1.0,
+                    graph.root,
+                ),
+            )
+        };
+        let animations: HashMap<_, _> = clips.into_iter().map(register_animation).collect();
+        let graph_handle = graphs.add(graph);
+
+        if let Some(idle_animation_id) = npc.idle_animation.as_ref() {
+            let node = animations.get(idle_animation_id.as_str()).unwrap();
+            for child in
+                iter::once(scene_ready.entity).chain(children.iter_descendants(scene_ready.entity))
+            {
+                if let Ok(mut animator) = animators.get_mut(child) {
+                    let mut transitions = AnimationTransitions::new();
+                    transitions.play(&mut animator, *node, Duration::ZERO);
+                    cmd.entity(child).insert((
+                        transitions,
+                        AnimationControls {
+                            animations: animations.clone(),
+                            graph_handle: graph_handle.clone(),
+                        },
+                        AnimationGraphHandle(graph_handle.clone()),
+                    ));
+                }
             }
-
-            // Add the animation graph. This only needs to be done once to
-            // connect the animation player to the mesh.
-            cmd.entity(child)
-                .insert(AnimationGraphHandle(controls.graph_handle.clone()));
         }
     }
-}
 
-fn npc_on_use(trigger: On<Use>, mut cmd: Commands, npcs: Query<&Npc>) {
-    let Ok(npc) = npcs.get(trigger.0) else {
-        return;
-    };
-    if let Some(ref script_id) = npc.script_id {
-        cmd.write_message(RatCommand::Start(
-            RatStart::new(script_id.clone()).target(trigger.0),
-        ));
+    fn on_use(trigger: On<Use>, mut cmd: Commands, npcs: Query<&Npc>) {
+        let Ok(npc) = npcs.get(trigger.0) else {
+            return;
+        };
+        if let Some(ref script_id) = npc.script_id {
+            cmd.write_message(RatCommand::Start(
+                RatStart::new(script_id.clone()).target(trigger.0),
+            ));
+        }
     }
 }
