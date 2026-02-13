@@ -77,20 +77,7 @@ pub(crate) struct PlayerRoot;
 
 #[point_class(group("player"), classname("spawn"), size(-16 -16 -32, 16 16 32), base(Transform))]
 #[derive(Clone, Copy)]
-#[component(on_add=Self::on_add_hook)]
 pub struct SpawnPoint;
-
-impl SpawnPoint {
-    fn on_add_hook(mut world: DeferredWorld, hook: HookContext) {
-        if world.is_scene_world() {
-            return;
-        }
-        world
-            .commands()
-            .entity(hook.entity)
-            .insert(SpatialListener3D::default());
-    }
-}
 
 /// Transition between two doors across different levels
 #[solid_class(group("func"), classname("door_portal"), base(Transform, Target))]
@@ -167,6 +154,7 @@ pub struct DoorPortalTarget;
 fn handle_added_spawn_point_camera(
     mut cmd: Commands,
     added: Query<(Entity, &GlobalTransform), Added<SpawnPoint>>,
+    existing: Query<Entity, With<PlayerRoot>>,
     level_to_prepare: Res<LevelToPrepare>,
     door_targets: Query<(&Targetable, &GlobalTransform), With<DoorPortalTarget>>,
     assets: Res<AssetServer>,
@@ -194,42 +182,44 @@ fn handle_added_spawn_point_camera(
             }
         };
 
-        // Character collider and player root
-        let player_root = cmd
-            .entity(entity)
-            .insert((
-                crate::input::controller_bundle(),
-                target_transform,
-                Player,
-                PlayerRoot,
-                sound::default_footstep_player(assets.as_ref()),
-            ))
-            .id();
+        if existing.is_empty() {
+            // Character collider and player root
+            let player_root = cmd
+                .spawn((
+                    crate::input::controller_bundle(),
+                    target_transform,
+                    Player,
+                    PlayerRoot,
+                    sound::default_footstep_player(assets.as_ref()),
+                    SpatialListener3D::default(),
+                ))
+                .id();
 
-        // Camera for our character collider
-        let camera_entity = cmd
-            .spawn((
-                crate::camera::player_camera_bundle(),
-                PsxCamera,
-                PsxConfig::default(),
-                CharacterControllerCameraOf::new(player_root),
-                Player,
-            ))
-            .id();
+            // Camera for our character collider
+            let camera_entity = cmd
+                .spawn((
+                    crate::camera::player_camera_bundle(),
+                    PsxCamera,
+                    PsxConfig::default(),
+                    CharacterControllerCameraOf::new(player_root),
+                    Player,
+                ))
+                .id();
 
-        // Raycaster for our use functionality
-        cmd.entity(camera_entity).with_child((
-            Player,
-            UseRaycaster,
-            Transform::default(),
-            RayCaster::new(Vec3::ZERO, Dir3::NEG_Z)
-                .with_max_distance(MAX_INTERACTION_DISTANCE)
-                .with_query_filter(SpatialQueryFilter {
-                    mask: [PhysLayer::Default, PhysLayer::Prop, PhysLayer::Usable].into(),
-                    ..Default::default()
-                })
-                .with_max_hits(1),
-        ));
+            // Raycaster for our use functionality
+            cmd.entity(camera_entity).with_child((
+                Player,
+                UseRaycaster,
+                Transform::default(),
+                RayCaster::new(Vec3::ZERO, Dir3::NEG_Z)
+                    .with_max_distance(MAX_INTERACTION_DISTANCE)
+                    .with_query_filter(SpatialQueryFilter {
+                        mask: [PhysLayer::Default, PhysLayer::Prop, PhysLayer::Usable].into(),
+                        ..Default::default()
+                    })
+                    .with_max_hits(1),
+            ));
+        }
     }
 }
 
