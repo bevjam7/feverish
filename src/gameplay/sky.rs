@@ -16,6 +16,9 @@ const SKY_RADIUS: f32 = 350.0;
 const SKY_PIXEL_RESOLUTION: Vec2 = Vec2::new(320.0, 240.0);
 const FLAG_ORION_BELT: u32 = 1;
 const FLAG_PROC_A: u32 = 2;
+const FLAG_SCORPIUS: u32 = 4;
+const FLAG_CYGNUS: u32 = 8;
+const FLAG_URSA_MAJOR: u32 = 16;
 
 pub(super) struct SkyPlugin;
 
@@ -54,7 +57,7 @@ impl Default for SkyUniformData {
             seed: 917.0,
             star_threshold: 0.968,
             micro_star_threshold: 0.997,
-            flags: FLAG_ORION_BELT | FLAG_PROC_A,
+            flags: FLAG_ORION_BELT | FLAG_PROC_A | FLAG_SCORPIUS | FLAG_CYGNUS | FLAG_URSA_MAJOR,
             nebula_strength: 0.42,
             dither_strength: 0.05,
             detail_scale: 3.6,
