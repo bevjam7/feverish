@@ -234,7 +234,7 @@ impl EndDoor {
     }
 
     fn on_use(
-        on: On<Use>,
+        _on: On<Use>,
         npcs: Query<&Npc>,
         phase: Res<State<Phase>>,
         mut hooks: MessageWriter<RatHookTriggered>,
