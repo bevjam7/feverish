@@ -1,0 +1,5 @@
+- hint UI
+- remove 'show item' from telephone
+- add outline shaders
+- remove Cool Company Inc
+- add actual tips to main menu
