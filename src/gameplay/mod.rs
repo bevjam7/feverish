@@ -56,10 +56,11 @@ impl Plugin for GameplayPlugin {
                     handle_debug_elimination,
                     handle_world_messages,
                     handle_game_phases,
-                    npc::handle_elimination_lure,
+                    npc::handle_elimination_triggers,
                     npc::tick_walkback_timers,
                     npc::npc_navigation,
                     npc::build_nav_paths,
+                    npc::handle_despawn_timers,
                     spawn_dropped_item,
                 )
                     .in_set(AppSystems::Update),
@@ -280,7 +281,7 @@ fn handle_debug_elimination(
     mut targetable_doors: Query<(Entity, &Targetable, &mut DoorBase)>,
 ) {
     for event in hooks.read() {
-        if event.hook == "debug.eliminate_target" {
+        if event.hook == "game.kill" {
             let office_key_meta = assets
                 .get_handle("items/office_key.item.meta")
                 .and_then(|handle| items.get(&handle))
@@ -291,8 +292,6 @@ fn handle_debug_elimination(
                 .unwrap();
             if let Some(target) = event.target {
                 info!("eliminating npc: {:?}", target);
-                // TODO: death animation
-                cmd.entity(target).despawn();
                 // Entity has `Suspect` value in `Npc` component which can be
                 // queried for UI/gameplay updates
 

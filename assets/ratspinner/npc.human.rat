@@ -150,6 +150,6 @@ speaker: Leaning Marcus
 portrait: sprites/npc_leaning.png
 voice: neutral_npc
 text: What did you want to show me?
-> (Eliminate) It's hard to see. Keep looking. [hook: npc.kill]
-> (Spare) Nevermind, it was nothing. [hook: npc.spare]
+> (Eliminate) It's hard to see. Keep looking. [hook: game.kill]
+> (Spare) Nevermind, it was nothing. [hook: game.spare]
 > (Leave) Hold on... [id: leave] [hook: npc.default.option.leave]

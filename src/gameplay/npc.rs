@@ -174,22 +174,24 @@ impl Npc {
     }
 
     pub(crate) fn transition_to_animation_one_shot(
-        name: In<(Entity, impl AsRef<str>)>,
+        name: In<(Entity, impl AsRef<str>, bool)>,
         controls: Query<&AnimationControls>,
         mut animators: Query<&mut AnimationPlayer>,
         children: Query<&Children>,
         mut transitions: Query<&mut AnimationTransitions>,
     ) {
-        let (entity, name) = name.0;
+        let (entity, name, repeat) = name.0;
 
         for child in iter::once(entity).chain(children.iter_descendants(entity)) {
             if let Ok(mut animator) = animators.get_mut(child) {
                 let control = controls.get(child).unwrap();
                 let node = control.animations.get(name.as_ref()).unwrap();
                 let mut transitions = transitions.get_mut(child).unwrap();
-                transitions
-                    .play(&mut animator, *node, Duration::from_secs_f32(0.5))
-                    .repeat();
+                let active_anim =
+                    transitions.play(&mut animator, *node, Duration::from_secs_f32(0.5));
+                if repeat {
+                    active_anim.repeat();
+                }
             }
         }
     }
@@ -209,7 +211,10 @@ impl Npc {
         let mut npc = npcs.get_mut(trigger.0).unwrap();
         // Disable talking while walking
         npc.script_id = None;
-        cmd.run_system_cached_with(Npc::transition_to_animation_one_shot, (trigger.0, "walk"));
+        cmd.run_system_cached_with(
+            Npc::transition_to_animation_one_shot,
+            (trigger.0, "walk", true),
+        );
     }
 
     fn on_arrived_destination(
@@ -217,7 +222,10 @@ impl Npc {
         mut cmd: Commands,
         mut npcs: Query<&mut Self>,
     ) {
-        cmd.run_system_cached_with(Npc::transition_to_animation_one_shot, (trigger.0, "idle_a"));
+        cmd.run_system_cached_with(
+            Npc::transition_to_animation_one_shot,
+            (trigger.0, "idle_a", true),
+        );
         cmd.entity(trigger.0).insert(WalkbackTimer(Timer::new(
             Duration::from_secs(Npc::WAIT_SECS),
             TimerMode::Once,
@@ -241,7 +249,7 @@ impl Npc {
         let (mut npc, mut transform) = npcs.get_mut(trigger.0).unwrap();
         cmd.run_system_cached_with(
             Npc::transition_to_animation_one_shot,
-            (trigger.0, npc.idle_animation.clone().unwrap()),
+            (trigger.0, npc.idle_animation.clone().unwrap(), true),
         );
         // Make the npc face the correct direction
         let walk_node_by_name = |name: &String| {
@@ -362,21 +370,59 @@ pub(crate) fn build_nav_paths(
     }
 }
 
-pub(crate) fn handle_elimination_lure(
+pub(crate) fn handle_elimination_triggers(
     mut hooks: MessageReader<RatHookTriggered>,
     mut cmd: Commands,
     mut npcs: Query<(&Npc, &mut Navigator)>,
 ) {
     for event in hooks.read() {
-        if event.hook == "game.lure" {
-            let npc_entity = event.target.unwrap();
-            let (_npc, mut navigator) = npcs.get_mut(npc_entity).unwrap();
-            // Begin walk animation
-            navigator.queue = navigator.path.iter().rev().copied().collect::<Vec<_>>();
-            cmd.entity(npc_entity).trigger(StartedWalk);
+        match event.hook.as_str() {
+            "game.lure" => {
+                let npc_entity = event.target.unwrap();
+                let (_npc, mut navigator) = npcs.get_mut(npc_entity).unwrap();
+                // Begin walk animation
+                navigator.queue = navigator.path.iter().rev().copied().collect::<Vec<_>>();
+                cmd.entity(npc_entity).trigger(StartedWalk);
+            }
+            "game.kill" => {
+                // TODO: play animations.
+                let npc_entity = event.target.unwrap();
+                cmd.run_system_cached_with(
+                    Npc::transition_to_animation_one_shot,
+                    (npc_entity, "death", false),
+                );
+                cmd.entity(npc_entity).insert(DespawnTimer(Timer::new(
+                    Duration::from_secs_f32(1.0),
+                    TimerMode::Once,
+                )));
+            }
+            "game.spare" => {
+                let npc_entity = event.target.unwrap();
+                let (_npc, mut navigator) = npcs.get_mut(npc_entity).unwrap();
+                // Begin walk animation
+                navigator.queue = navigator.path.iter().copied().collect::<Vec<_>>();
+                cmd.entity(npc_entity).trigger(StartedWalk);
+            }
+            _ => (),
         }
     }
 }
+
+pub(crate) fn handle_despawn_timers(
+    query: Query<(Entity, &mut DespawnTimer)>,
+    time: Res<Time>,
+    mut cmd: Commands,
+) {
+    for (entity, mut timer) in query {
+        timer.0.tick(time.delta());
+        if timer.0.just_finished() {
+            cmd.entity(entity).despawn();
+        }
+    }
+}
+
+#[derive(Component)]
+pub(crate) struct DespawnTimer(pub(crate) Timer);
 
 #[derive(EntityEvent)]
 pub(crate) struct StartedWalk(pub(crate) Entity);

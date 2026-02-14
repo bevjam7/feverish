@@ -137,3 +137,15 @@ speaker: Lounging Marcus
 portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: Some of my wife's books are mixed in here. She's a researcher.
+
+// script: npc.lover.lured
+// entry: judgement
+
+[judgement]
+speaker: Leaning Marcus
+portrait: sprites/npc_leaning.png
+voice: neutral_npc
+text: I don't see anything.
+> (Eliminate) Look, it's right below you. [hook: game.kill]
+> (Spare) It's not there anymore. [hook: game.spare]
+> (Leave) Wait here. [id: leave] [hook: npc.default.option.leave]
