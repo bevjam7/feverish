@@ -97,6 +97,7 @@ struct SkyUniformData {
     star_threshold: f32,
     micro_star_threshold: f32,
     flags: u32,
+    prev_flags: u32,
     nebula_strength: f32,
     dither_strength: f32,
     detail_scale: f32,
@@ -117,6 +118,7 @@ impl Default for SkyUniformData {
             star_threshold: 0.968,
             micro_star_threshold: 0.997,
             flags: FLAG_PROC_A,
+            prev_flags: FLAG_PROC_A,
             nebula_strength: 0.42,
             dither_strength: 0.05,
             detail_scale: 3.6,
@@ -217,11 +219,13 @@ fn handle_sky_commands(
     for cmd in commands.read() {
         match cmd {
             SkyCommand::ActivateConstellation(marcus) => {
+                material.sky.prev_flags = material.sky.flags;
                 material.sky.flags |= marcus.flag();
                 let (top, bottom) = marcus.default_sky_color();
                 set_sky_target(&mut material.sky, top, bottom, now);
             }
             SkyCommand::DeactivateConstellation(marcus) => {
+                material.sky.prev_flags = material.sky.flags;
                 material.sky.flags &= !marcus.flag();
             }
             SkyCommand::SetSkyColor { top, bottom } => {
@@ -239,6 +243,7 @@ fn handle_sky_commands(
                 material.sky = SkyUniformData::default();
                 material.sky.prev_color_top = current_top;
                 material.sky.prev_color_bottom = current_bottom;
+                material.sky.prev_flags = material.sky.flags;
                 material.sky.color_transition_start = now;
                 material.sky.color_transition_duration = SKY_COLOR_TRANSITION_SECS;
             }

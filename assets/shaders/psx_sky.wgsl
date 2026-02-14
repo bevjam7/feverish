@@ -14,6 +14,7 @@ struct SkyUniformData {
     star_threshold: f32,
     micro_star_threshold: f32,
     flags: u32,
+    prev_flags: u32,
     nebula_strength: f32,
     dither_strength: f32,
     detail_scale: f32,
@@ -235,6 +236,10 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
         1.0,
         clamp((globals.time - sky.color_transition_start) / transition_duration, 0.0, 1.0)
     );
+    let constellation_bits = FLAG_ORION_BELT | FLAG_SCORPIUS | FLAG_CYGNUS | FLAG_URSA_MAJOR;
+    let newly_enabled_constellations =
+        (sky.flags & constellation_bits) & ~(sky.prev_flags & constellation_bits);
+    let constellation_fade_in = select(1.0, transition_t, newly_enabled_constellations != 0u);
     let sky_top = mix(sky.prev_color_top.rgb, sky.color_top.rgb, transition_t);
     let sky_bottom = mix(sky.prev_color_bottom.rgb, sky.color_bottom.rgb, transition_t);
 
@@ -548,8 +553,12 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
         constellation_core += draw_segment(detail_dir, um6, um7, 0.0022) * 0.26;
     }
     let constellation_pulse = 0.88 + 0.12 * sin(globals.time * 0.85 + sky.seed * 0.3);
-    color += vec3<f32>(0.72, 0.96, 1.0) * constellation_core * 1.22 * constellation_pulse;
-    color += vec3<f32>(0.32, 0.55, 0.78) * constellation_halo * 0.72;
+    color += vec3<f32>(0.72, 0.96, 1.0)
+        * constellation_core
+        * 1.22
+        * constellation_pulse
+        * constellation_fade_in;
+    color += vec3<f32>(0.32, 0.55, 0.78) * constellation_halo * 0.72 * constellation_fade_in;
 
     let moon_dist = distance(detail_dir, moon_dir);
     let moon = 1.0 - smoothstep(moon_radius, moon_radius * 1.08, moon_dist);

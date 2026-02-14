@@ -27,7 +27,7 @@ use crate::{
     audio::mixer::WorldSfxPool,
     gameplay::{
         door::DoorBase,
-        npc::{Navigator, Npc, SuspectType},
+        npc::{Npc, SuspectType},
         props::Phone,
     },
     input::{Use, UseRaycaster},
@@ -275,6 +275,7 @@ fn handle_debug_elimination(
     mut cmd: Commands,
     mut count: ResMut<EliminationCount>,
     mut discovery_db: ResMut<UiDiscoveryDb>,
+    mut sky_commands: MessageWriter<sky::SkyCommand>,
     assets: Res<AssetServer>,
     items: Res<Assets<ItemMeta>>,
     npcs: Query<&Npc>,
@@ -292,6 +293,11 @@ fn handle_debug_elimination(
                 .unwrap();
             if let Some(target) = event.target {
                 info!("eliminating npc: {:?}", target);
+                if let Ok(npc) = npcs.get(target)
+                    && let Some(marcus) = marcus_type_for_npc(npc)
+                {
+                    sky_commands.write(sky::SkyCommand::ActivateConstellation(marcus));
+                }
                 // Entity has `Suspect` value in `Npc` component which can be
                 // queried for UI/gameplay updates
 
@@ -368,6 +374,22 @@ fn handle_debug_elimination(
                 }
             }
         }
+    }
+}
+
+fn marcus_type_for_npc(npc: &Npc) -> Option<sky::MarcusType> {
+    let script_id = npc
+        .default_script_id
+        .as_deref()
+        .or(npc.script_id.as_deref())
+        .map(|script| script.strip_suffix(".lured").unwrap_or(script));
+
+    match script_id {
+        Some("npc.dunce") => Some(sky::MarcusType::Panicking),
+        Some("npc.human") => Some(sky::MarcusType::Leaning),
+        Some("npc.lover") => Some(sky::MarcusType::Lounging),
+        Some("npc.strange") => Some(sky::MarcusType::Lonely),
+        _ => None,
     }
 }
 

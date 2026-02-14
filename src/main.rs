@@ -153,6 +153,7 @@ impl Plugin for AppPlugin {
             camera::CameraPlugin,
             map::MapPlugin,
             // debug, needs to be after SkyPlugin initializes messages
+            #[cfg(feature = "dev")]
             debug::sky::SkyDebugPlugin,
             gameplay::GameplayPlugin,
             input::InputPlugin,
