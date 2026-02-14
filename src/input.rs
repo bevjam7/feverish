@@ -199,7 +199,7 @@ fn activate_player_input(
     mut windows: Query<&mut CursorOptions>,
 ) {
     if let Ok(mut cursor_options) = windows.single_mut() {
-        cursor_options.grab_mode = CursorGrabMode::Locked;
+        cursor_options.grab_mode = CursorGrabMode::None;
     }
     for entity in &players {
         commands

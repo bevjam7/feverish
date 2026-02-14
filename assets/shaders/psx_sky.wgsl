@@ -29,6 +29,24 @@ const FLAG_SCORPIUS: u32 = 4u;
 const FLAG_CYGNUS: u32 = 8u;
 const FLAG_URSA_MAJOR: u32 = 16u;
 
+const CONSTELLATION_IDX_SCORPIUS: i32 = 0;
+const CONSTELLATION_IDX_CYGNUS: i32 = 1;
+const CONSTELLATION_IDX_URSA_MAJOR: i32 = 2;
+
+const ENABLE_CONSTELLATION_POSITION_OVERRIDES: bool = true;
+// i keep these slots aligned as [scorpius, cygnus, ursa_major]
+const CONSTELLATION_POSITION_OVERRIDE_ENABLED: array<bool, 3> = array<bool, 3>(
+    true,
+    true,
+    true
+);
+// use degrees here so can tweak placement quickly with shader hot reload
+const CONSTELLATION_POSITION_DEG: array<vec3<f32>, 3> = array<vec3<f32>, 3>(
+    vec3<f32>(50.0, 50.0, 0.0),
+    vec3<f32>(0.0, 120.0, 0.0),
+    vec3<f32>(0.0, 50.0, 40.0)
+);
+
 fn hash21(p: vec2<f32>) -> f32 {
     return fract(sin(dot(p, vec2<f32>(127.1, 311.7))) * 43758.5453);
 }
@@ -60,6 +78,33 @@ fn rotate_y(v: vec3<f32>, angle: f32) -> vec3<f32> {
     let c = cos(angle);
     let s = sin(angle);
     return vec3<f32>(v.x * c - v.z * s, v.y, v.x * s + v.z * c);
+}
+
+fn rotate_x(v: vec3<f32>, angle: f32) -> vec3<f32> {
+    let c = cos(angle);
+    let s = sin(angle);
+    return vec3<f32>(v.x, v.y * c - v.z * s, v.y * s + v.z * c);
+}
+
+fn rotate_z(v: vec3<f32>, angle: f32) -> vec3<f32> {
+    let c = cos(angle);
+    let s = sin(angle);
+    return vec3<f32>(v.x * c - v.y * s, v.x * s + v.y * c, v.z);
+}
+
+fn place_constellation_star(base: vec3<f32>, constellation_idx: i32) -> vec3<f32> {
+    if (
+        !ENABLE_CONSTELLATION_POSITION_OVERRIDES
+        || !CONSTELLATION_POSITION_OVERRIDE_ENABLED[constellation_idx]
+    ) {
+        return normalize(base);
+    }
+
+    let deg = CONSTELLATION_POSITION_DEG[constellation_idx];
+    let rad = deg * (PI / 180.0);
+    let pitched = rotate_x(base, rad.y);
+    let yawed = rotate_y(pitched, rad.x);
+    return normalize(rotate_z(yawed, rad.z));
 }
 
 fn uv_to_dir(uv: vec2<f32>) -> vec3<f32> {
@@ -234,62 +279,82 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
         star_exclusion = max(star_exclusion, draw_segment(detail_dir, em1, em3, 0.0040) * 0.9);
     }
     if ((sky.flags & FLAG_SCORPIUS) != 0u) {
-        let sc1 = normalize(vec3<f32>(0.42, 0.15, -0.60));
-        let sc2 = normalize(vec3<f32>(0.38, 0.25, -0.65));
-        let sc3 = normalize(vec3<f32>(0.35, 0.32, -0.70));
-        let sc4 = normalize(vec3<f32>(0.28, 0.38, -0.72));
-        let sc5 = normalize(vec3<f32>(0.20, 0.40, -0.75));
-        let sc6 = normalize(vec3<f32>(0.12, 0.35, -0.70));
+        let sc1 = place_constellation_star(vec3<f32>(-0.58, 0.70, -0.34), CONSTELLATION_IDX_SCORPIUS);
+        let sc2 = place_constellation_star(vec3<f32>(-0.52, 0.60, -0.45), CONSTELLATION_IDX_SCORPIUS);
+        let sc3 = place_constellation_star(vec3<f32>(-0.44, 0.55, -0.56), CONSTELLATION_IDX_SCORPIUS);
+        let sc4 = place_constellation_star(vec3<f32>(-0.34, 0.47, -0.66), CONSTELLATION_IDX_SCORPIUS);
+        let sc5 = place_constellation_star(vec3<f32>(-0.25, 0.38, -0.73), CONSTELLATION_IDX_SCORPIUS);
+        let sc6 = place_constellation_star(vec3<f32>(-0.17, 0.28, -0.78), CONSTELLATION_IDX_SCORPIUS);
+        let sc7 = place_constellation_star(vec3<f32>(-0.10, 0.20, -0.76), CONSTELLATION_IDX_SCORPIUS);
+        let sc8 = place_constellation_star(vec3<f32>(-0.03, 0.24, -0.69), CONSTELLATION_IDX_SCORPIUS);
+        let sc9 = place_constellation_star(vec3<f32>(0.00, 0.33, -0.61), CONSTELLATION_IDX_SCORPIUS);
         star_exclusion = max(star_exclusion, draw_star(detail_dir, sc1, 0.009));
         star_exclusion = max(star_exclusion, draw_star(detail_dir, sc2, 0.011));
-        star_exclusion = max(star_exclusion, draw_star(detail_dir, sc3, 0.008));
-        star_exclusion = max(star_exclusion, draw_star(detail_dir, sc4, 0.010));
-        star_exclusion = max(star_exclusion, draw_star(detail_dir, sc5, 0.012));
+        star_exclusion = max(star_exclusion, draw_star(detail_dir, sc3, 0.009));
+        star_exclusion = max(star_exclusion, draw_star(detail_dir, sc4, 0.013));
+        star_exclusion = max(star_exclusion, draw_star(detail_dir, sc5, 0.010));
         star_exclusion = max(star_exclusion, draw_star(detail_dir, sc6, 0.008));
+        star_exclusion = max(star_exclusion, draw_star(detail_dir, sc7, 0.008));
+        star_exclusion = max(star_exclusion, draw_star(detail_dir, sc8, 0.009));
+        star_exclusion = max(star_exclusion, draw_star(detail_dir, sc9, 0.010));
         star_exclusion = max(star_exclusion, draw_segment(detail_dir, sc1, sc2, 0.0035) * 0.85);
         star_exclusion = max(star_exclusion, draw_segment(detail_dir, sc2, sc3, 0.0030) * 0.85);
-        star_exclusion = max(star_exclusion, draw_segment(detail_dir, sc3, sc4, 0.0028) * 0.85);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, sc3, sc4, 0.0030) * 0.85);
         star_exclusion = max(star_exclusion, draw_segment(detail_dir, sc4, sc5, 0.0032) * 0.85);
-        star_exclusion = max(star_exclusion, draw_segment(detail_dir, sc5, sc6, 0.0035) * 0.85);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, sc5, sc6, 0.0030) * 0.85);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, sc6, sc7, 0.0030) * 0.85);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, sc7, sc8, 0.0032) * 0.85);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, sc8, sc9, 0.0032) * 0.85);
     }
     if ((sky.flags & FLAG_CYGNUS) != 0u) {
-        let cy1 = normalize(vec3<f32>(-0.35, 0.55, -0.50));
-        let cy2 = normalize(vec3<f32>(-0.20, 0.60, -0.55));
-        let cy3 = normalize(vec3<f32>(0.0, 0.62, -0.58));
-        let cy4 = normalize(vec3<f32>(0.20, 0.58, -0.55));
-        let cy5 = normalize(vec3<f32>(0.35, 0.52, -0.50));
-        let cy6 = normalize(vec3<f32>(0.0, 0.75, -0.40));
+        let cy1 = place_constellation_star(vec3<f32>(0.04, 0.80, -0.52), CONSTELLATION_IDX_CYGNUS);
+        let cy2 = place_constellation_star(vec3<f32>(0.06, 0.69, -0.61), CONSTELLATION_IDX_CYGNUS);
+        let cy3 = place_constellation_star(vec3<f32>(0.08, 0.59, -0.68), CONSTELLATION_IDX_CYGNUS);
+        let cy4 = place_constellation_star(vec3<f32>(0.09, 0.49, -0.74), CONSTELLATION_IDX_CYGNUS);
+        let cy5 = place_constellation_star(vec3<f32>(0.10, 0.38, -0.80), CONSTELLATION_IDX_CYGNUS);
+        let cy6 = place_constellation_star(vec3<f32>(-0.08, 0.57, -0.76), CONSTELLATION_IDX_CYGNUS);
+        let cy7 = place_constellation_star(vec3<f32>(-0.23, 0.55, -0.77), CONSTELLATION_IDX_CYGNUS);
+        let cy8 = place_constellation_star(vec3<f32>(0.25, 0.63, -0.67), CONSTELLATION_IDX_CYGNUS);
+        let cy9 = place_constellation_star(vec3<f32>(0.39, 0.68, -0.58), CONSTELLATION_IDX_CYGNUS);
         star_exclusion = max(star_exclusion, draw_star(detail_dir, cy1, 0.009));
         star_exclusion = max(star_exclusion, draw_star(detail_dir, cy2, 0.010));
         star_exclusion = max(star_exclusion, draw_star(detail_dir, cy3, 0.012));
         star_exclusion = max(star_exclusion, draw_star(detail_dir, cy4, 0.010));
         star_exclusion = max(star_exclusion, draw_star(detail_dir, cy5, 0.009));
-        star_exclusion = max(star_exclusion, draw_star(detail_dir, cy6, 0.011));
-        star_exclusion = max(star_exclusion, draw_segment(detail_dir, cy1, cy3, 0.0030) * 0.85);
-        star_exclusion = max(star_exclusion, draw_segment(detail_dir, cy3, cy5, 0.0030) * 0.85);
-        star_exclusion = max(star_exclusion, draw_segment(detail_dir, cy2, cy6, 0.0025) * 0.75);
-        star_exclusion = max(star_exclusion, draw_segment(detail_dir, cy4, cy6, 0.0025) * 0.75);
+        star_exclusion = max(star_exclusion, draw_star(detail_dir, cy6, 0.009));
+        star_exclusion = max(star_exclusion, draw_star(detail_dir, cy7, 0.008));
+        star_exclusion = max(star_exclusion, draw_star(detail_dir, cy8, 0.009));
+        star_exclusion = max(star_exclusion, draw_star(detail_dir, cy9, 0.008));
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, cy1, cy2, 0.0028) * 0.85);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, cy2, cy3, 0.0028) * 0.85);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, cy3, cy4, 0.0028) * 0.85);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, cy4, cy5, 0.0028) * 0.85);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, cy7, cy6, 0.0025) * 0.75);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, cy6, cy3, 0.0025) * 0.75);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, cy3, cy8, 0.0025) * 0.75);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, cy8, cy9, 0.0025) * 0.75);
     }
     if ((sky.flags & FLAG_URSA_MAJOR) != 0u) {
-        let um1 = normalize(vec3<f32>(0.55, 0.65, -0.20));
-        let um2 = normalize(vec3<f32>(0.45, 0.72, -0.25));
-        let um3 = normalize(vec3<f32>(0.32, 0.75, -0.30));
-        let um4 = normalize(vec3<f32>(0.18, 0.78, -0.35));
-        let um5 = normalize(vec3<f32>(0.05, 0.75, -0.38));
-        let um6 = normalize(vec3<f32>(-0.10, 0.70, -0.40));
-        let um7 = normalize(vec3<f32>(-0.22, 0.62, -0.45));
+        let um1 = place_constellation_star(vec3<f32>(-0.60, 0.73, -0.33), CONSTELLATION_IDX_URSA_MAJOR);
+        let um2 = place_constellation_star(vec3<f32>(-0.58, 0.61, -0.45), CONSTELLATION_IDX_URSA_MAJOR);
+        let um3 = place_constellation_star(vec3<f32>(-0.47, 0.58, -0.54), CONSTELLATION_IDX_URSA_MAJOR);
+        let um4 = place_constellation_star(vec3<f32>(-0.45, 0.69, -0.44), CONSTELLATION_IDX_URSA_MAJOR);
+        let um5 = place_constellation_star(vec3<f32>(-0.33, 0.71, -0.50), CONSTELLATION_IDX_URSA_MAJOR);
+        let um6 = place_constellation_star(vec3<f32>(-0.22, 0.70, -0.56), CONSTELLATION_IDX_URSA_MAJOR);
+        let um7 = place_constellation_star(vec3<f32>(-0.09, 0.67, -0.61), CONSTELLATION_IDX_URSA_MAJOR);
         star_exclusion = max(star_exclusion, draw_star(detail_dir, um1, 0.010));
         star_exclusion = max(star_exclusion, draw_star(detail_dir, um2, 0.011));
-        star_exclusion = max(star_exclusion, draw_star(detail_dir, um3, 0.012));
+        star_exclusion = max(star_exclusion, draw_star(detail_dir, um3, 0.010));
         star_exclusion = max(star_exclusion, draw_star(detail_dir, um4, 0.011));
         star_exclusion = max(star_exclusion, draw_star(detail_dir, um5, 0.010));
         star_exclusion = max(star_exclusion, draw_star(detail_dir, um6, 0.009));
         star_exclusion = max(star_exclusion, draw_star(detail_dir, um7, 0.008));
         star_exclusion = max(star_exclusion, draw_segment(detail_dir, um1, um2, 0.0030) * 0.85);
         star_exclusion = max(star_exclusion, draw_segment(detail_dir, um2, um3, 0.0028) * 0.85);
-        star_exclusion = max(star_exclusion, draw_segment(detail_dir, um3, um4, 0.0028) * 0.85);
-        star_exclusion = max(star_exclusion, draw_segment(detail_dir, um4, um5, 0.0030) * 0.85);
-        star_exclusion = max(star_exclusion, draw_segment(detail_dir, um5, um6, 0.0032) * 0.85);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, um3, um4, 0.0030) * 0.85);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, um4, um1, 0.0030) * 0.85);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, um4, um5, 0.0032) * 0.85);
+        star_exclusion = max(star_exclusion, draw_segment(detail_dir, um5, um6, 0.0030) * 0.85);
         star_exclusion = max(star_exclusion, draw_segment(detail_dir, um6, um7, 0.0035) * 0.85);
     }
     if ((sky.flags & FLAG_PROC_A) != 0u) {
@@ -363,85 +428,112 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
         constellation_core += draw_segment(detail_dir, p2, p3, 0.0018) * 0.20;
     }
     if ((sky.flags & FLAG_SCORPIUS) != 0u) {
-        let sc1 = normalize(vec3<f32>(0.42, 0.15, -0.60));
-        let sc2 = normalize(vec3<f32>(0.38, 0.25, -0.65));
-        let sc3 = normalize(vec3<f32>(0.35, 0.32, -0.70));
-        let sc4 = normalize(vec3<f32>(0.28, 0.38, -0.72));
-        let sc5 = normalize(vec3<f32>(0.20, 0.40, -0.75));
-        let sc6 = normalize(vec3<f32>(0.12, 0.35, -0.70));
+        let sc1 = place_constellation_star(vec3<f32>(-0.58, 0.70, -0.34), CONSTELLATION_IDX_SCORPIUS);
+        let sc2 = place_constellation_star(vec3<f32>(-0.52, 0.60, -0.45), CONSTELLATION_IDX_SCORPIUS);
+        let sc3 = place_constellation_star(vec3<f32>(-0.44, 0.55, -0.56), CONSTELLATION_IDX_SCORPIUS);
+        let sc4 = place_constellation_star(vec3<f32>(-0.34, 0.47, -0.66), CONSTELLATION_IDX_SCORPIUS);
+        let sc5 = place_constellation_star(vec3<f32>(-0.25, 0.38, -0.73), CONSTELLATION_IDX_SCORPIUS);
+        let sc6 = place_constellation_star(vec3<f32>(-0.17, 0.28, -0.78), CONSTELLATION_IDX_SCORPIUS);
+        let sc7 = place_constellation_star(vec3<f32>(-0.10, 0.20, -0.76), CONSTELLATION_IDX_SCORPIUS);
+        let sc8 = place_constellation_star(vec3<f32>(-0.03, 0.24, -0.69), CONSTELLATION_IDX_SCORPIUS);
+        let sc9 = place_constellation_star(vec3<f32>(0.00, 0.33, -0.61), CONSTELLATION_IDX_SCORPIUS);
         let sc_t = 0.86 + 0.14 * sin(globals.time * 1.05 + sky.seed * 0.29 + 1.5);
+        let sc_antares = 0.93 + 0.07 * sin(globals.time * 0.87 + sky.seed * 0.37 + 2.3);
         constellation_core += draw_star(detail_dir, sc1, 0.0042) * sc_t;
         constellation_core += draw_star(detail_dir, sc2, 0.0048) * sc_t;
-        constellation_core += draw_star(detail_dir, sc3, 0.0038) * sc_t;
-        constellation_core += draw_star(detail_dir, sc4, 0.0045) * sc_t;
-        constellation_core += draw_star(detail_dir, sc5, 0.0052) * sc_t;
-        constellation_core += draw_star(detail_dir, sc6, 0.0038) * sc_t;
-        constellation_halo += draw_star(detail_dir, sc1, 0.0095) * 0.32 * sc_t;
-        constellation_halo += draw_star(detail_dir, sc2, 0.0105) * 0.34 * sc_t;
-        constellation_halo += draw_star(detail_dir, sc3, 0.0085) * 0.30 * sc_t;
-        constellation_halo += draw_star(detail_dir, sc4, 0.0098) * 0.32 * sc_t;
-        constellation_halo += draw_star(detail_dir, sc5, 0.0110) * 0.35 * sc_t;
-        constellation_halo += draw_star(detail_dir, sc6, 0.0085) * 0.30 * sc_t;
+        constellation_core += draw_star(detail_dir, sc3, 0.0043) * sc_t;
+        constellation_core += draw_star(detail_dir, sc4, 0.0060) * sc_antares;
+        constellation_core += draw_star(detail_dir, sc5, 0.0045) * sc_t;
+        constellation_core += draw_star(detail_dir, sc6, 0.0040) * sc_t;
+        constellation_core += draw_star(detail_dir, sc7, 0.0038) * sc_t;
+        constellation_core += draw_star(detail_dir, sc8, 0.0042) * sc_t;
+        constellation_core += draw_star(detail_dir, sc9, 0.0045) * sc_t;
+        constellation_halo += draw_star(detail_dir, sc1, 0.0095) * 0.30 * sc_t;
+        constellation_halo += draw_star(detail_dir, sc2, 0.0105) * 0.32 * sc_t;
+        constellation_halo += draw_star(detail_dir, sc3, 0.0098) * 0.30 * sc_t;
+        constellation_halo += draw_star(detail_dir, sc4, 0.0135) * 0.40 * sc_antares;
+        constellation_halo += draw_star(detail_dir, sc5, 0.0102) * 0.32 * sc_t;
+        constellation_halo += draw_star(detail_dir, sc6, 0.0090) * 0.30 * sc_t;
+        constellation_halo += draw_star(detail_dir, sc7, 0.0088) * 0.28 * sc_t;
+        constellation_halo += draw_star(detail_dir, sc8, 0.0092) * 0.30 * sc_t;
+        constellation_halo += draw_star(detail_dir, sc9, 0.0098) * 0.32 * sc_t;
         constellation_core += draw_segment(detail_dir, sc1, sc2, 0.0022) * 0.26;
         constellation_core += draw_segment(detail_dir, sc2, sc3, 0.0020) * 0.24;
-        constellation_core += draw_segment(detail_dir, sc3, sc4, 0.0018) * 0.22;
+        constellation_core += draw_segment(detail_dir, sc3, sc4, 0.0020) * 0.24;
         constellation_core += draw_segment(detail_dir, sc4, sc5, 0.0020) * 0.24;
-        constellation_core += draw_segment(detail_dir, sc5, sc6, 0.0022) * 0.26;
+        constellation_core += draw_segment(detail_dir, sc5, sc6, 0.0018) * 0.22;
+        constellation_core += draw_segment(detail_dir, sc6, sc7, 0.0018) * 0.22;
+        constellation_core += draw_segment(detail_dir, sc7, sc8, 0.0018) * 0.22;
+        constellation_core += draw_segment(detail_dir, sc8, sc9, 0.0018) * 0.22;
     }
     if ((sky.flags & FLAG_CYGNUS) != 0u) {
-        let cy1 = normalize(vec3<f32>(-0.35, 0.55, -0.50));
-        let cy2 = normalize(vec3<f32>(-0.20, 0.60, -0.55));
-        let cy3 = normalize(vec3<f32>(0.0, 0.62, -0.58));
-        let cy4 = normalize(vec3<f32>(0.20, 0.58, -0.55));
-        let cy5 = normalize(vec3<f32>(0.35, 0.52, -0.50));
-        let cy6 = normalize(vec3<f32>(0.0, 0.75, -0.40));
+        let cy1 = place_constellation_star(vec3<f32>(0.04, 0.80, -0.52), CONSTELLATION_IDX_CYGNUS);
+        let cy2 = place_constellation_star(vec3<f32>(0.06, 0.69, -0.61), CONSTELLATION_IDX_CYGNUS);
+        let cy3 = place_constellation_star(vec3<f32>(0.08, 0.59, -0.68), CONSTELLATION_IDX_CYGNUS);
+        let cy4 = place_constellation_star(vec3<f32>(0.09, 0.49, -0.74), CONSTELLATION_IDX_CYGNUS);
+        let cy5 = place_constellation_star(vec3<f32>(0.10, 0.38, -0.80), CONSTELLATION_IDX_CYGNUS);
+        let cy6 = place_constellation_star(vec3<f32>(-0.08, 0.57, -0.76), CONSTELLATION_IDX_CYGNUS);
+        let cy7 = place_constellation_star(vec3<f32>(-0.23, 0.55, -0.77), CONSTELLATION_IDX_CYGNUS);
+        let cy8 = place_constellation_star(vec3<f32>(0.25, 0.63, -0.67), CONSTELLATION_IDX_CYGNUS);
+        let cy9 = place_constellation_star(vec3<f32>(0.39, 0.68, -0.58), CONSTELLATION_IDX_CYGNUS);
         let cy_t = 0.84 + 0.16 * sin(globals.time * 0.98 + sky.seed * 0.21 + 2.8);
-        constellation_core += draw_star(detail_dir, cy1, 0.0042) * cy_t;
-        constellation_core += draw_star(detail_dir, cy2, 0.0045) * cy_t;
+        constellation_core += draw_star(detail_dir, cy1, 0.0048) * cy_t;
+        constellation_core += draw_star(detail_dir, cy2, 0.0044) * cy_t;
         constellation_core += draw_star(detail_dir, cy3, 0.0052) * cy_t;
-        constellation_core += draw_star(detail_dir, cy4, 0.0045) * cy_t;
-        constellation_core += draw_star(detail_dir, cy5, 0.0042) * cy_t;
-        constellation_core += draw_star(detail_dir, cy6, 0.0048) * cy_t;
-        constellation_halo += draw_star(detail_dir, cy1, 0.0095) * 0.28 * cy_t;
-        constellation_halo += draw_star(detail_dir, cy2, 0.0102) * 0.30 * cy_t;
+        constellation_core += draw_star(detail_dir, cy4, 0.0042) * cy_t;
+        constellation_core += draw_star(detail_dir, cy5, 0.0040) * cy_t;
+        constellation_core += draw_star(detail_dir, cy6, 0.0042) * cy_t;
+        constellation_core += draw_star(detail_dir, cy7, 0.0038) * cy_t;
+        constellation_core += draw_star(detail_dir, cy8, 0.0042) * cy_t;
+        constellation_core += draw_star(detail_dir, cy9, 0.0038) * cy_t;
+        constellation_halo += draw_star(detail_dir, cy1, 0.0108) * 0.30 * cy_t;
+        constellation_halo += draw_star(detail_dir, cy2, 0.0098) * 0.28 * cy_t;
         constellation_halo += draw_star(detail_dir, cy3, 0.0115) * 0.32 * cy_t;
-        constellation_halo += draw_star(detail_dir, cy4, 0.0102) * 0.30 * cy_t;
-        constellation_halo += draw_star(detail_dir, cy5, 0.0095) * 0.28 * cy_t;
-        constellation_halo += draw_star(detail_dir, cy6, 0.0108) * 0.30 * cy_t;
-        constellation_core += draw_segment(detail_dir, cy1, cy3, 0.0020) * 0.24;
-        constellation_core += draw_segment(detail_dir, cy3, cy5, 0.0020) * 0.24;
-        constellation_core += draw_segment(detail_dir, cy2, cy6, 0.0018) * 0.20;
-        constellation_core += draw_segment(detail_dir, cy4, cy6, 0.0018) * 0.20;
+        constellation_halo += draw_star(detail_dir, cy4, 0.0095) * 0.27 * cy_t;
+        constellation_halo += draw_star(detail_dir, cy5, 0.0090) * 0.26 * cy_t;
+        constellation_halo += draw_star(detail_dir, cy6, 0.0098) * 0.28 * cy_t;
+        constellation_halo += draw_star(detail_dir, cy7, 0.0085) * 0.25 * cy_t;
+        constellation_halo += draw_star(detail_dir, cy8, 0.0098) * 0.28 * cy_t;
+        constellation_halo += draw_star(detail_dir, cy9, 0.0088) * 0.25 * cy_t;
+        constellation_core += draw_segment(detail_dir, cy1, cy2, 0.0019) * 0.23;
+        constellation_core += draw_segment(detail_dir, cy2, cy3, 0.0019) * 0.23;
+        constellation_core += draw_segment(detail_dir, cy3, cy4, 0.0019) * 0.23;
+        constellation_core += draw_segment(detail_dir, cy4, cy5, 0.0019) * 0.23;
+        constellation_core += draw_segment(detail_dir, cy7, cy6, 0.0018) * 0.20;
+        constellation_core += draw_segment(detail_dir, cy6, cy3, 0.0018) * 0.20;
+        constellation_core += draw_segment(detail_dir, cy3, cy8, 0.0018) * 0.20;
+        constellation_core += draw_segment(detail_dir, cy8, cy9, 0.0018) * 0.20;
     }
     if ((sky.flags & FLAG_URSA_MAJOR) != 0u) {
-        let um1 = normalize(vec3<f32>(0.55, 0.65, -0.20));
-        let um2 = normalize(vec3<f32>(0.45, 0.72, -0.25));
-        let um3 = normalize(vec3<f32>(0.32, 0.75, -0.30));
-        let um4 = normalize(vec3<f32>(0.18, 0.78, -0.35));
-        let um5 = normalize(vec3<f32>(0.05, 0.75, -0.38));
-        let um6 = normalize(vec3<f32>(-0.10, 0.70, -0.40));
-        let um7 = normalize(vec3<f32>(-0.22, 0.62, -0.45));
+        let um1 = place_constellation_star(vec3<f32>(-0.60, 0.73, -0.33), CONSTELLATION_IDX_URSA_MAJOR);
+        let um2 = place_constellation_star(vec3<f32>(-0.58, 0.61, -0.45), CONSTELLATION_IDX_URSA_MAJOR);
+        let um3 = place_constellation_star(vec3<f32>(-0.47, 0.58, -0.54), CONSTELLATION_IDX_URSA_MAJOR);
+        let um4 = place_constellation_star(vec3<f32>(-0.45, 0.69, -0.44), CONSTELLATION_IDX_URSA_MAJOR);
+        let um5 = place_constellation_star(vec3<f32>(-0.33, 0.71, -0.50), CONSTELLATION_IDX_URSA_MAJOR);
+        let um6 = place_constellation_star(vec3<f32>(-0.22, 0.70, -0.56), CONSTELLATION_IDX_URSA_MAJOR);
+        let um7 = place_constellation_star(vec3<f32>(-0.09, 0.67, -0.61), CONSTELLATION_IDX_URSA_MAJOR);
         let um_t = 0.85 + 0.15 * sin(globals.time * 0.92 + sky.seed * 0.18 + 4.2);
-        constellation_core += draw_star(detail_dir, um1, 0.0045) * um_t;
-        constellation_core += draw_star(detail_dir, um2, 0.0048) * um_t;
-        constellation_core += draw_star(detail_dir, um3, 0.0052) * um_t;
+        constellation_core += draw_star(detail_dir, um1, 0.0048) * um_t;
+        constellation_core += draw_star(detail_dir, um2, 0.0046) * um_t;
+        constellation_core += draw_star(detail_dir, um3, 0.0045) * um_t;
         constellation_core += draw_star(detail_dir, um4, 0.0048) * um_t;
-        constellation_core += draw_star(detail_dir, um5, 0.0045) * um_t;
-        constellation_core += draw_star(detail_dir, um6, 0.0042) * um_t;
-        constellation_core += draw_star(detail_dir, um7, 0.0038) * um_t;
-        constellation_halo += draw_star(detail_dir, um1, 0.0102) * 0.30 * um_t;
-        constellation_halo += draw_star(detail_dir, um2, 0.0108) * 0.32 * um_t;
-        constellation_halo += draw_star(detail_dir, um3, 0.0115) * 0.34 * um_t;
-        constellation_halo += draw_star(detail_dir, um4, 0.0108) * 0.32 * um_t;
-        constellation_halo += draw_star(detail_dir, um5, 0.0102) * 0.30 * um_t;
-        constellation_halo += draw_star(detail_dir, um6, 0.0095) * 0.28 * um_t;
-        constellation_halo += draw_star(detail_dir, um7, 0.0088) * 0.26 * um_t;
+        constellation_core += draw_star(detail_dir, um5, 0.0047) * um_t;
+        constellation_core += draw_star(detail_dir, um6, 0.0043) * um_t;
+        constellation_core += draw_star(detail_dir, um7, 0.0040) * um_t;
+        constellation_halo += draw_star(detail_dir, um1, 0.0110) * 0.32 * um_t;
+        constellation_halo += draw_star(detail_dir, um2, 0.0102) * 0.30 * um_t;
+        constellation_halo += draw_star(detail_dir, um3, 0.0098) * 0.29 * um_t;
+        constellation_halo += draw_star(detail_dir, um4, 0.0108) * 0.31 * um_t;
+        constellation_halo += draw_star(detail_dir, um5, 0.0105) * 0.30 * um_t;
+        constellation_halo += draw_star(detail_dir, um6, 0.0098) * 0.28 * um_t;
+        constellation_halo += draw_star(detail_dir, um7, 0.0092) * 0.26 * um_t;
         constellation_core += draw_segment(detail_dir, um1, um2, 0.0020) * 0.24;
         constellation_core += draw_segment(detail_dir, um2, um3, 0.0018) * 0.22;
         constellation_core += draw_segment(detail_dir, um3, um4, 0.0018) * 0.22;
+        constellation_core += draw_segment(detail_dir, um4, um1, 0.0020) * 0.24;
         constellation_core += draw_segment(detail_dir, um4, um5, 0.0020) * 0.24;
-        constellation_core += draw_segment(detail_dir, um5, um6, 0.0022) * 0.26;
-        constellation_core += draw_segment(detail_dir, um6, um7, 0.0024) * 0.28;
+        constellation_core += draw_segment(detail_dir, um5, um6, 0.0020) * 0.24;
+        constellation_core += draw_segment(detail_dir, um6, um7, 0.0022) * 0.26;
     }
     let constellation_pulse = 0.88 + 0.12 * sin(globals.time * 0.85 + sky.seed * 0.3);
     color += vec3<f32>(0.72, 0.96, 1.0) * constellation_core * 1.22 * constellation_pulse;
