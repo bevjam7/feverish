@@ -3,17 +3,17 @@
 
 [greeting]
 speaker: Panicking Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_cowering.png
 voice: neutral_npc
 text: GET AWAY FROM ME!
 hook: npc.default.greeting
 > Calm down. Who are you? -> identity [id: ask_identity] [hook: npc.default.option.identity]
-> I want to show you something by the window. (eliminate) [id: eliminate] [hook: debug.eliminate_target]
-> i should go. [id: leave] [hook: npc.default.option.leave]
+> (Eliminate)  Come with me to the window. [id: eliminate] [hook: debug.eliminate_target]
+> (Leave) Okay, I'm leaving. [id: leave] [hook: npc.default.option.leave]
 
 [identity]
 speaker: Panicking Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_cowering.png
 text: I'M MARCUS. GET AWAY FROM ME!
 -> greeting
 
@@ -22,13 +22,13 @@ text: I'M MARCUS. GET AWAY FROM ME!
 [response_apartment_key]
 speaker: Panicking Marcus
 text: May I PLEEEEEASE TASTE that?
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_cowering.png
 
 // CD
 
 [response_cd]
 speaker: Panicking Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_cowering.png
 voice: neutral_npc
 text: That marker smells INCREDIBLY scrumptious. It FEELS like her music.
 
@@ -37,13 +37,13 @@ text: That marker smells INCREDIBLY scrumptious. It FEELS like her music.
 [response_cigarettes]
 speaker: Panicking Marcus
 text: THAT SMELLS SO BAD! I'M GOING TO BE SICK TO MY STOMACH.
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_cowering.png
 
 // DIORAMA
 
 [response_diorama]
 speaker: Panicking Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_cowering.png
 voice: neutral_npc
 text: HOW DID THEY SHRINK IT DOWN SO SMALL!?
 
@@ -51,14 +51,14 @@ text: HOW DID THEY SHRINK IT DOWN SO SMALL!?
 
 [response_necklace]
 speaker: Panicking Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_cowering.png
 voice: neutral_npc
 text: I BOUGHT THAT FOR CATHERINE!
 > Who is that? -> ask_catherine_b [id: ask_catherine_b]
 
 [ask_catherine_b]
 speaker: Panicking Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_cowering.png
 voice: neutral_npc
 text: SHE'S HOT.
 
@@ -66,7 +66,7 @@ text: SHE'S HOT.
 
 [response_noise_complaint]
 speaker: Panicking Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_cowering.png
 voice: neutral_npc
 text: WHO CARES! THIS GUY SUCKS!
 
@@ -74,7 +74,7 @@ text: WHO CARES! THIS GUY SUCKS!
 
 [response_office_key]
 speaker: Panicking Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_cowering.png
 voice: neutral_npc
 text: HE SAYS I'M NOT ALLOWED TO GO DOWN THERE.
 
@@ -82,7 +82,7 @@ text: HE SAYS I'M NOT ALLOWED TO GO DOWN THERE.
 
 [response_photograph]
 speaker: Panicking Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_cowering.png
 voice: neutral_npc
 text: THIS FEELS SLIMY AND SMELLS LIKE DUST. IT'S BORING. IT'S SO BORING.
 
@@ -90,7 +90,7 @@ text: THIS FEELS SLIMY AND SMELLS LIKE DUST. IT'S BORING. IT'S SO BORING.
 
 [response_rat_toy]
 speaker: Panicking Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_cowering.png
 voice: neutral_npc
 text: SMELLS LIKE SOMETHING DELICIOUS! CAN I HAVE A BITE?
 
@@ -98,6 +98,6 @@ text: SMELLS LIKE SOMETHING DELICIOUS! CAN I HAVE A BITE?
 
 [response_strange_books]
 speaker: Panicking Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_cowering.png
 voice: neutral_npc
 text: THAT'S WHY I'M HERE!

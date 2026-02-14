@@ -11,7 +11,7 @@ use bevy_trenchbroom::prelude::*;
 
 use crate::{
     Usable,
-    gameplay::{PhysLayer, link_hierarchal_colliders},
+    gameplay::{PhysLayer, link_hierarchal_colliders, npc::Npc},
     input::Use,
 };
 
@@ -172,7 +172,7 @@ impl Prop {
     }
 }
 
-#[point_class(base(Transform, Visibility, Prop), model({path: model}))]
+#[point_class(base(Transform, Visibility, Prop, Npc), model({path: model}))]
 #[derive(Default)]
 #[require(Usable)]
 #[component(on_add=Self::on_add_hook)]

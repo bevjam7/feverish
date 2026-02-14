@@ -3,31 +3,31 @@
 
 [greeting]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: Yes...?
 hook: npc.default.greeting
 > Who are you? -> identity [id: ask_identity] [hook: npc.default.option.identity]
-> I want to show you something by the window. (eliminate) [id: eliminate] [hook: debug.eliminate_target]
-> I should go. [id: leave] [hook: npc.default.option.leave]
+> (Eliminate)  Come with me to the window. [id: eliminate] [hook: debug.eliminate_target]
+> (Leave) I should go. [id: leave] [hook: npc.default.option.leave]
 
 [identity]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 text: My name is Marcus. I am an architect.
 
 // APARTMENT KEY
 
 [response_apartment_key]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: This appears to be the key to someone's apartment.
 > Whose is it? -> ask_apartment_key [id: ask_apartment_key]
 
 [ask_apartment_key]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: I have no recollection of this key in any of my memories.
 
@@ -35,7 +35,7 @@ text: I have no recollection of this key in any of my memories.
 
 [response_cd]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: These are Jane's favorite songs, titled "Favorite songs".
 
@@ -43,7 +43,7 @@ text: These are Jane's favorite songs, titled "Favorite songs".
 
 [response_cigarettes]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: Cigarettes are bad for your health according to all known medical journals.
 
@@ -51,7 +51,7 @@ text: Cigarettes are bad for your health according to all known medical journals
 
 [response_diorama]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: This appears to be what looks like a small apartment.
 
@@ -59,14 +59,14 @@ text: This appears to be what looks like a small apartment.
 
 [response_necklace]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: This necklace has a name carved into the back.
 > Who is Catherine? -> ask_catherine [id: ask_catherine]
 
 [ask_catherine]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: I don't know anything outside of this apartment.
 
@@ -74,7 +74,7 @@ text: I don't know anything outside of this apartment.
 
 [response_noise_complaint]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: This is beneath me.
 
@@ -82,7 +82,7 @@ text: This is beneath me.
 
 [response_office_key]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: This key is known to lock and unlock the downstairs office door.
 
@@ -90,14 +90,14 @@ text: This key is known to lock and unlock the downstairs office door.
 
 [response_photograph]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: A photograph of two people. One of them looks particularly rapturous.
 > Who is she? -> ask_photograph [id: ask_photograph]
 
 [ask_photograph]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: She looks very happy.
 
@@ -105,7 +105,7 @@ text: She looks very happy.
 
 [response_rat_toy]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: Unpleasant is not a word I use lightly, but that odor is unpleasant.
 
@@ -113,6 +113,6 @@ text: Unpleasant is not a word I use lightly, but that odor is unpleasant.
 
 [response_strange_books]
 speaker: Lonely Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: These are books of assorted make and publisher. Would you like me to summarize?

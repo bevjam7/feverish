@@ -3,38 +3,38 @@
 
 [greeting]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: Yeah?
 hook: npc.default.greeting
 > Who are you? -> identity [id: ask_identity] [hook: npc.default.option.identity]
-> I want to show you something by the window. (eliminate) [id: eliminate] [hook: debug.eliminate_target]
-> I should go. [id: leave] [hook: npc.default.option.leave]
+> (Eliminate)  Come over to the window. [id: eliminate] [hook: debug.eliminate_target]
+> (Leave) I should go. [id: leave] [hook: npc.default.option.leave]
 
 [identity]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 text: I'm Marcus. Who sent you?
 > Who sent me? -> who_sent [id: who_sent]
 > ... -> who_sent [id: who_sent]
 
 [who_sent]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 text: Don't bother. I can guess.
 
 // APARTMENT KEY
 
 [response_apartment_key]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: Someone lent me this.
 > Whose is it? -> ask_apartment_key [id: ask_apartment_key]
 
 [ask_apartment_key]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: A friend.
 
@@ -42,7 +42,7 @@ text: A friend.
 
 [response_cd]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: I made this playlist for Jane. She said it was the best gift she ever got.
 
@@ -50,7 +50,7 @@ text: I made this playlist for Jane. She said it was the best gift she ever got.
 
 [response_cigarettes]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: Those are Jane's. I keep telling her to stop.
 
@@ -58,7 +58,7 @@ text: Those are Jane's. I keep telling her to stop.
 
 [response_diorama]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: Huh. You would think whoever made this would remember to put in a front door.
 
@@ -66,21 +66,21 @@ text: Huh. You would think whoever made this would remember to put in a front do
 
 [response_necklace]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: I got that for Jane last Valentines day. She said it was one of the best gifts ever.
 > Who is Catherine? -> ask_catherine [id: ask_catherine]
 
 [ask_catherine]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: She lives on our floor, apartment 359. I don't care for her at all.
 > What happened? -> ask_catherine_b [id: ask_catherine_b]
 
 [ask_catherine_b]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: There's no girl I need in my life besides Jane.
 
@@ -88,14 +88,14 @@ text: There's no girl I need in my life besides Jane.
 
 [response_noise_complaint]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
-text: Yeah I know. I kept it pinned up as a trophy. 
+text: Yeah I know. I kept it pinned up as a trophy.
 > What happened? -> ask_noise_complaint [id: ask_noise_complaint]
 
 [ask_noise_complaint]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: Every time I take one down, he puts up another. Might as well save us both the effort.
 
@@ -103,7 +103,7 @@ text: Every time I take one down, he puts up another. Might as well save us both
 
 [response_office_key]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: That leads downstairs to our office.
 
@@ -111,14 +111,14 @@ text: That leads downstairs to our office.
 
 [response_photograph]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: I remember when this was taken, nearly a decade ago.
 > Who is she? -> ask_photograph [id: ask_photograph]
 
 [ask_photograph]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: That's my wife. What a beautiful prize she is!
 
@@ -126,7 +126,7 @@ text: That's my wife. What a beautiful prize she is!
 
 [response_rat_toy]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: That... smells absolutely wretched. Can you throw that out?
 
@@ -134,6 +134,6 @@ text: That... smells absolutely wretched. Can you throw that out?
 
 [response_strange_books]
 speaker: Lounging Marcus
-portrait: models/npc_a/npc_a.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: Some of my wife's books are mixed in here. She's a researcher.

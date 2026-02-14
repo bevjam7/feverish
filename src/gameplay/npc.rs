@@ -19,7 +19,7 @@ pub(crate) struct Npc {
     #[class(default = "models/npc_a/npc_a.gltf", must_set)]
     pub(crate) model: String,
     #[class(default = "idle_a")]
-    pub(crate) idle_animation: String,
+    pub(crate) idle_animation: Option<String>,
     /// Marks the NPC as one that must be eliminated or saved
     pub(crate) suspect: Option<SuspectType>,
     pub(crate) script_id: Option<String>,
@@ -35,9 +35,9 @@ impl Default for Npc {
     fn default() -> Self {
         Self {
             model: Default::default(),
-            idle_animation: "idle_a".into(),
+            idle_animation: None,
             suspect: None,
-            script_id: Some("npc.default".into()),
+            script_id: None,
         }
     }
 }
@@ -71,7 +71,7 @@ impl Npc {
                         .get(clip_name)
                         .expect(&format!("No animation named {clip_name}"))
                         .clone(),
-                    match clip_name == &npc.idle_animation {
+                    match clip_name == &npc.idle_animation.clone().unwrap_or_default() {
                         true => 1.0,
                         false => 0.0,
                     },
@@ -83,7 +83,7 @@ impl Npc {
             .into_iter()
             // TODO: Breaks when we add more than 2 animations to root, so filtering to just the
             // idle animation
-            .filter(|x| x == &npc.idle_animation)
+            .filter(|x| x == &npc.idle_animation.clone().unwrap_or_default())
             .map(register_animation)
             .collect();
         let graph_handle = {

@@ -1,0 +1,94 @@
+// script: npc.phone.first_ring
+// entry: first_ring
+
+[first_ring]
+speaker: Unknown Caller
+portrait: sprites/phone.png
+voice: corrupted_transmission
+text: Hello? Can you hear me?
+> Hello? -> first_hint [id: first_hint]
+> Who is this? -> ask_who [id: ask_who]
+
+[first_hint]
+speaker: Unknown Caller
+portrait: sprites/phone.png
+voice: corrupted_transmission
+text: Only one of them is real.
+> What should I do? -> ask_what [id: ask_what]
+
+[ask_who]
+speaker: Unknown Caller
+portrait: sprites/phone.png
+voice: corrupted_transmission
+text: We know each other. You don't remember. That's okay.
+> (Back) -> first_hint [id: first_ring]
+
+[ask_what]
+speaker: Unknown Caller
+portrait: sprites/phone.png
+voice: corrupted_transmission
+text: Find out who isn't real. Get them out of the apartment.
+> How can I do that? -> ask_how [id: ask_how]
+
+[ask_how]
+speaker: Unknown Caller
+portrait: sprites/phone.png
+voice: corrupted_transmission
+text: Talk to them. Show them his belongings. You'll know if something doesn't seem right.
+> Who is this? -> ask_who [id: ask_who]
+> (Hang up) [id: leave] [hook: npc.default.option.leave]
+
+// script: npc.phone.lose_ring
+// entry: lose_ring
+
+[lose_ring]
+speaker: Unknown Caller
+portrait: sprites/phone.png
+voice: corrupted_transmission
+text: Are you still there?
+> Yeah -> lose_ring_b [id: lose_ring_b]
+
+[lose_ring_b]
+speaker: Malevolent Caller
+portrait: sprites/evil_phone.png
+voice: corrupted_transmission
+text: And you'll stay there forever. Your actions have consequences for us both now.
+> What are you talking about? -> lose_ring_c [id: lose_ring_c]
+
+[lose_ring_c]
+speaker: Malevolent Caller
+portrait: sprites/evil_phone.png
+voice: corrupted_transmission
+text: ... It's time to sleep.
+
+// script: npc.phone.win_ring
+// entry: win_ring
+
+[win_ring]
+speaker: Unknown Caller
+portrait: sprites/phone.png
+voice: corrupted_transmission
+text: Are you still there?
+> Yeah -> lose_ring_b [id: lose_ring_b]
+
+[win_ring_b]
+speaker: Unknown Caller
+portrait: sprites/phone.png
+voice: corrupted_transmission
+text: I feel it. You got rid of them for good.
+> I think so. -> win_ring_c [id: lose_ring_c]
+
+[win_ring_c]
+speaker: Unknown Caller
+portrait: sprites/phone.png
+voice: corrupted_transmission
+text: You don't know what this means to me. But you're still missing one.
+> I got rid of all the others. It's safe now. -> win_ring_d [id: win_ring_d]
+
+[win_ring_d]
+speaker: Unknown Caller
+portrait: sprites/phone.png
+voice: corrupted_transmission
+text: It's never safe, real or not. It doesn't matter.
+> (Leave) Consider it done. [id: leave] [hook: game.kill_ending]
+> (Leave) I've done enough. I'm leaving. [id: leave] [hook: game.spare_ending]

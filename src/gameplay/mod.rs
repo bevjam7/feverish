@@ -16,7 +16,7 @@ use bevy::{
 use bevy_ahoy::prelude::*;
 use bevy_seedling::{
     prelude::HrtfNode,
-    sample::{AudioSample, SamplePlayer},
+    sample::{AudioSample, PlaybackSettings, SamplePlayer},
     spatial::SpatialListener3D,
 };
 use bevy_trenchbroom::prelude::*;
@@ -355,9 +355,11 @@ fn handle_debug_elimination(
                         {
                             // lose
                             dbg!("you guessed incorrectly :(");
+                            cmd.set_state(Phase::Lose);
                         } else {
                             // win
                             dbg!("you guessed correctly! you win!");
+                            cmd.set_state(Phase::Win);
                         }
                     }
                     _ => {}
@@ -376,7 +378,7 @@ fn handle_world_messages(mut hooks: MessageReader<RatHookTriggered>, mut cmd: Co
 }
 
 fn handle_game_phases(
-    phones: Query<Entity, With<Phone>>,
+    mut phones: Query<(Entity, &mut Npc), With<Phone>>,
     mut timer: Local<Timer>,
     mut state_changes: MessageReader<StateTransitionEvent<Phase>>,
     time: Res<Time>,
@@ -396,7 +398,7 @@ fn handle_game_phases(
         Phase::Main =>
             if timer.just_finished() {
                 let sample: Handle<AudioSample> = assets.get_handle("audio/phone.ogg").unwrap();
-                for entity in phones {
+                for (entity, mut npc) in phones {
                     cmd.entity(entity).with_child((
                         SamplePlayer::new(sample.clone())
                             .looping()
@@ -404,10 +406,38 @@ fn handle_game_phases(
                         bevy_seedling::sample_effects![HrtfNode::default()],
                         WorldSfxPool,
                     ));
+                    npc.script_id = Some("npc.phone.first_ring".into());
                 }
             },
-        Phase::Win => (),
-        Phase::Lose => (),
+        Phase::Win =>
+            if current_phase.0.is_changed() {
+                let sample: Handle<AudioSample> = assets.get_handle("audio/phone.ogg").unwrap();
+                for (entity, mut npc) in phones {
+                    cmd.entity(entity).with_child((
+                        SamplePlayer::new(sample.clone())
+                            .looping()
+                            .with_volume(bevy_seedling::prelude::Volume::Linear(0.5)),
+                        bevy_seedling::sample_effects![HrtfNode::default()],
+                        WorldSfxPool,
+                    ));
+                    npc.script_id = Some("npc.phone.win_ring".into());
+                }
+            },
+        Phase::Lose =>
+            if current_phase.0.is_changed() {
+                let sample: Handle<AudioSample> = assets.get_handle("audio/phone.ogg").unwrap();
+                for (entity, mut npc) in phones {
+                    cmd.entity(entity).with_child((
+                        SamplePlayer::new(sample.clone())
+                            .looping()
+                            .with_volume(bevy_seedling::prelude::Volume::Linear(0.5)),
+                        PlaybackSettings::default().with_speed(0.7),
+                        bevy_seedling::sample_effects![HrtfNode::default()],
+                        WorldSfxPool,
+                    ));
+                    npc.script_id = Some("npc.phone.lose_ring".into());
+                }
+            },
     }
 }
 

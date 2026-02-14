@@ -911,7 +911,7 @@ fn dialogue_options_for_node(
         .collect();
 
     options.push(UiDialogueOption {
-        text: "show item...".to_string(),
+        text: "Show item...".to_string(),
         preview: None,
         item_id: None,
         seen: false,
