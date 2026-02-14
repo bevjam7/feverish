@@ -8,7 +8,7 @@ voice: neutral_npc
 text: GET AWAY FROM ME!
 hook: npc.default.greeting
 > Calm down. Who are you? -> identity [id: ask_identity] [hook: npc.default.option.identity]
-> (Eliminate)  Come with me to the window. [id: eliminate] [hook: debug.eliminate_target]
+> (Eliminate)  Come with me to the window. [id: lure] [hook: game.lure]
 > (Leave) Okay, I'm leaving. [id: leave] [hook: npc.default.option.leave]
 
 [identity]

@@ -20,7 +20,7 @@ use super::{
 use crate::{ratspinner::RatCommand, settings::GameSettings};
 
 #[derive(Resource, Default)]
-pub(super) struct UiDialogueState {
+pub(crate) struct UiDialogueState {
     pub active: bool,
 }
 

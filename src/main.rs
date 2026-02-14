@@ -13,7 +13,7 @@ mod map;
 mod psx;
 mod ratspinner;
 mod settings;
-mod ui;
+pub(crate) mod ui;
 mod voice;
 
 use avian3d::prelude::{CollisionLayers, LayerMask};

@@ -9,7 +9,7 @@ text: ...
 hook: npc.default.greeting
 > Who are you? -> identity [id: ask_identity] [hook: npc.default.option.identity]
 > Why are there so many of you? -> place [id: ask_place] [hook: npc.default.option.place]
-> (Eliminate)  There's something cool by the window. [id: eliminate] [hook: debug.eliminate_target]
+> (Eliminate)  There's something cool by the window. [id: lure] [hook: game.lure]
 > (Leave) I'll leave you alone. [id: leave] [hook: npc.default.option.leave]
 
 [identity]
@@ -141,3 +141,15 @@ speaker: Leaning Marcus
 portrait: sprites/npc_leaning.png
 voice: neutral_npc
 text: She's mostly into medical stuff. I don't really get the hype.
+
+// script: npc.human.lured
+// entry: judgement
+
+[judgement]
+speaker: Leaning Marcus
+portrait: sprites/npc_leaning.png
+voice: neutral_npc
+text: What did you want to show me?
+> (Eliminate) It's hard to see. Keep looking. [hook: npc.kill]
+> (Spare) Nevermind, it was nothing. [hook: npc.spare]
+> (Leave) Hold on... [id: leave] [hook: npc.default.option.leave]

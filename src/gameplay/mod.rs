@@ -27,7 +27,7 @@ use crate::{
     audio::mixer::WorldSfxPool,
     gameplay::{
         door::DoorBase,
-        npc::{Npc, SuspectType},
+        npc::{Navigator, Npc, SuspectType},
         props::Phone,
     },
     input::{Use, UseRaycaster},
@@ -56,6 +56,10 @@ impl Plugin for GameplayPlugin {
                     handle_debug_elimination,
                     handle_world_messages,
                     handle_game_phases,
+                    npc::handle_elimination_lure,
+                    npc::tick_walkback_timers,
+                    npc::npc_navigation,
+                    npc::build_nav_paths,
                     spawn_dropped_item,
                 )
                     .in_set(AppSystems::Update),

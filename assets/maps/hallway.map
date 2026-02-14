@@ -1948,6 +1948,7 @@
 "idle_animation" "idle_lean"
 "suspect" "Human"
 "script_id" "npc.human"
+"starting_walk_node" "walk_front_start"
 }
 // entity 19
 {
@@ -1958,6 +1959,7 @@
 "idle_animation" "sit"
 "suspect" "Imposter"
 "script_id" "npc.lover"
+"starting_walk_node" "walk_couch_start"
 }
 // entity 20
 {
@@ -1968,6 +1970,7 @@
 "idle_animation" "cower"
 "suspect" "Imposter"
 "script_id" "npc.dunce"
+"starting_walk_node" "walk_bathroom_door_start"
 }
 // entity 21
 {
@@ -2059,6 +2062,7 @@
 "idle_animation" "idle_a"
 "suspect" "Imposter"
 "script_id" "npc.strange"
+"starting_walk_node" "walk_bedroom_start"
 }
 // entity 26
 {
@@ -2797,4 +2801,103 @@
 "shadows_enabled" "true"
 "intensity" "10000.000000"
 "color" "1 0.7641108 0.5253681"
+}
+// entity 66
+{
+"classname" "walk_target"
+"origin" "656 336 0"
+"targetname" "walk_couch_a"
+"target" "walk_door_inside"
+}
+// entity 67
+{
+"classname" "walk_target"
+"origin" "784 160 0"
+"targetname" "walk_door_inside"
+"target" "walk_door_outside"
+}
+// entity 68
+{
+"classname" "walk_target"
+"origin" "784 96 0"
+"targetname" "walk_door_outside"
+"target" "walk_window"
+}
+// entity 69
+{
+"classname" "walk_target"
+"origin" "880 64 0"
+"targetname" "walk_window"
+}
+// entity 70
+{
+"classname" "walk_target"
+"origin" "640.38 396 0"
+"angles" "0 -105 0"
+"targetname" "walk_couch_start"
+"target" "walk_couch_a"
+}
+// entity 71
+{
+"classname" "walk_target"
+"origin" "816 256 0"
+"targetname" "walk_front_a"
+"target" "walk_door_inside"
+}
+// entity 72
+{
+"classname" "walk_target"
+"origin" "895 300 0"
+"angles" "0 180 0"
+"target" "walk_front_a"
+"targetname" "walk_front_start"
+}
+// entity 73
+{
+"classname" "walk_target"
+"origin" "344 366.628 0"
+"angles" "0 -45 0"
+"targetname" "walk_bedroom_start"
+"target" "walk_bedroom_a"
+}
+// entity 74
+{
+"classname" "walk_target"
+"origin" "432 286.628 0"
+"angles" "0 -45 0"
+"targetname" "walk_bedroom_a"
+"target" "walk_hallway_a"
+}
+// entity 75
+{
+"classname" "walk_target"
+"origin" "432 174.628 0"
+"angles" "0 -45 0"
+"targetname" "walk_hallway_a"
+"target" "walk_door_inside"
+}
+// entity 76
+{
+"classname" "walk_target"
+"origin" "360 182.628 0"
+"angles" "0 -45 0"
+"targetname" "walk_bathroom_door_b"
+"target" "walk_hallway_a"
+}
+// entity 77
+{
+"classname" "walk_target"
+"origin" "288 182.628 0"
+"angles" "0 -45 0"
+"targetname" "walk_bathroom_door_a"
+"target" "walk_bathroom_door_b"
+}
+// entity 78
+{
+"classname" "walk_target"
+"origin" "208 274.628 0"
+"angles" "0 -45 0"
+"idle_animation" "cower"
+"targetname" "walk_bathroom_door_start"
+"target" "walk_bathroom_door_a"
 }
