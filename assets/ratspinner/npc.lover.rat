@@ -142,7 +142,7 @@ text: Some of my wife's books are mixed in here. She's a researcher.
 // entry: judgement
 
 [judgement]
-speaker: Leaning Marcus
+speaker: Lounging Marcus
 portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: I don't see anything.

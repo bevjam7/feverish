@@ -35,8 +35,8 @@ speaker: Unknown Caller
 portrait: sprites/phone.png
 voice: corrupted_transmission
 text: Talk to them. Show them his belongings. You'll know if something doesn't seem right.
-> Who is this? -> ask_who [id: ask_who]
 > (Hang up) [id: leave] [hook: npc.default.option.leave]
+> Who is this? -> ask_who [id: ask_who]
 
 // script: npc.phone.lose_ring
 // entry: lose_ring
@@ -75,20 +75,21 @@ text: Are you still there?
 speaker: Unknown Caller
 portrait: sprites/phone.png
 voice: corrupted_transmission
-text: I feel it. You got rid of them for good.
+text: I feel it. They are gone for good.
 > I think so. -> win_ring_c [id: win_ring_c]
 
 [win_ring_c]
 speaker: Unknown Caller
 portrait: sprites/phone.png
 voice: corrupted_transmission
-text: You don't know what this means to me. But you're still missing one.
-> I got rid of all the others. It's safe now. -> win_ring_d [id: win_ring_d]
+text: There's just one left.
+> I already got rid of all the fakes. -> win_ring_d [id: win_ring_d]
+> (Hang up) Consider it done. [id: leave] [hook: game.kill_ending]
 
 [win_ring_d]
 speaker: Unknown Caller
 portrait: sprites/phone.png
 voice: corrupted_transmission
-text: It's never safe, real or not. It doesn't matter.
-> (Leave) Consider it done. [id: leave] [hook: game.kill_ending]
-> (Leave) I've done enough. I'm leaving. [id: leave] [hook: game.spare_ending]
+text: That was his doing. He'll do it again. Get rid of him.
+> (Hang up) Consider it done. [id: leave] [hook: game.kill_ending]
+> (Hang up) I've done enough. I'm leaving. [id: leave] [hook: game.spare_ending]

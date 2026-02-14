@@ -121,7 +121,7 @@ text: These are books of assorted make and publisher. Would you like me to summa
 // entry: judgement
 
 [judgement]
-speaker: Leaning Marcus
+speaker: Lonely Marcus
 portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: I see it! Wow!

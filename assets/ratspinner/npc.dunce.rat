@@ -106,7 +106,7 @@ text: THAT'S WHY I'M HERE!
 // entry: judgement
 
 [judgement]
-speaker: Leaning Marcus
+speaker: Panicking Marcus
 portrait: sprites/npc_cowering.png
 voice: neutral_npc
 text: THERE'S NOTHING HERE AT ALL.

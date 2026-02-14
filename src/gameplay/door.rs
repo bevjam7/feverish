@@ -6,9 +6,12 @@ use bevy_seedling::{prelude::HrtfNode, sample::SamplePlayer};
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-    Usable,
+    Phase, Usable,
     audio::mixer::WorldSfxPool,
-    gameplay::{EmitHook, HookCounter},
+    gameplay::{
+        DoorPortal, EmitHook, HookCounter,
+        npc::{Npc, SuspectType},
+    },
     input::Use,
     ratspinner::RatHookTriggered,
 };
@@ -210,6 +213,56 @@ pub(super) fn rotate_doors(
 
         if animation.timer.is_finished() {
             cmd.entity(door_entity).remove::<DoorAnimationTimer>();
+        }
+    }
+}
+
+/// Not exactly a door, but we'll have the endgame screen play for win states
+/// when the player leaves.
+#[solid_class(group("func"), classname("door_end"), base(Transform, DoorPortal))]
+#[derive(Component, Clone, Copy, Default)]
+#[component(on_add=Self::on_add_hook)]
+#[require(Usable)]
+pub(crate) struct EndDoor;
+
+impl EndDoor {
+    fn on_add_hook(mut world: DeferredWorld, hook: HookContext) {
+        if world.is_scene_world() {
+            return;
+        }
+        world.commands().entity(hook.entity).observe(Self::on_use);
+    }
+
+    fn on_use(
+        on: On<Use>,
+        npcs: Query<&Npc>,
+        phase: Res<State<Phase>>,
+        mut hooks: MessageWriter<RatHookTriggered>,
+    ) {
+        if let Phase::Win = phase.get() {
+            // Check to see if the human npc was killed
+            let spared = npcs
+                .iter()
+                .any(|x| matches!(x.suspect, Some(SuspectType::Human)));
+
+            dbg!("Human spared: {}", spared);
+
+            match spared {
+                true => hooks.write(RatHookTriggered {
+                    hook: "game.win.spared".to_string(),
+                    script_id: Default::default(),
+                    node_id: Default::default(),
+                    option_id: None,
+                    target: None,
+                }),
+                false => hooks.write(RatHookTriggered {
+                    hook: "game.win.killed".to_string(),
+                    script_id: Default::default(),
+                    node_id: Default::default(),
+                    option_id: None,
+                    target: None,
+                }),
+            };
         }
     }
 }

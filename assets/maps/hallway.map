@@ -1687,7 +1687,7 @@
 }
 // entity 1
 {
-"classname" "func_door_portal"
+"classname" "func_door_end"
 "level" "exterior"
 "target" "exterior_door_target"
 "angles" "0 0 0"

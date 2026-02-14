@@ -26,7 +26,7 @@ use crate::{
     assets::ItemMeta,
     audio::mixer::WorldSfxPool,
     gameplay::{
-        door::DoorBase,
+        door::{DoorBase, EndDoor},
         npc::{Npc, SuspectType},
         props::Phone,
     },
@@ -107,10 +107,17 @@ impl DoorPortal {
         trigger: On<Use>,
         targets: Query<&Target>,
         doors: Query<&Self>,
+        end_door: Query<(), With<EndDoor>>,
         mut pending_transition: ResMut<PendingLevelTransition>,
         mut preloads: ResMut<DoorScenePreloads>,
         assets: Res<AssetServer>,
+        phase: Res<State<Phase>>,
     ) {
+        if end_door.get(trigger.event_target()).is_ok() {
+            if !matches!(phase.get(), Phase::Win) {
+                return;
+            }
+        }
         let door_portal = doors.get(trigger.0).unwrap();
         let target_level = door_portal.level.clone().expect(
             "Transitioning between two doors in the same map is not yet supported. A target level \
