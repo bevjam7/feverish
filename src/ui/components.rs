@@ -263,6 +263,7 @@ pub struct UiDialogueOption {
     pub preview: Option<UiDialoguePreview>,
     pub item_id: Option<String>,
     pub seen: bool,
+    pub enabled: bool,
 }
 
 #[derive(Debug, Clone, PartialEq)]

@@ -15,6 +15,10 @@ use crate::settings::GameSettings;
 
 const UI_FX_SHADER: &str = "shaders/ui_menu_fx.wgsl";
 const UI_FX_LAYER: usize = 31;
+const UI_FX_PIXEL_SIZE: f32 = 1.35;
+const UI_FX_QUANT_STEPS: f32 = 96.0;
+const UI_FX_DITHER_STRENGTH: f32 = 0.20;
+const UI_FX_MELT_STRENGTH: f32 = 0.14;
 
 pub(super) struct UiMenuFxPlugin;
 
@@ -116,13 +120,18 @@ fn setup_ui_fx_target_and_material(
         bevy::render::render_resource::TextureFormat::Bgra8UnormSrgb,
         None,
     );
-    target.sampler = ImageSampler::nearest();
+    target.sampler = ImageSampler::linear();
     let target_handle = images.add(target);
 
     let material_handle = materials.add(UiMenuFxMaterial {
         source: target_handle.clone(),
         tint: Vec4::new(0.95, 0.92, 1.0, 0.05),
-        params_a: Vec4::new(2.0, 72.0, 0.30, 0.18),
+        params_a: Vec4::new(
+            UI_FX_PIXEL_SIZE,
+            UI_FX_QUANT_STEPS,
+            UI_FX_DITHER_STRENGTH,
+            UI_FX_MELT_STRENGTH,
+        ),
         params_b: Vec4::new(0.30, 0.55, 0.0, 0.0),
         viewport: Vec4::new(
             width as f32,
@@ -213,7 +222,7 @@ fn resize_ui_fx_target(
         height,
         depth_or_array_layers: 1,
     });
-    image.sampler = ImageSampler::nearest();
+    image.sampler = ImageSampler::linear();
 }
 
 fn fit_ui_fx_quad_to_window(

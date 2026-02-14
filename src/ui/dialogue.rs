@@ -104,6 +104,8 @@ const DIALOGUE_SLOT_ESTIMATED_WIDTH: f32 = 610.0;
 const DIALOGUE_SLOT_CHAR_WIDTH_FACTOR: f32 = 0.56;
 const DIALOGUE_SLOT_CONTENT_HEIGHT: f32 = 44.0;
 const DIALOGUE_SLOT_LINE_HEIGHT_FACTOR: f32 = 1.22;
+const DIALOGUE_PROMPT_FONT_SIZE: f32 = 16.0;
+const DIALOGUE_QUICK_ACTION_FONT_SIZE: f32 = 12.0;
 
 pub(super) fn apply_dialogue_commands(
     mut commands: Commands,
@@ -486,22 +488,39 @@ pub(super) fn handle_dialogue_quick_action_buttons(
     };
 
     for (interaction, action, mut bg, mut border) in &mut interactions {
+        let enabled = session
+            .options
+            .get(action.option_index)
+            .is_some_and(|option| option.enabled);
         match *interaction {
             Interaction::Pressed => {
-                *bg = BackgroundColor(theme::BUTTON_BG);
+                *bg = BackgroundColor(if enabled {
+                    theme::BUTTON_BG
+                } else {
+                    theme::BUTTON_DISABLED
+                });
                 *border = theme::border(false);
-                if session.revealed >= session.text_chars.len()
+                if enabled
+                    && session.revealed >= session.text_chars.len()
                     && action.option_index < session.options.len()
                 {
                     commands.write_message(RatCommand::Choose(action.option_index));
                 }
             }
             Interaction::Hovered => {
-                *bg = BackgroundColor(theme::BUTTON_HOVER);
+                *bg = BackgroundColor(if enabled {
+                    theme::BUTTON_HOVER
+                } else {
+                    theme::BUTTON_DISABLED
+                });
                 *border = theme::border(true);
             }
             Interaction::None => {
-                *bg = BackgroundColor(theme::BUTTON_BG);
+                *bg = BackgroundColor(if enabled {
+                    theme::BUTTON_BG
+                } else {
+                    theme::BUTTON_DISABLED
+                });
                 *border = theme::border(true);
             }
         }
@@ -513,6 +532,7 @@ pub(super) fn handle_dialogue_confirm_button(
         (&Interaction, &mut BackgroundColor, &mut BorderColor),
         (Changed<Interaction>, With<DialogueConfirmButton>),
     >,
+    mut slot_colors: Query<&mut TextColor, With<DialogueOptionSlot>>,
     runtime: Res<UiDialogueRuntime>,
     mut commands: Commands,
 ) {
@@ -521,12 +541,18 @@ pub(super) fn handle_dialogue_confirm_button(
     };
 
     for (interaction, mut bg, mut border) in &mut interactions {
+        let mut slot_text_color = theme::TEXT_LIGHT;
         match *interaction {
             Interaction::Pressed => {
                 *bg = BackgroundColor(theme::BUTTON_BG);
                 *border = theme::border(false);
+                slot_text_color = theme::TEXT_DARK;
                 if session.revealed >= session.text_chars.len()
                     && session.selected_option < session.options.len()
+                    && session
+                        .options
+                        .get(session.selected_option)
+                        .is_some_and(|option| option.enabled)
                 {
                     commands.write_message(RatCommand::Choose(session.selected_option));
                 }
@@ -534,11 +560,16 @@ pub(super) fn handle_dialogue_confirm_button(
             Interaction::Hovered => {
                 *bg = BackgroundColor(theme::BUTTON_HOVER);
                 *border = theme::border(true);
+                slot_text_color = theme::TEXT_DARK;
             }
             Interaction::None => {
                 *bg = BackgroundColor(Color::srgb(0.08, 0.10, 0.13));
                 *border = theme::border(true);
             }
+        }
+
+        if let Ok(mut color) = slot_colors.get_mut(session.slot_text) {
+            *color = TextColor(slot_text_color);
         }
     }
 }
@@ -917,7 +948,7 @@ fn spawn_dialogue(
                                     Text::new("press e or click to skip"),
                                     TextFont {
                                         font: fonts.body.clone(),
-                                        font_size: 16.0,
+                                        font_size: DIALOGUE_PROMPT_FONT_SIZE,
                                         ..default()
                                     },
                                     TextColor(Color::srgb(0.84, 0.84, 0.88)),
@@ -1310,6 +1341,16 @@ fn spawn_quick_action_buttons(
         let Some(label) = quick_action_label(&option.text) else {
             continue;
         };
+        let bg = if option.enabled {
+            theme::BUTTON_BG
+        } else {
+            theme::BUTTON_DISABLED
+        };
+        let text_color = if option.enabled {
+            theme::TEXT_DARK
+        } else {
+            Color::srgb(0.86, 0.87, 0.84)
+        };
         row.spawn((
             Button,
             DialogueQuickActionButton { option_index: idx },
@@ -1321,7 +1362,7 @@ fn spawn_quick_action_buttons(
                 align_items: AlignItems::Center,
                 ..default()
             },
-            BackgroundColor(theme::BUTTON_BG),
+            BackgroundColor(bg),
             theme::border(true),
         ))
         .with_children(|button| {
@@ -1329,10 +1370,11 @@ fn spawn_quick_action_buttons(
                 Text::new(label),
                 TextFont {
                     font: fonts.pixel.clone(),
-                    font_size: 11.0,
+                    font_size: DIALOGUE_QUICK_ACTION_FONT_SIZE,
                     ..default()
                 },
-                TextColor(theme::TEXT_DARK),
+                TextColor(text_color),
+                TextLayout::new(Justify::Center, LineBreak::NoWrap),
             ));
         });
     }
@@ -1749,6 +1791,7 @@ fn inventory_request_from_db(discovery_db: &UiDiscoveryDb) -> UiDialogueRequest 
             }),
             item_id: Some(entry.id.clone()),
             seen: entry.seen,
+            enabled: true,
         })
         .collect();
     options.push(UiDialogueOption {
@@ -1756,6 +1799,7 @@ fn inventory_request_from_db(discovery_db: &UiDiscoveryDb) -> UiDialogueRequest 
         preview: None,
         item_id: None,
         seen: false,
+        enabled: true,
     });
     let preview = options.first().and_then(|option| option.preview.clone());
 
@@ -1812,6 +1856,7 @@ fn drop_selected_inventory_item(
             preview: None,
             item_id: None,
             seen: false,
+            enabled: true,
         });
     }
 

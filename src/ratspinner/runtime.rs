@@ -759,7 +759,10 @@ fn choose_option(
     }
 
     let inventory_idx = node.options.len();
-    if !discovery_db.entries(DiscoveryKind::Item).is_empty() && index == inventory_idx {
+    if index == inventory_idx {
+        if discovery_db.entries(DiscoveryKind::Item).is_empty() {
+            return;
+        }
         open_inventory_picker(
             ui_commands,
             discovery_db,
@@ -903,17 +906,17 @@ fn dialogue_options_for_node(
             preview: None,
             item_id: None,
             seen: false,
+            enabled: true,
         })
         .collect();
 
-    if !discovery_db.entries(DiscoveryKind::Item).is_empty() {
-        options.push(UiDialogueOption {
-            text: "show item...".to_string(),
-            preview: None,
-            item_id: None,
-            seen: false,
-        });
-    }
+    options.push(UiDialogueOption {
+        text: "show item...".to_string(),
+        preview: None,
+        item_id: None,
+        seen: false,
+        enabled: !discovery_db.entries(DiscoveryKind::Item).is_empty(),
+    });
     options
 }
 
@@ -941,6 +944,7 @@ fn open_inventory_picker(
             }),
             item_id: Some(entry.id.clone()),
             seen: discovery_db.was_item_shared_with_speaker(&entry.id, script_id, speaker),
+            enabled: true,
         })
         .collect();
     options.push(UiDialogueOption {
@@ -948,6 +952,7 @@ fn open_inventory_picker(
         preview: None,
         item_id: None,
         seen: false,
+        enabled: true,
     });
 
     let initial_preview = options.first().and_then(|option| option.preview.clone());
@@ -997,6 +1002,7 @@ fn show_item_response(
                 preview: None,
                 item_id: None,
                 seen: false,
+                enabled: true,
             }],
             reveal_duration_secs: estimate_speech_duration_secs(&line, node.voice),
         }));
