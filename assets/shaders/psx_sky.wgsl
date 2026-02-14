@@ -7,6 +7,8 @@
 struct SkyUniformData {
     color_top: vec4<f32>,
     color_bottom: vec4<f32>,
+    prev_color_top: vec4<f32>,
+    prev_color_bottom: vec4<f32>,
     resolution: vec2<f32>,
     seed: f32,
     star_threshold: f32,
@@ -16,6 +18,8 @@ struct SkyUniformData {
     dither_strength: f32,
     detail_scale: f32,
     horizon_haze_strength: f32,
+    color_transition_start: f32,
+    color_transition_duration: f32,
 }
 
 @group(#{MATERIAL_BIND_GROUP}) @binding(0)
@@ -225,6 +229,14 @@ fn star_grain_field(uv: vec2<f32>, pix_res: vec2<f32>) -> vec3<f32> {
 fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
     let res = max(sky.resolution, vec2<f32>(1.0, 1.0));
     let detail_res = max(res * max(sky.detail_scale, 1.0), vec2<f32>(1.0, 1.0));
+    let transition_duration = max(sky.color_transition_duration, 0.0001);
+    let transition_t = smoothstep(
+        0.0,
+        1.0,
+        clamp((globals.time - sky.color_transition_start) / transition_duration, 0.0, 1.0)
+    );
+    let sky_top = mix(sky.prev_color_top.rgb, sky.color_top.rgb, transition_t);
+    let sky_bottom = mix(sky.prev_color_bottom.rgb, sky.color_bottom.rgb, transition_t);
 
     let world_dir = normalize(in.world_position.xyz - view.world_position);
     let phi = atan2(world_dir.z, world_dir.x);
@@ -237,7 +249,7 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
     let detail_dir = uv_to_dir(detail_uv);
 
     let horizon_mix = smoothstep(-0.35, 0.9, dir.y);
-    var color = mix(sky.color_bottom.rgb, sky.color_top.rgb, horizon_mix);
+    var color = mix(sky_bottom, sky_top, horizon_mix);
 
     let nebula_uv = vec2<f32>(
         snapped_uv.x * 8.0 + sky.seed * 0.11,
@@ -255,7 +267,7 @@ fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
     let horizon_band = 1.0 - smoothstep(0.01, 0.30, abs(dir.y));
     let haze_noise = noise(vec2<f32>(snapped_uv.x * 140.0 + sky.seed, snapped_uv.y * 26.0));
     let haze_amount = horizon_band * sky.horizon_haze_strength * (0.84 + 0.16 * haze_noise);
-    let haze_color = mix(sky.color_bottom.rgb, vec3<f32>(0.17, 0.22, 0.30), 0.62);
+    let haze_color = mix(sky_bottom, vec3<f32>(0.17, 0.22, 0.30), 0.62);
     color = mix(color, haze_color, haze_amount);
 
     let lower_band = 1.0 - smoothstep(-0.35, 0.08, dir.y);

@@ -7,6 +7,7 @@
 mod assets;
 mod audio;
 mod camera;
+pub mod debug;
 mod gameplay;
 mod input;
 mod map;
@@ -18,7 +19,7 @@ mod voice;
 
 use avian3d::prelude::{CollisionLayers, LayerMask};
 use bevy::{
-    asset::{AssetMetaCheck, AssetPath},
+    asset::AssetMetaCheck,
     ecs::{lifecycle::HookContext, world::DeferredWorld},
     gltf::{GltfPlugin, convert_coordinates::GltfConvertCoordinates},
     image::ImagePlugin,
@@ -29,7 +30,27 @@ use bevy_trenchbroom::{config::DefaultFaceAttributes, prelude::*};
 use crate::gameplay::PhysLayer;
 
 fn main() -> AppExit {
+    if should_skip_graphics_boot() {
+        eprintln!("non-interactive environment detected; skipping graphical startup.");
+        return AppExit::Success;
+    }
+
     App::new().add_plugins(AppPlugin).run()
+}
+
+fn should_skip_graphics_boot() -> bool {
+    #[cfg(all(feature = "native", target_os = "linux"))]
+    {
+        use std::io::IsTerminal;
+        std::env::var_os("FEVERISH_FORCE_GRAPHICS").is_none()
+            && !std::io::stdout().is_terminal()
+            && !std::io::stderr().is_terminal()
+    }
+
+    #[cfg(not(all(feature = "native", target_os = "linux")))]
+    {
+        false
+    }
 }
 
 pub struct AppPlugin;
@@ -131,6 +152,8 @@ impl Plugin for AppPlugin {
             assets::AssetsPlugin,
             camera::CameraPlugin,
             map::MapPlugin,
+            // debug, needs to be after SkyPlugin initializes messages
+            debug::sky::SkyDebugPlugin,
             gameplay::GameplayPlugin,
             input::InputPlugin,
             audio::AudioPlugin,

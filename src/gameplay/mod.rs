@@ -3,7 +3,7 @@ mod focus_fx;
 mod inventory;
 mod npc;
 mod props;
-mod sky;
+pub mod sky;
 mod sound;
 
 use std::{collections::HashMap, time::Duration};
