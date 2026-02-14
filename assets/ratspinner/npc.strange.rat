@@ -122,7 +122,7 @@ text: These are books of assorted make and publisher. Would you like me to summa
 
 [judgement]
 speaker: Leaning Marcus
-portrait: sprites/npc_leaning.png
+portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: I see it! Wow!
 > (Eliminate) Uh-huh. [hook: game.kill]

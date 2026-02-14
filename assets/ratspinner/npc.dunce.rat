@@ -107,7 +107,7 @@ text: THAT'S WHY I'M HERE!
 
 [judgement]
 speaker: Leaning Marcus
-portrait: sprites/npc_leaning.png
+portrait: sprites/npc_cowering.png
 voice: neutral_npc
 text: THERE'S NOTHING HERE AT ALL.
 > (Eliminate) Goodbye! [hook: game.kill]
