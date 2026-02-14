@@ -122,6 +122,13 @@ pub(super) fn spawn_pause_menu(commands: &mut Commands, fonts: &UiFonts, owner: 
                                 menu,
                                 fonts,
                                 owner,
+                                "INVENTORY",
+                                ButtonAction::OpenInventory,
+                            );
+                            spawn_pause_button(
+                                menu,
+                                fonts,
+                                owner,
                                 "STATUS",
                                 ButtonAction::SelectPage(MainMenuPage::Home),
                             );

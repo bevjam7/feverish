@@ -40,6 +40,7 @@ fn fragment(
     out.color = main_pass_post_lighting_processing(pbr_input, out.color);
 
     let is_focused = (psx.flags & FX_FOCUSED) != 0u;
+
     let sat = clamp(psx.saturation, 0.0, 1.0);
     if !is_focused && sat < 1.0 {
         let luma = dot(out.color.rgb, vec3(0.299, 0.587, 0.114));
@@ -57,5 +58,6 @@ fn fragment(
         psx.dither_scale,
         psx.dither_mode,
     );
+
     return out;
 }

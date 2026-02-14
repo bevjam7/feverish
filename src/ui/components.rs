@@ -253,6 +253,7 @@ pub enum UiMenuAction {
     Play(Entity),
     Continue(Entity),
     Resume(Entity),
+    OpenInventory(Entity),
     BackToMainMenu(Entity),
     QuitGame,
 }
@@ -341,6 +342,7 @@ pub(super) enum ButtonAction {
     Play,
     Continue,
     Resume,
+    OpenInventory,
     BackToMainMenu,
     QuitGame,
     ConfirmProceed,

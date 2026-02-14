@@ -21,6 +21,7 @@ use super::{
         PauseMenuState, PauseMenuStatusPanel, PauseMenuUi, SettingsValueText, SpawnDroppedItem,
         UiCursorSprite, UiDiscoveryCommand, UiDiscoveryDbSnapshot, UiMenuAction,
     },
+    inventory::UiInventoryCommand,
     main_menu::spawn_main_menu,
     pause_menu::spawn_pause_menu,
     theme,
@@ -587,6 +588,13 @@ pub(super) fn handle_menu_actions(
                 commands.entity(owner).remove::<PauseMenuUi>();
                 next_paused.set(Paused(false));
             }
+            UiMenuAction::OpenInventory(owner) => {
+                commands.entity(owner).remove::<PauseMenuUi>();
+                next_paused.set(Paused(false));
+                commands.queue(|world: &mut World| {
+                    world.write_message(UiInventoryCommand::Open);
+                });
+            }
             UiMenuAction::BackToMainMenu(owner) => {
                 commands.entity(owner).remove::<PauseMenuUi>();
                 commands.entity(owner).insert(MainMenuUi);
@@ -966,6 +974,9 @@ pub(super) fn handle_button_interactions(
                     }
                     ButtonAction::Resume => {
                         actions.write(UiMenuAction::Resume(owner.0));
+                    }
+                    ButtonAction::OpenInventory => {
+                        actions.write(UiMenuAction::OpenInventory(owner.0));
                     }
                     ButtonAction::BackToMainMenu =>
                         for mut confirm in &mut confirms {

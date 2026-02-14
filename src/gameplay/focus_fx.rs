@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use avian3d::prelude::CollisionLayers;
 use bevy::prelude::*;
 
@@ -10,7 +12,7 @@ use crate::{
 #[derive(Default)]
 pub(super) struct FocusFxState {
     saturation: f32,
-    focused_material: Option<Handle<PsxPbrMaterial>>,
+    focused_materials: HashSet<AssetId<PsxPbrMaterial>>,
     initialized: bool,
     focus_grace_timer: f32,
 }
@@ -36,27 +38,32 @@ pub(super) fn handle_focus_effect(
     }
 
     let focused_entity = focused_usable_entity(&q_hits, &q_hierarchy, &q_layers);
-    let focused_material = focused_entity.and_then(|entity| {
-        find_material(entity, &q_materials, &q_children).or_else(|| {
-            q_hierarchy
-                .get(entity)
-                .ok()
-                .and_then(|parent| find_material(parent.0, &q_materials, &q_children))
+    let focused_materials = focused_entity
+        .map(|entity| {
+            let mut handles = collect_material_handles(entity, &q_materials, &q_children);
+            if handles.is_empty()
+                && let Ok(parent) = q_hierarchy.get(entity)
+            {
+                handles = collect_material_handles(parent.0, &q_materials, &q_children);
+            }
+            handles
         })
-    });
+        .unwrap_or_default();
 
-    if state.focused_material != focused_material {
-        if let Some(old) = state.focused_material.take() {
-            if let Some(mat) = materials.get_mut(&old) {
+    if state.focused_materials != focused_materials {
+        for old in state.focused_materials.difference(&focused_materials) {
+            if let Some(mat) = materials.get_mut(*old) {
                 set_material_focused(mat, false);
             }
         }
-        if let Some(new_focus) = focused_material.clone() {
-            if let Some(mat) = materials.get_mut(&new_focus) {
+
+        for new_focus in focused_materials.difference(&state.focused_materials) {
+            if let Some(mat) = materials.get_mut(*new_focus) {
                 set_material_focused(mat, true);
             }
         }
-        state.focused_material = focused_material;
+
+        state.focused_materials = focused_materials;
     }
 
     if focused_entity.is_some() {
@@ -94,18 +101,22 @@ fn focused_usable_entity(
     }
 }
 
-fn find_material(
+fn collect_material_handles(
     entity: Entity,
     q_materials: &Query<&MeshMaterial3d<PsxPbrMaterial>>,
     q_children: &Query<&Children>,
-) -> Option<Handle<PsxPbrMaterial>> {
+) -> HashSet<AssetId<PsxPbrMaterial>> {
+    let mut handles = HashSet::new();
+
     if let Ok(material) = q_materials.get(entity) {
-        return Some(material.0.clone());
+        handles.insert(material.id());
     }
+
     for child in q_children.iter_descendants(entity) {
         if let Ok(material) = q_materials.get(child) {
-            return Some(material.0.clone());
+            handles.insert(material.id());
         }
     }
-    None
+
+    handles
 }
