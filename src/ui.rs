@@ -2,7 +2,7 @@
 
 pub(super) mod components;
 pub(super) mod confirm_popup;
-pub(super) mod dialogue;
+pub(crate) mod dialogue;
 pub mod discovery_api;
 pub(super) mod fx;
 pub(super) mod inventory;

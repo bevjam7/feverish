@@ -8,7 +8,7 @@ voice: neutral_npc
 text: Yes...?
 hook: npc.default.greeting
 > Who are you? -> identity [id: ask_identity] [hook: npc.default.option.identity]
-> (Eliminate)  Come with me to the window. [id: eliminate] [hook: debug.eliminate_target]
+> (Eliminate)  Come with me to the window. [id: lure] [hook: game.lure]
 > (Leave) I should go. [id: leave] [hook: npc.default.option.leave]
 
 [identity]
@@ -116,3 +116,15 @@ speaker: Lonely Marcus
 portrait: sprites/npc_standing.png
 voice: neutral_npc
 text: These are books of assorted make and publisher. Would you like me to summarize?
+
+// script: npc.strange.lured
+// entry: judgement
+
+[judgement]
+speaker: Leaning Marcus
+portrait: sprites/npc_leaning.png
+voice: neutral_npc
+text: I see it! Wow!
+> (Eliminate) Uh-huh. [hook: game.kill]
+> (Spare) Thanks for checking with me. [hook: game.spare]
+> (Leave) Stand here a moment. [id: leave] [hook: npc.default.option.leave]

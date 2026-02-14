@@ -8,7 +8,7 @@ voice: neutral_npc
 text: GET AWAY FROM ME!
 hook: npc.default.greeting
 > Calm down. Who are you? -> identity [id: ask_identity] [hook: npc.default.option.identity]
-> (Eliminate)  Come with me to the window. [id: eliminate] [hook: debug.eliminate_target]
+> (Eliminate)  Come with me to the window. [id: lure] [hook: game.lure]
 > (Leave) Okay, I'm leaving. [id: leave] [hook: npc.default.option.leave]
 
 [identity]
@@ -101,3 +101,15 @@ speaker: Panicking Marcus
 portrait: sprites/npc_cowering.png
 voice: neutral_npc
 text: THAT'S WHY I'M HERE!
+
+// script: npc.dunce.lured
+// entry: judgement
+
+[judgement]
+speaker: Leaning Marcus
+portrait: sprites/npc_leaning.png
+voice: neutral_npc
+text: THERE'S NOTHING HERE AT ALL.
+> (Eliminate) Goodbye! [hook: game.kill]
+> (Spare) You're right. You can go back. [hook: game.spare]
+> (Leave) Wait right here... [id: leave] [hook: npc.default.option.leave]
