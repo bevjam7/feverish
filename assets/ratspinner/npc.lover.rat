@@ -143,7 +143,7 @@ text: Some of my wife's books are mixed in here. She's a researcher.
 
 [judgement]
 speaker: Leaning Marcus
-portrait: sprites/npc_leaning.png
+portrait: sprites/npc_lounging.png
 voice: neutral_npc
 text: I don't see anything.
 > (Eliminate) Look, it's right below you. [hook: game.kill]
