@@ -69,14 +69,14 @@ speaker: Unknown Caller
 portrait: sprites/phone.png
 voice: corrupted_transmission
 text: Are you still there?
-> Yeah -> lose_ring_b [id: lose_ring_b]
+> Yeah -> win_ring_b [id: win_ring_b]
 
 [win_ring_b]
 speaker: Unknown Caller
 portrait: sprites/phone.png
 voice: corrupted_transmission
 text: I feel it. You got rid of them for good.
-> I think so. -> win_ring_c [id: lose_ring_c]
+> I think so. -> win_ring_c [id: win_ring_c]
 
 [win_ring_c]
 speaker: Unknown Caller

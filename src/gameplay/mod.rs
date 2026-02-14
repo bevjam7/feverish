@@ -350,16 +350,15 @@ fn handle_debug_elimination(
                         // Play the game win/lose scenario
                         if npcs
                             .iter()
-                            .filter(|npc| npc.suspect.is_some())
-                            .any(|suspect| matches!(suspect.suspect, Some(SuspectType::Imposter)))
+                            .any(|npc| matches!(npc.suspect, Some(SuspectType::Human)))
                         {
-                            // lose
-                            dbg!("you guessed incorrectly :(");
-                            cmd.set_state(Phase::Lose);
-                        } else {
                             // win
                             dbg!("you guessed correctly! you win!");
                             cmd.set_state(Phase::Win);
+                        } else {
+                            // lose
+                            dbg!("you guessed incorrectly :(");
+                            cmd.set_state(Phase::Lose);
                         }
                     }
                     _ => {}
