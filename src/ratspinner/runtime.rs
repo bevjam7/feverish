@@ -91,19 +91,19 @@ impl AssetLoader for RatScriptAssetLoader {
             .and_then(|value| value.to_str())
             .unwrap_or("script");
 
-        let script = match extension.as_str() {
+        let scripts = match extension.as_str() {
             "rat" => {
                 let content = std::str::from_utf8(&bytes)?;
-                parse_rat_script(content, fallback_script_id)?
+                parse_rat_scripts(content, fallback_script_id)?
             }
             "ron" => {
                 let raw = ron::de::from_bytes::<RatScriptRon>(&bytes)?;
-                RatScript::try_from(raw).map_err(RatScriptAssetLoaderError::Invalid)?
+                vec![RatScript::try_from(raw).map_err(RatScriptAssetLoaderError::Invalid)?]
             }
             _ => return Err(RatScriptAssetLoaderError::UnsupportedExtension(extension)),
         };
 
-        Ok(RatScriptAsset::new(script))
+        Ok(RatScriptAsset::new(scripts))
     }
 
     fn extensions(&self) -> &[&str] {
@@ -152,12 +152,46 @@ pub(super) fn load_scripts_from_assets(
 
     for handle in &game_assets.rat_scripts {
         if let Some(asset) = script_assets.get(handle) {
-            let script = asset.script.clone();
-            library.scripts.insert(script.id.clone(), script);
+            for script in &asset.scripts {
+                library.scripts.insert(script.id.clone(), script.clone());
+            }
         } else {
             warn!("ratspinner script handle not ready: {:?}", handle);
         }
     }
+}
+
+fn parse_rat_scripts(
+    content: &str,
+    fallback_script_id: &str,
+) -> Result<Vec<RatScript>, RatScriptAssetLoaderError> {
+    let mut sections = Vec::new();
+    let mut current = String::new();
+
+    for line in content.lines() {
+        let trimmed = line.trim();
+        if trimmed.starts_with("// script:") && !current.trim().is_empty() {
+            sections.push(current);
+            current = String::new();
+        }
+        current.push_str(line);
+        current.push('\n');
+    }
+
+    if !current.trim().is_empty() {
+        sections.push(current);
+    }
+
+    if sections.is_empty() {
+        return Err(RatScriptAssetLoaderError::Invalid(
+            "script does not define any content".to_string(),
+        ));
+    }
+
+    sections
+        .into_iter()
+        .map(|section| parse_rat_script(&section, fallback_script_id))
+        .collect()
 }
 
 pub(super) fn seed_builtin_script(mut library: ResMut<RatLibrary>) {
@@ -535,14 +569,17 @@ fn start_dialogue(
     discovery_db: &UiDiscoveryDb,
     start: RatStart,
 ) {
-    let Some(script) = library.scripts.get(&start.script_id) else {
-        warn!("ratspinner script '{}' not found", start.script_id);
+    let Some((script_id, entry_node)) = resolve_start_target(library, &start) else {
+        return;
+    };
+    let Some(script) = library.scripts.get(&script_id) else {
+        warn!("ratspinner script '{}' not found", script_id);
         return;
     };
 
     runtime.active = Some(ActiveDialogue {
-        script_id: start.script_id,
-        node_id: script.entry.clone(),
+        script_id,
+        node_id: entry_node.clone(),
         target: start.target,
         presentation: start.presentation,
         overlay: DialogueOverlay::None,
@@ -555,7 +592,7 @@ fn start_dialogue(
             DiscoveryInteractionActor::Player,
         )
         .script(script.id.clone())
-        .node(script.entry.clone())
+        .node(entry_node)
         .note("dialogue.start"),
     });
     state.active = true;
@@ -571,6 +608,37 @@ fn start_dialogue(
         discovery_db,
         true,
     );
+}
+
+fn resolve_start_target(library: &RatLibrary, start: &RatStart) -> Option<(String, String)> {
+    if let Some(script) = library.scripts.get(&start.script_id) {
+        let entry = start.entry.clone().unwrap_or_else(|| script.entry.clone());
+        if !script.nodes.contains_key(&entry) {
+            warn!(
+                "ratspinner entry '{}' not found in script '{}'",
+                entry, script.id
+            );
+            return None;
+        }
+        return Some((start.script_id.clone(), entry));
+    }
+
+    if start.entry.is_none()
+        && let Some((script_id, entry_node)) = start.script_id.rsplit_once('.')
+        && let Some(script) = library.scripts.get(script_id)
+    {
+        if !script.nodes.contains_key(entry_node) {
+            warn!(
+                "ratspinner entry '{}' not found in script '{}'",
+                entry_node, script.id
+            );
+            return None;
+        }
+        return Some((script_id.to_string(), entry_node.to_string()));
+    }
+
+    warn!("ratspinner script '{}' not found", start.script_id);
+    None
 }
 
 fn advance_dialogue(

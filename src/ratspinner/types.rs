@@ -17,6 +17,7 @@ pub enum RatCommand {
 #[derive(Debug, Clone)]
 pub struct RatStart {
     pub script_id: String,
+    pub entry: Option<String>,
     pub target: Option<Entity>,
     pub presentation: RatDialoguePresentation,
 }
@@ -31,9 +32,15 @@ impl RatStart {
     pub fn new(script_id: impl Into<String>) -> Self {
         Self {
             script_id: script_id.into(),
+            entry: None,
             target: None,
             presentation: RatDialoguePresentation::Ui,
         }
+    }
+
+    pub fn entry(mut self, entry_node: impl Into<String>) -> Self {
+        self.entry = Some(entry_node.into());
+        self
     }
 
     pub fn target(mut self, entity: Entity) -> Self {
@@ -87,12 +94,12 @@ pub struct RatScript {
 
 #[derive(Asset, TypePath, Debug, Clone)]
 pub struct RatScriptAsset {
-    pub script: RatScript,
+    pub scripts: Vec<RatScript>,
 }
 
 impl RatScriptAsset {
-    pub fn new(script: RatScript) -> Self {
-        Self { script }
+    pub fn new(scripts: Vec<RatScript>) -> Self {
+        Self { scripts }
     }
 }
 
