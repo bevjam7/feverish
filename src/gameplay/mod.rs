@@ -9,9 +9,10 @@ mod sound;
 
 use std::{collections::HashMap, time::Duration};
 
-use avian3d::prelude::*;
+use avian3d::{math::TAU, prelude::*};
 use bevy::{
     ecs::{lifecycle::HookContext, world::DeferredWorld},
+    light::light_consts::lumens,
     prelude::*,
 };
 use bevy_ahoy::prelude::*;
@@ -29,8 +30,9 @@ use crate::{
     audio::mixer::WorldSfxPool,
     gameplay::{
         door::{DoorBase, EndDoor},
+        inventory::Item,
         npc::{Npc, SuspectType},
-        props::Phone,
+        props::{Model, Phone, Prop},
     },
     input::{Use, UseRaycaster},
     map::{LevelToPrepare, PendingLevelTransition},
@@ -63,6 +65,7 @@ impl Plugin for GameplayPlugin {
                     handle_debug_elimination,
                     handle_world_messages,
                     handle_game_phases,
+                    door::open_doors_on_hooks,
                     npc::handle_elimination_triggers,
                     npc::tick_walkback_timers,
                     npc::npc_navigation,
@@ -71,6 +74,7 @@ impl Plugin for GameplayPlugin {
                     spawn_dropped_item,
                     reset_game_on_ending,
                     tick_lose_timers,
+                    animate_lights,
                 )
                     .in_set(AppSystems::Update),
             );
@@ -318,7 +322,7 @@ fn handle_debug_elimination(
     mut sky_commands: MessageWriter<sky::SkyCommand>,
     assets: Res<AssetServer>,
     items: Res<Assets<ItemMeta>>,
-    npcs: Query<&Npc>,
+    npcs: Query<(&Npc, &GlobalTransform)>,
     mut targetable_doors: Query<(Entity, &Targetable, &mut DoorBase)>,
 ) {
     for event in hooks.read() {
@@ -333,87 +337,158 @@ fn handle_debug_elimination(
                 .unwrap();
             if let Some(target) = event.target {
                 info!("eliminating npc: {:?}", target);
-                if let Ok(npc) = npcs.get(target)
+                if let Ok((npc, transform)) = npcs.get(target)
                     && let Some(marcus) = marcus_type_for_npc(npc)
                 {
                     sky_commands.write(sky::SkyCommand::ActivateConstellation(marcus));
-                }
-                // Entity has `Suspect` value in `Npc` component which can be
-                // queried for UI/gameplay updates
 
-                // Give the player a key (or play win/lose state), based on how many kills have
-                // progressed
-                count.0 += 1;
+                    // Entity has `Suspect` value in `Npc` component which can be
+                    // queried for UI/gameplay updates
 
-                const KEY_PATH: &str = "models/key/key.gltf#Scene0";
-                const OFFICE_DOOR_ID: &str = "office_door";
-                const APARTMENT_DOOR_ID: &str = "apartment_door";
+                    // Give the player a key (or play win/lose state), based on how many kills have
+                    // progressed
+                    count.0 += 1;
 
-                match count.0 {
-                    1 => {
-                        // Give the office key
-                        discovery_db.upsert(
-                            crate::ui::DiscoveryKind::Item,
-                            DiscoveryEntry::new(&office_key_meta.id, office_key_meta.name.clone())
-                                .subtitle(office_key_meta.subtitle.clone())
-                                .description(office_key_meta.description.clone())
-                                .model_path(KEY_PATH)
-                                .seen(true),
-                        );
+                    const KEY_PATH: &str = "models/key/key.gltf#Scene0";
+                    const OFFICE_DOOR_ID: &str = "office_door";
+                    const APARTMENT_DOOR_ID: &str = "apartment_door";
 
-                        // Unlock the office door
-                        targetable_doors
-                            .iter_mut()
-                            .find(|(_, door_name, _)| {
-                                door_name.targetname.0.as_str() == OFFICE_DOOR_ID
-                            })
-                            .unwrap()
-                            .2
-                            .locked = false;
-                    }
-                    2 => {
-                        // Give the apartment key
-                        discovery_db.upsert(
-                            crate::ui::DiscoveryKind::Item,
-                            DiscoveryEntry::new(
-                                &apartment_key_meta.id,
-                                apartment_key_meta.name.clone(),
-                            )
-                            .subtitle(apartment_key_meta.subtitle.clone())
-                            .description(apartment_key_meta.description.clone())
-                            .model_path(KEY_PATH)
-                            .seen(true),
-                        );
-
-                        // Unlock the apartment door
-                        targetable_doors
-                            .iter_mut()
-                            .find(|(_, door_name, _)| {
-                                door_name.targetname.0.as_str() == APARTMENT_DOOR_ID
-                            })
-                            .unwrap()
-                            .2
-                            .locked = false;
-                    }
-                    3 => {
-                        // Play the game win/lose scenario
-                        if npcs
-                            .iter()
-                            .any(|npc| matches!(npc.suspect, Some(SuspectType::Human)))
-                        {
-                            // win
-                            dbg!("you guessed correctly! you win!");
-                            cmd.set_state(Phase::Win);
-                        } else {
-                            // lose
-                            dbg!("you guessed incorrectly :(");
-                            cmd.set_state(Phase::Lose);
+                    match count.0 {
+                        1 => {
+                            cmd.run_system_cached_with(
+                                spawn_key,
+                                KeySettings {
+                                    translation: transform.translation(),
+                                    metadata: "items/office_key.item.meta".into(),
+                                    door: OFFICE_DOOR_ID.into(),
+                                },
+                            );
                         }
+                        2 => {
+                            cmd.run_system_cached_with(
+                                spawn_key,
+                                KeySettings {
+                                    translation: transform.translation(),
+                                    metadata: "items/apartment_key.item.meta".into(),
+                                    door: APARTMENT_DOOR_ID.into(),
+                                },
+                            );
+                        }
+                        3 => {
+                            // Play the game win/lose scenario
+                            if npcs
+                                .iter()
+                                .any(|(npc, _)| matches!(npc.suspect, Some(SuspectType::Human)))
+                            {
+                                // win
+                                dbg!("you guessed correctly! you win!");
+                                cmd.set_state(Phase::Win);
+                            } else {
+                                // lose
+                                dbg!("you guessed incorrectly :(");
+                                cmd.set_state(Phase::Lose);
+                            }
+                        }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
+    }
+}
+
+pub(crate) struct KeySettings {
+    pub(crate) translation: Vec3,
+    pub(crate) metadata: String,
+    pub(crate) door: String,
+}
+
+pub(crate) fn spawn_key(key: In<KeySettings>, mut cmd: Commands) {
+    cmd.spawn((
+        Item {
+            metadata: Some(key.metadata.clone()),
+        },
+        Model {
+            model: "models/key/key.gltf".into(),
+            animation: None,
+        },
+        Visibility::Inherited,
+        Prop { dynamic: true },
+        CollisionLayers {
+            memberships: [PhysLayer::Default, PhysLayer::Usable].into(),
+            filters: [PhysLayer::Default].into(),
+        },
+        Transform::from_translation(key.translation + Vec3::Y),
+    ))
+    .with_child((
+        PointLight {
+            color: Color::Srgba(Srgba {
+                red: 1f32,
+                green: 0.7641108,
+                blue: 0.5253681,
+                alpha: 1.0,
+            }),
+            radius: 0.2,
+            ..Default::default()
+        },
+        AnimatedPointLight {
+            min: lumens::LUMENS_PER_INCANDESCENT_WATTS * 50.0,
+            max: lumens::LUMENS_PER_INCANDESCENT_WATTS * 250.0,
+            frequency_seconds: 2.0,
+        },
+        Transform::default(),
+    ))
+    .observe(
+        move |_on: On<Use>, mut targetable_doors: Query<(Entity, &Targetable, &mut DoorBase)>| {
+            let mut door = targetable_doors
+                .iter_mut()
+                .find(|(_, door_name, _)| door_name.targetname.0.as_str() == key.door)
+                .unwrap();
+            door.2.locked = false;
+        },
+    );
+}
+
+#[derive(Component, Copy, Clone)]
+#[require(PointLight, AnimatedPointLightTimer)]
+#[component(on_add=Self::on_add_hook)]
+pub(crate) struct AnimatedPointLight {
+    min: f32,
+    max: f32,
+    frequency_seconds: f32,
+}
+
+impl AnimatedPointLight {
+    fn on_add_hook(mut world: DeferredWorld, hook: HookContext) {
+        let animation = *world.get::<Self>(hook.entity).unwrap();
+        let mut timer = world
+            .get_mut::<AnimatedPointLightTimer>(hook.entity)
+            .unwrap();
+        timer.0 = Timer::new(
+            Duration::from_secs_f32(animation.frequency_seconds),
+            TimerMode::Repeating,
+        );
+        let mut light = world.get_mut::<PointLight>(hook.entity).unwrap();
+        light.intensity = animation.min;
+    }
+}
+
+#[derive(Component, Default)]
+pub(crate) struct AnimatedPointLightTimer(pub(crate) Timer);
+
+pub(crate) fn animate_lights(
+    lights: Query<(
+        &mut PointLight,
+        &AnimatedPointLight,
+        &mut AnimatedPointLightTimer,
+    )>,
+    time: Res<Time>,
+) {
+    for (mut light, animation, mut timer) in lights {
+        let scalar = animation.max - animation.min;
+        light.intensity =
+            (((f32::sin(timer.0.fraction() * TAU) + 1.0) * 0.5) * scalar) + animation.min;
+        timer.0.tick(time.delta());
     }
 }
 
@@ -469,6 +544,22 @@ fn handle_game_phases(
                             .with_volume(bevy_seedling::prelude::Volume::Linear(0.5)),
                         // bevy_seedling::sample_effects![HrtfNode::default()],
                         WorldSfxPool,
+                        PointLight {
+                            color: Color::Srgba(Srgba {
+                                red: 1f32,
+                                green: 0.1641108,
+                                blue: 0.1253681,
+                                alpha: 1.0,
+                            }),
+                            radius: 0.2,
+                            ..Default::default()
+                        },
+                        AnimatedPointLight {
+                            min: lumens::LUMENS_PER_INCANDESCENT_WATTS * 50.0,
+                            max: lumens::LUMENS_PER_INCANDESCENT_WATTS * 250.0,
+                            frequency_seconds: 1.0,
+                        },
+                        Transform::from_translation(Vec3::Y * 0.4),
                     ));
                     npc.script_id = Some("npc.phone.first_ring".into());
                 }
@@ -483,6 +574,22 @@ fn handle_game_phases(
                             .with_volume(bevy_seedling::prelude::Volume::Linear(0.5)),
                         // bevy_seedling::sample_effects![HrtfNode::default()],
                         WorldSfxPool,
+                        PointLight {
+                            color: Color::Srgba(Srgba {
+                                red: 1f32,
+                                green: 0.1641108,
+                                blue: 0.1253681,
+                                alpha: 1.0,
+                            }),
+                            radius: 0.2,
+                            ..Default::default()
+                        },
+                        AnimatedPointLight {
+                            min: lumens::LUMENS_PER_INCANDESCENT_WATTS * 50.0,
+                            max: lumens::LUMENS_PER_INCANDESCENT_WATTS * 250.0,
+                            frequency_seconds: 1.0,
+                        },
+                        Transform::from_translation(Vec3::Y * 0.4),
                     ));
                     npc.script_id = Some("npc.phone.win_ring".into());
                 }
@@ -498,6 +605,22 @@ fn handle_game_phases(
                         PlaybackSettings::default().with_speed(0.7),
                         // bevy_seedling::sample_effects![HrtfNode::default()],
                         WorldSfxPool,
+                        PointLight {
+                            color: Color::Srgba(Srgba {
+                                red: 1f32,
+                                green: 0.1641108,
+                                blue: 0.1253681,
+                                alpha: 1.0,
+                            }),
+                            radius: 0.2,
+                            ..Default::default()
+                        },
+                        AnimatedPointLight {
+                            min: lumens::LUMENS_PER_INCANDESCENT_WATTS * 50.0,
+                            max: lumens::LUMENS_PER_INCANDESCENT_WATTS * 250.0,
+                            frequency_seconds: 1.0,
+                        },
+                        Transform::from_translation(Vec3::Y * 0.4),
                     ));
                     npc.script_id = Some("npc.phone.lose_ring".into());
                     cmd.entity(entity).observe(countdown_to_lose);
@@ -581,13 +704,11 @@ fn spawn_dropped_item(
 fn reset_game_on_ending(
     mut reader: RemovedComponents<EndingUiRoot>,
     mut elims: ResMut<EliminationCount>,
-    mut level: ResMut<LevelToPrepare>,
     mut cmd: Commands,
     player_root: Single<Entity, With<PlayerRoot>>,
     assets: Res<GameAssets>,
 ) {
     for event in reader.read() {
-        level.level = Some(assets.level_exterior.clone());
         elims.0 = 0;
         cmd.entity(player_root.entity()).despawn();
     }

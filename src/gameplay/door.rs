@@ -253,3 +253,31 @@ impl EndDoor {
         }
     }
 }
+
+pub(crate) fn open_doors_on_hooks(
+    mut hooks: MessageReader<RatHookTriggered>,
+    mut cmd: Commands,
+    doors: Query<(Entity, &Targetable, &DoorBase), With<DoorBase>>,
+) {
+    let door_with_name = |name: String| -> Option<Entity> {
+        doors
+            .iter()
+            .find(|(_, t, door)| t.targetname.0 == name && !door.open)
+            .map(|x| x.0)
+    };
+
+    for hook in hooks.read() {
+        match hook.hook.as_str() {
+            "game.bathroom_door.open" => {
+                if let Some(door) = door_with_name("bathroom_door".into()) {
+                    cmd.entity(door).trigger(Use);
+                }
+            }
+            "game.front_door.open" =>
+                if let Some(door) = door_with_name("front_door".into()) {
+                    cmd.entity(door).trigger(Use);
+                },
+            _ => (),
+        }
+    }
+}

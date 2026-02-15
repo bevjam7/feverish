@@ -41,7 +41,10 @@ pub(crate) struct Navigator {
 }
 
 #[point_class(base(Transform, Target, Targetable))]
-pub(crate) struct WalkTarget;
+#[derive(Default)]
+pub(crate) struct WalkTarget {
+    hook: Option<String>,
+}
 
 #[derive(Reflect, FgdType)]
 pub(crate) enum SuspectType {
@@ -80,7 +83,7 @@ impl Npc {
         const HEIGHT: f32 = 1.8;
         let layers = CollisionLayers::new(
             [PhysLayer::Npc, PhysLayer::Usable],
-            [PhysLayer::Npc, PhysLayer::Default, PhysLayer::Usable],
+            [PhysLayer::Npc, PhysLayer::Default],
         );
         world
             .commands()
@@ -297,7 +300,9 @@ pub(crate) fn npc_navigation(
     )>,
     targetables: Query<&Targetable>,
     global_transforms: Query<&GlobalTransform>,
+    walk_targets: Query<&WalkTarget>,
     time: Res<Time>,
+    mut hooks: MessageWriter<RatHookTriggered>,
 ) {
     const SPEED: f32 = 1.5;
     const CHECKPOINT_RADIUS: f32 = 0.1;
@@ -306,6 +311,7 @@ pub(crate) fn npc_navigation(
         if let Some(target) = nav.queue.last().copied() {
             // Move to next node
             let target_global_transform = global_transforms.get(target).unwrap();
+            let walk_target = walk_targets.get(target).unwrap();
             let rotated = global_transform
                 .compute_transform()
                 .looking_at(target_global_transform.translation(), Vec3::Y);
@@ -322,6 +328,15 @@ pub(crate) fn npc_navigation(
                 .distance_squared(target_global_transform.translation())
                 <= CHECKPOINT_RADIUS.powi(2)
             {
+                if let Some(ref hook) = walk_target.hook {
+                    hooks.write(RatHookTriggered {
+                        hook: hook.clone(),
+                        script_id: Default::default(),
+                        node_id: Default::default(),
+                        option_id: None,
+                        target: None,
+                    });
+                }
                 nav.queue.pop();
                 if nav.queue.is_empty() {
                     match (targetables.get(target)).unwrap().targetname.0.as_str()

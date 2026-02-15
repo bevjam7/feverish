@@ -134,7 +134,7 @@ impl Model {
 #[derive(Default)]
 #[component(on_add=Self::on_add_hook)]
 pub(crate) struct Prop {
-    dynamic: bool,
+    pub(crate) dynamic: bool,
 }
 
 impl Prop {
