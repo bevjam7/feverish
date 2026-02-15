@@ -26,8 +26,20 @@ impl Plugin for AudioPlugin {
 }
 
 fn set_up_mixer(mut cmd: Commands) {
+    let reverb = cmd
+        .spawn(FreeverbNode {
+            room_size: 0.06,
+            damping: 0.9,
+            width: 0.5,
+            ..Default::default()
+        })
+        .id();
+    let reverb_mix = cmd.spawn(VolumeNode::from_linear(0.1)).id();
     cmd.spawn((VolumeNode::default(), mixer::UiSfxBus));
-    cmd.spawn((VolumeNode::default(), mixer::WorldSfxBus));
+    let world_sfx = cmd.spawn((VolumeNode::default(), mixer::WorldSfxBus)).id();
+
+    cmd.entity(world_sfx).connect(reverb).connect(reverb_mix);
+    cmd.entity(world_sfx).connect(MainBus);
 
     cmd.spawn(SamplerPool(mixer::UiSfxPool))
         .connect(mixer::UiSfxBus);
@@ -64,7 +76,7 @@ fn start_playing_bgm(
     game_assets: Res<GameAssets>,
     already_playing: Query<(), With<BackgroundMusic>>,
 ) {
-    if !already_playing.is_empty() {
+    if already_playing.is_empty() {
         let mut sampler = SamplePlayer::new(game_assets.music_a.clone());
         sampler.repeat_mode = RepeatMode::RepeatEndlessly;
         let volume = cmd

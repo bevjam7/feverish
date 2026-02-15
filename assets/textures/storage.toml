@@ -1,0 +1,5 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "storage.png"
+metallic = 0.0
+perceptual_roughness = 1.0
