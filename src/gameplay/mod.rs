@@ -1,10 +1,14 @@
 mod door;
 mod focus_fx;
 mod inventory;
+mod mesh_outline;
 mod npc;
 mod props;
 pub mod sky;
 mod sound;
+
+#[allow(unused_imports)]
+pub(crate) use mesh_outline::MeshOutlineTarget;
 
 use std::{collections::HashMap, time::Duration};
 
@@ -42,6 +46,7 @@ pub(crate) struct GameplayPlugin;
 impl Plugin for GameplayPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(sky::SkyPlugin)
+            .add_plugins(mesh_outline::MeshOutlinePlugin)
             .init_resource::<DoorScenePreloads>()
             .init_resource::<EliminationCount>()
             .add_message::<SpawnDroppedItem>()
