@@ -609,7 +609,7 @@ fn handle_game_phases(
                             color: Color::Srgba(Srgba {
                                 red: 1f32,
                                 green: 0.1641108,
-                                blue: 0.1253681,
+                                blue: 0.5253681,
                                 alpha: 1.0,
                             }),
                             radius: 0.2,
