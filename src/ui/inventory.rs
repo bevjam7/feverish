@@ -429,6 +429,10 @@ pub(super) fn sync_inventory_preview_from_selection(
         return;
     }
 
+    if let Some(viewport) = runtime.preview_viewport {
+        detach_viewport_target(&mut commands, viewport);
+    }
+
     if let Some(old_root) = runtime.preview_world_root.take() {
         despawn_tree(&mut commands, old_root, &children);
     }
@@ -775,12 +779,24 @@ fn despawn_tree(commands: &mut Commands, root: Entity, children_query: &Query<&C
     });
 }
 
+fn detach_viewport_target(commands: &mut Commands, viewport: Entity) {
+    commands.queue(move |world: &mut World| {
+        if let Ok(mut entity) = world.get_entity_mut(viewport) {
+            entity.remove::<ViewportNode>();
+        }
+    });
+}
+
 fn close_inventory(
     commands: &mut Commands,
     runtime: &mut UiInventoryRuntime,
     roots: &Query<(), With<InventoryUiRoot>>,
     children: &Query<&Children>,
 ) {
+    if let Some(viewport) = runtime.preview_viewport {
+        detach_viewport_target(commands, viewport);
+    }
+
     if let Some(root) = runtime.root.take() {
         if roots.get(root).is_ok() {
             commands.queue(move |world: &mut World| {

@@ -362,7 +362,7 @@ fn open_ending(
                     Text::new(status_block),
                     TextFont {
                         font: fonts.body.clone(),
-                        font_size: 14.0,
+                        font_size: 20.0,
                         ..default()
                     },
                     TextColor(Color::srgb(0.76, 0.78, 0.84)),

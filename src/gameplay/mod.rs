@@ -39,8 +39,10 @@ use crate::{
     psx::{PsxCamera, PsxConfig},
     ratspinner::RatHookTriggered,
     ui::{
-        DiscoveryEntry, EndingUiRoot, SpawnDroppedItem, UiDiscoveryDb, UiEndingCommand,
-        UiEndingCommandsExt, UiEndingPayload, dialogue::UiDialogueState,
+        DiscoveryEntry, EndingUiRoot, SpawnDroppedItem, UiDiscoveryCommand, UiDiscoveryDb,
+        UiDiscoveryDbSnapshot, UiEndingCommandsExt, UiEndingPayload, UiHintCommand,
+        UiHintRequest,
+        dialogue::UiDialogueState,
     },
 };
 
@@ -52,6 +54,7 @@ impl Plugin for GameplayPlugin {
             .add_plugins(mesh_outline::MeshOutlinePlugin)
             .init_resource::<DoorScenePreloads>()
             .init_resource::<EliminationCount>()
+            .init_resource::<ObjectiveHintRuntime>()
             .add_message::<SpawnDroppedItem>()
             .add_systems(OnEnter(GameState::Main), setup_endings)
             .add_systems(
@@ -72,6 +75,7 @@ impl Plugin for GameplayPlugin {
                     npc::build_nav_paths,
                     npc::handle_despawn_timers,
                     spawn_dropped_item,
+                    drive_objective_hints,
                     reset_game_on_ending,
                     tick_lose_timers,
                     animate_lights,
@@ -516,6 +520,124 @@ fn handle_world_messages(mut hooks: MessageReader<RatHookTriggered>, mut cmd: Co
     }
 }
 
+const HINT_VISIBLE_SECS: f32 = 15.0;
+const HINT_FADE_SECS: f32 = 0.7;
+
+#[derive(Resource)]
+struct ObjectiveHintRuntime {
+    leave_building: HintLoop,
+    pickup_key: HintLoop,
+}
+
+impl Default for ObjectiveHintRuntime {
+    fn default() -> Self {
+        Self {
+            leave_building: HintLoop::new(),
+            pickup_key: HintLoop::new(),
+        }
+    }
+}
+
+struct HintLoop {
+    active: bool,
+    shown: bool,
+    fade_sent: bool,
+    visible_timer: Timer,
+}
+
+impl HintLoop {
+    fn new() -> Self {
+        Self {
+            active: false,
+            shown: false,
+            fade_sent: false,
+            visible_timer: Timer::from_seconds(HINT_VISIBLE_SECS, TimerMode::Once),
+        }
+    }
+
+    fn stop(&mut self) {
+        self.active = false;
+        self.shown = false;
+        self.fade_sent = false;
+        self.visible_timer.reset();
+    }
+}
+
+fn drive_objective_hints(
+    time: Res<Time>,
+    phase: Option<Res<State<Phase>>>,
+    ending_ui: Query<(), With<EndingUiRoot>>,
+    dropped_items: Query<&crate::gameplay::inventory::Item, Without<crate::gameplay::inventory::InventoryItem>>,
+    mut runtime: ResMut<ObjectiveHintRuntime>,
+    mut hints: MessageWriter<UiHintCommand>,
+) {
+    let win_active = phase
+        .as_ref()
+        .is_some_and(|current| matches!(current.get(), Phase::Win))
+        && ending_ui.is_empty();
+    tick_hint_loop(
+        &mut runtime.leave_building,
+        win_active,
+        "leave the building to finish the game",
+        time.delta(),
+        &mut hints,
+    );
+
+    let has_dropped_key = dropped_items.iter().any(is_floor_key);
+    tick_hint_loop(
+        &mut runtime.pickup_key,
+        has_dropped_key,
+        "pick up the key on the floor",
+        time.delta(),
+        &mut hints,
+    );
+}
+
+fn tick_hint_loop(
+    loop_state: &mut HintLoop,
+    active: bool,
+    text: &str,
+    delta: Duration,
+    hints: &mut MessageWriter<UiHintCommand>,
+) {
+    if !active {
+        if loop_state.active {
+            hints.write(UiHintCommand::FadeOut {
+                duration_secs: HINT_FADE_SECS,
+            });
+        }
+        loop_state.stop();
+        return;
+    }
+
+    if !loop_state.active {
+        loop_state.active = true;
+        loop_state.shown = true;
+        loop_state.fade_sent = false;
+        loop_state.visible_timer.reset();
+        hints.write(UiHintCommand::Show(UiHintRequest::new(text)));
+        return;
+    }
+
+    if loop_state.shown {
+        loop_state.visible_timer.tick(delta);
+    }
+
+    if !loop_state.fade_sent && loop_state.visible_timer.is_finished() {
+        loop_state.fade_sent = true;
+        hints.write(UiHintCommand::FadeOut {
+            duration_secs: HINT_FADE_SECS,
+        });
+    }
+}
+
+fn is_floor_key(item: &crate::gameplay::inventory::Item) -> bool {
+    matches!(
+        item.metadata.as_deref(),
+        Some("items/office_key.item.meta" | "items/apartment_key.item.meta")
+    )
+}
+
 fn handle_game_phases(
     mut phones: Query<(Entity, &mut Npc), With<Phone>>,
     mut timer: Local<Timer>,
@@ -704,12 +826,25 @@ fn spawn_dropped_item(
 fn reset_game_on_ending(
     mut reader: RemovedComponents<EndingUiRoot>,
     mut elims: ResMut<EliminationCount>,
+    mut hints_runtime: ResMut<ObjectiveHintRuntime>,
+    mut level_to_prepare: ResMut<LevelToPrepare>,
+    mut pending_transition: ResMut<PendingLevelTransition>,
     mut cmd: Commands,
     player_root: Single<Entity, With<PlayerRoot>>,
-    assets: Res<GameAssets>,
 ) {
-    for event in reader.read() {
+    for _event in reader.read() {
         elims.0 = 0;
+        hints_runtime.leave_building.stop();
+        hints_runtime.pickup_key.stop();
+        level_to_prepare.level = None;
+        level_to_prepare.portal_target = None;
+        pending_transition.level = None;
+        pending_transition.portal_target = None;
+        cmd.set_state(Phase::Explore);
+        cmd.write_message(UiHintCommand::Hide);
+        cmd.write_message(UiDiscoveryCommand::ReplaceAll {
+            snapshot: UiDiscoveryDbSnapshot::default(),
+        });
         cmd.entity(player_root.entity()).despawn();
     }
 }

@@ -662,7 +662,11 @@ pub(super) fn animate_dialogue_glyphs(
         if t >= 1.0 {
             transform.translation = Val2::ZERO;
             transform.scale = Vec2::ONE;
-            commands.entity(entity).remove::<DialogueGlyphFx>();
+            commands.queue(move |world: &mut World| {
+                if let Ok(mut entity_mut) = world.get_entity_mut(entity) {
+                    entity_mut.remove::<DialogueGlyphFx>();
+                }
+            });
         }
     }
 }
@@ -1658,6 +1662,10 @@ fn apply_preview_to_right_panel(
         .entity(session.preview_label)
         .insert(Text::new(preview.title.clone()));
 
+    if let Some(viewport) = session.preview_viewport {
+        detach_viewport_target(commands, viewport);
+    }
+
     if let Ok(card_children) = children.get(session.preview_card_root) {
         for child in card_children.iter() {
             despawn_tree(commands, child, children);
@@ -1743,10 +1751,13 @@ fn close_session(
     children: &Query<&Children>,
 ) {
     if let Some(session) = runtime.session.take() {
+        if let Some(viewport) = session.preview_viewport {
+            detach_viewport_target(commands, viewport);
+        }
+        despawn_tree(commands, session.root, children);
         if let Some(preview_root) = session.preview_world_root {
             despawn_tree(commands, preview_root, children);
         }
-        despawn_tree(commands, session.root, children);
     }
     state.active = false;
 }
@@ -1768,6 +1779,14 @@ fn despawn_tree(commands: &mut Commands, root: Entity, children_query: &Query<&C
     commands.queue(move |world: &mut World| {
         if world.entities().contains(root) {
             let _ = world.despawn(root);
+        }
+    });
+}
+
+fn detach_viewport_target(commands: &mut Commands, viewport: Entity) {
+    commands.queue(move |world: &mut World| {
+        if let Ok(mut entity) = world.get_entity_mut(viewport) {
+            entity.remove::<ViewportNode>();
         }
     });
 }
