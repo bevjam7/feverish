@@ -2,7 +2,7 @@ use bevy::{
     ecs::{lifecycle::HookContext, world::DeferredWorld},
     prelude::*,
 };
-use bevy_seedling::{prelude::HrtfNode, sample::SamplePlayer};
+use bevy_seedling::sample::SamplePlayer;
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
@@ -163,7 +163,7 @@ impl DoorRotatingBase {
             cmd.entity(door_entity).with_child((
                 SamplePlayer::new(assets.get_handle(sample).unwrap())
                     .with_volume(bevy_seedling::prelude::Volume::Linear(0.5)),
-                bevy_seedling::sample_effects![HrtfNode::default()],
+                // bevy_seedling::sample_effects![HrtfNode::default()],
                 WorldSfxPool,
             ));
         }

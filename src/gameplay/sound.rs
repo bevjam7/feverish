@@ -6,7 +6,7 @@ use bevy::{
 };
 use bevy_ahoy::{CharacterController, CharacterControllerState};
 use bevy_seedling::{
-    prelude::{HrtfNode, Volume},
+    prelude::Volume,
     sample::{AudioSample, PlaybackSettings, SamplePlayer},
 };
 use bevy_trenchbroom::prelude::*;
@@ -79,7 +79,7 @@ impl SoundPoint {
         world.commands().entity(hook.entity).insert((
             sampler,
             playback_settings,
-            bevy_seedling::sample_effects![HrtfNode::default()],
+            // bevy_seedling::sample_effects![HrtfNode::default()],
             WorldSfxPool,
         ));
     }

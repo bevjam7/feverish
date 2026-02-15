@@ -1,6 +1,6 @@
 (
     master_volume: 1.0,
-    music_volume: 0.85,
+    music_volume: 0.4,
     ui_sfx_volume: 0.9,
     world_sfx_volume: 0.95,
     voice_volume: 1.0,

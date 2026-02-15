@@ -19,7 +19,6 @@ use bevy::{
 };
 use bevy_ahoy::prelude::*;
 use bevy_seedling::{
-    prelude::HrtfNode,
     sample::{AudioSample, PlaybackSettings, SamplePlayer},
     spatial::SpatialListener3D,
 };
@@ -440,7 +439,7 @@ fn handle_game_phases(
                         SamplePlayer::new(sample.clone())
                             .looping()
                             .with_volume(bevy_seedling::prelude::Volume::Linear(0.5)),
-                        bevy_seedling::sample_effects![HrtfNode::default()],
+                        // bevy_seedling::sample_effects![HrtfNode::default()],
                         WorldSfxPool,
                     ));
                     npc.script_id = Some("npc.phone.first_ring".into());
@@ -454,7 +453,7 @@ fn handle_game_phases(
                         SamplePlayer::new(sample.clone())
                             .looping()
                             .with_volume(bevy_seedling::prelude::Volume::Linear(0.5)),
-                        bevy_seedling::sample_effects![HrtfNode::default()],
+                        // bevy_seedling::sample_effects![HrtfNode::default()],
                         WorldSfxPool,
                     ));
                     npc.script_id = Some("npc.phone.win_ring".into());
@@ -469,7 +468,7 @@ fn handle_game_phases(
                             .looping()
                             .with_volume(bevy_seedling::prelude::Volume::Linear(0.5)),
                         PlaybackSettings::default().with_speed(0.7),
-                        bevy_seedling::sample_effects![HrtfNode::default()],
+                        // bevy_seedling::sample_effects![HrtfNode::default()],
                         WorldSfxPool,
                     ));
                     npc.script_id = Some("npc.phone.lose_ring".into());

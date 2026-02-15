@@ -31,6 +31,8 @@ pub struct GameAssets {
     pub models: Vec<Handle<Gltf>>,
     #[asset(key = "audio", collection(typed))]
     pub audio: Vec<Handle<AudioSample>>,
+    #[asset(key = "music.ambient_a")]
+    pub music_a: Handle<AudioSample>,
     #[asset(key = "items", collection(typed))]
     pub items: Vec<Handle<ItemMeta>>,
     #[asset(key = "ratspinner.scripts", collection(typed))]

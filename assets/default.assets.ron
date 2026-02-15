@@ -22,6 +22,7 @@
         "models/diorama/diorama.gltf",
         "models/cd/cd.gltf",
     ]),
+    "music.ambient_a": File(path: "audio/ambient_a.ogg"),
     "audio": Files(paths: [
         "audio/radio_static.ogg",
         "audio/hum.ogg",
