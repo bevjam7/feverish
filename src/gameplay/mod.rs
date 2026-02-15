@@ -25,7 +25,7 @@ pub(crate) use mesh_outline::MeshOutlineTarget;
 
 use crate::{
     AppSystems, GameState, Phase, Usable,
-    assets::ItemMeta,
+    assets::{GameAssets, ItemMeta},
     audio::mixer::WorldSfxPool,
     gameplay::{
         door::{DoorBase, EndDoor},
@@ -37,8 +37,8 @@ use crate::{
     psx::{PsxCamera, PsxConfig},
     ratspinner::RatHookTriggered,
     ui::{
-        DiscoveryEntry, SpawnDroppedItem, UiDiscoveryDb, UiEndingCommand, UiEndingCommandsExt,
-        UiEndingPayload,
+        DiscoveryEntry, EndingUiRoot, SpawnDroppedItem, UiDiscoveryDb, UiEndingCommand,
+        UiEndingCommandsExt, UiEndingPayload, dialogue::UiDialogueState,
     },
 };
 
@@ -70,6 +70,7 @@ impl Plugin for GameplayPlugin {
                     npc::handle_despawn_timers,
                     spawn_dropped_item,
                     reset_game_on_ending,
+                    tick_lose_timers,
                 )
                     .in_set(AppSystems::Update),
             );
@@ -96,7 +97,7 @@ fn setup_endings(mut cmd: Commands) {
             .title("End")
             .subtitle("You failed to identify the real one.")
             .narrative("...")
-            .status_lines(["Soul adrift"]),
+            .status_lines(["Mind adrift"]),
     );
 }
 
@@ -499,8 +500,32 @@ fn handle_game_phases(
                         WorldSfxPool,
                     ));
                     npc.script_id = Some("npc.phone.lose_ring".into());
+                    cmd.entity(entity).observe(countdown_to_lose);
                 }
             },
+    }
+}
+
+#[derive(Component)]
+pub(crate) struct LoseTimer(Timer);
+
+fn countdown_to_lose(_on: On<Use>, mut cmd: Commands) {
+    cmd.spawn(LoseTimer(Timer::from_seconds(3.0, TimerMode::Once)));
+}
+
+pub(crate) fn tick_lose_timers(
+    mut timer: Single<(Entity, &mut LoseTimer)>,
+    state: Res<UiDialogueState>,
+    time: Res<Time>,
+    mut cmd: Commands,
+) {
+    if state.active {
+        return;
+    }
+    timer.1.0.tick(time.delta());
+    if timer.1.0.is_finished() {
+        cmd.entity(timer.0).try_despawn();
+        cmd.show_ending("lose");
     }
 }
 
@@ -554,15 +579,16 @@ fn spawn_dropped_item(
 }
 
 fn reset_game_on_ending(
-    mut reader: MessageReader<UiEndingCommand>,
+    mut reader: RemovedComponents<EndingUiRoot>,
     mut elims: ResMut<EliminationCount>,
+    mut level: ResMut<LevelToPrepare>,
     mut cmd: Commands,
     player_root: Single<Entity, With<PlayerRoot>>,
+    assets: Res<GameAssets>,
 ) {
     for event in reader.read() {
-        if let UiEndingCommand::Close = event {
-            elims.0 = 0;
-            cmd.entity(player_root.entity()).despawn();
-        }
+        level.level = Some(assets.level_exterior.clone());
+        elims.0 = 0;
+        cmd.entity(player_root.entity()).despawn();
     }
 }

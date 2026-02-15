@@ -3,13 +3,9 @@ use std::{collections::VecDeque, iter, time::Duration};
 use avian3d::prelude::{ColliderConstructor, CollisionLayers, RigidBody};
 use bevy::{
     asset::AssetPath,
-    ecs::{
-        lifecycle::HookContext, relationship::OrderedRelationshipSourceCollection,
-        world::DeferredWorld,
-    },
+    ecs::{lifecycle::HookContext, world::DeferredWorld},
     platform::collections::HashMap,
     prelude::*,
-    reflect::List,
     scene::SceneInstanceReady,
 };
 use bevy_trenchbroom::prelude::*;
@@ -373,35 +369,48 @@ pub(crate) fn build_nav_paths(
 pub(crate) fn handle_elimination_triggers(
     mut hooks: MessageReader<RatHookTriggered>,
     mut cmd: Commands,
-    mut npcs: Query<(&Npc, &mut Navigator)>,
+    mut npcs: Query<(&mut Npc, &mut Navigator), Without<DespawnTimer>>,
+    mut lure_timers: Query<&mut WalkbackTimer>,
 ) {
     for event in hooks.read() {
         match event.hook.as_str() {
             "game.lure" => {
+                // Immediately end other lure timers
+                // idk why this isnt working lulz
+                for mut timer in lure_timers.iter_mut() {
+                    timer.0.finish();
+                }
+
                 let npc_entity = event.target.unwrap();
-                let (_npc, mut navigator) = npcs.get_mut(npc_entity).unwrap();
-                // Begin walk animation
-                navigator.queue = navigator.path.iter().rev().copied().collect::<Vec<_>>();
-                cmd.entity(npc_entity).trigger(StartedWalk);
+                if let Ok((_npc, mut navigator)) = npcs.get_mut(npc_entity) {
+                    // Begin walk animation
+                    navigator.queue = navigator.path.iter().rev().copied().collect::<Vec<_>>();
+                    cmd.entity(npc_entity).trigger(StartedWalk);
+                }
             }
             "game.kill" => {
                 // TODO: play animations.
                 let npc_entity = event.target.unwrap();
-                cmd.run_system_cached_with(
-                    Npc::transition_to_animation_one_shot,
-                    (npc_entity, "death", false),
-                );
-                cmd.entity(npc_entity).insert(DespawnTimer(Timer::new(
-                    Duration::from_secs_f32(1.0),
-                    TimerMode::Once,
-                )));
+                // We don't want already despawning NPCs
+                if let Ok((mut npc, _)) = npcs.get_mut(npc_entity) {
+                    npc.script_id = None;
+                    cmd.run_system_cached_with(
+                        Npc::transition_to_animation_one_shot,
+                        (npc_entity, "death", false),
+                    );
+                    cmd.entity(npc_entity).insert(DespawnTimer(Timer::new(
+                        Duration::from_secs_f32(1.0),
+                        TimerMode::Once,
+                    )));
+                }
             }
             "game.spare" => {
                 let npc_entity = event.target.unwrap();
-                let (_npc, mut navigator) = npcs.get_mut(npc_entity).unwrap();
-                // Begin walk animation
-                navigator.queue = navigator.path.iter().copied().collect::<Vec<_>>();
-                cmd.entity(npc_entity).trigger(StartedWalk);
+                if let Ok((_npc, mut navigator)) = npcs.get_mut(npc_entity) {
+                    // Begin walk animation
+                    navigator.queue = navigator.path.iter().copied().collect::<Vec<_>>();
+                    cmd.entity(npc_entity).trigger(StartedWalk);
+                }
             }
             _ => (),
         }
