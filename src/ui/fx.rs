@@ -10,7 +10,10 @@ use bevy::{
     window::PrimaryWindow,
 };
 
-use super::{DialogueUiRoot, InventoryUiRoot, MainMenuUi, PauseMenuUi, hint::UiHintRoot};
+use super::{
+    DialogueUiRoot, InventoryUiRoot, MainMenuUi, PauseMenuUi, ending::EndingUiRoot,
+    hint::UiHintRoot,
+};
 use crate::settings::GameSettings;
 
 const UI_FX_SHADER: &str = "shaders/ui_menu_fx.wgsl";
@@ -250,6 +253,7 @@ fn update_ui_fx_material(
             With<PauseMenuUi>,
             With<DialogueUiRoot>,
             With<InventoryUiRoot>,
+            With<EndingUiRoot>,
             With<UiHintRoot>,
         )>,
     >,

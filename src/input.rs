@@ -11,7 +11,7 @@ use crate::{
     GameState,
     gameplay::{ColliderHierarchyChildOf, PhysLayer, Player},
     ratspinner::RatDialogueState,
-    ui::{DialogueUiRoot, InventoryUiRoot, MainMenuUi, PauseMenuUi, UiDialogueCommand},
+    ui::{DialogueUiRoot, EndingUiRoot, InventoryUiRoot, MainMenuUi, PauseMenuUi, UiDialogueCommand},
 };
 
 pub(crate) struct InputPlugin;
@@ -177,6 +177,7 @@ fn sync_player_input_state(
             With<PauseMenuUi>,
             With<DialogueUiRoot>,
             With<InventoryUiRoot>,
+            With<EndingUiRoot>,
         )>,
     >,
     state: Res<State<PlayerInputState>>,

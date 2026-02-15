@@ -154,7 +154,7 @@ impl Plugin for AppPlugin {
             map::MapPlugin,
             // debug, needs to be after SkyPlugin initializes messages
             #[cfg(feature = "dev")]
-            debug::sky::SkyDebugPlugin,
+            (debug::sky::SkyDebugPlugin, debug::ending::EndingDebugPlugin),
             gameplay::GameplayPlugin,
             input::InputPlugin,
             audio::AudioPlugin,

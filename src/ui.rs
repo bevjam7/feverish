@@ -4,6 +4,7 @@ pub(super) mod components;
 pub(super) mod confirm_popup;
 pub(crate) mod dialogue;
 pub mod discovery_api;
+pub(super) mod ending;
 pub(super) mod fx;
 pub(super) mod hint;
 pub(super) mod inventory;
@@ -22,6 +23,10 @@ pub use components::{
 };
 #[allow(unused_imports)]
 pub use discovery_api::DiscoveryCommandsExt;
+#[allow(unused_imports)]
+pub use ending::{
+    EndingUiRoot, UiEndingCatalog, UiEndingCommand, UiEndingCommandsExt, UiEndingPayload,
+};
 #[allow(unused_imports)]
 pub use hint::{UiHintCommand, UiHintCommandsExt, UiHintRequest};
 pub use systems::UiDiscoveryDb;
@@ -48,16 +53,22 @@ impl Plugin for UiPlugin {
             .init_resource::<UiDiscoveryDb>()
             .init_resource::<dialogue::UiDialogueRuntime>()
             .init_resource::<dialogue::UiDialogueState>()
+            .init_resource::<ending::UiEndingCatalog>()
+            .init_resource::<ending::UiEndingRuntime>()
             .init_resource::<hint::UiHintRuntime>()
             .init_resource::<inventory::UiInventoryRuntime>()
             .add_plugins(fx::UiMenuFxPlugin)
             .add_message::<UiMenuAction>()
             .add_message::<UiDialogueCommand>()
+            .add_message::<ending::UiEndingCommand>()
             .add_message::<hint::UiHintCommand>()
             .add_message::<inventory::UiInventoryCommand>()
             .add_message::<UiDiscoveryCommand>()
             .add_observer(on_ui_scroll)
-            .add_systems(OnExit(AppState::Load), populate_ui_fonts_and_cursor)
+            .add_systems(
+                OnExit(AppState::Load),
+                (populate_ui_fonts_and_cursor, ending::populate_default_endings),
+            )
             .add_systems(
                 Update,
                 emulate_button_interaction_for_offscreen_ui
@@ -69,6 +80,7 @@ impl Plugin for UiPlugin {
                 Update,
                 (
                     apply_discovery_commands,
+                    ending::apply_ending_commands,
                     hint::apply_hint_commands,
                     spawn_main_menu_on_added,
                     spawn_pause_menu_on_added,
@@ -130,6 +142,14 @@ impl Plugin for UiPlugin {
                         inventory::rotate_inventory_preview,
                         inventory::handle_inventory_preview_zoom,
                     ),
+                )
+                    .run_if(in_state(AppState::Main)),
+            )
+            .add_systems(
+                Update,
+                (
+                    ending::update_ending_reveal,
+                    ending::update_ending_hold_to_continue,
                 )
                     .run_if(in_state(AppState::Main)),
             );
