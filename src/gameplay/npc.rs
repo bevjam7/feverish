@@ -416,7 +416,7 @@ pub(crate) fn handle_despawn_timers(
     for (entity, mut timer) in query {
         timer.0.tick(time.delta());
         if timer.0.just_finished() {
-            cmd.entity(entity).despawn();
+            cmd.entity(entity).try_despawn();
         }
     }
 }

@@ -7,9 +7,6 @@ mod props;
 pub mod sky;
 mod sound;
 
-#[allow(unused_imports)]
-pub(crate) use mesh_outline::MeshOutlineTarget;
-
 use std::{collections::HashMap, time::Duration};
 
 use avian3d::prelude::*;
@@ -23,9 +20,11 @@ use bevy_seedling::{
     spatial::SpatialListener3D,
 };
 use bevy_trenchbroom::prelude::*;
+#[allow(unused_imports)]
+pub(crate) use mesh_outline::MeshOutlineTarget;
 
 use crate::{
-    AppSystems, Phase, Usable,
+    AppSystems, GameState, Phase, Usable,
     assets::ItemMeta,
     audio::mixer::WorldSfxPool,
     gameplay::{
@@ -37,7 +36,10 @@ use crate::{
     map::{LevelToPrepare, PendingLevelTransition},
     psx::{PsxCamera, PsxConfig},
     ratspinner::RatHookTriggered,
-    ui::{DiscoveryEntry, SpawnDroppedItem, UiDiscoveryDb},
+    ui::{
+        DiscoveryEntry, SpawnDroppedItem, UiDiscoveryDb, UiEndingCommand, UiEndingCommandsExt,
+        UiEndingPayload,
+    },
 };
 
 pub(crate) struct GameplayPlugin;
@@ -49,6 +51,7 @@ impl Plugin for GameplayPlugin {
             .init_resource::<DoorScenePreloads>()
             .init_resource::<EliminationCount>()
             .add_message::<SpawnDroppedItem>()
+            .add_systems(OnEnter(GameState::Main), setup_endings)
             .add_systems(
                 Update,
                 (
@@ -66,10 +69,35 @@ impl Plugin for GameplayPlugin {
                     npc::build_nav_paths,
                     npc::handle_despawn_timers,
                     spawn_dropped_item,
+                    reset_game_on_ending,
                 )
                     .in_set(AppSystems::Update),
             );
     }
+}
+
+fn setup_endings(mut cmd: Commands) {
+    cmd.upsert_ending(
+        UiEndingPayload::new("win_spared")
+            .title("End")
+            .subtitle("You left him with his thoughts.")
+            .narrative("...")
+            .status_lines(["Eliminations: 3"]),
+    );
+    cmd.upsert_ending(
+        UiEndingPayload::new("win_killed")
+            .title("End")
+            .subtitle("You made sure this can't happen again.")
+            .narrative("...")
+            .status_lines(["Eliminations: 4"]),
+    );
+    cmd.upsert_ending(
+        UiEndingPayload::new("lose")
+            .title("End")
+            .subtitle("You failed to identify the real one.")
+            .narrative("...")
+            .status_lines(["Soul adrift"]),
+    );
 }
 
 #[derive(Resource, Default)]
@@ -235,7 +263,6 @@ fn handle_added_spawn_point_camera(
                     })
                     .with_max_hits(1),
             ));
-
         }
     }
 }
@@ -524,4 +551,16 @@ fn spawn_dropped_item(
             ),
         ));
     }
+}
+
+fn reset_game_on_ending(
+    mut reader: MessageReader<UiEndingCommand>,
+    mut elims: ResMut<EliminationCount>,
+    mut cmd: Commands,
+    player_root: Single<Entity, With<PlayerRoot>>,
+) {
+    for _event in reader.read() {
+        elims.0 = 0;
+    }
+    cmd.entity(player_root.entity()).despawn();
 }

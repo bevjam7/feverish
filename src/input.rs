@@ -200,7 +200,8 @@ fn activate_player_input(
     mut windows: Query<&mut CursorOptions>,
 ) {
     if let Ok(mut cursor_options) = windows.single_mut() {
-        cursor_options.grab_mode = CursorGrabMode::None;
+        cursor_options.grab_mode = CursorGrabMode::Locked;
+        cursor_options.visible = false;
     }
     for entity in &players {
         commands
@@ -225,6 +226,7 @@ fn lock_player_input(
 ) {
     if let Ok(mut cursor_options) = windows.single_mut() {
         cursor_options.grab_mode = CursorGrabMode::None;
+        cursor_options.visible = true;
     }
     for (entity, actions) in &players {
         // clear any latched values once before disabling the input context

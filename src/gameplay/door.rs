@@ -9,11 +9,12 @@ use crate::{
     Phase, Usable,
     audio::mixer::WorldSfxPool,
     gameplay::{
-        DoorPortal, EmitHook, HookCounter,
+        DoorPortal, EliminationCount, EmitHook, HookCounter,
         npc::{Npc, SuspectType},
     },
     input::Use,
     ratspinner::RatHookTriggered,
+    ui::UiEndingCommandsExt,
 };
 
 /// Base door class from which other types of doors inherit
@@ -233,12 +234,7 @@ impl EndDoor {
         world.commands().entity(hook.entity).observe(Self::on_use);
     }
 
-    fn on_use(
-        _on: On<Use>,
-        npcs: Query<&Npc>,
-        phase: Res<State<Phase>>,
-        mut hooks: MessageWriter<RatHookTriggered>,
-    ) {
+    fn on_use(_on: On<Use>, npcs: Query<&Npc>, phase: Res<State<Phase>>, mut cmd: Commands) {
         if let Phase::Win = phase.get() {
             // Check to see if the human npc was killed
             let spared = npcs
@@ -246,22 +242,13 @@ impl EndDoor {
                 .any(|x| matches!(x.suspect, Some(SuspectType::Human)));
 
             dbg!("Human spared: {}", spared);
-
             match spared {
-                true => hooks.write(RatHookTriggered {
-                    hook: "game.win.spared".to_string(),
-                    script_id: Default::default(),
-                    node_id: Default::default(),
-                    option_id: None,
-                    target: None,
-                }),
-                false => hooks.write(RatHookTriggered {
-                    hook: "game.win.killed".to_string(),
-                    script_id: Default::default(),
-                    node_id: Default::default(),
-                    option_id: None,
-                    target: None,
-                }),
+                true => {
+                    cmd.show_ending("win_spared");
+                }
+                false => {
+                    cmd.show_ending("win_killed");
+                }
             };
         }
     }
