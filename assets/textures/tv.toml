@@ -1,0 +1,10 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "tv.png"
+normal_map_texture = "tv_normal.png"
+metallic_roughness_texture = "tv_mr.png"
+metallic = 1.0
+perceptual_roughness = 1.0
+
+
+

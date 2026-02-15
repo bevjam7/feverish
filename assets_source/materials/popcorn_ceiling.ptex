@@ -1,0 +1,138 @@
+{
+	"connections": [
+		{
+			"from": "fbm3",
+			"from_port": 0,
+			"to": "normal_map2",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "fbm3",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "@Node@7028",
+	"node_position": {
+		"x": 0.0,
+		"y": 0.0
+	},
+	"nodes": [
+		{
+			"export_last_target": "Bevy Trenchbroom",
+			"export_paths": {
+				"Bevy Trenchbroom": "/Users/doomy/Code/feverish/assets/textures/popcorn_ceiling"
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 74.1184387207031,
+				"y": -33.1167488098145
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
+					"type": "Color"
+				},
+				"ao": 1.0,
+				"depth_scale": 0.5,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 0.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 8,
+				"sss": 1.0
+			},
+			"seed_int": 0,
+			"type": "material"
+		},
+		{
+			"name": "fbm3",
+			"node_position": {
+				"x": -376.679321289062,
+				"y": 34.6796264648438
+			},
+			"parameters": {
+				"folds": 0.0,
+				"iterations": 1.0,
+				"noise": 9,
+				"offset": 0.0,
+				"persistence": 0.78,
+				"scale_x": 239.0,
+				"scale_y": 225.0
+			},
+			"seed_int": 0,
+			"type": "fbm3"
+		},
+		{
+			"name": "normal_map2",
+			"node_position": {
+				"x": -159.179992675781,
+				"y": 166.08903503418
+			},
+			"parameters": {
+				"buffer": 1.0,
+				"param2": 0.0,
+				"size": 8,
+				"strength": 0.68
+			},
+			"seed_int": 0,
+			"type": "normal_map2"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -180.217269897461,
+				"y": -155.017425537109
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 0.582122802734375,
+							"g": 0.667738914489746,
+							"pos": 0.0,
+							"r": 0.68359375
+						},
+						{
+							"a": 1.0,
+							"b": 0.706954956054688,
+							"g": 0.776484608650208,
+							"pos": 0.918068869072094,
+							"r": 0.8359375
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

@@ -40,8 +40,7 @@ use crate::{
     ratspinner::RatHookTriggered,
     ui::{
         DiscoveryEntry, EndingUiRoot, SpawnDroppedItem, UiDiscoveryCommand, UiDiscoveryDb,
-        UiDiscoveryDbSnapshot, UiEndingCommandsExt, UiEndingPayload, UiHintCommand,
-        UiHintRequest,
+        UiDiscoveryDbSnapshot, UiEndingCommandsExt, UiEndingPayload, UiHintCommand, UiHintRequest,
         dialogue::UiDialogueState,
     },
 };
@@ -567,7 +566,10 @@ fn drive_objective_hints(
     time: Res<Time>,
     phase: Option<Res<State<Phase>>>,
     ending_ui: Query<(), With<EndingUiRoot>>,
-    dropped_items: Query<&crate::gameplay::inventory::Item, Without<crate::gameplay::inventory::InventoryItem>>,
+    dropped_items: Query<
+        &crate::gameplay::inventory::Item,
+        Without<crate::gameplay::inventory::InventoryItem>,
+    >,
     mut runtime: ResMut<ObjectiveHintRuntime>,
     mut hints: MessageWriter<UiHintCommand>,
 ) {
@@ -578,7 +580,7 @@ fn drive_objective_hints(
     tick_hint_loop(
         &mut runtime.leave_building,
         win_active,
-        "leave the building to finish the game",
+        "leave the same way you came",
         time.delta(),
         &mut hints,
     );
@@ -587,7 +589,7 @@ fn drive_objective_hints(
     tick_hint_loop(
         &mut runtime.pickup_key,
         has_dropped_key,
-        "pick up the key on the floor",
+        "a key fell to the floor...",
         time.delta(),
         &mut hints,
     );

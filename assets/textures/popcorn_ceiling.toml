@@ -1,0 +1,9 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "popcorn_ceiling.png"
+normal_map_texture = "popcorn_ceiling_normal.png"
+metallic = 1.0
+perceptual_roughness = 1.0
+
+
+

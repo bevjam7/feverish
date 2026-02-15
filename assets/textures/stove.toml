@@ -1,0 +1,5 @@
+type = "StandardMaterial"
+[material]
+base_color_texture = "stove.png"
+metallic = 0.0
+perceptual_roughness = 0.8
