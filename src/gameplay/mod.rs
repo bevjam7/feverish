@@ -231,6 +231,7 @@ fn handle_added_spawn_point_camera(
                     })
                     .with_max_hits(1),
             ));
+
         }
     }
 }

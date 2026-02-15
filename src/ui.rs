@@ -5,6 +5,7 @@ pub(super) mod confirm_popup;
 pub(crate) mod dialogue;
 pub mod discovery_api;
 pub(super) mod fx;
+pub(super) mod hint;
 pub(super) mod inventory;
 pub(super) mod main_menu;
 pub(super) mod pause_menu;
@@ -21,6 +22,8 @@ pub use components::{
 };
 #[allow(unused_imports)]
 pub use discovery_api::DiscoveryCommandsExt;
+#[allow(unused_imports)]
+pub use hint::{UiHintCommand, UiHintCommandsExt, UiHintRequest};
 pub use systems::UiDiscoveryDb;
 use systems::{
     animate_dither_pixels, animate_main_menu_ticker, apply_discovery_commands,
@@ -45,10 +48,12 @@ impl Plugin for UiPlugin {
             .init_resource::<UiDiscoveryDb>()
             .init_resource::<dialogue::UiDialogueRuntime>()
             .init_resource::<dialogue::UiDialogueState>()
+            .init_resource::<hint::UiHintRuntime>()
             .init_resource::<inventory::UiInventoryRuntime>()
             .add_plugins(fx::UiMenuFxPlugin)
             .add_message::<UiMenuAction>()
             .add_message::<UiDialogueCommand>()
+            .add_message::<hint::UiHintCommand>()
             .add_message::<inventory::UiInventoryCommand>()
             .add_message::<UiDiscoveryCommand>()
             .add_observer(on_ui_scroll)
@@ -64,6 +69,7 @@ impl Plugin for UiPlugin {
                 Update,
                 (
                     apply_discovery_commands,
+                    hint::apply_hint_commands,
                     spawn_main_menu_on_added,
                     spawn_pause_menu_on_added,
                     cleanup_removed_main_menu,
@@ -96,6 +102,8 @@ impl Plugin for UiPlugin {
                     cleanup_ui_cursor,
                     restore_native_cursor_on_exit,
                     dialogue::apply_dialogue_commands,
+                    hint::animate_hint_glitch,
+                    hint::animate_hint_fade,
                     inventory::apply_inventory_commands,
                     (
                         dialogue::update_typewriter_dialogue,
