@@ -74,7 +74,8 @@ impl Plugin for UiPlugin {
                 emulate_button_interaction_for_offscreen_ui
                     .before(handle_button_interactions)
                     .before(dialogue::handle_dialogue_arrow_buttons)
-                    .before(dialogue::handle_dialogue_quick_action_buttons),
+                    .before(dialogue::handle_dialogue_quick_action_buttons)
+                    .before(dialogue::handle_dialogue_confirm_button)
             )
             .add_systems(
                 Update,
