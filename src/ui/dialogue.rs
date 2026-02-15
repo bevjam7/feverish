@@ -1778,7 +1778,7 @@ fn despawn_tree(commands: &mut Commands, root: Entity, children_query: &Query<&C
     }
     commands.queue(move |world: &mut World| {
         if world.entities().contains(root) {
-            let _ = world.despawn(root);
+            let _ = world.try_despawn(root);
         }
     });
 }
