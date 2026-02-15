@@ -197,9 +197,9 @@ pub(super) fn spawn_pause_menu(commands: &mut Commands, fonts: &UiFonts, owner: 
                                         ))
                                         .with_children(|lines| {
                                             for line in [
-                                                "keep up the good work!",
+                                                "Press \"E\" to interact with the world",
                                                 "",
-                                                "resume to continue",
+                                                "Resume to continue",
                                                 "main menu to reset run",
                                                 "",
                                                 "quit to desktop",

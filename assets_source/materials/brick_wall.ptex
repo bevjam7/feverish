@@ -244,7 +244,7 @@
 				"metallic": 0.0,
 				"normal": 1.0,
 				"roughness": 1.0,
-				"size": 8,
+				"size": 8.0,
 				"sss": 1.0
 			},
 			"seed_int": 0,
@@ -295,7 +295,7 @@
 				"amount3": 0.24,
 				"blend_type1": 2.0,
 				"blend_type2": 0.0,
-				"blend_type3": 7
+				"blend_type3": 7.0
 			},
 			"seed_int": 0,
 			"type": "blend2"
@@ -310,7 +310,7 @@
 				"buffer": 1.0,
 				"param2": 0.0,
 				"size": 9.0,
-				"strength": 0.46
+				"strength": 0.2
 			},
 			"seed_int": 0,
 			"type": "normal_map2"
@@ -712,7 +712,7 @@
 			},
 			"parameters": {
 				"amount1": 0.21,
-				"blend_type1": 13
+				"blend_type1": 13.0
 			},
 			"seed_int": 0,
 			"type": "blend2"
@@ -757,7 +757,7 @@
 			"parameters": {
 				"d_scale": 1.0,
 				"param0": 0.0,
-				"param1": 10
+				"param1": 10.0
 			},
 			"seed_int": 0,
 			"type": "dirt"
@@ -938,7 +938,7 @@
 			},
 			"parameters": {
 				"amount1": 1.0,
-				"blend_type1": 12
+				"blend_type1": 12.0
 			},
 			"seed_int": 0,
 			"type": "blend2"

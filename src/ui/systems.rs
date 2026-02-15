@@ -1442,14 +1442,13 @@ pub(super) fn animate_dither_pixels(
 fn main_menu_page_content(page: MainMenuPage) -> (&'static str, &'static [&'static str]) {
     match page {
         MainMenuPage::Home => (
-            "SYSTEM STATUS",
+            "SEQUENCE START",
             &[
-                "terminal online",
-                "",
-                "new game: available",
-                "continue: waiting for save state",
-                "",
-                "open credits or gallery on left",
+                "CONTROLS",
+                "WSAD: Move | Space: Jump",
+                "E: Interact",
+                "Tab: Inventory",
+                "Esc: Pause menu",
             ],
         ),
         MainMenuPage::Credits => (
