@@ -827,7 +827,7 @@ fn choose_option(
     }
 
     let inventory_idx = node.options.len();
-    if index == inventory_idx {
+    if can_show_items_in_dialogue(&active_snapshot.script_id) && index == inventory_idx {
         if discovery_db.entries(DiscoveryKind::Item).is_empty() {
             return;
         }
@@ -943,7 +943,7 @@ fn show_current_node(
             text: node.text.clone(),
             portrait_path: node.portrait_path.clone(),
             preview: None,
-            options: dialogue_options_for_node(node, discovery_db),
+            options: dialogue_options_for_node(node, discovery_db, &active.script_id),
             reveal_duration_secs: if speak {
                 estimate_speech_duration_secs(&node.text, node.voice)
             } else {
@@ -965,6 +965,7 @@ fn show_current_node(
 fn dialogue_options_for_node(
     node: &RatNode,
     discovery_db: &UiDiscoveryDb,
+    script_id: &str,
 ) -> Vec<UiDialogueOption> {
     let mut options: Vec<UiDialogueOption> = node
         .options
@@ -978,14 +979,20 @@ fn dialogue_options_for_node(
         })
         .collect();
 
-    options.push(UiDialogueOption {
-        text: "Show item...".to_string(),
-        preview: None,
-        item_id: None,
-        seen: false,
-        enabled: !discovery_db.entries(DiscoveryKind::Item).is_empty(),
-    });
+    if can_show_items_in_dialogue(script_id) {
+        options.push(UiDialogueOption {
+            text: "Show item...".to_string(),
+            preview: None,
+            item_id: None,
+            seen: false,
+            enabled: !discovery_db.entries(DiscoveryKind::Item).is_empty(),
+        });
+    }
     options
+}
+
+fn can_show_items_in_dialogue(script_id: &str) -> bool {
+    !script_id.starts_with("npc.phone")
 }
 
 fn open_inventory_picker(
