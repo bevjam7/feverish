@@ -1,6 +1,4 @@
-use avian3d::prelude::{
-    Collider, CollisionLayers, LayerMask, RayCaster, RayHits, ShapeHits, SpatialQueryFilter,
-};
+use avian3d::prelude::{Collider, RayCaster, RayHits, SpatialQueryFilter};
 use bevy::{
     prelude::*,
     window::{CursorGrabMode, CursorOptions},
@@ -11,7 +9,9 @@ use crate::{
     GameState,
     gameplay::{ColliderHierarchyChildOf, PhysLayer, Player},
     ratspinner::RatDialogueState,
-    ui::{DialogueUiRoot, EndingUiRoot, InventoryUiRoot, MainMenuUi, PauseMenuUi, UiDialogueCommand},
+    ui::{
+        DialogueUiRoot, EndingUiRoot, InventoryUiRoot, MainMenuUi, PauseMenuUi, UiDialogueCommand,
+    },
 };
 
 pub(crate) struct InputPlugin;

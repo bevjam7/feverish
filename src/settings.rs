@@ -89,7 +89,7 @@ impl Default for GameSettings {
     fn default() -> Self {
         Self {
             master_volume: 1.0,
-            music_volume: 0.4,
+            music_volume: 0.2,
             ui_sfx_volume: 0.9,
             world_sfx_volume: 0.95,
             voice_volume: 1.0,

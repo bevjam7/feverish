@@ -16,13 +16,7 @@ struct AudioRestartMitigation {
 impl Plugin for AudioPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, set_up_mixer)
-            .add_systems(
-                Update,
-                (
-                    apply_mixer_settings.run_if(resource_changed::<GameSettings>),
-                    run_fade_in_out,
-                ),
-            )
+            .add_systems(Update, (apply_mixer_settings, run_fade_in_out))
             .add_systems(OnEnter(Phase::Main), start_playing_bgm);
 
         #[cfg(feature = "native")]
@@ -32,12 +26,8 @@ impl Plugin for AudioPlugin {
 }
 
 fn set_up_mixer(mut cmd: Commands) {
-    cmd.spawn((VolumeNode::default(), mixer::MusicBus));
     cmd.spawn((VolumeNode::default(), mixer::UiSfxBus));
     cmd.spawn((VolumeNode::default(), mixer::WorldSfxBus));
-
-    cmd.spawn(SamplerPool(mixer::MusicPool))
-        .connect(mixer::MusicBus);
 
     cmd.spawn(SamplerPool(mixer::UiSfxPool))
         .connect(mixer::UiSfxBus);
@@ -52,10 +42,10 @@ fn set_up_mixer(mut cmd: Commands) {
 fn apply_mixer_settings(
     settings: Res<GameSettings>,
     mut buses: ParamSet<(
-        Query<&mut VolumeNode, With<MainBus>>,
-        Query<&mut VolumeNode, With<mixer::MusicBus>>,
-        Query<&mut VolumeNode, With<mixer::UiSfxBus>>,
-        Query<&mut VolumeNode, With<mixer::WorldSfxBus>>,
+        Single<&mut VolumeNode, With<MainBus>>,
+        Single<&mut VolumeNode, With<SamplerPool<MusicPool>>>,
+        Single<&mut VolumeNode, With<mixer::UiSfxBus>>,
+        Single<&mut VolumeNode, With<mixer::WorldSfxBus>>,
     )>,
 ) {
     let master = settings.master_volume.clamp(0.0, 1.5);
@@ -63,33 +53,31 @@ fn apply_mixer_settings(
     let ui_sfx = settings.ui_sfx_volume.clamp(0.0, 1.5);
     let world_sfx = settings.world_sfx_volume.clamp(0.0, 1.5);
 
-    if let Ok(mut node) = buses.p0().single_mut() {
-        node.volume = Volume::Linear(master);
-    }
-    if let Ok(mut node) = buses.p1().single_mut() {
-        node.volume = Volume::Linear(music);
-    }
-    if let Ok(mut node) = buses.p2().single_mut() {
-        node.volume = Volume::Linear(ui_sfx);
-    }
-    if let Ok(mut node) = buses.p3().single_mut() {
-        node.volume = Volume::Linear(world_sfx);
-    }
+    buses.p0().as_mut().volume = Volume::Linear(master);
+    buses.p1().as_mut().volume = Volume::Linear(music);
+    buses.p2().as_mut().volume = Volume::Linear(ui_sfx);
+    buses.p3().as_mut().volume = Volume::Linear(world_sfx);
 }
 
 fn start_playing_bgm(
     mut cmd: Commands,
     game_assets: Res<GameAssets>,
-    music_volume: Single<&mut VolumeNode, With<mixer::MusicBus>>,
+    music_volume: Single<&mut VolumeNode, With<SamplerPool<MusicPool>>>,
 ) {
     let mut sampler = SamplePlayer::new(game_assets.music_a.clone());
     sampler.repeat_mode = RepeatMode::RepeatEndlessly;
-    // TODO: Volume busses not working so we set a very small volume on bgm.
-    cmd.spawn((
-        sampler.with_volume(Volume::Linear(0.15)),
-        // MusicPool,
-        // VolumeNode::from_linear(0.1), // FadeInOut::new(0.0, 0.2, 5.0)
-    ));
+    let volume = cmd
+        .spawn((FadeInOut::new(0.0, 1.0, 5.0), VolumeNode::from_linear(0.0)))
+        .id();
+    cmd.spawn((sampler, MusicPool)).connect(volume);
+    dbg!(music_volume.volume);
+    dbg!(music_volume.volume);
+    dbg!(music_volume.volume);
+    dbg!(music_volume.volume);
+    dbg!(music_volume.volume);
+    dbg!(music_volume.volume);
+    dbg!(music_volume.volume);
+    dbg!(music_volume.volume);
     dbg!(music_volume.volume);
 }
 
@@ -156,11 +144,6 @@ pub(crate) mod mixer {
     pub(crate) struct WorldSfxBus;
     #[derive(PoolLabel, PartialEq, Eq, Debug, Hash, Clone)]
     pub(crate) struct WorldSfxPool;
-
-    #[derive(NodeLabel, PartialEq, Eq, Debug, Hash, Clone)]
-    pub(crate) struct MusicBus;
-    #[derive(PoolLabel, PartialEq, Eq, Debug, Hash, Clone)]
-    pub(crate) struct MusicPool;
 }
 
 #[derive(Component)]
