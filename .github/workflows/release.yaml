@@ -87,12 +87,12 @@ env:
 
   # Before enabling LFS, please take a look at GitHub's documentation for costs and quota limits:
   # <https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-storage-and-bandwidth-usage>
-  git_lfs: false
+  git_lfs: true
 
   # Enable these to deploy on every push to `main`.
   # Make sure to set up any enabled targets. Builds will ignore warnings.
   # Warning: If you use private repositories, this will eat through your available worker minutes quickly.
-  continuous_deployment_to_itch: false
+  continuous_deployment_to_itch: true
   continuous_deployment_to_github_pages: false
 
 jobs:
@@ -215,6 +215,7 @@ jobs:
         uses: dtolnay/rust-toolchain@nightly
         with:
           targets: ${{ matrix.targets }}
+          components: rust-src
 
       - name: Restore Rust cache
         if: ${{ env.is_platform_enabled == 'true' && github.event_name == 'push' }}
