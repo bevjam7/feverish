@@ -82,7 +82,7 @@ pub(super) fn spawn_main_menu(commands: &mut Commands, fonts: &UiFonts, owner: E
                     ))
                     .with_children(|titlebar| {
                         titlebar.spawn((
-                            Text::new("FEVERISH"),
+                            Text::new("These Four"),
                             TextFont {
                                 font: fonts.pixel.clone(),
                                 font_size: 22.0,
@@ -449,7 +449,9 @@ pub(super) fn spawn_main_menu(commands: &mut Commands, fonts: &UiFonts, owner: E
                                     ticker.spawn((
                                         MainMenuTicker {
                                             tips: vec![
-                                                "there should be a super useful tip here"
+                                                "press tab to open your inventory".to_string(),
+                                                "look at the sky!".to_string(),
+                                                "there's a hidden combo with the arrow keys"
                                                     .to_string(),
                                             ],
                                             current: 0,
@@ -462,7 +464,7 @@ pub(super) fn spawn_main_menu(commands: &mut Commands, fonts: &UiFonts, owner: E
                                             top: Val::Px(2.0),
                                             ..default()
                                         },
-                                        Text::new("there should be a super useful tip here"),
+                                        Text::new("press tab to open your inventory"),
                                         TextFont {
                                             font: fonts.body.clone(),
                                             font_size: 24.0,

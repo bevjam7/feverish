@@ -79,7 +79,7 @@ impl Plugin for AppPlugin {
                 })
                 .set(WindowPlugin {
                     primary_window: Window {
-                        title: "Feverish".to_string(),
+                        title: "These Four".to_string(),
                         fit_canvas_to_parent: true,
                         #[cfg(feature = "web")]
                         prevent_default_event_handling: true,
