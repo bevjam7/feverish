@@ -502,7 +502,7 @@ pub(super) fn spawn_main_menu(commands: &mut Commands, fonts: &UiFonts, owner: E
                             })
                             .with_children(|label| {
                                 label.spawn((
-                                    Text::new("Cool Company Inc"),
+                                    Text::new("♠   ♣   ♥   ♦"),
                                     TextFont {
                                         font: fonts.pixel.clone(),
                                         font_size: 14.0,
