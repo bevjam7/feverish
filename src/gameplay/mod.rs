@@ -559,8 +559,10 @@ fn reset_game_on_ending(
     mut cmd: Commands,
     player_root: Single<Entity, With<PlayerRoot>>,
 ) {
-    for _event in reader.read() {
-        elims.0 = 0;
+    for event in reader.read() {
+        if let UiEndingCommand::Close = event {
+            elims.0 = 0;
+            cmd.entity(player_root.entity()).despawn();
+        }
     }
-    cmd.entity(player_root.entity()).despawn();
 }
