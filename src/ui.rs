@@ -67,7 +67,10 @@ impl Plugin for UiPlugin {
             .add_observer(on_ui_scroll)
             .add_systems(
                 OnExit(AppState::Load),
-                (populate_ui_fonts_and_cursor, ending::populate_default_endings),
+                (
+                    populate_ui_fonts_and_cursor,
+                    ending::populate_default_endings,
+                ),
             )
             .add_systems(
                 Update,
@@ -75,7 +78,7 @@ impl Plugin for UiPlugin {
                     .before(handle_button_interactions)
                     .before(dialogue::handle_dialogue_arrow_buttons)
                     .before(dialogue::handle_dialogue_quick_action_buttons)
-                    .before(dialogue::handle_dialogue_confirm_button)
+                    .before(dialogue::handle_dialogue_confirm_button),
             )
             .add_systems(
                 Update,
@@ -144,6 +147,7 @@ impl Plugin for UiPlugin {
                         inventory::handle_inventory_preview_zoom,
                     ),
                 )
+                    .chain()
                     .run_if(in_state(AppState::Main)),
             )
             .add_systems(

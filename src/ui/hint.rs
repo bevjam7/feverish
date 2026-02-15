@@ -76,9 +76,7 @@ impl From<String> for UiHintRequest {
 #[derive(Message, Debug, Clone)]
 pub enum UiHintCommand {
     Show(UiHintRequest),
-    FadeOut {
-        duration_secs: f32,
-    },
+    FadeOut { duration_secs: f32 },
     Hide,
 }
 
@@ -160,12 +158,7 @@ pub(super) fn animate_hint_glitch(
     time: Res<Time>,
     mut commands: Commands,
     mut hints: Query<
-        (
-            Entity,
-            &mut UiHintGlitch,
-            &mut UiTransform,
-            &mut TextColor,
-        ),
+        (Entity, &mut UiHintGlitch, &mut UiTransform, &mut TextColor),
         With<UiHintText>,
     >,
 ) {
@@ -264,22 +257,17 @@ fn open_hint(
 
     commands.entity(root).with_children(|overlay| {
         let mut frame_entity = overlay.spawn((
-                Name::new("UI Hint Frame"),
-                Node {
-                    max_width: Val::Px(860.0),
-                    min_width: Val::Px(220.0),
-                    border: UiRect::all(Val::Px(2.0)),
-                    padding: UiRect::new(
-                        Val::Px(16.0),
-                        Val::Px(16.0),
-                        Val::Px(10.0),
-                        Val::Px(10.0),
-                    ),
-                    ..default()
-                },
-                BackgroundColor(Color::srgba(0.04, 0.05, 0.09, HINT_FRAME_BASE_ALPHA)),
-                theme::border(true),
-            ));
+            Name::new("UI Hint Frame"),
+            Node {
+                max_width: Val::Px(860.0),
+                min_width: Val::Px(220.0),
+                border: UiRect::all(Val::Px(2.0)),
+                padding: UiRect::new(Val::Px(16.0), Val::Px(16.0), Val::Px(10.0), Val::Px(10.0)),
+                ..default()
+            },
+            BackgroundColor(Color::srgba(0.04, 0.05, 0.09, HINT_FRAME_BASE_ALPHA)),
+            theme::border(true),
+        ));
         frame = frame_entity.id();
 
         frame_entity.with_children(|frame_node| {
