@@ -155,7 +155,7 @@ jobs:
             runner: windows-latest
 
           - platform: macos
-            targets: x86_64-apple-darwin aarch64-apple-darwin
+            targets: aarch64-apple-darwin
             app_suffix: .app/Contents/MacOS
             package_ext: .dmg
             runner: macos-latest
