@@ -52,14 +52,14 @@ text: Are you still there?
 speaker: Malevolent Caller
 portrait: sprites/evil_phone.png
 voice: corrupted_transmission
-text: And you'll stay there forever. Your actions have consequences for us both now.
+text: This isn't right. None of this is right. You failed me.
 > What are you talking about? -> lose_ring_c [id: lose_ring_c]
 
 [lose_ring_c]
 speaker: Malevolent Caller
 portrait: sprites/evil_phone.png
 voice: corrupted_transmission
-text: ... It's time to sleep.
+text: ...Then this will be your eternity, too.
 
 // script: npc.phone.win_ring
 // entry: win_ring
@@ -75,14 +75,14 @@ text: Are you still there?
 speaker: Unknown Caller
 portrait: sprites/phone.png
 voice: corrupted_transmission
-text: I feel it. They are gone for good.
-> I think so. -> win_ring_c [id: win_ring_c]
+text: I feel it. They are gone for good. You can go on back outside. After one more thing.
+> What is it? -> win_ring_c [id: win_ring_c]
 
 [win_ring_c]
 speaker: Unknown Caller
 portrait: sprites/phone.png
 voice: corrupted_transmission
-text: There's just one left.
+text: There's just one left. Leave the way you came when you're done with him.
 > I already got rid of all the fakes. -> win_ring_d [id: win_ring_d]
 > (Hang up) Consider it done. [id: leave] [hook: game.kill_ending]
 
@@ -92,4 +92,4 @@ portrait: sprites/phone.png
 voice: corrupted_transmission
 text: That was his doing. He'll do it again. Get rid of him.
 > (Hang up) Consider it done. [id: leave] [hook: game.kill_ending]
-> (Hang up) I've done enough. I'm leaving. [id: leave] [hook: game.spare_ending]
+> (Hang up) I've done enough. I'm going back outside. [id: leave] [hook: game.spare_ending]

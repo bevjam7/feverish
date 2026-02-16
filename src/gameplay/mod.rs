@@ -577,6 +577,7 @@ fn drive_objective_hints(
         .as_ref()
         .is_some_and(|current| matches!(current.get(), Phase::Win))
         && ending_ui.is_empty();
+    // Currently broken for some reason
     tick_hint_loop(
         &mut runtime.leave_building,
         win_active,
