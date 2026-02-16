@@ -181,7 +181,7 @@ jobs:
           echo "package=${app_package_name}-"'${{ matrix.platform }}${{ matrix.package_ext }}' >> "${GITHUB_ENV}"
 
           # Rustflags:
-          RUSTFLAGS='-Zthreads=0'
+          RUSTFLAGS='-Zthreads=1'
           if [ '${{ matrix.platform }}' != 'windows' ]; then
             RUSTFLAGS="${RUSTFLAGS:+$RUSTFLAGS }"'-Zshare-generics=y'
           fi
