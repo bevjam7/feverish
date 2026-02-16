@@ -141,7 +141,7 @@ impl FootstepPlayer {
 pub(super) fn default_footstep_player(assets: &AssetServer) -> FootstepPlayer {
     let mut footsteps = FootstepPlayer::default();
     footsteps.stride_length = 1.1;
-    footsteps.base_volume = 0.5;
+    footsteps.base_volume = 0.3;
     footsteps.concrete_samples = load_surface_samples(assets, "concrete");
     footsteps.wood_samples = load_surface_samples(assets, "wood");
     footsteps.grass_samples = load_surface_samples(assets, "grass");

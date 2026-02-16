@@ -79,11 +79,12 @@ fn start_playing_bgm(
     if already_playing.is_empty() {
         let mut sampler = SamplePlayer::new(game_assets.music_a.clone());
         sampler.repeat_mode = RepeatMode::RepeatEndlessly;
-        let volume = cmd
-            .spawn((FadeInOut::new(0.0, 1.0, 5.0), VolumeNode::from_linear(0.0)))
-            .id();
-        cmd.spawn((sampler, MusicPool, BackgroundMusic))
-            .connect(volume);
+        cmd.spawn((
+            sampler,
+            MusicPool,
+            BackgroundMusic,
+            sample_effects![FadeInOut::new(0.0, 1.0, 5.0)],
+        ));
     }
 }
 
