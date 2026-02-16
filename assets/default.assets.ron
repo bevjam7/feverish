@@ -3,6 +3,7 @@
     "levels.hallway": File(path: "maps/hallway.map#Scene"),
     "models": Files(paths: [
         "models/npc_a/npc_a.gltf",
+        "models/npc_rat/npc_rat.gltf",
         "models/rat_toy/rat_toy.gltf",
         "models/plant/plant.gltf",
         "models/tree_a/tree_a.gltf",

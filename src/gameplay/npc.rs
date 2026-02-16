@@ -17,7 +17,7 @@ use crate::{
     ui::dialogue::UiDialogueState,
 };
 
-#[point_class(base(Transform, Visibility, Target), model("models/npc_a/npc_a.gltf"))]
+#[point_class(base(Transform, Visibility, Target),  model({path: model}))]
 #[component(on_add=Self::on_add_hook)]
 #[require(Navigator)]
 pub(crate) struct Npc {
@@ -29,6 +29,10 @@ pub(crate) struct Npc {
     pub(crate) suspect: Option<SuspectType>,
     pub(crate) script_id: Option<String>,
     pub(crate) starting_walk_node: Option<String>,
+    pub(crate) start_walk_on_spawn: bool,
+    pub(crate) walk_loop: bool,
+    pub(crate) no_collider: bool,
+    pub(crate) speed: f32,
     #[class(ignore)]
     pub(crate) default_script_id: Option<String>,
 }
@@ -61,6 +65,10 @@ impl Default for Npc {
             script_id: None,
             starting_walk_node: None,
             default_script_id: None,
+            start_walk_on_spawn: false,
+            walk_loop: false,
+            no_collider: false,
+            speed: 1f32,
         }
     }
 }
@@ -73,6 +81,7 @@ impl Npc {
             return;
         }
         let mut npc = world.get_mut::<Self>(hook.entity).unwrap();
+        let npc_no_collider = npc.no_collider;
         npc.default_script_id = npc.script_id.clone();
         let npc = world.get::<Self>(hook.entity).unwrap();
         let asset_path = AssetPath::from(&npc.model);
@@ -88,8 +97,9 @@ impl Npc {
         world
             .commands()
             .entity(hook.entity)
-            .insert(SceneRoot(scene_handle.clone()))
-            .with_children(|cmd| {
+            .insert(SceneRoot(scene_handle.clone()));
+        if !npc_no_collider {
+            world.commands().entity(hook.entity).with_children(|cmd| {
                 // Spawn the NPC collider in the center, since the npc models origins are at the
                 // feet
                 cmd.spawn((
@@ -102,7 +112,11 @@ impl Npc {
                     Transform::from_translation(Vec3::Y * HEIGHT * 0.5),
                     ColliderHierarchyChildOf(cmd.target_entity()),
                 ));
-            })
+            });
+        }
+        world
+            .commands()
+            .entity(hook.entity)
             .observe(Self::setup_animations)
             .observe(Self::on_use)
             .observe(Self::on_walk_start)
@@ -320,7 +334,7 @@ pub(crate) fn npc_navigation(
                 .rotation
                 .slerp(rotated.rotation, 3.0 * time.delta_secs());
             let forward = rotated.forward();
-            transform.translation += forward * time.delta_secs() * SPEED;
+            transform.translation += forward * time.delta_secs() * SPEED * npc.speed;
 
             // Transition to the next node if it exists
             if global_transform
@@ -351,6 +365,8 @@ pub(crate) fn npc_navigation(
                     }
                 }
             }
+        } else if npc.walk_loop {
+            nav.queue = nav.path.iter().copied().collect();
         }
     }
 }
@@ -376,6 +392,9 @@ pub(crate) fn build_nav_paths(
                 let target_name = &targets.get(node_entity).unwrap().target.0;
 
                 current = walk_node_by_name(target_name);
+            }
+            if npc.start_walk_on_spawn {
+                nav.queue = nav.path.iter().copied().collect();
             }
         }
     }

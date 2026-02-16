@@ -81,6 +81,10 @@ impl Plugin for AppPlugin {
                     primary_window: Window {
                         title: "These Four".to_string(),
                         fit_canvas_to_parent: true,
+                        #[cfg(feature = "native")]
+                        mode: bevy::window::WindowMode::BorderlessFullscreen(
+                            MonitorSelection::Current,
+                        ),
                         #[cfg(feature = "web")]
                         prevent_default_event_handling: true,
                         ..default()

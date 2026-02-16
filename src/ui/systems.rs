@@ -555,7 +555,7 @@ pub(super) fn restore_native_cursor_on_exit(
         return;
     }
     for mut cursor_options in &mut windows {
-        cursor_options.visible = true;
+        cursor_options.visible = false;
     }
 }
 

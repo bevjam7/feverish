@@ -218,30 +218,3 @@
 "model" "models/telephone_pole/telephone_pole.gltf"
 "angles" "0 180 0"
 }
-// entity 16
-{
-"classname" "walk_target"
-"origin" "272 104 0"
-"targetname" "a"
-"target" "b"
-}
-// entity 17
-{
-"classname" "walk_target"
-"origin" "208 208 0"
-"targetname" "b"
-"target" "c"
-}
-// entity 18
-{
-"classname" "walk_target"
-"origin" "120 144 0"
-"targetname" "c"
-"target" "d"
-}
-// entity 19
-{
-"classname" "walk_target"
-"origin" "168 16 0"
-"targetname" "d"
-}

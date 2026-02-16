@@ -226,7 +226,7 @@ fn lock_player_input(
 ) {
     if let Ok(mut cursor_options) = windows.single_mut() {
         cursor_options.grab_mode = CursorGrabMode::None;
-        cursor_options.visible = true;
+        cursor_options.visible = false;
     }
     for (entity, actions) in &players {
         // clear any latched values once before disabling the input context
