@@ -87,24 +87,24 @@ impl Plugin for GameplayPlugin {
 fn setup_endings(mut cmd: Commands) {
     cmd.upsert_ending(
         UiEndingPayload::new("win_spared")
-            .title("End")
+            .title("These One")
             .subtitle("You left him with his thoughts.")
             .narrative("...")
             .status_lines(["Eliminations: 3"]),
     );
     cmd.upsert_ending(
         UiEndingPayload::new("win_killed")
-            .title("End")
+            .title("These None")
             .subtitle("You made sure this can't happen again.")
             .narrative("...")
             .status_lines(["Eliminations: 4"]),
     );
     cmd.upsert_ending(
         UiEndingPayload::new("lose")
-            .title("End")
-            .subtitle("You failed to identify the real one.")
+            .title("These Five")
+            .subtitle("You failed to identify the real One.")
             .narrative("...")
-            .status_lines(["Mind adrift"]),
+            .status_lines(["Adrift"]),
     );
 }
 
