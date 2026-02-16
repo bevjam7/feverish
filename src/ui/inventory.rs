@@ -655,7 +655,7 @@ pub(super) fn handle_inventory_preview_zoom(
             continue;
         }
         let zoom_speed = (0.35 + distance * 0.28).clamp(0.2, 4.0);
-        distance = (distance - event.y * zoom_speed).clamp(0.06, 40.0);
+        distance = (distance - event.y * zoom_speed * 0.01).clamp(0.06, 40.0);
         camera_transform.translation = focus + orbit_dir * distance;
         camera_transform.look_at(focus, Vec3::Y);
     }
